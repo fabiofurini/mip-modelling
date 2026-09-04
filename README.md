@@ -20,7 +20,9 @@
 
 Mixed-integer linear models for Management Engineering — how to build a model
 with binary and integer variables, how to *prove* it does what it should, how
-to squeeze it with a dual bound and a heuristic, how to solve it with Gurobi.
+to squeeze it between a heuristic and a dual bound (the same bounds a real
+solver falls back on when it cannot reach proven optimality), how to solve it
+with Gurobi.
 The second course of the series that started with the
 [Operations Research Lab](https://fabiofurini.github.io/operations-research-lab/).
 

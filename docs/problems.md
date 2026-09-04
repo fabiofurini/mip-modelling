@@ -20,7 +20,11 @@ relaxation, solution with Gurobi and additional modelling questions.
 
     ---
 
-    *Under construction.*
+    Where to open locations and hubs: aggregated and disaggregated
+    activation, an "if and only if" with two link constraints, a maximum
+    variable. Four problems.
+
+    [:octicons-arrow-right-24: The four problems](location.md)
 
 -   :material-factory: **Production planning and lot sizing**
 

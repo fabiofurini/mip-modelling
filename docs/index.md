@@ -12,9 +12,11 @@ A model with binary and integer variables is not just *written*: it is
 *proved*. Every constraint linking two families of variables imposes a logical
 implication, and the student must be able to prove that it really does — in
 both directions, or by explaining why one direction follows from optimality.
-Then the model is *squeezed*: a constructive heuristic gives an upper bound, a
-dual solution of the linear relaxation gives a lower bound, and the optimal
-value lies in between. Finally the model is *solved*, with Gurobi from Python.
+Then the model is *squeezed*: a constructive heuristic yields an upper bound
+and a dual solution of the linear relaxation yields a lower bound, trapping
+the optimal value between the two — the same technique used in practice
+whenever a real instance is too large to be solved to proven optimality.
+Finally the model is *solved*, with Gurobi from Python.
 
 Every model can be run **right away in the browser**: each chapter has its own
 [notebook that opens in Colab](notebooks.md), with nothing to install.

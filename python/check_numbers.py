@@ -55,4 +55,35 @@ attese = {"1a": 12, "1b": 18, "2a": 12, "2b": 12, "3a": 20, "3b": 20, "4a": 10, 
 for k, z in attese.items():
     assert uguale(v[k], z), (k, v[k], z)
 print("ch. 7: the fourteen additional questions — optima match the texts")
+
+# ----------------------------------------------------------------------
+# Chapter 8 — Location and coverage
+# ----------------------------------------------------------------------
+b8 = pd.read_csv(DATI / "loc_bound.csv").set_index("problem")
+attesi8 = {   # problem: (heuristic, hand dual, pure z(LP), strengthened z(LP+), z(MILP))
+    "1 capacitated location": (439, F("1581/5"), F("1581/5"), 317, 365),
+    "2 p-median":             (18, 13, 15, 15, 15),
+    "3 coverage":             (25, F("225/2"), F("41925/646"), F("125/2"), 45),
+    "4 hub":                  (20, F("15/2"), F("25/2"), F("1015/78"), 19),
+}
+massimo8 = {"3 coverage"}
+for nome, (eur, duale, zlp, zlpr, zmilp) in attesi8.items():
+    r = b8.loc[nome]
+    ub, lb = (duale, eur) if nome in massimo8 else (eur, duale)
+    assert uguale(r.ub, ub), (nome, "ub", r.ub, ub)
+    assert uguale(r.lb, lb), (nome, "lb", r.lb, lb)
+    assert uguale(r.z_lp, zlp), (nome, "z_lp", r.z_lp, zlp)
+    assert uguale(r.z_lp_rafforzato, zlpr), (nome, "z_lp_rafforzato", r.z_lp_rafforzato, zlpr)
+    assert uguale(r.z_milp, zmilp), (nome, "z_milp", r.z_milp, zmilp)
+    if nome in massimo8:
+        assert float(r.lb) <= float(r.z_milp) <= float(r.z_lp) <= float(r.ub) + 1e-9, nome
+    else:
+        assert float(r.lb) <= float(r.z_lp) <= float(r.z_milp) <= float(r.ub) + 1e-9, nome
+print("ch. 8: the four problems — bounds, relaxations and optima match the texts")
+
+v8 = pd.read_csv(DATI / "loc_varianti.csv").set_index("variant")["z"]
+attese8 = {"1a": 365, "1b": 365, "2a": 15, "2b": 16, "3a": 45, "3b": 45, "4a": 19, "4b": 19}
+for k, z in attese8.items():
+    assert uguale(v8[k], z), (k, v8[k], z)
+print("ch. 8: the eight additional questions — optima match the texts")
 print("All checks passed.")

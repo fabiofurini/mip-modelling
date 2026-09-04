@@ -27,7 +27,10 @@ four-question scheme:
 
 The resulting `lb ≤ z(MILP) ≤ ub` is the thread running through the course: a
 model is not just written down, it is squeezed from both sides before it is
-handed to the solver.
+handed to the solver — and this is exactly what a real MILP falls back on
+when it cannot be solved to proven optimality in useful time: the heuristic
+and the dual bound are the certificate of quality that a stalled solver run
+cannot provide by itself.
 
 ## Grading criteria
 
