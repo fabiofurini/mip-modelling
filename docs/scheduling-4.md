@@ -1,8 +1,8 @@
 # Parallel jobs: the processing time as a maximum
 
-**Class:** MILP · **Links:** maximum variable · **Script:** `python/fam07_scheduling.py`
+**Class:** MILP · **Links:** maximum variable · **Script:** `python/fam07_4_parallel.py`
 
-[![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/fabiofurini/mip-modelling/blob/main/notebooks/fam07_scheduling.ipynb)
+[![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/fabiofurini/mip-modelling/blob/main/notebooks/fam07_4_parallel.ipynb)
 
 !!! abstract "Problem 7.4"
     A company needs to execute $n$ jobs with $k$ machines. For each job $j$
@@ -162,5 +162,5 @@ best.
 
 ## Code
 
-Full script: [`python/fam07_scheduling.py`](https://github.com/fabiofurini/mip-modelling/blob/main/python/fam07_scheduling.py);
-notebook: [`notebooks/fam07_scheduling.ipynb`](https://github.com/fabiofurini/mip-modelling/blob/main/notebooks/fam07_scheduling.ipynb).
+Full script: [`python/fam07_4_parallel.py`](https://github.com/fabiofurini/mip-modelling/blob/main/python/fam07_4_parallel.py);
+notebook: [`notebooks/fam07_4_parallel.ipynb`](https://github.com/fabiofurini/mip-modelling/blob/main/notebooks/fam07_4_parallel.ipynb).

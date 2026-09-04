@@ -1,8 +1,8 @@
 # Assignment and scheduling
 
-**Class:** BIP / MILP · **Script:** `python/fam07_scheduling.py`
-
-[![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/fabiofurini/mip-modelling/blob/main/notebooks/fam07_scheduling.ipynb)
+**Class:** BIP / MILP · **Script:** one script and one notebook per problem
+(`python/fam07_1_assignment.py` … `fam07_7_tardiness.py`), plus
+`fam07_8_summary.py` which collects the bounds of all seven.
 
 Seven problems with the same skeleton: some **jobs** must be assigned to some
 **machines** with limited availability. What changes from problem to problem is

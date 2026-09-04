@@ -14,7 +14,13 @@ being written to a file.
 
 | Chapter | Class | Notebook |
 |---|---|---|
-| [Minimum-cost assignment with availability](scheduling-1.md) | BIP | [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/fabiofurini/mip-modelling/blob/main/notebooks/fam07_scheduling.ipynb) |
+| [Minimum-cost assignment with availability](scheduling-1.md) | BIP | [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/fabiofurini/mip-modelling/blob/main/notebooks/fam07_1_assignment.ipynb) |
+| [Machines with a fixed usage cost](scheduling-2.md) | BIP | [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/fabiofurini/mip-modelling/blob/main/notebooks/fam07_2_fixedcost.ipynb) |
+| [Job selection with revenues and fixed-cost machines](scheduling-3.md) | BIP | [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/fabiofurini/mip-modelling/blob/main/notebooks/fam07_3_selection.ipynb) |
+| [Parallel jobs: the processing time as a maximum](scheduling-4.md) | MILP | [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/fabiofurini/mip-modelling/blob/main/notebooks/fam07_4_parallel.ipynb) |
+| [One machine, job classes with setup](scheduling-5.md) | BIP | [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/fabiofurini/mip-modelling/blob/main/notebooks/fam07_5_classessetup.ipynb) |
+| [Classes with completion bonus and "if and only if" reduction](scheduling-6.md) | BIP | [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/fabiofurini/mip-modelling/blob/main/notebooks/fam07_6_classesbonus.ipynb) |
+| [Total tardiness on one machine: sequencing with big-M](scheduling-7.md) | MILP | [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/fabiofurini/mip-modelling/blob/main/notebooks/fam07_7_tardiness.ipynb) |
 
 ## How they are made
 
@@ -29,5 +35,5 @@ docstring, sections and comments from it — and whoever prefers the command lin
 keeps running, from the `python/` folder:
 
 ```bash
-python3 fam07_scheduling.py
+python3 fam07_1_assignment.py
 ```

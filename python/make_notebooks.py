@@ -104,7 +104,7 @@ docstring, sections and comments from it — and whoever prefers the command lin
 keeps running, from the `python/` folder:
 
 ```bash
-python3 fam07_scheduling.py
+python3 fam07_1_assignment.py
 ```
 """
 
@@ -133,7 +133,8 @@ def titolo_e_classe(slug: str) -> tuple[str, str]:
 def pagina_indice() -> str:
     """The website page listing the notebooks, one badge per chapter."""
     righe = []
-    for percorso in sorted(list(DIR_SCRIPT.glob("cap*.py")) + list(DIR_SCRIPT.glob("fam*.py"))):
+    for percorso in sorted(p for p in list(DIR_SCRIPT.glob("cap*.py")) + list(DIR_SCRIPT.glob("fam*.py"))
+              if not p.stem.endswith("_summary")):
         nome = percorso.stem
         slug = pagina_del_capitolo(nome)
         if not slug:
@@ -231,7 +232,8 @@ def main() -> int:
     else:
         indice.write_text(pagina_indice())
         print(f"  [page]     docs/{indice.name}")
-    for percorso in sorted(list(DIR_SCRIPT.glob("cap*.py")) + list(DIR_SCRIPT.glob("fam*.py"))):
+    for percorso in sorted(p for p in list(DIR_SCRIPT.glob("cap*.py")) + list(DIR_SCRIPT.glob("fam*.py"))
+              if not p.stem.endswith("_summary")):
         atteso = json.dumps(notebook(percorso), ensure_ascii=False, indent=1) + "\n"
         uscita = DIR_NOTEBOOK / f"{percorso.stem}.ipynb"
         if verifica:

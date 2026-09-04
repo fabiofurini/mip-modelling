@@ -1,8 +1,8 @@
 # Classes with completion bonus and "if and only if" reduction
 
-**Class:** BIP · **Links:** if and only if (two), CNF · **Script:** `python/fam07_scheduling.py`
+**Class:** BIP · **Links:** if and only if (two), CNF · **Script:** `python/fam07_6_classesbonus.py`
 
-[![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/fabiofurini/mip-modelling/blob/main/notebooks/fam07_scheduling.ipynb)
+[![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/fabiofurini/mip-modelling/blob/main/notebooks/fam07_6_classesbonus.ipynb)
 
 !!! abstract "Problem 7.6"
     A company has $n$ jobs executable on a machine with availability $a$. For
@@ -160,5 +160,5 @@ $10 + 22 + 10$. Heuristic gap $24\%$.
 
 ## Code
 
-Full script: [`python/fam07_scheduling.py`](https://github.com/fabiofurini/mip-modelling/blob/main/python/fam07_scheduling.py);
-notebook: [`notebooks/fam07_scheduling.ipynb`](https://github.com/fabiofurini/mip-modelling/blob/main/notebooks/fam07_scheduling.ipynb).
+Full script: [`python/fam07_6_classesbonus.py`](https://github.com/fabiofurini/mip-modelling/blob/main/python/fam07_6_classesbonus.py);
+notebook: [`notebooks/fam07_6_classesbonus.ipynb`](https://github.com/fabiofurini/mip-modelling/blob/main/notebooks/fam07_6_classesbonus.ipynb).

@@ -1,8 +1,8 @@
 # Job selection with revenues and fixed-cost machines
 
-**Class:** BIP · **Links:** activation (aggregated), maximisation problem · **Script:** `python/fam07_scheduling.py`
+**Class:** BIP · **Links:** activation (aggregated), maximisation problem · **Script:** `python/fam07_3_selection.py`
 
-[![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/fabiofurini/mip-modelling/blob/main/notebooks/fam07_scheduling.ipynb)
+[![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/fabiofurini/mip-modelling/blob/main/notebooks/fam07_3_selection.ipynb)
 
 !!! abstract "Problem 7.3"
     A company can execute $n \in \mathbb{Z}_{\ge 1}$ jobs and has $k \in \mathbb{Z}_{\ge 1}$
@@ -172,5 +172,5 @@ second machine ($c_1 = 20 > r_2 = 15$). Heuristic gap: $20\%$.
 
 ## Code
 
-Full script: [`python/fam07_scheduling.py`](https://github.com/fabiofurini/mip-modelling/blob/main/python/fam07_scheduling.py);
-notebook: [`notebooks/fam07_scheduling.ipynb`](https://github.com/fabiofurini/mip-modelling/blob/main/notebooks/fam07_scheduling.ipynb).
+Full script: [`python/fam07_3_selection.py`](https://github.com/fabiofurini/mip-modelling/blob/main/python/fam07_3_selection.py);
+notebook: [`notebooks/fam07_3_selection.ipynb`](https://github.com/fabiofurini/mip-modelling/blob/main/notebooks/fam07_3_selection.ipynb).

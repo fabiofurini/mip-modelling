@@ -1,8 +1,8 @@
 # One machine, job classes with setup
 
-**Class:** BIP · **Links:** disaggregated activation, CNF · **Script:** `python/fam07_scheduling.py`
+**Class:** BIP · **Links:** disaggregated activation, CNF · **Script:** `python/fam07_5_classessetup.py`
 
-[![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/fabiofurini/mip-modelling/blob/main/notebooks/fam07_scheduling.ipynb)
+[![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/fabiofurini/mip-modelling/blob/main/notebooks/fam07_5_classessetup.ipynb)
 
 !!! abstract "Problem 7.5"
     A company has $n$ jobs executable on a machine with availability
@@ -157,5 +157,5 @@ The heuristic stays at $9$ (gap $57\%$): the scanning order matters.
 
 ## Code
 
-Full script: [`python/fam07_scheduling.py`](https://github.com/fabiofurini/mip-modelling/blob/main/python/fam07_scheduling.py);
-notebook: [`notebooks/fam07_scheduling.ipynb`](https://github.com/fabiofurini/mip-modelling/blob/main/notebooks/fam07_scheduling.ipynb).
+Full script: [`python/fam07_5_classessetup.py`](https://github.com/fabiofurini/mip-modelling/blob/main/python/fam07_5_classessetup.py);
+notebook: [`notebooks/fam07_5_classessetup.ipynb`](https://github.com/fabiofurini/mip-modelling/blob/main/notebooks/fam07_5_classessetup.ipynb).

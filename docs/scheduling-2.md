@@ -1,8 +1,8 @@
 # Machines with a fixed usage cost
 
-**Class:** BIP · **Links:** activation (aggregated) · **Script:** `python/fam07_scheduling.py`
+**Class:** BIP · **Links:** activation (aggregated) · **Script:** `python/fam07_2_fixedcost.py`
 
-[![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/fabiofurini/mip-modelling/blob/main/notebooks/fam07_scheduling.ipynb)
+[![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/fabiofurini/mip-modelling/blob/main/notebooks/fam07_2_fixedcost.ipynb)
 
 !!! abstract "Problem 7.2"
     A company needs to process $n \in \mathbb{Z}_{\ge 1}$ jobs and has
@@ -220,5 +220,5 @@ machines 2 and 3 on, $\tilde x_{12} = \tilde x_{23} = \tilde x_{33} = 1$.
 
 ## Code
 
-Full script: [`python/fam07_scheduling.py`](https://github.com/fabiofurini/mip-modelling/blob/main/python/fam07_scheduling.py);
-notebook: [`notebooks/fam07_scheduling.ipynb`](https://github.com/fabiofurini/mip-modelling/blob/main/notebooks/fam07_scheduling.ipynb).
+Full script: [`python/fam07_2_fixedcost.py`](https://github.com/fabiofurini/mip-modelling/blob/main/python/fam07_2_fixedcost.py);
+notebook: [`notebooks/fam07_2_fixedcost.ipynb`](https://github.com/fabiofurini/mip-modelling/blob/main/notebooks/fam07_2_fixedcost.ipynb).
