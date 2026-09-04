@@ -1,0 +1,29 @@
+cff-version: 1.2.0
+message: "If you use this material, please cite it as below."
+title: "MIP Modelling: mixed-integer linear models for Management Engineering"
+abstract: >-
+  A course on modelling with integer and binary variables: general techniques
+  (logic and binary variables, links between variables, big-M, dual bounds of
+  the linear relaxation, constructive heuristics) and six families of problems
+  — assignment and scheduling, location and covering, production and lot sizing,
+  selection and knapsack, partitioning and balancing, logistics — with solved
+  exercises, additional modelling questions, Python/Gurobi code and notebooks.
+authors:
+  - family-names: Furini
+    given-names: Fabio
+    email: fabio.furini@uniroma1.it
+    affiliation: "DIAG, Sapienza University of Rome"
+url: "https://fabiofurini.github.io/mip-modelling/"
+repository-code: "https://github.com/fabiofurini/mip-modelling"
+license:
+  - CC-BY-4.0
+  - MIT
+date-released: 2026-09-04
+keywords:
+  - operations research
+  - integer linear programming
+  - modelling
+  - binary variables
+  - Gurobi
+  - Python
+  - teaching material
