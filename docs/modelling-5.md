@@ -4,10 +4,13 @@
 
 [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/fabiofurini/mip-modelling/blob/main/notebooks/cap05_heuristics.ipynb)
 
-A constructive heuristic builds **one** feasible solution, quickly, without
-proving anything about its quality. It is the other half of the sandwich of
+A constructive heuristic builds **one** solution quickly, adding one element at a
+time and never backtracking. It proves nothing about the quality of that
+solution, and it is not even guaranteed to reach a feasible one: it can get stuck
+part-way, with an element that fits nowhere. When it does end with a feasible
+solution, that solution is the other half of the sandwich of
 [chapter 4](modelling-4.md): the pessimistic side, the one guaranteed by a
-solution that really exists.
+solution that really exists; when it fails, there is no primal bound.
 
 !!! note "What a heuristic must produce in this course"
     1. a readable **pseudocode**, with the scanning order, the choice criterion,
