@@ -44,6 +44,29 @@ being written to a file.
 | [Songs across CDs](mixed-8.md) | MILP | [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/fabiofurini/mip-modelling/blob/main/notebooks/fam10_8_cds.ipynb) |
 | [Books across shelves](mixed-9.md) | MILP | [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/fabiofurini/mip-modelling/blob/main/notebooks/fam10_9_shelves.ipynb) |
 
+## The fifteen numerical models
+
+One per model, from EX 1 to EX 15 — the full list is on the
+[Fifteen numerical models](numerical.md) page.
+
+| Model | Class | Notebook |
+|---|---|---|
+| EX 1 — The eight-seat van | BIP | [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/fabiofurini/mip-modelling/blob/main/notebooks/ex01_van.ipynb) |
+| [EX 2 — Bus lines](ex-02.md) | BIP | [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/fabiofurini/mip-modelling/blob/main/notebooks/ex02_buslines.ipynb) |
+| [EX 3 — Relay](ex-03.md) | BIP | [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/fabiofurini/mip-modelling/blob/main/notebooks/ex03_relay.ipynb) |
+| EX 4 — Shoes: production, inventory and hirings | MILP | [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/fabiofurini/mip-modelling/blob/main/notebooks/ex04_shoes.ipynb) |
+| EX 5 — Vehicles with a minimum quantity | ILP | [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/fabiofurini/mip-modelling/blob/main/notebooks/ex05_vehicles.ipynb) |
+| [EX 6 — Hub-and-spoke](ex-06.md) | BIP | [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/fabiofurini/mip-modelling/blob/main/notebooks/ex06_hub.ipynb) |
+| EX 7 — Custom aircraft with a fixed set-up cost | ILP | [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/fabiofurini/mip-modelling/blob/main/notebooks/ex07_aircraft.ipynb) |
+| [EX 8 — Seminars](ex-08.md) | BIP | [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/fabiofurini/mip-modelling/blob/main/notebooks/ex08_seminars.ipynb) |
+| EX 9 — The eight queens | BIP | [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/fabiofurini/mip-modelling/blob/main/notebooks/ex09_queens.ipynb) |
+| [EX 10 — Tools of a CNC machine](ex-10.md) | BIP | [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/fabiofurini/mip-modelling/blob/main/notebooks/ex10_tools.ipynb) |
+| [EX 11 — Balancing between two workers](ex-11.md) | MILP | [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/fabiofurini/mip-modelling/blob/main/notebooks/ex11_balancing.ipynb) |
+| EX 12 — Shoes with a minimum production threshold | ILP | [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/fabiofurini/mip-modelling/blob/main/notebooks/ex12_shoes_threshold.ipynb) |
+| EX 13 — Mutual funds bought in lots | ILP | [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/fabiofurini/mip-modelling/blob/main/notebooks/ex13_funds.ipynb) |
+| EX 14 — Emergency department shifts | ILP | [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/fabiofurini/mip-modelling/blob/main/notebooks/ex14_shifts.ipynb) |
+| EX 15 — The music school timetable | BIP | [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/fabiofurini/mip-modelling/blob/main/notebooks/ex15_timetable.ipynb) |
+
 ## How they are made
 
 The notebooks are not written by hand: they are generated from the scripts with

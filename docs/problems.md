@@ -1,11 +1,21 @@
 # The problems
 
-Three families of problems plus a chapter of mixed models, each with its solved
-exercises: model, proof of the links between the variables, instance,
+Fifteen numerical models, three families of problems and a chapter of mixed
+models, each with its solved exercises: model, proof of the links between the variables, instance,
 constructive heuristic, dual of the LP relaxation, solution with Gurobi and
 additional modelling questions.
 
 <div class="grid cards" markdown>
+
+-   :material-numeric: **Fifteen numerical models**
+
+    ---
+
+    The easiest examples, with explicit data and few variables: one per
+    technique, to be read before the families to get your bearings. From EX 1 to
+    EX 15.
+
+    [:octicons-arrow-right-24: The fifteen models](numerical.md)
 
 -   :material-timer-sand: **Assignment and scheduling**
 

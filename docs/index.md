@@ -80,6 +80,15 @@ Every model can be run **right away in the browser**: each chapter has its own
 
 **[The problems](problems.md)**
 
+*[Fifteen numerical models](numerical.md)* — from EX 1 to EX 15, with the online page for
+
+EX 2 [Bus lines](ex-02.md) ·
+EX 3 [Relay](ex-03.md) ·
+EX 6 [Hub-and-spoke](ex-06.md) ·
+EX 8 [Seminars](ex-08.md) ·
+EX 10 [CNC tools](ex-10.md) ·
+EX 11 [Balancing](ex-11.md)
+
 *[Assignment and scheduling](scheduling.md)*
 
 7.1 [Minimum-cost assignment](scheduling-1.md) ·
@@ -114,15 +123,6 @@ Every model can be run **right away in the browser**: each chapter has its own
 10.7 [Branches across two companies](mixed-7.md) ·
 10.8 [Songs across CDs](mixed-8.md) ·
 10.9 [Books across shelves](mixed-9.md)
-
-*Numerical models*
-
-EX 2 [Bus lines](ex-02.md) ·
-EX 3 [Relay](ex-03.md) ·
-EX 6 [Hub-and-spoke](ex-06.md) ·
-EX 8 [Seminars](ex-08.md) ·
-EX 10 [CNC tools](ex-10.md) ·
-EX 11 [Balancing](ex-11.md)
 
 **The course**
 
