@@ -25,22 +25,29 @@ and inequalities that make a solution feasible).
     $z(\mathit{MILP})$ and never $z^\star$: which model is being optimised must
     be explicit.
 
-**Classes of models.** A model has $n$ variables $x_1, x_2, \dots, x_n$, indexed
-by $j \in \{1, 2, \dots, n\}$, and $m$ constraints, indexed by
-$i \in \{1, 2, \dots, m\}$. The data are the $n$ cost coefficients $c_j$, the
-$m \cdot n$ coefficients $a_{ij}$ and the $m$ right-hand sides $b_i$. In every
-class objective and constraints are the same linear functions: only the
-**domain** of the variables changes, that is, the last row of the model. Below
-they are in canonical minimisation form; a maximisation model is written with
-$\max$ and $\le$ constraints.
+**Classes of models.** Upright LP is the *class* of problems, italic
+$\mathit{LP}$ is *one* problem of that class; the same for ILP, BIP and MILP. In
+every class objective and constraints are linear: only the domain of the
+variables changes, that is, the last row of the model. A model has $n$
+variables, with $j \in \{1, 2, \dots, n\}$, and $m$ constraints, with
+$i \in \{1, 2, \dots, m\}$; the data are the costs $c_j$, the coefficients
+$a_{ij}$ and the right-hand sides $b_i$. The sets $M_{\le}$, $M_{=}$, $M_{\ge}$
+partition $\{1, 2, \dots, m\}$ according to the direction of the constraint;
+$N_{\ge 0}$, $N_{\gtreqless 0}$, $N_{\le 0}$ partition $\{1, 2, \dots, n\}$
+according to the sign of the variable. The objective is a minimisation here;
+with $\max$ only the direction of the optimisation changes.
 
 **A model of LP type** — all variables continuous:
 
 $$
 \begin{aligned}
 \min ~~ \sum_{j=1}^{n} c_j\, x_j & & \\
-\text{subject to} \quad \sum_{j=1}^{n} a_{ij}\, x_j &\ge b_i, & \forall i \in \{1, 2, \dots, m\},\\
-x_j &\ge 0, & \forall j \in \{1, 2, \dots, n\}.
+\text{subject to} \quad \sum_{j=1}^{n} a_{ij}\, x_j &\le b_i, & \forall i \in M_{\le},\\
+\sum_{j=1}^{n} a_{ij}\, x_j &= b_i, & \forall i \in M_{=},\\
+\sum_{j=1}^{n} a_{ij}\, x_j &\ge b_i, & \forall i \in M_{\ge},\\
+x_j &\ge 0, & \forall j \in N_{\ge 0},\\
+x_j &\gtreqless 0, & \forall j \in N_{\gtreqless 0},\\
+x_j &\le 0, & \forall j \in N_{\le 0}.
 \end{aligned}
 $$
 
@@ -49,8 +56,12 @@ $$
 $$
 \begin{aligned}
 \min ~~ \sum_{j=1}^{n} c_j\, x_j & & \\
-\text{subject to} \quad \sum_{j=1}^{n} a_{ij}\, x_j &\ge b_i, & \forall i \in \{1, 2, \dots, m\},\\
-x_j &\in \mathbb{Z}_{\ge 0}, & \forall j \in \{1, 2, \dots, n\}.
+\text{subject to} \quad \sum_{j=1}^{n} a_{ij}\, x_j &\le b_i, & \forall i \in M_{\le},\\
+\sum_{j=1}^{n} a_{ij}\, x_j &= b_i, & \forall i \in M_{=},\\
+\sum_{j=1}^{n} a_{ij}\, x_j &\ge b_i, & \forall i \in M_{\ge},\\
+x_j &\in \mathbb{Z}_{\ge 0}, & \forall j \in N_{\ge 0},\\
+x_j &\in \mathbb{Z}, & \forall j \in N_{\gtreqless 0},\\
+x_j &\in \mathbb{Z}_{\le 0}, & \forall j \in N_{\le 0}.
 \end{aligned}
 $$
 
@@ -59,27 +70,33 @@ $$
 $$
 \begin{aligned}
 \min ~~ \sum_{j=1}^{n} c_j\, x_j & & \\
-\text{subject to} \quad \sum_{j=1}^{n} a_{ij}\, x_j &\ge b_i, & \forall i \in \{1, 2, \dots, m\},\\
+\text{subject to} \quad \sum_{j=1}^{n} a_{ij}\, x_j &\le b_i, & \forall i \in M_{\le},\\
+\sum_{j=1}^{n} a_{ij}\, x_j &= b_i, & \forall i \in M_{=},\\
+\sum_{j=1}^{n} a_{ij}\, x_j &\ge b_i, & \forall i \in M_{\ge},\\
 x_j &\in \{0, 1\}, & \forall j \in \{1, 2, \dots, n\}.
 \end{aligned}
 $$
 
-**A model of MILP type** — integer and continuous variables together, with
-$J \subseteq \{1, 2, \dots, n\}$ the set of indices of the integer variables:
+**A model of MILP type** — with $J \subseteq \{1, 2, \dots, n\}$ the set of indices of the integer variables and the signs of the model of LP type:
 
 $$
 \begin{aligned}
 \min ~~ \sum_{j=1}^{n} c_j\, x_j & & \\
-\text{subject to} \quad \sum_{j=1}^{n} a_{ij}\, x_j &\ge b_i, & \forall i \in \{1, 2, \dots, m\},\\
-x_j &\in \mathbb{Z}_{\ge 0}, & \forall j \in J,\\
-x_j &\ge 0, & \forall j \in \{1, 2, \dots, n\} \setminus J.
+\text{subject to} \quad \sum_{j=1}^{n} a_{ij}\, x_j &\le b_i, & \forall i \in M_{\le},\\
+\sum_{j=1}^{n} a_{ij}\, x_j &= b_i, & \forall i \in M_{=},\\
+\sum_{j=1}^{n} a_{ij}\, x_j &\ge b_i, & \forall i \in M_{\ge},\\
+x_j &\in \mathbb{Z}, & \forall j \in J,\\
+x_j &\in \mathbb{R}, & \forall j \in \{1, 2, \dots, n\} \setminus J.
 \end{aligned}
 $$
 
-The objective adds up the costs of the decisions taken; each constraint $i$
-requires the linear combination $\sum_{j=1}^{n} a_{ij}\, x_j$ to reach at least
-the threshold $b_i$; the last row declares the domain and is the only thing that
-tells the four classes apart. This course works almost exclusively with MILPs.
+The objective adds up the costs of the decisions taken; each constraint $i$ ties
+the variables to the right-hand side $b_i$; the last row declares the domain and
+is the only thing that tells the four classes apart. Every datum and every
+symbol is defined before it is used: in every model the variables are introduced
+before the formulation, the domain constraints close the model, and a list
+explains objective and constraints family by family. This course works almost
+exclusively with MILPs.
 
 ## Why integrality matters
 
