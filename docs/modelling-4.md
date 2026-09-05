@@ -58,7 +58,8 @@ building a dual solution has an economic meaning.
   serves as a **check**: the optimum of the dual written by hand must coincide
   with $z(\mathit{LP})$. The course scripts verify it with an `assert`.
 
-And then: since $X_{\mathit{MILP}} \subseteq X_{\mathit{LP}}$,
+And then: since every feasible solution of the MILP is feasible for the
+relaxation too,
 
 $$\textstyle\sum_i b_i \bar\pi_i ~\le~ z(\mathit{LP}) ~\le~ z(\mathit{MILP}).$$
 

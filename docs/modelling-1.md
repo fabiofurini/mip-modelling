@@ -118,11 +118,11 @@ course works almost exclusively with MILPs.
 ## Why integrality matters
 
 $$
-\begin{aligned}
-\max ~~ x_1 + x_2 & & \\
-\text{subject to} \quad 2x_1 + 2x_2 &\le 3, & \\
-x_1,\ x_2 &\in \{0,1\}. &
-\end{aligned}
+\begin{array}{r r c r c l}
+\max & x_1 & + & x_2 &  & \\
+\text{subject to} & 2x_1 & + & 2x_2 & \le & 3,\\
+ & x_1 & , & x_2 & \in & \{0, 1\}.
+\end{array}
 $$
 
 The LP relaxation replaces $x_1, x_2 \in \{0,1\}$ by $0 \le x_1, x_2 \le 1$ and
@@ -162,11 +162,9 @@ worth more than $1$.
     constraints already imply $x \le 1$ — for instance with an assignment
     constraint $\sum_m x_{jm} = 1$.
 
-The relaxation **removes** constraints, hence
-
-$$X_{\mathit{MILP}} \subseteq X_{\mathit{LP}^+} \subseteq X_{\mathit{LP}},$$
-
-and optimising over a larger set cannot give a worse value. In a maximisation
+The relaxation **removes** constraints: every feasible solution of the MILP stays
+feasible for the relaxation, which therefore optimises over a larger set — and
+optimising over a larger set cannot give a worse value. In a maximisation
 the relaxation is an *upper* bound, in a minimisation a *lower* bound: in both
 cases it is an **optimistic** bound.
 
