@@ -60,12 +60,12 @@ time, an ILP and a MILP in general are not.
     How many units to buy from two suppliers, $x_1$ and $x_2$, in whole lots.
 
     $$
-    \begin{aligned}
-    \min ~~ 4x_1 + 7x_2 & & \\
-    \text{subject to} \quad 2x_1 + 3x_2 &\ge 12, & \\
-    x_1 + x_2 &\le 5, & \\
-    x_1,\ x_2 &\in \mathbb{Z}_{\ge 0}. &
-    \end{aligned}
+    \begin{array}{r r c r c l}
+    \min & 4x_1 & + & 7x_2 &  & \\
+    \text{subject to} & 2x_1 & + & 3x_2 & \ge & 12,\\
+     & x_1 & + & x_2 & \le & 5,\\
+     & x_1 & , & x_2 & \in & \mathbb{Z}_{\ge 0}.
+    \end{array}
     $$
 
     The objective minimises the spending; the $\ge$ constraint covers the demand
@@ -76,12 +76,12 @@ time, an ILP and a MILP in general are not.
     Which projects to fund: $y_k = 1$ if project $k$ is funded, $0$ otherwise.
 
     $$
-    \begin{aligned}
-    \max ~~ 5y_1 + 4y_2 + 6y_3 & & \\
-    \text{subject to} \quad y_1 + y_2 + y_3 &\le 2, & \\
-    y_1 + y_3 &\ge 1, & \\
-    y_1,\ y_2,\ y_3 &\in \{0, 1\}. &
-    \end{aligned}
+    \begin{array}{r r c r c r c l}
+    \max & 5y_1 & + & 4y_2 & + & 6y_3 &  & \\
+    \text{subject to} & y_1 & + & y_2 & + & y_3 & \le & 2,\\
+     & y_1 &  &  & + & y_3 & \ge & 1,\\
+     & y_1 & , & y_2 & , & y_3 & \in & \{0, 1\}.
+    \end{array}
     $$
 
     The objective maximises the value of the projects chosen; the $\le$
@@ -94,14 +94,14 @@ time, an ILP and a MILP in general are not.
     otherwise.
 
     $$
-    \begin{aligned}
-    \max ~~ 3x_1 + 8x_2 - 10y & & \\
-    \text{subject to} \quad x_1 + x_2 &= 6, & \\
-    x_2 - 4y &\le 0, & \\
-    x_1 &\ge 1, & \\
-    x_1,\ x_2 &\ge 0, & \\
-    y &\in \{0, 1\}. &
-    \end{aligned}
+    \begin{array}{r r c r c r c l}
+    \max & 3x_1 & + & 8x_2 & - & 10y &  & \\
+    \text{subject to} & x_1 & + & x_2 &  &  & = & 6,\\
+     &  &  & x_2 & - & 4y & \le & 0,\\
+     & x_1 &  &  &  &  & \ge & 1,\\
+     & x_1 & , & x_2 &  &  & \ge & 0,\\
+     &  &  &  &  & y & \in & \{0, 1\}.
+    \end{array}
     $$
 
     The objective maximises the revenue minus the cost of the plant; the equality
