@@ -58,7 +58,7 @@ extra:
       name: GitHub
     - icon: material/chart-timeline-variant
       link: https://fabiofurini.github.io/operations-research-lab/
-      name: Operations Research Lab — the first course of the series
+      name: Operations Research Lab
   alternate:
     - name: Italiano
       link: https://fabiofurini.github.io/modellazione-mip/

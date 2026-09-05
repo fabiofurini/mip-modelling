@@ -5,8 +5,7 @@ professor at [DIAG](https://www.diag.uniroma1.it/), Sapienza University of Rome.
 
 **Mixed-integer linear models for Management Engineering** — the course
 lecture notes in online form, with Python/Gurobi code, notebooks and
-reproducible instances. It is the second course of the series that started
-with the [Operations Research Lab](https://fabiofurini.github.io/operations-research-lab/).
+reproducible instances.
 
 A model with binary and integer variables is not just *written*: it is
 *proved*. Every constraint linking two families of variables imposes a logical
