@@ -5,23 +5,23 @@
 ## The link in words
 
 "If you produce, produce at least $\ell$": the quantity $q_j$ is either zero or
-lies between a threshold $\ell$ and the capacity $C_j$. It is not an interval:
+lies between a threshold $\ell$ and the capacity $c_j$. It is not an interval:
 it is the union of a point and an interval. A variable with this domain is
 called **semicontinuous**.
 
 ## The constraints
 
-$$\ell\, y_j ~\le~ q_j ~\le~ C_j\, y_j, \qquad \forall j \qquad (2m \text{ constraints}).$$
+$$\ell\, y_j ~\le~ q_j ~\le~ c_j\, y_j, \qquad \forall j \qquad (2m \text{ constraints}).$$
 
 ## The proof
 
 Both directions are imposed by the constraints. If $y_j = 0$:
-$0 \le q_j \le 0$, that is $q_j = 0$. If $y_j = 1$: $\ell \le q_j \le C_j$.
+$0 \le q_j \le 0$, that is $q_j = 0$. If $y_j = 1$: $\ell \le q_j \le c_j$.
 Hence
 
-$$q_j \in \{0\} \cup [\ell,\ C_j],$$
+$$q_j \in \{0\} \cup [\ell,\ c_j],$$
 
-exactly the domain wanted. One needs $\ell \le C_j$, otherwise $y_j = 1$ is
+exactly the domain wanted. One needs $\ell \le c_j$, otherwise $y_j = 1$ is
 infeasible and the variable is forced to zero: a data error the solver reports
 as infeasibility only if $y_j$ is forced to 1 by other constraints.
 

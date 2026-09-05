@@ -56,8 +56,8 @@ configuration.
     The lights constraint is an **availability**: for every colour, the lights
     bought must be at least those required. There is no big-M, because both
     sides are sums of real quantities. The count of the boxes comes from here:
-    if the lights of colour $l$ required are $U_l$ and a box contains $v_{bl}$,
-    buying only boxes of type $b$ would require $\lceil U_l / v_{bl} \rceil$
+    if the lights of colour $l$ required are $u_l$ and a box contains $v_{bl}$,
+    buying only boxes of type $b$ would require $\lceil u_l / v_{bl} \rceil$
     boxes. The model never writes the ceiling: integrality produces it.
 
 !!! note "The 'configuration used' link"

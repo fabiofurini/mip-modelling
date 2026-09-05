@@ -14,7 +14,7 @@ With $q_j \ge 0$ the quantity and $y_j$ the indicator:
 
 $$
 \begin{aligned}
-q_j &\le C_j\, y_j, & \forall j &\qquad (n \text{ constraints}),\\
+q_j &\le c_j\, y_j, & \forall j &\qquad (n \text{ constraints}),\\
 q_j &\ge \ell\, y_j, & \forall j &\qquad (n \text{ constraints}),\\
 \sum_{j=1}^{n} y_j &\ge p & &\qquad (1 \text{ constraint}).
 \end{aligned}

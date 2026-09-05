@@ -78,7 +78,7 @@ $$\textstyle\sum_i b_i \bar\pi_i ~\le~ z(\mathit{LP}) ~\le~ z(\mathit{MILP}).$$
    raise the corresponding dual variable until the first dual constraint that
    opposes it becomes tight, and update the residuals.
 3. **The best ratio.** With a single capacity constraint in a maximisation,
-   $\bar v = \max_j p_j / w_j$ is feasible and gives the bound $C \bar v$.
+   $\bar v = \max_j p_j / w_j$ is feasible and gives the bound $b \bar v$.
 
 Whichever recipe is used, the solution must be **checked feasible** for the dual
 — that is the only thing that makes the bound valid — and its value compared
@@ -147,16 +147,16 @@ and $10$. The heuristic was already optimal, but the bounds cannot tell us that.
 
 !!! abstract "Knapsack"
     Four items of value $p = (10, 7, 6, 4)$ and weight $w = (5, 4, 3, 3)$;
-    capacity $C = 9$.
+    capacity $b = 9$.
 
-The dual of the relaxation without the bounds has a single variable $v \ge 0$: $\min\ C v$
+The dual of the relaxation without the bounds has a single variable $v \ge 0$: $\min\ b v$
 with $w_j v \ge p_j$ for every $j$.
 
 - **Heuristic** (ratio constructive heuristic): ratios $2$, $7/4$, $2$, $4/3$; items 1 and 3 are
   taken (weight $8$), value $16$. In a **maximisation** the heuristic gives a
   **lower** bound: $\mathit{LB} = 16$.
 - **Dual by hand** (recipe 3): $\bar v = \max_j p_j/w_j = 2$, value
-  $C \bar v = 18$. In a **maximisation** the dual gives an **upper** bound:
+  $b \bar v = 18$. In a **maximisation** the dual gives an **upper** bound:
   $\mathit{UB} = 18$.
 
 $$16 ~\le~ z(\mathit{MILP}) = 17 ~\le~ z(\mathit{LP}^+) = \tfrac{71}{4} ~\le~ z(\mathit{LP}) = 18.$$
@@ -191,9 +191,9 @@ $x_j \le 1$ bites, because without it the LP takes $9/5$ units of item 1.
   declared as such (example: $z_j \le M_j y_j$ in
   [problem 8.4](location-4.md)).
 
-**The cover cut.** A set $S$ is a *cover* if $\sum_{j \in S} w_j > C$; then
+**The cover cut.** A set $S$ is a *cover* if $\sum_{j \in S} w_j > b$; then
 $\sum_{j \in S} x_j \le |S| - 1$ is valid. On the knapsack ($w = (5,4,3,3)$,
-$C = 9$) the minimal covers are the four triples. The optimal solution of the
+$b = 9$) the minimal covers are the four triples. The optimal solution of the
 relaxation is $\tilde x = (1,\ 1/4,\ 1,\ 0)$:
 
 | Cover $S$ | $\sum_{j \in S} \tilde x_j$ | $\|S\|-1$ | |
@@ -235,7 +235,7 @@ reference case is [activation](links-01.md).
 
 ## LP duals are not the marginal prices of the MILP
 
-| $C$ | $z(\mathit{MILP})$ | $z(\mathit{LP}^+)$ | LP dual | true change |
+| $b$ | $z(\mathit{MILP})$ | $z(\mathit{LP}^+)$ | LP dual | true change |
 |---:|---:|---:|---:|---:|
 | 8 | 16 | 16 | $2$ | — |
 | 9 | 17 | $71/4$ | $7/4$ | $+1$ |
@@ -244,7 +244,7 @@ reference case is [activation](links-01.md).
 | 12 | 23 | 23 | $7/4$ | $+3$ |
 
 The LP dual is the ratio $p_j/w_j$ of the "critical" item. The true change of
-the integer optimum comes in jumps: from $C = 9$ to $C = 10$ it does not change
+the integer optimum comes in jumps: from $b = 9$ to $b = 10$ it does not change
 *at all*, while the dual promises $7/4$.
 
 !!! note "What can be said, then"

@@ -10,21 +10,21 @@ between the largest and the smallest).
 
 ## The constraints
 
-With $L_k$ the load of resource $k$, $k = 1, \dots, K$:
+With $\ell_k$ the load of resource $k \in \{1, 2, \dots, m\}$:
 
 $$
 \begin{aligned}
-\text{min-max:}&\quad \min T \quad\text{with}\quad T \ge L_k,\ \forall k &&(K \text{ constraints}),\\
-\text{max-min:}&\quad \max U \quad\text{with}\quad U \le L_k,\ \forall k &&(K \text{ constraints}),\\
-\text{range:}&\quad \min\,(T - U) \quad\text{with both} &&(2K \text{ constraints}).
+\text{min-max:}&\quad \min z \quad\text{with}\quad z \ge \ell_k,\ \forall k &&(m \text{ constraints}),\\
+\text{max-min:}&\quad \max u \quad\text{with}\quad u \le \ell_k,\ \forall k &&(m \text{ constraints}),\\
+\text{range:}&\quad \min\,(z - u) \quad\text{with both} &&(2m \text{ constraints}).
 \end{aligned}
 $$
 
 ## The proof
 
 Each is the [maximum auxiliary variable](links-05.md) (or minimum) with the
-exchange argument in the right direction: in a $\min T$ the variable $T$ falls
-to the maximum of the loads; in a $\max U$ it rises to the minimum. In the range
+exchange argument in the right direction: in a $\min z$ the variable $z$ falls
+to the maximum of the loads; in a $\max u$ it rises to the minimum. In the range
 both pressures are present and the two conclusions hold together.
 
 !!! danger "The three objectives are not comparable"

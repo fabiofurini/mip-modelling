@@ -128,10 +128,10 @@ $-d_i/m + d_i/m = 0 \le 0$. The value is $\mathit{LB} = 0$.
 
 ## A parity argument that closes the problem
 
-The durations are integers and there are two CDs: their durations $D_1$ and
-$D_2$ are integers summing to $D = 35$, which is **odd**. Two integers summing
-to an odd number cannot be equal, and their difference $|D_1 - D_2|$ has the
-same parity as $D$, that is, it is odd. An odd, non-negative difference is at
+The durations are integers and there are two CDs: their durations $q_1$ and
+$q_2$ are integers summing to $q = 35$, which is **odd**. Two integers summing
+to an odd number cannot be equal, and their difference $|q_1 - q_2|$ has the
+same parity as $q$, that is, it is odd. An odd, non-negative difference is at
 least $1$:
 
 $$z(\mathit{MILP}) \ge \mathit{LB} = 1 .$$

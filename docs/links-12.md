@@ -17,10 +17,10 @@ $$
 \sum_{i} p_{iv} = 1 \quad \forall v \qquad (n \text{ constraints}).
 $$
 
-**Binary expansion** of $v \in \{0, 1, \dots, 2^K - 1\}$:
+**Binary expansion** of $v \in \{0, 1, \dots, 2^p - 1\}$:
 
-$$v = \sum_{k=0}^{K-1} 2^k\, b_k, \qquad b_k \in \{0,1\}
-\qquad (1 \text{ constraint}, K \text{ binaries}).$$
+$$v = \sum_{k=0}^{p-1} 2^k\, b_k, \qquad b_k \in \{0,1\}
+\qquad (1 \text{ constraint}, p \text{ binaries}).$$
 
 ## The proof
 
@@ -28,7 +28,7 @@ Alldiff is a **double set partitioning**: the first group gives "every object
 one value", the second "every value to one object". Together they impose a
 bijection, that is, all distinct values. Binary expansion is the base-2
 representation, unique for every integer in that range: the correspondence
-between $v$ and $(b_0, \dots, b_{K-1})$ is one-to-one.
+between $v$ and $(b_0, \dots, b_{p-1})$ is one-to-one.
 
 !!! note "Alldiff has an exact relaxation, expansion does not help"
     The matrix of the double partitioning is the one of the assignment problem:
@@ -37,8 +37,8 @@ between $v$ and $(b_0, \dots, b_{K-1})$ is one-to-one.
     the script both are $7$: integrality is free.
 
     Binary expansion, by contrast, adds no strength: $\sum_k 2^k b_k$ with
-    $b_k \in [0,1]$ covers all of $[0, 2^K - 1]$ continuously, exactly like
-    $v \ge 0$, $v \le 2^K - 1$. It serves to *reformulate*, not to tighten — for
+    $b_k \in [0,1]$ covers all of $[0, 2^p - 1]$ continuously, exactly like
+    $v \ge 0$, $v \le 2^p - 1$. It serves to *reformulate*, not to tighten — for
     instance when another part of the model needs binary indicators rather than
     an integer variable.
 
