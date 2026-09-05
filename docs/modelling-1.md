@@ -31,23 +31,17 @@ every class objective and constraints are linear: only the domain of the
 variables changes, that is, the last row of the model. A model has $n$
 variables, with $j \in \{1, 2, \dots, n\}$, and $m$ constraints, with
 $i \in \{1, 2, \dots, m\}$; the data are the costs $c_j$, the coefficients
-$a_{ij}$ and the right-hand sides $b_i$. The sets $M_{\le}$, $M_{=}$, $M_{\ge}$
-partition $\{1, 2, \dots, m\}$ according to the direction of the constraint;
-$N_{\ge 0}$, $N_{\gtreqless 0}$, $N_{\le 0}$ partition $\{1, 2, \dots, n\}$
-according to the sign of the variable. The objective is a minimisation here;
-with $\max$ only the direction of the optimisation changes.
+$a_{ij}$ and the right-hand sides $b_i$. Here the constraints are $\ge$, the
+variables non-negative and the objective a minimisation; with $\max$ only the
+direction of the optimisation changes.
 
 **A model of LP type** — all variables continuous:
 
 $$
 \begin{aligned}
 \min ~~ \sum_{j=1}^{n} c_j\, x_j & & \\
-\text{subject to} \quad \sum_{j=1}^{n} a_{ij}\, x_j &\le b_i, & \forall i \in M_{\le},\\
-\sum_{j=1}^{n} a_{ij}\, x_j &= b_i, & \forall i \in M_{=},\\
-\sum_{j=1}^{n} a_{ij}\, x_j &\ge b_i, & \forall i \in M_{\ge},\\
-x_j &\ge 0, & \forall j \in N_{\ge 0},\\
-x_j &\gtreqless 0, & \forall j \in N_{\gtreqless 0},\\
-x_j &\le 0, & \forall j \in N_{\le 0}.
+\text{subject to} \quad \sum_{j=1}^{n} a_{ij}\, x_j &\ge b_i, & \forall i \in \{1, 2, \dots, m\},\\
+x_j &\ge 0, & \forall j \in \{1, 2, \dots, n\}.
 \end{aligned}
 $$
 
@@ -56,12 +50,8 @@ $$
 $$
 \begin{aligned}
 \min ~~ \sum_{j=1}^{n} c_j\, x_j & & \\
-\text{subject to} \quad \sum_{j=1}^{n} a_{ij}\, x_j &\le b_i, & \forall i \in M_{\le},\\
-\sum_{j=1}^{n} a_{ij}\, x_j &= b_i, & \forall i \in M_{=},\\
-\sum_{j=1}^{n} a_{ij}\, x_j &\ge b_i, & \forall i \in M_{\ge},\\
-x_j &\in \mathbb{Z}_{\ge 0}, & \forall j \in N_{\ge 0},\\
-x_j &\in \mathbb{Z}, & \forall j \in N_{\gtreqless 0},\\
-x_j &\in \mathbb{Z}_{\le 0}, & \forall j \in N_{\le 0}.
+\text{subject to} \quad \sum_{j=1}^{n} a_{ij}\, x_j &\ge b_i, & \forall i \in \{1, 2, \dots, m\},\\
+x_j &\in \mathbb{Z}_{\ge 0}, & \forall j \in \{1, 2, \dots, n\}.
 \end{aligned}
 $$
 
@@ -70,25 +60,25 @@ $$
 $$
 \begin{aligned}
 \min ~~ \sum_{j=1}^{n} c_j\, x_j & & \\
-\text{subject to} \quad \sum_{j=1}^{n} a_{ij}\, x_j &\le b_i, & \forall i \in M_{\le},\\
-\sum_{j=1}^{n} a_{ij}\, x_j &= b_i, & \forall i \in M_{=},\\
-\sum_{j=1}^{n} a_{ij}\, x_j &\ge b_i, & \forall i \in M_{\ge},\\
+\text{subject to} \quad \sum_{j=1}^{n} a_{ij}\, x_j &\ge b_i, & \forall i \in \{1, 2, \dots, m\},\\
 x_j &\in \{0, 1\}, & \forall j \in \{1, 2, \dots, n\}.
 \end{aligned}
 $$
 
-**A model of MILP type** — with $J \subseteq \{1, 2, \dots, n\}$ the set of indices of the integer variables and the signs of the model of LP type:
+**A model of MILP type** — with $J \subseteq \{1, 2, \dots, n\}$ the set of indices of the integer variables:
 
 $$
 \begin{aligned}
 \min ~~ \sum_{j=1}^{n} c_j\, x_j & & \\
-\text{subject to} \quad \sum_{j=1}^{n} a_{ij}\, x_j &\le b_i, & \forall i \in M_{\le},\\
-\sum_{j=1}^{n} a_{ij}\, x_j &= b_i, & \forall i \in M_{=},\\
-\sum_{j=1}^{n} a_{ij}\, x_j &\ge b_i, & \forall i \in M_{\ge},\\
-x_j &\in \mathbb{Z}, & \forall j \in J,\\
-x_j &\in \mathbb{R}, & \forall j \in \{1, 2, \dots, n\} \setminus J.
+\text{subject to} \quad \sum_{j=1}^{n} a_{ij}\, x_j &\ge b_i, & \forall i \in \{1, 2, \dots, m\},\\
+x_j &\in \mathbb{Z}_{\ge 0}, & \forall j \in J,\\
+x_j &\ge 0, & \forall j \in \{1, 2, \dots, n\} \setminus J.
 \end{aligned}
 $$
+
+These are the models in their simplest form: a model can also contain $\le$
+constraints and equality constraints — and the ones in the following chapters
+use all three — as well as several different families of variables.
 
 The objective adds up the costs of the decisions taken; each constraint $i$ ties
 the variables to the right-hand side $b_i$; the last row declares the domain and
