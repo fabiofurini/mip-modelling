@@ -1,0 +1,5 @@
+variant,z,x1,x2
+"original data, with share",16.0,8,0
+"original data, without share",16.0,8,0
+"fund 2 at 20 per cent, with share",18.0,3,3
+"fund 2 at 20 per cent, without share",20.0,0,5

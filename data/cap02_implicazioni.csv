@@ -1,0 +1,31 @@
+exercise,item,description,clauses,constraints,assignments,true
+2.1,1,"if 2 is chosen, then 3 is chosen",1,-x2 + x3 >= 0,4,3
+2.1,2,"if 2 is chosen, then 4 is not chosen",1,x2 + x4 <= 1,4,3
+2.1,3,"if 1 and 6 are chosen, then 7 is chosen",1,x1 + x6 - x7 <= 1,8,7
+2.1,4,"if 1 or 6 is chosen, then 8 is chosen",2,-x1 + x8 >= 0 ; -x6 + x8 >= 0,8,5
+2.1,5,"if 2 and 3 are chosen, then 9 is not chosen",1,x2 + x3 + x9 <= 2,8,7
+2.1,6,"if 2 or 3 is chosen, then 10 is not chosen",2,x2 + x10 <= 1 ; x3 + x10 <= 1,8,5
+2.2,1,"if 3 is not chosen, then 2 is chosen",1,x2 + x3 >= 1,4,3
+2.2,2,"if 4 is not chosen, then 2 is not chosen",1,-x2 + x4 >= 0,4,3
+2.2,3,"if 7 is chosen, then 1 and 6 are chosen",2,x1 - x7 >= 0 ; x6 - x7 >= 0,8,5
+2.2,4,"if 8 is chosen, then 1 or 6 is chosen",1,x1 + x6 - x8 >= 0,8,7
+2.2,5,"if 9 is not chosen, then 2 and 3 are chosen",2,x2 + x9 >= 1 ; x3 + x9 >= 1,8,5
+2.2,6,"if 10 is not chosen, then 2 or 3 is chosen",1,x2 + x3 + x10 >= 1,8,7
+2.3,1,"if 7 or 3 is chosen, then 1 and 2 are chosen",4,x1 - x3 >= 0 ; x1 - x7 >= 0 ; x2 - x3 >= 0 ; x2 - x7 >= 0,16,7
+2.3,2,"if 1, 6 and 7 are chosen, then 8 is chosen",1,x1 + x6 + x7 - x8 <= 2,16,15
+2.3,3,"if 5 and 2 are chosen and 4 is not, then 3 is not chosen",1,x2 + x3 - x4 + x5 <= 2,16,15
+2.3,4,"if 6 and (1 or 4) are chosen, then 2 and (5 or 7) are chosen",4,x1 - x2 + x6 <= 1 ; -x2 + x4 + x6 <= 1 ; x1 - x5 + x6 - x7 <= 1 ; x4 - x5 + x6 - x7 <= 1,64,49
+2.3,5,"if (2 or 5) is chosen and 8 is not, then 3 is chosen or 6 is not",2,x2 - x3 + x6 - x8 <= 1 ; -x3 + x5 + x6 - x8 <= 1,32,29
+2.3,6,"if (1 or 4) and (2 or 5) and not 8, then 3 and (not 6 or 7)",8,x1 + x2 - x3 - x8 <= 1 ; x1 - x3 + x5 - x8 <= 1 ; x2 - x3 + x4 - x8 <= 1 ; -x3 + x4 + x5 - x8 <= 1 ; x1 + x2 + x6 - x7 - x8 <= 2 ; x1 + x5 + x6 - x7 - x8 <= 2 ; x2 + x4 + x6 - x7 - x8 <= 2 ; x4 + x5 + x6 - x7 - x8 <= 2,256,211
+2.4,1,"if 4 is chosen, at least two of 1, 2, 3",3,x1 + x2 - x4 >= 0 ; x1 + x3 - x4 >= 0 ; x2 + x3 - x4 >= 0,16,12
+2.4,2,"if at least two of 6, 7, 8, then 5",3,-x5 + x6 + x7 <= 1 ; -x5 + x6 + x8 <= 1 ; -x5 + x7 + x8 <= 1,16,12
+2.4,3,"if 4 is not chosen, at least two of 1, 2, 3, 9",4,x1 + x2 + x3 + x4 >= 1 ; x1 + x2 + x4 + x9 >= 1 ; x1 + x3 + x4 + x9 >= 1 ; x2 + x3 + x4 + x9 >= 1,32,27
+2.4,4,"if 8 is chosen, then (1 and 6) or (1 and 7) or (2 and 6)",3,x1 + x2 - x8 >= 0 ; x1 + x6 - x8 >= 0 ; x6 + x7 - x8 >= 0,32,24
+2.4,5,"if at least two of 1, 3, 5, then 9 is not chosen",3,x1 + x3 + x9 <= 2 ; x1 + x5 + x9 <= 2 ; x3 + x5 + x9 <= 2,16,12
+2.4,6,"if (1 and 2) or (3 and 4), then 5",2,x1 + x2 - x5 <= 1 ; x3 + x4 - x5 <= 1,32,25
+2.5,1,"if 1 or 2 is chosen, then 3 is chosen",2,-x1 + x3 >= 0 ; -x2 + x3 >= 0,8,5
+2.5,2,"if 4 is chosen, then 5 and 6 are chosen",2,-x4 + x5 >= 0 ; -x4 + x6 >= 0,8,5
+2.5,3,"if 1 or 2 is chosen, then 3 and 4 are chosen",4,-x1 + x3 >= 0 ; -x1 + x4 >= 0 ; -x2 + x3 >= 0 ; -x2 + x4 >= 0,16,7
+2.5,4,"if 1 and 2 are chosen, then 3 is chosen",1,x1 + x2 - x3 <= 1,8,7
+2.5,5,"if 5 or 6 is chosen, then 7 is not chosen",2,x5 + x7 <= 1 ; x6 + x7 <= 1,8,5
+2.5,6,"if 8 is not chosen or 9 is not chosen, then 10 is chosen",2,x8 + x10 >= 1 ; x9 + x10 >= 1,8,5

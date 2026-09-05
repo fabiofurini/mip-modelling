@@ -1,0 +1,5 @@
+case,status,sol_count,obj_val,obj_bound,mip_gap
+optimal,2,2,11.0,11.0,0.0
+infeasible,3,0,,,
+"time limit, no solution",9,0,,,
+first solution,10,1,12.0,10.0,0.16666666666666666

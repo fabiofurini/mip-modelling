@@ -45,11 +45,11 @@ Every model can be run **right away in the browser**: each chapter has its own
 
     ---
 
-    Six families: assignment and scheduling, location and covering,
-    production and lot sizing, selection and knapsack, partitioning and
-    balancing, logistics. Solved exercises and additional questions.
+    Three families — assignment and scheduling, location and coverage,
+    production planning — plus a chapter of mixed models, for the problems that
+    have no family. Solved exercises and additional questions.
 
-    [:octicons-arrow-right-24: The six families](modelling.md)
+    [:octicons-arrow-right-24: The problems](problems.md)
 
 -   :material-school: **The course**
 

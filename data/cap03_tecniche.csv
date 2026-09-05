@@ -1,0 +1,15 @@
+section,technique,z_milp,formulation_1,z_lp_1,formulation_2,z_lp_2,formulation_3,z_lp_3
+3.1,"activation, aggregated / disaggregated",15.0,aggregated,12.666666666666666,disaggregated,15.0,,
+3.2,fixed cost with capacity,44.0,with the capacity as coefficient,37.33333333333333,with a big-M = 100,21.18,,
+3.3,minimum lot size / semicontinuous,49.0,with minimum lot,37.33333333333333,,,,
+3.4,integer count (rounding up),4.0,capacity constraint,3.4,,,,
+3.5,maximum auxiliary variable,4.0,z >= t_j x_j,2.7540983606557377,,,,
+3.6,min-max / max-min / range,11.0,min-max,10.5,,,,
+3.7,absolute value in the objective,1.0,"two constraints, d >= +/-(u-v)",0.0,,,,
+3.8,big-M in a conditional constraint,3.0,smallest M = 6,3.0,M = 20,3.7,M = 1000,3.9939999999999998
+3.9,precedences and sequencing (big-M),9.0,M = sum t_j = 9,4.0,,,,
+3.10,if and only if,15.0,both directions imposed,15.0,,,,
+3.11,counting the different types,57.0,activation + threshold,57.0,,,,
+3.12,alldiff / binary expansion,7.0,double partitioning,7.0,,,,
+3.13,soft constraints with penalties,6.0,deviations +/-,6.0,,,,
+3.14,piecewise linear function,33.0,without adjacency (free convex combination),29.25,with adjacency (SOS2 written by hand),29.25,,

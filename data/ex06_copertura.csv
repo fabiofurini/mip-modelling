@@ -1,0 +1,9 @@
+city,covered_by
+Atlanta,"Atlanta, Chicago, Houston, New York"
+Chicago,"Atlanta, Chicago, New York"
+Denver,"Denver, Los Angeles"
+Houston,"Atlanta, Houston"
+Los Angeles,"Denver, Los Angeles, San Francisco"
+New York,"Atlanta, Chicago, New York"
+San Francisco,"Los Angeles, San Francisco, Seattle"
+Seattle,"San Francisco, Seattle"

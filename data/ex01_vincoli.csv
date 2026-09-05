@@ -1,0 +1,5 @@
+variant,z,groups
+complete model,120.0,2 4
+without the limit on groups,120.0,2 4
+without the implication,130.0,2 3
+without both,130.0,2 3

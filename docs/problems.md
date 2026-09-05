@@ -1,8 +1,9 @@
 # The problems
 
-Six families of problems, each with its solved exercises: model, proof of the
-links between the variables, instance, constructive heuristic, dual of the LP
-relaxation, solution with Gurobi and additional modelling questions.
+Three families of problems plus a chapter of mixed models, each with its solved
+exercises: model, proof of the links between the variables, instance,
+constructive heuristic, dual of the LP relaxation, solution with Gurobi and
+additional modelling questions.
 
 <div class="grid cards" markdown>
 
@@ -11,43 +12,40 @@ relaxation, solution with Gurobi and additional modelling questions.
     ---
 
     Jobs on machines with availability: assignment costs, fixed costs,
-    selection, parallel jobs, classes with setup, "if and only if" bonuses,
+    selection, parallel jobs, classes with setup, ``if and only if'' bonuses,
     sequencing with big-M. Seven problems.
 
     [:octicons-arrow-right-24: The seven problems](scheduling.md)
 
--   :material-map-marker-radius: **Location and covering**
+-   :material-map-marker-radius: **Location and coverage**
 
     ---
 
-    Where to open locations and hubs: aggregated and disaggregated
-    activation, an "if and only if" with two link constraints, a maximum
-    variable. Four problems.
+    Where to open facilities and hubs: aggregated and disaggregated activation,
+    an ``if and only if'' with two linking constraints, maximum variable. Four
+    problems.
 
     [:octicons-arrow-right-24: The four problems](location.md)
 
--   :material-factory: **Production planning and lot sizing**
+-   :material-factory: **Production planning**
 
     ---
 
-    *Under construction.*
+    How much to produce, not merely whether: inventory balance, fixed setup
+    cost, workforce and hirings, minimum lot with a variety bonus. Three
+    problems.
 
--   :material-basket: **Selection, knapsack and auctions**
+    [:octicons-arrow-right-24: The three problems](production.md)
 
-    ---
-
-    *Under construction.*
-
--   :material-scale-balance: **Partitioning and balancing**
+-   :material-shape-outline: **Mixed models**
 
     ---
 
-    *Under construction.*
+    The problems that have no family: alternative modes, minimum lots,
+    containers, splitting and balancing. This is where the linear relaxation
+    stops being useful and the dual bound must be found with combinatorial
+    arguments. Nine solved problems plus two to model.
 
--   :material-truck-delivery: **Logistics and packing**
-
-    ---
-
-    *Under construction.*
+    [:octicons-arrow-right-24: The nine problems](mixed.md)
 
 </div>

@@ -14,8 +14,16 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
+      # reproducible numerical check: the licence bundled with gurobipy (2000
+      # variables and 2000 constraints) is enough for every instance of the course
+      - run: pip install gurobipy pandas matplotlib mkdocs-material
+      - run: python3 python/run_all.py
+      - run: python3 python/check_numbers.py
+      # the CSVs regenerate identically; the PNGs do not (they depend on the
+      # matplotlib version), so the byte-for-byte check is limited to the data
+      - run: git diff --exit-code -- data
       - run: python3 python/make_notebooks.py --check
-      - run: pip install mkdocs-material
+      - run: python3 python/embed_code.py --check
       - run: mkdocs build --strict
       - uses: actions/upload-pages-artifact@v3
         with:

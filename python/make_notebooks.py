@@ -110,11 +110,17 @@ python3 fam07_1_assignment.py
 
 
 def pagina_del_capitolo(nome: str) -> str | None:
-    """Find the website page that presents this script (its «Script:» field)."""
+    """Finds the site page presenting this script (the "Script:" field).
+
+    Several pages may quote the same script (a chapter's choice page and its
+    subpages): the one with the shortest slug is chosen, that is, the main page.
+    """
+    candidate = []
     for pagina in sorted(DIR_DOCS.glob("*.md")):
-        if f"python/{nome}.py" in pagina.read_text():
-            return pagina.stem
-    return None
+        quante = pagina.read_text().count(f"python/{nome}.py")
+        if quante:
+            candidate.append((-quante, len(pagina.stem), pagina.stem))
+    return min(candidate)[2] if candidate else None
 
 
 def titolo_e_classe(slug: str) -> tuple[str, str]:
@@ -134,6 +140,7 @@ def pagina_indice() -> str:
     """The website page listing the notebooks, one badge per chapter."""
     righe = []
     for percorso in sorted(p for p in list(DIR_SCRIPT.glob("cap*.py")) + list(DIR_SCRIPT.glob("fam*.py"))
+              + list(DIR_SCRIPT.glob("num*.py"))
               if not p.stem.endswith("_summary")):
         nome = percorso.stem
         slug = pagina_del_capitolo(nome)
@@ -233,6 +240,7 @@ def main() -> int:
         indice.write_text(pagina_indice())
         print(f"  [page]     docs/{indice.name}")
     for percorso in sorted(p for p in list(DIR_SCRIPT.glob("cap*.py")) + list(DIR_SCRIPT.glob("fam*.py"))
+              + list(DIR_SCRIPT.glob("num*.py"))
               if not p.stem.endswith("_summary")):
         atteso = json.dumps(notebook(percorso), ensure_ascii=False, indent=1) + "\n"
         uscita = DIR_NOTEBOOK / f"{percorso.stem}.ipynb"

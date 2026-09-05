@@ -95,7 +95,7 @@ salva_dati(pd.DataFrame([riga]), "sched2_bound")
 m2d, x2d, y2d = modello_2(t2, c2, a2)
 m2d.addConstrs((x2d[j, mm] <= y2d[mm] for j in R(3) for mm in R(3)), name="disaggregated")
 zlp2d, _, _ = rilassamento(m2d, rafforzato=True)
-print(f"Strengthened relaxation with the disaggregated links x_jm <= y_m: z(LP+) = {frazione(zlp2d)} "
+print(f"Relaxation with the bounds with the disaggregated links x_jm <= y_m: z(LP+) = {frazione(zlp2d)} "
       f"(with the aggregated link only: {frazione(zlp2r)}) — the disaggregated formulation is stronger")
 
 # ---------- 5. ADDITIONAL MODELLING QUESTIONS ----------

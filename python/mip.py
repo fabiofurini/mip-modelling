@@ -80,8 +80,32 @@ def valuta(m: gp.Model, sol: dict):
     return z, viol
 
 
-def ammissibile(m: gp.Model, sol: dict) -> bool:
-    return valuta(m, sol)[1] <= TOL
+def viola_interezza(m: gp.Model, sol: dict) -> float:
+    """Largest distance from an integer among the variables declared integer or binary.
+
+    `valuta` checks bounds and linear constraints: on its own it does not tell an
+    integer solution from a fractional one that is feasible for the relaxation.
+    Certifying that a heuristic solution is a primal bound of the MILP needs this
+    check as well.
+    """
+    m.update()
+    peggio = 0.0
+    for v in m.getVars():
+        if v.VType in (GRB.BINARY, GRB.INTEGER):
+            x = float(sol.get(v.VarName, 0.0))
+            peggio = max(peggio, abs(x - round(x)))
+    return peggio
+
+
+def ammissibile(m: gp.Model, sol: dict, interi: bool = True) -> bool:
+    """Feasibility for the MILP: bounds, linear constraints and (by default) integrality.
+
+    With `interi=False` only continuous feasibility is checked: that is what the
+    hand-built dual solutions need, since they live in an LP.
+    """
+    if valuta(m, sol)[1] > TOL:
+        return False
+    return not interi or viola_interezza(m, sol) <= TOL
 
 
 def frazione(x: float) -> str:
@@ -135,7 +159,7 @@ def due_rilassamenti(m, d):
     zlp_r, _, _ = rilassamento(m, rafforzato=True)
     zd = risolvi(d)
     assert abs(zlp - zd) <= 1e-6, (zlp, zd)
-    print(f"Dual optimum = z(LP) (strong duality): {frazione(zd)};  strengthened relaxation "
+    print(f"Dual optimum = z(LP) (strong duality): {frazione(zd)};  relaxation with the bounds "
           f"with x <= 1: z(LP+) = {frazione(zlp_r)}")
     return zlp, zlp_r, pi
 

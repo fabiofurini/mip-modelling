@@ -21,6 +21,7 @@ site/
 # internal material, not published
 STYLE_AND_FORMAT.md
 notes/
+solutions/
 
 # the PDFs published on the site are versioned
 !docs/pdf/*.pdf

@@ -5,7 +5,7 @@
 | | Content | Learning objectives |
 |---|---|---|
 | **Part I** | Modelling | recognise a link between variables (activation, maximum, big-M, if and only if…) and prove that the model really imposes it |
-| **Part II** | The problems | apply the links to six families of real problems, from the model to Gurobi code |
+| **Part II** | The problems | apply the links to three families of real problems and to the mixed models, from the model to Gurobi code |
 | **Part III** | The course | put what was learned to the test with the additional modelling questions |
 
 ## The format of every exercise (and of the exam)
@@ -27,10 +27,13 @@ four-question scheme:
 
 The resulting `lb ≤ z(MILP) ≤ ub` is the thread running through the course: a
 model is not just written down, it is squeezed from both sides before it is
-handed to the solver — and this is exactly what a real MILP falls back on
-when it cannot be solved to proven optimality in useful time: the heuristic
-and the dual bound are the certificate of quality that a stalled solver run
-cannot provide by itself.
+handed to the solver. A solver stopped halfway does provide a certificate, of
+course — the incumbent `ObjVal` and the bound `ObjBound` enclose the optimum in
+an interval, and `MIPGap` measures its width. The teaching point is a different
+one: **being able to build those two numbers by hand** is what makes it possible
+to understand where they come from, to judge whether the interval the solver
+reports is narrow because the model is good or wide because it is badly
+formulated, and to produce a bound even when the solver returns nothing useful.
 
 ## Grading criteria
 

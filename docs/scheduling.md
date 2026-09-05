@@ -1,8 +1,7 @@
 # Assignment and scheduling
 
 **Class:** BIP / MILP · **Script:** one script and one notebook per problem
-(`python/fam07_1_assignment.py` … `fam07_7_tardiness.py`), plus
-`fam07_8_summary.py` which collects the bounds of all seven.
+(`python/fam07_1_assignment.py` … `fam07_7_tardiness.py`).
 
 Seven problems with the same skeleton: some **jobs** must be assigned to some
 **machines** with limited availability. What changes from problem to problem is
@@ -110,24 +109,16 @@ due dates when the jobs follow one another on a single machine.
 
 </div>
 
-## The picture of the bounds
+## Numerical models of the family
 
-| Problem | heuristic | hand dual | $z(\mathrm{LP})$ | $z(\mathrm{LP}^+)$ | $z(\mathrm{MILP})$ |
-|---|---:|---:|---:|---:|---:|
-| 7.1 minimum-cost assignment | 11 | 10 | $53/5$ | $53/5$ | 11 |
-| 7.2 machines with fixed cost | 12 | $25/4$ | $25/4$ | $1273/200$ | 12 |
-| 7.3 job selection (max) | 20 | 34 | 34 | $680/21$ | 25 |
-| 7.4 parallel jobs | 19 | 5 | $520/49$ | $520/49$ | 15 |
-| 7.5 classes with setup (max) | 9 | 100 | $425/13$ | $329/13$ | 21 |
-| 7.6 classes with bonus (max) | 32 | 150 | $5280/113$ | $5280/113$ | 42 |
-| 7.7 total tardiness | 12 | 2 | 2 | 2 | 11 |
+Four short models with explicit data, reusing the techniques of this family. The
+format is reduced — no variants and no additional questions — but it keeps the
+model, a feasible solution, the dual with a hand-built solution and the bound
+table.
 
-$z(\mathrm{LP})$ is the "pure" relaxation, where $x \in \{0,1\}$ becomes
-$x \ge 0$: it is the one whose dual is written in the exercises, and its
-optimum coincides with the optimum of the dual (strong duality).
-$z(\mathrm{LP}^+)$ is the relaxation strengthened with $x \le 1$, the one the
-solver solves at the root. In problems 7.2 and 7.3 the hand-built dual solution
-is *optimal* for the pure relaxation; in problems 7.1 and 7.2 the heuristic
-finds the optimum, but one knows it only after solving the MILP.
-
-![The bound sandwich on the seven problems](img/cap07_bound.png)
+| Model | What it exercises | $z(\mathrm{MILP})$ |
+|---|---|---:|
+| [EX 2 — Bus lines](ex-02.md) | assignment with a capacity in number of jobs | 9 |
+| [EX 3 — Relay](ex-03.md) | assignment with more resources than tasks; totally unimodular matrix | 95 |
+| [EX 8 — Seminars](ex-08.md) | exact cardinality, non-adjacency, dual with a free variable | 18 |
+| [EX 11 — Balancing](ex-11.md) | min-max versus range: same solutions, different values | 9 |

@@ -1,0 +1,8 @@
+heuristic,sense,heuristic_value,role,z_milp,gap
+5.1 next-fit,min,14.0,ub,11.0,0.2727272727272727
+5.1 first-fit,min,14.0,ub,11.0,0.2727272727272727
+5.1 best-fit (minimum cost),min,11.0,ub,11.0,0.0
+5.2 LPT (makespan),min,11.0,ub,9.0,0.2222222222222222
+5.3 covering constructive heuristic,min,10.0,ub,10.0,0.0
+5.4 constructive heuristic by ratio p/w,max,16.0,lb,17.0,0.058823529411764705
+5.5 lot sizing (least unit cost),min,200.0,ub,170.0,0.17647058823529413

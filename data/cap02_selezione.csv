@@ -1,0 +1,3 @@
+model,z,z_lp
+without logical constraints,30.0,
+with logical constraints,28.0,29.0

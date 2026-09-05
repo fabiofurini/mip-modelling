@@ -1,8 +1,7 @@
 # Location and coverage
 
 **Class:** BIP / MILP · **Script:** one script and one notebook per problem
-(`python/fam08_1_capacitated.py` … `fam08_4_hub.py`), plus
-`fam08_5_summary.py` which collects the bounds of all four.
+(`python/fam08_1_capacitated.py` … `fam08_4_hub.py`).
 
 Four problems in which we decide **where** to open a facility — a location,
 a hub — and how this constrains the variables that depend on that decision:
@@ -81,20 +80,11 @@ depend on it, and how the budget on openings enters the model.
 
 </div>
 
-## The overview of bounds
+## Numerical models of the family
 
-| Problem | heuristic | hand dual | $z(\mathrm{LP})$ | $z(\mathrm{LP}^+)$ | $z(\mathrm{MILP})$ |
-|---|---:|---:|---:|---:|---:|
-| 8.1 capacitated location | 439 | $1581/5$ | $1581/5$ | 317 | 365 |
-| 8.2 p-median | 18 | 13 | 15 | 15 | 15 |
-| 8.3 coverage with interference (max) | 25 | $225/2$ | $41925/646$ | $125/2$ | 45 |
-| 8.4 hub with maximum cost | 20 | $15/2$ | $25/2$ | $1015/78$ | 19 |
+Two short models with explicit data on the covering and activation techniques.
 
-$z(\mathrm{LP})$ is the "pure" relaxation, where the binary variables become
-$\ge 0$: it is the one whose dual is written in the exercises, and its
-optimum matches the dual's optimum (strong duality). $z(\mathrm{LP}^+)$ is
-the strengthened relaxation with $x \le 1$, the one the solver solves at
-the root. In problem 8.1 the hand-built dual solution is *optimal* for the
-pure relaxation; in problem 8.2 the relaxation is already integral.
-
-![The bound sandwich on the four problems](img/cap08_bound.png)
+| Model | What it exercises | $z(\mathrm{MILP})$ |
+|---|---|---:|
+| [EX 6 — Hub-and-spoke](ex-06.md) | pure set covering; the hand-built dual closes the problem | 3 |
+| [EX 10 — CNC tools](ex-10.md) | disaggregated activation reversed; an infeasible dual recipe, corrected | 2500 |

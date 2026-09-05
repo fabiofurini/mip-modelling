@@ -11,7 +11,8 @@ import pandas as pd
 from gurobipy import GRB
 
 from euristiche import matrice, next_fit
-from mip import due_rilassamenti, frazione, nuovo_modello, registra_bound, risolvi, stampa_soluzione, valuta
+from mip import (due_rilassamenti, frazione, nuovo_modello, registra_bound,
+                 rilassamento, risolvi, stampa_soluzione, valuta)
 from stile import intestazione, plt, salva_dati, salva_figura
 
 R = range
@@ -108,10 +109,36 @@ def variante(nome, mod):
     return z
 
 
-# 4a: disaggregated x_ij <= y_j in place of the aggregated link
+# 4a: the disaggregated links x_ij <= y_j are ADDED to the aggregated constraint
 mod, x, y, z = modello_4(c4, f4, k4)
 mod.addConstrs((x[i, j] <= y[j] for i in R(n) for j in R(m)), name="disaggregated_activation")
-varianti["4a"] = variante("4a. Disaggregated activation link added (x_ij <= y_j)", mod)
+varianti["4a"] = variante("4a. Disaggregated links ADDED to the aggregated one (x_ij <= y_j)", mod)
+zlp_4a, _, _ = rilassamento(mod, rafforzato=True)
+zlp_base, _, _ = rilassamento(modello_4(c4, f4, k4)[0], rafforzato=True)
+print(f"      relaxation: z(LP+) goes from {frazione(zlp_base)} to {frazione(zlp_4a)}: the")
+print("      disaggregated links are valid inequalities implied by the aggregated one on")
+print("      integer points, but not by the relaxation, and they tighten it.")
+
+# 4a-bis: the trap. REPLACING the aggregated constraint by the disaggregated links
+# alone also loses the capacity k: the model is no longer the one of the problem.
+# The capacity must be kept explicitly, or one speaks of addition, not replacement.
+mod, x, y, z = modello_4(c4, f4, k4)
+mod.update()
+mod.remove([cc for cc in mod.getConstrs() if cc.ConstrName.startswith("activation")])
+mod.update()
+mod.addConstrs((x[i, j] <= y[j] for i in R(n) for j in R(m)), name="disaggregated_only")
+varianti["4a_without_capacity"] = variante(
+    "4a'. REPLACING the aggregated one by the disaggregated links (capacity lost)", mod)
+mod, x, y, z = modello_4(c4, f4, k4)
+mod.update()
+mod.remove([cc for cc in mod.getConstrs() if cc.ConstrName.startswith("activation")])
+mod.update()
+mod.addConstrs((x[i, j] <= y[j] for i in R(n) for j in R(m)), name="disaggregated_only")
+mod.addConstrs((gp.quicksum(x[i, j] for i in R(n)) <= k4 for j in R(m)), name="capacity")
+varianti["4a_with_capacity"] = variante(
+    "4a\'\'. Correct replacement: disaggregated links + separate capacity", mod)
+assert varianti["4a_without_capacity"] < varianti["4a"], "without the capacity the optimum drops"
+assert varianti["4a_with_capacity"] == varianti["4a"], "with the capacity the optimum is unchanged"
 # 4b: terminal 1 cannot be connected to hub 2
 mod, x, y, z = modello_4(c4, f4, k4)
 mod.addConstr(x[0, 1] == 0, name="terminal1_not_hub2")

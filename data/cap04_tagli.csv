@@ -1,0 +1,2 @@
+model,z_lp_without_cuts,z_lp_with_cuts,z_milp
+knapsack,17.75,17.25,17.0

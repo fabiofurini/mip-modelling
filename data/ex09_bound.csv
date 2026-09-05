@@ -1,0 +1,2 @@
+problem,ub,lb,z_lp,z_lp_rafforzato,z_milp
+EX 9 queens,8.0,5,8.0,8.0,8.0
