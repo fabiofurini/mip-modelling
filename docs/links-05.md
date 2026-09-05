@@ -36,7 +36,7 @@ $$z ~\ge~ t_j\, x_j, \qquad \forall j \qquad (n \text{ constraints}), \qquad z \
 ## The strength of the relaxation
 
 $\min z$ with $z \ge t_j x_j$, $t = (4, 7, 3)$ and $\sum_j x_j \ge 2$: the
-integer optimum is $z(\mathrm{MILP}) = 4$ (jobs 1 and 3 are chosen, and the
+integer optimum is $z(\mathit{MILP}) = 4$ (jobs 1 and 3 are chosen, and the
 maximum is 4). The relaxation is $168/61 \approx 2.75$: the fractional solution
 $x_j = z/t_j$ spreads the choice over all three jobs and lowers the maximum. The
 maximum link gives **weak** relaxations: one of the reasons makespan problems

@@ -37,7 +37,7 @@ missing direction "$y_j = 1 \Rightarrow q_j \ge \ell$".
 ## The strength of the relaxation
 
 Three types, unit revenues $(4, 3, 5)$, resource $12$, capacity $10$ each,
-threshold $\ell = 3$, at least two types: $z(\mathrm{MILP}) = 57$, with
+threshold $\ell = 3$, at least two types: $z(\mathit{MILP}) = 57$, with
 $q = (3, 0, 9)$. The relaxation is also $57$: here the counting introduces no
 gap at all.
 

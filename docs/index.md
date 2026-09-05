@@ -12,7 +12,7 @@ A model with binary and integer variables is not just *written*: it is
 implication, and the student must be able to prove that it really does — in
 both directions, or by explaining why one direction follows from optimality.
 Then the model is *squeezed*: a constructive heuristic yields an upper bound
-and a dual solution of the linear relaxation yields a lower bound, trapping
+and a dual solution of the LP relaxation yields a lower bound, trapping
 the optimal value between the two — the same technique used in practice
 whenever a real instance is too large to be solved to proven optimality.
 Finally the model is *solved*, with Gurobi from Python.

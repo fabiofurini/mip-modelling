@@ -39,8 +39,8 @@ both pressures are present and the two conclusions hold together.
 
 ## The strength of the relaxation
 
-The min-max on that instance gives $z(\mathrm{LP}^+) = 21/2 = 10.5$ against
-$z(\mathrm{MILP}) = 11$: the relaxation splits the weights exactly in half,
+The min-max on that instance gives $z(\mathit{LP}^+) = 21/2 = 10.5$ against
+$z(\mathit{MILP}) = 11$: the relaxation splits the weights exactly in half,
 which integrality does not allow.
 
 ## In gurobipy, and where it is seen again

@@ -114,7 +114,7 @@ On the instance the order by preference is $3, 5, 1, 2, 4$.
   ($3 \le 3$): taken with a contribution of $8$ euros; the preference reaches
   $17 \ge 16$ and one stops.
 
-The total contribution is $z(\mathrm{MILP}) \le \mathit{UB} = 8$.
+The total contribution is $z(\mathit{MILP}) \le \mathit{UB} = 8$.
 
 ## LP relaxation and dual: the dual bound
 
@@ -158,10 +158,10 @@ $\bar\sigma = (0,\ 0,\ 1,\ 0,\ 4)$, with value
 $$\mathit{LB} = -(0+0+1+0+4) - 20 \cdot 2 + 16 \cdot 3 = 3 .$$
 
 This solution is **optimal** for the relaxation without the bounds: indeed
-$z(\mathrm{LP}) = z(\mathrm{LP}^+) = 3$.
+$z(\mathit{LP}) = z(\mathit{LP}^+) = 3$.
 
 !!! warning "An honest bound can be very far away"
-    Here $\mathit{LB} = 3$ and $z(\mathrm{MILP}) = 5$: the gap between the dual
+    Here $\mathit{LB} = 3$ and $z(\mathit{MILP}) = 5$: the gap between the dual
     bound and the integer optimum is $40\%$, and the certified gap between
     heuristic and dual is $100\%$. Nothing is wrong: the LP relaxation may take
     "half a prize" at half preference, and that freedom is worth a lot. It is
@@ -179,7 +179,7 @@ Prizes $3$ and $5$ are taken with points only ($10 + 7 = 17$) and prize $4$ with
 the contribution ($2$ points and $5$ euros): $19$ of the $20$ points are used,
 the preference is $7 + 6 + 3 = 16$, exactly the threshold.
 
-| $UB$ | $LB$ (dual) | $z(\mathrm{LP})$ | $z(\mathrm{LP}^+)$ | $z(\mathrm{MILP})$ | gap |
+| $UB$ | $LB$ (dual) | $z(\mathit{LP})$ | $z(\mathit{LP}^+)$ | $z(\mathit{MILP})$ | gap |
 |---:|---:|---:|---:|---:|---:|
 | 8 | 3 | 3 | 3 | 5 | $60.0\%$ |
 
@@ -193,7 +193,7 @@ which costs only $5$ euros of contribution.
 ## Additional considerations
 
 - The valid inequalities $x_i \le 1$ and $y_i \le 1$ are implied by the
-  mutual-exclusion constraints: indeed $z(\mathrm{LP}) = z(\mathrm{LP}^+)$.
+  mutual-exclusion constraints: indeed $z(\mathit{LP}) = z(\mathit{LP}^+)$.
 - If for some prize $c_i = 0$, the second option would dominate the first (fewer
   points, same cost) and the variable $x_i$ could be removed. It is a check on
   the data worth doing.

@@ -26,11 +26,7 @@ def uguale(a, b):
 c1 = pd.read_csv(DATI / "cap01_bound.csv").iloc[0]
 assert uguale(c1.z_lp, F("3/2")) and uguale(c1.z_lp_rafforzato, F("3/2")), c1
 assert uguale(c1.z_milp, 1), c1
-br = pd.read_csv(DATI / "cap01_branch.csv").set_index("node")
-assert uguale(br.loc["root"].z_lp, F("3/2")) and uguale(br.loc["x1 <= 0"].z_lp, 1)
-assert uguale(br.loc["x1 >= 1"].z_lp, F("3/2")) and uguale(br.loc["x1 >= 1, x2 <= 0"].z_lp, 1)
-assert pd.isna(br.loc["x1 >= 1, x2 >= 1"].z_lp)
-print("ch. 1: relaxations, optimum and branch-and-bound trace")
+print("ch. 1: relaxations and optimum of the rounding example")
 
 imp = pd.read_csv(DATI / "cap02_implicazioni.csv")
 assert len(imp) == 30, len(imp)

@@ -103,7 +103,7 @@ Class by class: the first job pays the setup too, if it fits.
 - **Step 4.** $t_4 = 6 > 5$: skipped. **Steps 5–7.** Class 3:
   $s_3 + t_j > 5$: skipped.
 
-Profit $10 + 6 + 8 - 10 - 5 = 9$: $z(\mathrm{MILP}) \ge 9$.
+Profit $10 + 6 + 8 - 10 - 5 = 9$: $z(\mathit{MILP}) \ge 9$.
 
 ## LP relaxation and dual: the dual bound
 
@@ -120,15 +120,15 @@ $$
 
 **A hand-built dual solution.** $\bar\lambda = 0$ and
 $\bar\pi = \max_j r_j/t_j = \tfrac{10}{5} = 2$: value $100$. Hence
-$9 \le z(\mathrm{MILP}) \le 100$: a coarse bound, as "knapsack" bounds often
+$9 \le z(\mathit{MILP}) \le 100$: a coarse bound, as "knapsack" bounds often
 are, ignoring setups and costs.
 
-**What the solver says.** $z(\mathrm{LP}) = 425/13 = 32.7$ (with
-$\pi = \tfrac{17}{26}$ and some $\lambda_j > 0$); $z(\mathrm{LP}^+) = 329/13$.
+**What the solver says.** $z(\mathit{LP}) = 425/13 = 32.7$ (with
+$\pi = \tfrac{17}{26}$ and some $\lambda_j > 0$); $z(\mathit{LP}^+) = 329/13$.
 Integer optimum $21$: classes 2 and 3, jobs $3, 4, 5, 6$, profit $30 - 9$.
 The heuristic stays at $9$ (gap $57\%$): the scanning order matters.
 
-| $LB$ | $UB$ (hand dual) | $z(\mathrm{LP})$ | $z(\mathrm{LP}^+)$ | $z(\mathrm{MILP})$ | heuristic gap |
+| $LB$ | $UB$ (hand dual) | $z(\mathit{LP})$ | $z(\mathit{LP}^+)$ | $z(\mathit{MILP})$ | heuristic gap |
 |---:|---:|---:|---:|---:|---:|
 | 9 | 100 | $425/13$ | $329/13$ | 21 | $57.1\%$ |
 

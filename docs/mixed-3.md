@@ -109,7 +109,7 @@ needed).
   minimum of $40$: nothing else is needed.
 
 The final diet is milk $1$ kg, rice $2.25$ kg, bread $1$ kg, for a cost of
-$z(\mathrm{MILP}) \le \mathit{UB} = 39/4 = 9.75$.
+$z(\mathit{MILP}) \le \mathit{UB} = 39/4 = 9.75$.
 
 ## LP relaxation and dual: the dual bound
 
@@ -149,7 +149,7 @@ $$\bar\alpha_j = \min_{i :\, g_{ij} > 0} \frac{w_i}{g_{ij}},
 
 and keep the nutrient that gives the larger bound. On the instance iron gives
 $60 \cdot 3/20 = 9$ and calcium $40 \cdot 1/15 = 8/3$: iron wins, and
-$z(\mathrm{MILP}) \ge \mathit{LB} = 9$.
+$z(\mathit{MILP}) \ge \mathit{LB} = 9$.
 
 ## Optimal solution
 
@@ -157,7 +157,7 @@ The optimal diet is rice $1.4$ kg, bread $1.4$ kg, potatoes $1$ kg: three
 different foods, as required, with $60$ grams of iron (exactly the minimum) and
 $40$ of calcium (again exactly the minimum).
 
-| $LB$ (dual) | $z(\mathrm{LP})$ | $z(\mathrm{LP}^+)$ | $z(\mathrm{MILP})$ | $UB$ (heuristic) | gap |
+| $LB$ (dual) | $z(\mathit{LP})$ | $z(\mathit{LP}^+)$ | $z(\mathit{MILP})$ | $UB$ (heuristic) | gap |
 |---:|---:|---:|---:|---:|---:|
 | 9 | $46/5$ | $48/5$ | $48/5$ | $39/4$ | $1.6\%$ |
 

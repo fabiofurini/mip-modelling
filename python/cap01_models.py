@@ -2,7 +2,7 @@
 
 Numerical check of the chapter's examples: the rounding counterexample, the two
 relaxations (pure and with the bounds kept), the integer optimum and the trace
-of the branch-and-bound carried out by hand in the text. Every number quoted in
+and the two bounds of the sandwich. Every number quoted in
 the notes and on the website comes from here.
 """
 import gurobipy as gp
@@ -86,45 +86,6 @@ print(f"Difference between relaxation and integer optimum: {frazione(zlpp)} - {f
 salva_dati(pd.DataFrame([{"model": "example 1.1", "z_lp": zlp, "z_lp_rafforzato": zlpp,
                           "z_milp": zmilp}]), "cap01_bound")
 
-
-# ---------- 5. BRANCH-AND-BOUND BY HAND ----------
-intestazione("5. Branch-and-bound: the trace reported in the chapter")
-
-
-def nodo(fissa: dict):
-    """LP+ relaxation of the subproblem whose variables are bounded by `fissa`.
-
-    `fissa` is {index: (lb, ub)}: these are the branches x_j <= floor(v) and
-    x_j >= ceil(v).
-    """
-    m, x = modello_esempio(binarie=False, superiore=True)
-    for j, (lo, hi) in fissa.items():
-        x[j].LB, x[j].UB = lo, hi
-    m.optimize()
-    if m.Status != GRB.OPTIMAL:
-        return None, None
-    return m.ObjVal, (x[0].X, x[1].X)
-
-
-passi = []
-for etichetta, fissa in [("root", {}),
-                         ("x1 <= 0", {0: (0.0, 0.0)}),
-                         ("x1 >= 1", {0: (1.0, 1.0)}),
-                         ("x1 >= 1, x2 <= 0", {0: (1.0, 1.0), 1: (0.0, 0.0)}),
-                         ("x1 >= 1, x2 >= 1", {0: (1.0, 1.0), 1: (1.0, 1.0)})]:
-    z, sol = nodo(fissa)
-    if z is None:
-        print(f"  {etichetta:20s} infeasible: the branch is discarded")
-        passi.append({"node": etichetta, "z_lp": None, "x1": None, "x2": None, "integer": False})
-        continue
-    intera = all(abs(v - round(v)) <= 1e-9 for v in sol)
-    print(f"  {etichetta:20s} z(LP+) = {frazione(z):>4}   x = ({frazione(sol[0])}, "
-          f"{frazione(sol[1])}){'   integer solution: candidate incumbent' if intera else '   fractional: branch'}")
-    passi.append({"node": etichetta, "z_lp": z, "x1": sol[0], "x2": sol[1], "integer": intera})
-salva_dati(pd.DataFrame(passi), "cap01_branch")
-assert passi[0]["z_lp"] == 1.5 and passi[1]["z_lp"] == 1.0 and passi[2]["z_lp"] == 1.5
-assert passi[3]["z_lp"] == 1.0 and passi[4]["z_lp"] is None
-print("  The final incumbent is worth 1: it is the optimum, and no subproblem is left open.")
 
 # ---------- 6. FIGURE: THE FEASIBLE REGION AND THE INTEGER POINTS ----------
 fig, ax = plt.subplots(figsize=(5.4, 5.0))

@@ -98,7 +98,7 @@ $16/3 \approx 5.33$, so the order is $1, 3, 4, 6, 5, 2$:
 - bid 5 $\{2,4\}$: rejected, item $4$ is already sold;
 - bid 2 $\{2\}$: accepted (profit 3).
 
-Bids $1, 2, 3$ are accepted: $z(\mathrm{MILP}) \ge \mathit{LB} = 21$.
+Bids $1, 2, 3$ are accepted: $z(\mathit{MILP}) \ge \mathit{LB} = 21$.
 
 ## LP relaxation and dual: the dual bound
 
@@ -128,7 +128,7 @@ Feasibility is immediate: for every bid $j$,
 $$\sum_{i \in B_j} \bar\lambda_i \;\ge\; |B_j| \cdot \frac{p_j}{|B_j|} = p_j .$$
 
 On the instance $\bar\lambda = (6, 5, 6, 6)$ and
-$z(\mathrm{MILP}) \le \mathit{UB} = 23$.
+$z(\mathit{MILP}) \le \mathit{UB} = 23$.
 
 !!! warning "A coarse recipe costs a lot"
     The "obvious" recipe $\bar\lambda_i = \max_{j :\, i \in B_j} p_j$ (without
@@ -142,7 +142,7 @@ $z(\mathrm{MILP}) \le \mathit{UB} = 23$.
 At the optimum bids $4$ ($\{1,3\}$, profit $12$) and $5$ ($\{2,4\}$, profit
 $10$) are accepted: all four items are sold.
 
-| $LB$ (heuristic) | $z(\mathrm{MILP})$ | $z(\mathrm{LP})$ | $z(\mathrm{LP}^+)$ | $UB$ (dual) | gap |
+| $LB$ (heuristic) | $z(\mathit{MILP})$ | $z(\mathit{LP})$ | $z(\mathit{LP}^+)$ | $UB$ (dual) | gap |
 |---:|---:|---:|---:|---:|---:|
 | 21 | 22 | 22 | 22 | 23 | $4.5\%$ |
 
@@ -155,13 +155,13 @@ items on the shelf.
 ## Additional considerations
 
 - The valid inequalities $x_j \le 1$ are implied by the item constraints
-  whenever $B_j \ne \emptyset$: indeed $z(\mathrm{LP}) = z(\mathrm{LP}^+) = 22$.
-- On this instance one also has $z(\mathrm{LP}) = z(\mathrm{MILP})$: the
+  whenever $B_j \ne \emptyset$: indeed $z(\mathit{LP}) = z(\mathit{LP}^+) = 22$.
+- On this instance one also has $z(\mathit{LP}) = z(\mathit{MILP})$: the
   relaxation lands on an integer vertex. That is luck, not a property of set
   packing. The minimal counterexample is the **triangle**: three items and three
   bids asking for two each, all of profit $1$. There
-  $z(\mathrm{LP}) = 3/2$ (with $x = 1/2$ on all three) against
-  $z(\mathrm{MILP}) = 1$.
+  $z(\mathit{LP}) = 3/2$ (with $x = 1/2$ on all three) against
+  $z(\mathit{MILP}) = 1$.
 - Set packing is NP-hard in general, but becomes easy when the incidence matrix
   is *perfect* or *balanced*. The triangle is the smallest non-perfect graph in
   this sense, and it is why *clique inequalities* are the classical cuts for this

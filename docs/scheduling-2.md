@@ -132,7 +132,7 @@ costs: it pays to consume little availability).
   $13$ the minimum is machine 2, $x[3][2] = 1$, $ra[2] = 7$.
 
 Machines used: 2 and 3: $\bar y = (0, 1, 1)$, value $12$, hence
-$z(\mathrm{MILP}) \le 12$. Next-fit, first-fit and the "opened machines first"
+$z(\mathit{MILP}) \le 12$. Next-fit, first-fit and the "opened machines first"
 variants use machines 1 and 2 (value $15$).
 
 ## LP relaxation and dual: the dual bound
@@ -157,18 +157,18 @@ $\bar\mu_2 = \min\{\tfrac{8}{5}, \tfrac{7}{2}, \tfrac{5}{6}\} = \tfrac{5}{6}$,
 $\bar\mu_3 = \min\{\tfrac{32}{5}, \tfrac{91}{20}, \tfrac{25}{6}\} = \tfrac{25}{6}$.
 Value $\tfrac{25}{4}$:
 
-$$\tfrac{25}{4} ~\le~ z(\mathrm{MILP}) ~\le~ 12.$$
+$$\tfrac{25}{4} ~\le~ z(\mathit{MILP}) ~\le~ 12.$$
 
 A weak bound: the fixed cost of a machine is paid in full as soon as it is
 used, but the relaxation spreads it over the minutes.
 
-**What the solver says.** $z(\mathrm{LP}) = 25/4$: the hand-built solution is
+**What the solver says.** $z(\mathit{LP}) = 25/4$: the hand-built solution is
 optimal for the dual. With $y_m \le 1$ and $x_{jm} \le 1$ the strengthened
-relaxation is $z(\mathrm{LP}^+) = 1273/200 = 6.365$; with the disaggregated
+relaxation is $z(\mathit{LP}^+) = 1273/200 = 6.365$; with the disaggregated
 links $x_{jm} \le y_m$ it rises to $440/67 = 6.567$. Integer optimum $12$:
 machines 2 and 3 on, $\tilde x_{12} = \tilde x_{23} = \tilde x_{33} = 1$.
 
-| $UB$ | $LB$ (hand dual) | $z(\mathrm{LP})$ | $z(\mathrm{LP}^+)$ | $z(\mathrm{MILP})$ | heuristic gap |
+| $UB$ | $LB$ (hand dual) | $z(\mathit{LP})$ | $z(\mathit{LP}^+)$ | $z(\mathit{MILP})$ | heuristic gap |
 |---:|---:|---:|---:|---:|---:|
 | 12 | $25/4$ | $25/4$ | $1273/200$ | 12 | $0.0\%$ |
 
@@ -182,7 +182,7 @@ machines 2 and 3 on, $\tilde x_{12} = \tilde x_{23} = \tilde x_{33} = 1$.
   $(x_{1m} \,\mathtt{OR}\, \dots \,\mathtt{OR}\, x_{nm}) \Rightarrow y_m$; De Morgan
   and distributivity give the CNF $(\mathtt{NOT}\,x_{1m} \,\mathtt{OR}\, y_m) \,\mathtt{AND}\, \dots$,
   i.e.\ the **disaggregated** constraints $x_{jm} \le y_m$: implied by the
-  model, but not by the relaxation — added, they bring $z(\mathrm{LP}^+)$ to
+  model, but not by the relaxation — added, they bring $z(\mathit{LP}^+)$ to
   $440/67$. Same set of integer solutions, tighter relaxation.
 - The opposite direction, $\sum_j x_{jm} \ge y_m$, is not valid but can be
   added without losing the optimum.

@@ -69,11 +69,11 @@ The reading order never changes: `Status`, then `SolCount`, then `ObjVal` and
 
 | `Status` | value | `SolCount` | What can be said |
 |---|---:|---:|---|
-| `OPTIMAL` | 2 | $\ge 1$ | $z(\mathrm{MILP}) = $ `ObjVal`, proved |
+| `OPTIMAL` | 2 | $\ge 1$ | $z(\mathit{MILP}) = $ `ObjVal`, proved |
 | `INFEASIBLE` | 3 | 0 | the model has no feasible solution |
 | `UNBOUNDED` | 5 | 0 | a constraint, or a bound on a variable, is missing |
 | `TIME_LIMIT` | 9 | 0 | nothing: neither a solution nor, in general, a useful bound |
-| `TIME_LIMIT` | 9 | $\ge 1$ | `ObjBound` $\le z(\mathrm{MILP}) \le$ `ObjVal` |
+| `TIME_LIMIT` | 9 | $\ge 1$ | `ObjBound` $\le z(\mathit{MILP}) \le$ `ObjVal` |
 | `SOLUTION_LIMIT` | 10 | $\ge 1$ | as above |
 
 !!! example "The four cases on the instance of problem 7.1"
@@ -125,7 +125,7 @@ zlp = r.ObjVal
 duals = {c.ConstrName: c.Pi for c in r.getConstrs()}
 ```
 
-On the instance of problem 7.1, $z(\mathrm{LP}^+) = z(\mathrm{LP}) = 53/5$ — the
+On the instance of problem 7.1, $z(\mathit{LP}^+) = z(\mathit{LP}) = 53/5$ — the
 two relaxations coincide because the assignment constraints already imply
 $x_{jm} \le 1$ — and the nonzero duals are $\tilde\mu = (2,\ 4.8,\ 5)$ and
 $\tilde\pi_2 = -0.2$: machine 2 is the only tight resource.
@@ -152,7 +152,7 @@ salva_dati(pd.DataFrame([row]), "sched1_bound")          #     -> data/sched1_bo
 ```
 
 On the instance of problem 7.1 the protocol produces $\mathit{LB} = 10$,
-$z(\mathrm{LP}) = 53/5$, $z(\mathrm{MILP}) = 11$, $\mathit{UB} = 11$, and the
+$z(\mathit{LP}) = 53/5$, $z(\mathit{MILP}) = 11$, $\mathit{UB} = 11$, and the
 row ends up in `data/sched1_bound.csv`. That is where the notes, the website
 page and `check_numbers.py` read it from: **one single place where the number
 exists**.

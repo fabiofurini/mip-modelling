@@ -53,12 +53,12 @@ service costs
 
 $$c = \begin{pmatrix} 2 & 5 \\ 4 & 1 \\ 3 & 3\end{pmatrix}.$$
 
-| Formulation | link constraints | $z(\mathrm{LP}^+)$ |
+| Formulation | link constraints | $z(\mathit{LP}^+)$ |
 |---|---:|---:|
 | aggregated | $m = 2$ | $38/3 \approx 12.67$ |
 | disaggregated | $n\,m = 6$ | $15$ |
 
-The integer optimum is $z(\mathrm{MILP}) = 15$: the disaggregated form already
+The integer optimum is $z(\mathit{MILP}) = 15$: the disaggregated form already
 reaches it in the relaxation, the aggregated one stops at $38/3$. More rows,
 tighter relaxation: the typical trade-off of this technique.
 

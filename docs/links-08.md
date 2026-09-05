@@ -32,16 +32,16 @@ Three things must be told apart:
 !!! danger "An invalid $M$ is not «a little different»"
     With $a = (3,4,5)$, $b = 6$ and $x$ binary, the maximum of $a'x$ is $12$, so
     $M = 12 - 6 = 6$ is valid. On $\max\ x_1 + x_2 + x_3 + y$ the optimum is
-    $z(\mathrm{MILP}) = 3$ (with $y = 0$ and all the $x$ at 1). With $M = 5$ the
+    $z(\mathit{MILP}) = 3$ (with $y = 0$ and all the $x$ at 1). With $M = 5$ the
     constraint with $y = 0$ remains $3x_1 + 4x_2 + 5x_3 \le 11$, which excludes
     $x = (1,1,1)$: the optimum drops to $2$. The model no longer answers the
     question asked.
 
 ## The strength of the relaxation
 
-| $M$ | $z(\mathrm{LP}^+)$ | |
+| $M$ | $z(\mathit{LP}^+)$ | |
 |---|---:|---|
-| $6$ (the smallest proved) | $3$ | coincides with $z(\mathrm{MILP})$ |
+| $6$ (the smallest proved) | $3$ | coincides with $z(\mathit{MILP})$ |
 | $20$ | $37/10 = 3.7$ | |
 | $1000$ | $1997/500 \approx 3.994$ | almost the largest possible, $4$ |
 

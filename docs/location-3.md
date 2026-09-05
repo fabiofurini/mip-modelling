@@ -88,7 +88,7 @@ The first $k$ locations open. Client 1: signal $10\ge5$ but 2 strong
 locations ($>1$): **not covered**. Client 2: signal $5\ge5$, 0 strong
 locations: **covered**. Client 3: signal $7\ge5$, 1 strong location:
 **covered**. Clients 4 and 5: insufficient signal: **not covered**. Value
-$20+5=25$: $z(\mathrm{MILP}) \ge \mathit{LB} = 25$.
+$20+5=25$: $z(\mathit{MILP}) \ge \mathit{LB} = 25$.
 
 ## LP relaxation and dual: the dual bound
 
@@ -100,15 +100,15 @@ $$
 
 of value $m\sum_c\bar\lambda_c = 3\cdot75/2=225/2$. By weak duality (a
 maximisation problem: the heuristic gives the lower bound, the dual the
-upper bound), $\mathit{LB}=25 \le z(\mathrm{MILP}) \le z(\mathrm{LP}) \le
+upper bound), $\mathit{LB}=25 \le z(\mathit{MILP}) \le z(\mathit{LP}) \le
 \mathit{UB}=225/2$.
 
-**What the solver says.** $z(\mathrm{LP}) = 41925/646 \approx 64.9$,
-$z(\mathrm{LP}^+) = 125/2 = 62.5$. $z(\mathrm{MILP}) = 45$, with locations
+**What the solver says.** $z(\mathit{LP}) = 41925/646 \approx 64.9$,
+$z(\mathit{LP}^+) = 125/2 = 62.5$. $z(\mathit{MILP}) = 45$, with locations
 1 and 3 installed and clients 1, 2, 4 covered (not 3 or 5): different from
 what the heuristic found. Heuristic gap $44.4\%$.
 
-| $LB$ | $UB$ (dual) | $z(\mathrm{LP})$ | $z(\mathrm{LP}^+)$ | $z(\mathrm{MILP})$ | gap |
+| $LB$ | $UB$ (dual) | $z(\mathit{LP})$ | $z(\mathit{LP}^+)$ | $z(\mathit{MILP})$ | gap |
 |---:|---:|---:|---:|---:|---:|
 | 25 | $225/2$ | $41925/646$ | $125/2$ | 45 | $44.4\%$ |
 

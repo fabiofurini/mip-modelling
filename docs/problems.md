@@ -42,7 +42,7 @@ additional modelling questions.
     ---
 
     The problems that have no family: alternative modes, minimum lots,
-    containers, splitting and balancing. This is where the linear relaxation
+    containers, splitting and balancing. This is where the LP relaxation
     stops being useful and the dual bound must be found with combinatorial
     arguments. Nine solved problems plus two to model.
 

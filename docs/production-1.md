@@ -94,7 +94,7 @@ unit, then starts again. Cost $O(n^2)$.
 - period 5: covers only itself, quantity $10$, average cost $5$.
 
 Setups on days $1, 3, 5$, for a cost of $420$. Keeping the better of the two,
-$z(\mathrm{MILP}) \le \mathit{UB} = 420$.
+$z(\mathit{MILP}) \le \mathit{UB} = 420$.
 
 ## LP relaxation and dual: the dual bound
 
@@ -124,7 +124,7 @@ $$\mathit{LB} = 2{\cdot}20 + 3{\cdot}10 + 2{\cdot}30 + 3{\cdot}40 + 2{\cdot}10 =
 It is the production cost if the setups were free: valid, and deliberately
 optimistic.
 
-**What the solver says.** $z(\mathrm{LP}) = z(\mathrm{LP}^+) = 3890/11
+**What the solver says.** $z(\mathit{LP}) = z(\mathit{LP}^+) = 3890/11
 \approx 353.6$: the relaxation does pay for the setups, in fractions
 ($\pi_t = q_t/M_t$ is feasible). The integer optimum sets up on days 1 and 3.
 
@@ -134,7 +134,7 @@ optimistic.
 | production $x_t$ | 30 | 0 | 80 | 0 | 0 |
 | stock $s_t$ | 10 | 0 | 50 | 10 | — |
 
-| $UB$ | $LB$ (dual) | $z(\mathrm{LP})$ | $z(\mathrm{LP}^+)$ | $z(\mathrm{MILP})$ | gap |
+| $UB$ | $LB$ (dual) | $z(\mathit{LP})$ | $z(\mathit{LP}^+)$ | $z(\mathit{MILP})$ | gap |
 |---:|---:|---:|---:|---:|---:|
 | 420 | 270 | $3890/11$ | $3890/11$ | 390 | $7.7\%$ |
 
@@ -146,7 +146,7 @@ optimistic.
   program. Least unit cost is *not* that algorithm: it is a myopic rule that
   looks at one setup at a time, and indeed it stops at $420$ against $390$.
 - The valid inequality $x_t \le M_t$ adds nothing: $M_t$ is already the largest
-  useful production, and indeed $z(\mathrm{LP}) = z(\mathrm{LP}^+)$.
+  useful production, and indeed $z(\mathit{LP}) = z(\mathit{LP}^+)$.
 - An alternative formulation with variables $x_{t\tau}$ (``produced in $t$, sold
   in $\tau$'') has an **integral** relaxation but $O(n^2)$ variables: the typical
   trade-off between the size of the model and the quality of the relaxation.

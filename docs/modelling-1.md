@@ -14,12 +14,12 @@ and inequalities that make a solution feasible).
 
 !!! note "Notation for optimal values"
     $X$ is the **feasible set** (the points satisfying all constraints, domains
-    included); $z(\mathrm{MILP})$, $z(\mathrm{LP})$, $z(\mathrm{D})$ are the
+    included); $z(\mathit{MILP})$, $z(\mathit{LP})$, $z(\mathit{D})$ are the
     optimal values of the MILP, of its relaxation and of the dual of the
-    relaxation. Solutions **built by hand** carry a bar ($\bar x$), **optimal**
+    relaxation. **Feasible** solutions carry a bar ($\bar x$), **optimal**
     ones a tilde ($\tilde x$). The bounds are called $LB$ and
     $UB$, whatever the direction of the objective. We always write
-    $z(\mathrm{MILP})$ and never $z^\star$: which model is being optimised must
+    $z(\mathit{MILP})$ and never $z^\star$: which model is being optimised must
     be explicit.
 
 **Classes of models.** **LP** if objective and constraints are linear and the
@@ -38,7 +38,7 @@ x_1,\ x_2 &\in \{0,1\}. &
 $$
 
 The LP relaxation replaces $x_1, x_2 \in \{0,1\}$ by $0 \le x_1, x_2 \le 1$ and
-is worth $z(\mathrm{LP}^+) = 3/2$. That value is attained by **infinitely many**
+is worth $z(\mathit{LP}^+) = 3/2$. That value is attained by **infinitely many**
 optimal solutions — every point of the segment $x_1 + x_2 = 3/2$ inside the
 square — among them $(3/4, 3/4)$, $(1, 1/2)$ and $(1/2, 1)$. Which one the
 solver returns depends on the algorithm: on our installation Gurobi gives
@@ -47,7 +47,7 @@ $(1/2, 1)$.
 Rounding $(3/4, 3/4)$ to the nearest integer gives $(1,1)$, which violates the
 constraint ($2+2 = 4 > 3$): it is **not even feasible**. Rounding $(1, 1/2)$
 gives $(1, 0)$, feasible with value $1$ — which is exactly the integer optimum,
-$z(\mathrm{MILP}) = 1$.
+$z(\mathit{MILP}) = 1$.
 
 ![The relaxation and the integer points](img/cap01_rilassamento.png)
 
@@ -59,21 +59,21 @@ worth more than $1$.
 ## The two relaxations, and which side they are on
 
 !!! note "Two versions not to be confused"
-    - **relaxation without the bounds** $z(\mathrm{LP})$: $x \in \{0,1\}$ becomes $x \ge 0$
+    - **relaxation without the bounds** $z(\mathit{LP})$: $x \in \{0,1\}$ becomes $x \ge 0$
       alone. This is the one whose dual the exercises write by hand.
-    - **relaxation with the bounds** $z(\mathrm{LP}^+)$: $x \in \{0,1\}$
+    - **relaxation with the bounds** $z(\mathit{LP}^+)$: $x \in \{0,1\}$
       becomes $0 \le x \le 1$. This is Gurobi's `relax()` and the root
       relaxation of branch-and-bound.
 
     In a maximisation
-    $z(\mathrm{LP}) \ge z(\mathrm{LP}^+) \ge z(\mathrm{MILP})$; in a
+    $z(\mathit{LP}) \ge z(\mathit{LP}^+) \ge z(\mathit{MILP})$; in a
     minimisation the directions are reversed. The two coincide when the other
     constraints already imply $x \le 1$ — for instance with an assignment
     constraint $\sum_m x_{jm} = 1$.
 
 The relaxation **removes** constraints, hence
 
-$$X_{\mathrm{MILP}} \subseteq X_{\mathrm{LP}^+} \subseteq X_{\mathrm{LP}},$$
+$$X_{\mathit{MILP}} \subseteq X_{\mathit{LP}^+} \subseteq X_{\mathit{LP}},$$
 
 and optimising over a larger set cannot give a worse value. In a maximisation
 the relaxation is an *upper* bound, in a minimisation a *lower* bound: in both
@@ -82,21 +82,24 @@ cases it is an **optimistic** bound.
 !!! warning "Which side each bound comes from"
     The dual of the relaxation does **not** give a bound "from the other side".
     By weak duality, in a minimisation every feasible dual solution is worth at
-    most $z(\mathrm{LP})$, hence at most $z(\mathrm{MILP})$: it sits on the
+    most $z(\mathit{LP})$, hence at most $z(\mathit{MILP})$: it sits on the
     *same* side as the relaxation. The bound from the other side — the
     *pessimistic* one — comes only from a feasible solution of the MILP, that
     is, from a heuristic or from the solver. In a **minimisation**:
 
-    $$z(\mathrm{D}) \le z(\mathrm{LP}) \le z(\mathrm{LP}^+) \le z(\mathrm{MILP}) \le c'\bar x$$
+    $$\textstyle\sum_i b_i \bar u_i \le z(\mathit{D}(\mathit{LP})) = z(\mathit{LP}) \le z(\mathit{LP}^+) \le z(\mathit{MILP}) \le \sum_j c_j \bar x_j$$
 
     for every feasible integer $\bar x$; in a **maximisation** all directions
     are reversed.
 
 ## Three "gaps" not to be confused
 
-1. **Heuristic gap**, when the optimum is known:
-   $|z_{\text{heur}} - z(\mathrm{MILP})| / |z(\mathrm{MILP})|$. It is the one
-   reported in the exercise tables.
+1. **Heuristic gap.** If $\bar x$ is the solution built by the heuristic, its
+   value is $\sum_j c_j\, \bar x_j$ and the gap is
+   $\bigl|\sum_j c_j\, \bar x_j - z(\mathit{MILP})\bigr| / |z(\mathit{MILP})|$
+   when the optimum is known — it is the one reported in the exercise tables.
+   When the optimum is not known it is computed against a dual bound, which
+   takes its place.
 2. **Certified gap** between two known bounds, without knowing the optimum:
    $(\mathit{UB} - \mathit{LB})/|\mathit{UB}|$ for a minimisation with
    $\mathit{UB} > 0$. It guarantees the optimum lies in the interval, not that
@@ -119,30 +122,22 @@ Problem [7.1](scheduling-1.md) uses a *partitioning* for every job,
 [7.3](scheduling-3.md) a *packing*, and [chapter 2](modelling-2.md) shows
 *covering* as the direct translation of an OR clause.
 
-## Branch-and-bound in one page
+## What the solver does with the two bounds
 
-For a **minimisation** problem:
+A MILP with a bounded feasible set is solved with dedicated algorithms. How they
+work — how the solution space is explored, how cuts are separated, what to
+branch on — is not a topic of this course: solution techniques are the subject
+of a separate course. Only one thing matters here: the two bounds this course
+teaches how to build by hand are exactly the ones the solver works with.
 
-1. solve the LP relaxation of the subproblem: if infeasible, discard it; if the
-   solution is integer it becomes a candidate **incumbent**;
-2. otherwise choose a fractional variable $x_j = v$ and **branch** into
-   $x_j \le \lfloor v \rfloor$ and $x_j \ge \lceil v \rceil$: every integer
-   solution satisfies one of the two, and none both;
-3. **prune** a subproblem whose relaxation is worth more than the incumbent;
-4. terminate when no open subproblems remain.
+- The **primal bound** is a feasible solution, and it gives a value to beat: any
+  part of the space that cannot do better is discarded without being explored.
+- The **dual bound** comes from the relaxation, and says how much one may hope
+  for at most: the closer it is to the integer optimum — that is, the tighter
+  the formulation, see [chapter 3](links.md) — the less work is left.
 
-With binary variables the tree has at most $2^n$ leaves and the algorithm
-certainly terminates; with unbounded integer variables termination is not
-guaranteed.
-
-!!! example "The trace on the example (a maximisation: prune what is worth *less*)"
-    - **Root.** $z(\mathrm{LP}^+) = 3/2$ with $(1/2, 1)$: $x_1$ is fractional.
-    - **Branch $x_1 \le 0$.** Optimum $x_2 = 1$, value $1$, integer: incumbent.
-    - **Branch $x_1 \ge 1$.** Optimum $x_2 = 1/2$, value $3/2$: still
-      fractional. The sub-branch $x_2 \le 0$ gives $(1,0)$ of value $1$, which
-      does not improve; the sub-branch $x_2 \ge 1$ is infeasible.
-    - **End.** $z(\mathrm{MILP}) = 1$, proved. The five relaxations are solved by
-      the script and saved in `data/cap01_branch.csv`.
+The gap between the two is what the solver reports as `MIPGap`, and it is also
+the only thing one can claim with certainty when the optimum is not reached.
 
 ## What this chapter leaves open
 
@@ -156,7 +151,7 @@ guaranteed.
 
 ## Code
 
-The complete script — the two relaxations, the rounding, the branch-and-bound
+The complete script — the two relaxations, the rounding
 trace and the figure — is
 [`python/cap01_models.py`](https://github.com/fabiofurini/mip-modelling/blob/main/python/cap01_models.py)
 (reproducible with `python3 python/cap01_models.py` from the `python/` folder).
@@ -166,14 +161,14 @@ The same code is available as a notebook —
 
 <!-- embedded-script: begin (regenerated by python/embed_code.py) -->
 
-??? example "Show the complete script — `python/cap01_models.py` (155 lines)"
+??? example "Show the complete script — `python/cap01_models.py` (116 lines)"
 
     ```python
     """Chapter 1 -- What is a MIP model: relaxation, rounding, bounds.
 
     Numerical check of the chapter's examples: the rounding counterexample, the two
     relaxations (pure and with the bounds kept), the integer optimum and the trace
-    of the branch-and-bound carried out by hand in the text. Every number quoted in
+    and the two bounds of the sandwich. Every number quoted in
     the notes and on the website comes from here.
     """
     import gurobipy as gp
@@ -257,45 +252,6 @@ The same code is available as a notebook —
     salva_dati(pd.DataFrame([{"model": "example 1.1", "z_lp": zlp, "z_lp_rafforzato": zlpp,
                               "z_milp": zmilp}]), "cap01_bound")
 
-
-    # ---------- 5. BRANCH-AND-BOUND BY HAND ----------
-    intestazione("5. Branch-and-bound: the trace reported in the chapter")
-
-
-    def nodo(fissa: dict):
-        """LP+ relaxation of the subproblem whose variables are bounded by `fissa`.
-
-        `fissa` is {index: (lb, ub)}: these are the branches x_j <= floor(v) and
-        x_j >= ceil(v).
-        """
-        m, x = modello_esempio(binarie=False, superiore=True)
-        for j, (lo, hi) in fissa.items():
-            x[j].LB, x[j].UB = lo, hi
-        m.optimize()
-        if m.Status != GRB.OPTIMAL:
-            return None, None
-        return m.ObjVal, (x[0].X, x[1].X)
-
-
-    passi = []
-    for etichetta, fissa in [("root", {}),
-                             ("x1 <= 0", {0: (0.0, 0.0)}),
-                             ("x1 >= 1", {0: (1.0, 1.0)}),
-                             ("x1 >= 1, x2 <= 0", {0: (1.0, 1.0), 1: (0.0, 0.0)}),
-                             ("x1 >= 1, x2 >= 1", {0: (1.0, 1.0), 1: (1.0, 1.0)})]:
-        z, sol = nodo(fissa)
-        if z is None:
-            print(f"  {etichetta:20s} infeasible: the branch is discarded")
-            passi.append({"node": etichetta, "z_lp": None, "x1": None, "x2": None, "integer": False})
-            continue
-        intera = all(abs(v - round(v)) <= 1e-9 for v in sol)
-        print(f"  {etichetta:20s} z(LP+) = {frazione(z):>4}   x = ({frazione(sol[0])}, "
-              f"{frazione(sol[1])}){'   integer solution: candidate incumbent' if intera else '   fractional: branch'}")
-        passi.append({"node": etichetta, "z_lp": z, "x1": sol[0], "x2": sol[1], "integer": intera})
-    salva_dati(pd.DataFrame(passi), "cap01_branch")
-    assert passi[0]["z_lp"] == 1.5 and passi[1]["z_lp"] == 1.0 and passi[2]["z_lp"] == 1.5
-    assert passi[3]["z_lp"] == 1.0 and passi[4]["z_lp"] is None
-    print("  The final incumbent is worth 1: it is the optimum, and no subproblem is left open.")
 
     # ---------- 6. FIGURE: THE FEASIBLE REGION AND THE INTEGER POINTS ----------
     fig, ax = plt.subplots(figsize=(5.4, 5.0))

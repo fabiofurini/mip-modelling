@@ -188,7 +188,7 @@ seen at work.
        coefficient in the objective: strictly nonzero gives "in every optimum",
        zero gives at most "there exists an optimum".
     3. **How strong is the relaxation?** Answered by comparing
-       $z(\mathrm{LP}^+)$ with $z(\mathrm{MILP})$ on a small instance and, when
+       $z(\mathit{LP}^+)$ with $z(\mathit{MILP})$ on a small instance and, when
        there are two formulations, by comparing them with each other — after
        proving them equivalent on integer points.
 

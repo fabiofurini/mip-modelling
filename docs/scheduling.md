@@ -116,7 +116,7 @@ format is reduced — no variants and no additional questions — but it keeps t
 model, a feasible solution, the dual with a hand-built solution and the bound
 table.
 
-| Model | What it exercises | $z(\mathrm{MILP})$ |
+| Model | What it exercises | $z(\mathit{MILP})$ |
 |---|---|---:|
 | [EX 2 — Bus lines](ex-02.md) | assignment with a capacity in number of jobs | 9 |
 | [EX 3 — Relay](ex-03.md) | assignment with more resources than tasks; totally unimodular matrix | 95 |

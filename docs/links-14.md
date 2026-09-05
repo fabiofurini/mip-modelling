@@ -58,7 +58,7 @@ below the function.
 Two things must not be confused: adjacency changes the **integer set** (the two
 models have different optima, $29.25$ and $33$), but **not** the strength of the
 relaxation — with $w_t$ fractional the adjacency constraint does not bite and
-the two models share the same $z(\mathrm{LP}^+) = 117/4$.
+the two models share the same $z(\mathit{LP}^+) = 117/4$.
 
 ## In gurobipy, and where it is seen again
 

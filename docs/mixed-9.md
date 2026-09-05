@@ -85,7 +85,7 @@ order, the heuristic *fails*.
   shelf 2; book 3 on shelf 1, which reaches $10$; book 1 on shelf 2, which
   reaches $8$. Heights $\max(4, 7) = 7$ and $\max(5, 8) = 8$, sum $15$.
 
-$$z(\mathrm{MILP}) \le \mathit{UB} = 15 .$$
+$$z(\mathit{MILP}) \le \mathit{UB} = 15 .$$
 
 !!! warning "The right order depends on the constraint, not on the objective"
     The decreasing-height order is the one suggested by the *objective*, but the
@@ -134,7 +134,7 @@ $\lceil 18/10 \rceil = 2$ non-empty shelves are needed. One of them hosts the
 tallest book and measures at least $8$; the other contains at least one book, so
 it measures at least $\min_{b \ne 1} h_b = 4$. Summing,
 
-$$z(\mathrm{MILP}) \ge \mathit{LB} = 8 + 4 = 12 ,$$
+$$z(\mathit{MILP}) \ge \mathit{LB} = 8 + 4 = 12 ,$$
 
 better than the dual bound $8$. Here too the jump comes from integrality: the
 relaxation can put half a book on each shelf and pay half the height twice, that
@@ -147,7 +147,7 @@ is, still $8$ in total.
 | shelf 1 | 1, 2 | 8 of 10 | 8 |
 | shelf 2 | 3, 4 | 10 of 10 | 7 |
 
-| $LB$ (combinatorial) | $z(\mathrm{LP})$ | $z(\mathrm{LP}^+)$ | $z(\mathrm{MILP})$ | $UB$ (heuristic) | gap |
+| $LB$ (combinatorial) | $z(\mathit{LP})$ | $z(\mathit{LP}^+)$ | $z(\mathit{MILP})$ | $UB$ (heuristic) | gap |
 |---:|---:|---:|---:|---:|---:|
 | 12 | 8 | 8 | 15 | 15 | $0\%$ |
 

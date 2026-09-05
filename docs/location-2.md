@@ -81,7 +81,7 @@ $m = 3$ locations, $n = 3$ clients, $k = 2$:
 The first $k$ locations open; every client goes to the nearest open
 location. Opening locations 1 and 2: client 1 → location 2 (dist. 3),
 client 2 → location 1 (dist. 6), client 3 → location 2 (dist. 9). Value
-$3+6+9=18$: $z(\mathrm{MILP}) \le \mathit{UB} = 18$.
+$3+6+9=18$: $z(\mathit{MILP}) \le \mathit{UB} = 18$.
 
 ## LP relaxation and dual: the dual bound
 
@@ -92,15 +92,15 @@ $$
 \bar\mu_1 = 3,\quad \bar\mu_2 = 6,\quad \bar\mu_3 = 4,
 $$
 
-of value $13$. By weak duality, $\mathit{LB}=13 \le z(\mathrm{LP}) \le
-z(\mathrm{MILP}) \le \mathit{UB}=18$.
+of value $13$. By weak duality, $\mathit{LB}=13 \le z(\mathit{LP}) \le
+z(\mathit{MILP}) \le \mathit{UB}=18$.
 
-**What the solver says.** $z(\mathrm{LP}) = z(\mathrm{LP}^+) = 15$: the
-relaxation is already integral on this instance. $z(\mathrm{MILP}) = 15$,
+**What the solver says.** $z(\mathit{LP}) = z(\mathit{LP}^+) = 15$: the
+relaxation is already integral on this instance. $z(\mathit{MILP}) = 15$,
 with locations 1 and 3 open (not 1 and 2 as in the heuristic): heuristic
 gap $20.0\%$.
 
-| $UB$ | $LB$ (dual) | $z(\mathrm{LP})$ | $z(\mathrm{LP}^+)$ | $z(\mathrm{MILP})$ | gap |
+| $UB$ | $LB$ (dual) | $z(\mathit{LP})$ | $z(\mathit{LP}^+)$ | $z(\mathit{MILP})$ | gap |
 |---:|---:|---:|---:|---:|---:|
 | 18 | 13 | 15 | 15 | 15 | $20.0\%$ |
 

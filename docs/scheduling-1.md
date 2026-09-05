@@ -148,7 +148,7 @@ Run on the instance (output of the script):
   $x[3][1] = 1$ and $ra[1] = 5 - 4 = 1$.
 
 Solution $\bar x_{13} = \bar x_{22} = \bar x_{31} = 1$, value $2 + 4 + 5 = 11$:
-$\mathit{UB} = 11$, i.e.\ $z(\mathrm{MILP}) \le 11$. Next-fit and first-fit both
+$\mathit{UB} = 11$, i.e.\ $z(\mathit{MILP}) \le 11$. Next-fit and first-fit both
 find $x_{11} = x_{21} = x_{32} = 1$, of value $14$.
 
 ## LP relaxation and dual: the dual bound
@@ -177,22 +177,22 @@ $$
 with value $10$. By weak duality
 
 $$
-10 ~\le~ z(\mathrm{LP}) ~\le~ z(\mathrm{MILP}) ~\le~ 11.
+10 ~\le~ z(\mathit{LP}) ~\le~ z(\mathit{MILP}) ~\le~ 11.
 $$
 
 The recipe has a meaning: "every job costs at least its minimum cost" is a
 lower bound anyone would write down; the dual formalises it and says how to
 improve it, with $\pi_m < 0$ where the availability is tight.
 
-**What the solver says.** $z(\mathrm{LP}) = 53/5 = 10.6$ (equal to the optimum
+**What the solver says.** $z(\mathit{LP}) = 53/5 = 10.6$ (equal to the optimum
 of the dual: strong duality), with duals $\tilde\mu = (2,\ 4.8,\ 5)$ and
 $\tilde\pi = (0,\ -0.2,\ 0)$: machine 2 is the tight resource. The integer
-optimum is $z(\mathrm{MILP}) = 11$ with $\tilde x_{13} = \tilde x_{22} = \tilde x_{31} = 1$:
+optimum is $z(\mathit{MILP}) = 11$ with $\tilde x_{13} = \tilde x_{22} = \tilde x_{31} = 1$:
 the best-fit heuristic had found the optimum, but only the solver certifies it
 — the dual bound stopped at $10$ (and since the costs are integer,
 $\lceil 53/5 \rceil = 11$ closes the gap).
 
-| $UB$ (best-fit) | $LB$ (hand dual) | $z(\mathrm{LP})$ | $z(\mathrm{MILP})$ | heuristic gap |
+| $UB$ (best-fit) | $LB$ (hand dual) | $z(\mathit{LP})$ | $z(\mathit{MILP})$ | heuristic gap |
 |---:|---:|---:|---:|---:|
 | 11 | 10 | $53/5$ | 11 | $0.0\%$ |
 
@@ -202,7 +202,7 @@ $\lceil 53/5 \rceil = 11$ closes the gap).
 
 - $x_{jm} \le 1$ ($n\,k$ inequalities) are valid but implied by the
   assignment constraints: they do not strengthen the relaxation (indeed
-  $z(\mathrm{LP}) = z(\mathrm{LP}^+)$).
+  $z(\mathit{LP}) = z(\mathit{LP}^+)$).
 - If a job $j$ does not fit on a machine $m$ ($t_{jm} > a_m$), $x_{jm}$ can be
   fixed to zero before solving: the model is smaller and the relaxation does
   not get worse.

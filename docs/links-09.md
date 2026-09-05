@@ -40,7 +40,7 @@ because then $\kappa_j + t_i - M \le \sum_h t_h + t_i - \sum_h t_h = t_i \le \ka
 ## The strength of the relaxation
 
 Three jobs of duration $(3, 2, 4)$ on one machine, makespan objective:
-$z(\mathrm{MILP}) = 9 = \sum_h t_h$ (obviously: a single machine), with
+$z(\mathit{MILP}) = 9 = \sum_h t_h$ (obviously: a single machine), with
 completion times $(3, 5, 9)$. The relaxation is $4$: with $s_{ij} = 1/2$ all the
 precedence constraints are half switched off and the jobs may overlap. It is the
 weakest relaxation in the whole chapter, and it explains why big-M sequencing

@@ -98,7 +98,7 @@ $u$.
   $t_4 + u = 25 \le 30$: $x[4] = 1$, $z = 1$, $ra = 5$.
 - **Steps 5–6.** Class 3: $t_5, t_6 > 5$, skipped.
 
-Revenue $10 + 5 + 12 + 5 = 32$: $z(\mathrm{MILP}) \ge 32$.
+Revenue $10 + 5 + 12 + 5 = 32$: $z(\mathit{MILP}) \ge 32$.
 
 ## LP relaxation and dual: the dual bound
 
@@ -117,13 +117,13 @@ $$
 **A hand-built dual solution.** The bonus of every class loaded on one job:
 $\bar\pi_1 = -5$, $\bar\pi_3 = -4$, $\bar\pi_5 = -10$; $\bar\lambda = 0$;
 $\bar\mu = \max_j (r_j - \bar\pi_j)/t_j = \max\{3, \tfrac{1}{3}, \tfrac{24}{25}, \tfrac{4}{5}, 2, \tfrac{11}{19}\} = 3$;
-value $150$: $32 \le z(\mathrm{MILP}) \le 150$.
+value $150$: $32 \le z(\mathit{MILP}) \le 150$.
 
-**What the solver says.** $z(\mathrm{LP}) = 5280/113 = 46.7$. Integer optimum
+**What the solver says.** $z(\mathit{LP}) = 5280/113 = 46.7$. Integer optimum
 $42$: class 3 alone, complete, jobs 5 and 6 ($48 \le 50$, $z = 0$), revenue
 $10 + 22 + 10$. Heuristic gap $24\%$.
 
-| $LB$ | $UB$ (hand dual) | $z(\mathrm{LP})$ | $z(\mathrm{MILP})$ | heuristic gap |
+| $LB$ | $UB$ (hand dual) | $z(\mathit{LP})$ | $z(\mathit{MILP})$ | heuristic gap |
 |---:|---:|---:|---:|---:|
 | 32 | 150 | $5280/113$ | 42 | $23.8\%$ |
 

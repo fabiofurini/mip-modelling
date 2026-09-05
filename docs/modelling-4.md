@@ -17,12 +17,12 @@ larger set cannot be higher. In a maximisation the inequality is reversed.
 
 | Name | What is dropped | Note |
 |---|---|---|
-| $z(\mathrm{LP})$, pure | $x \in \{0,1\}$ becomes $x \ge 0$ | this is the one whose dual is written by hand: fewer constraints, hence a dual with fewer variables |
-| $z(\mathrm{LP}^+)$, bounds kept | $x \in \{0,1\}$ becomes $0 \le x \le 1$ | this is Gurobi's `relax()` and the root relaxation |
-| $z(\mathrm{LP}^{++})$, strengthened | as above, plus valid inequalities | see below |
+| $z(\mathit{LP})$, pure | $x \in \{0,1\}$ becomes $x \ge 0$ | this is the one whose dual is written by hand: fewer constraints, hence a dual with fewer variables |
+| $z(\mathit{LP}^+)$, bounds kept | $x \in \{0,1\}$ becomes $0 \le x \le 1$ | this is Gurobi's `relax()` and the root relaxation |
+| $z(\mathit{LP}^{++})$, strengthened | as above, plus valid inequalities | see below |
 
 In a minimisation
-$z(\mathrm{LP}) \le z(\mathrm{LP}^+) \le z(\mathrm{LP}^{++}) \le z(\mathrm{MILP})$.
+$z(\mathit{LP}) \le z(\mathit{LP}^+) \le z(\mathit{LP}^{++}) \le z(\mathit{MILP})$.
 
 !!! note "The two relaxations coincide more often than one thinks"
     If the model contains an assignment constraint $\sum_m x_{jm} = 1$ with
@@ -56,16 +56,16 @@ building a dual solution has an economic meaning.
   lower bound from **any** feasible dual solution, even one built by hand.
 - **Strong duality**: if the LP has a finite optimum, $\max b'u = \min c'x$. It
   serves as a **check**: the optimum of the dual written by hand must coincide
-  with $z(\mathrm{LP})$. The course scripts verify it with an `assert`.
+  with $z(\mathit{LP})$. The course scripts verify it with an `assert`.
 
-And then: since $X_{\mathrm{MILP}} \subseteq X_{\mathrm{LP}}$,
+And then: since $X_{\mathit{MILP}} \subseteq X_{\mathit{LP}}$,
 
-$$b'\bar u ~\le~ z(\mathrm{LP}) ~\le~ z(\mathrm{MILP}).$$
+$$b'\bar u ~\le~ z(\mathit{LP}) ~\le~ z(\mathit{MILP}).$$
 
 !!! danger "There is no such thing as «the dual of the MILP»"
     The dual one writes is that of the **relaxation**. A MILP has no linear
     dual, and strong duality between a MILP and any linear program does not hold
-    in general: the jump $z(\mathrm{MILP}) - z(\mathrm{LP})$ is precisely what
+    in general: the jump $z(\mathit{MILP}) - z(\mathit{LP})$ is precisely what
     is missing.
 
 ## Three recipes for building a dual solution by hand
@@ -82,7 +82,7 @@ $$b'\bar u ~\le~ z(\mathrm{LP}) ~\le~ z(\mathrm{MILP}).$$
 
 Whichever recipe is used, the solution must be **checked feasible** for the dual
 — that is the only thing that makes the bound valid — and its value compared
-with $z(\mathrm{LP})$.
+with $z(\mathit{LP})$.
 
 ## A minimisation problem, in full
 
@@ -135,7 +135,7 @@ $$\mathit{LB} = 3 + 0 + 1 + 0 + 0 + 3 = 7.$$
 $2$, $4$, of cost $4+3+3 = 10$: a feasible and **integer** solution, so
 $\mathit{UB} = 10$.
 
-| $UB$ (constructive heuristic) | $LB$ (dual by hand) | $z(\mathrm{LP})$ | $z(\mathrm{MILP})$ | heuristic gap |
+| $UB$ (constructive heuristic) | $LB$ (dual by hand) | $z(\mathit{LP})$ | $z(\mathit{MILP})$ | heuristic gap |
 |---:|---:|---:|---:|---:|
 | 10 | 7 | $15/2$ | 10 | $0.0\%$ |
 
@@ -159,7 +159,7 @@ with $w_j v \ge p_j$ for every $j$.
   $C \bar v = 18$. In a **maximisation** the dual gives an **upper** bound:
   $\mathit{UB} = 18$.
 
-$$16 ~\le~ z(\mathrm{MILP}) = 17 ~\le~ z(\mathrm{LP}^+) = \tfrac{71}{4} ~\le~ z(\mathrm{LP}) = 18.$$
+$$16 ~\le~ z(\mathit{MILP}) = 17 ~\le~ z(\mathit{LP}^+) = \tfrac{71}{4} ~\le~ z(\mathit{LP}) = 18.$$
 
 Here the dual by hand is **optimal** for the relaxation without the bounds, and the relaxation
 with the bounds kept is strictly better ($71/4 < 18$): the constraint
@@ -168,8 +168,8 @@ $x_j \le 1$ bites, because without it the LP takes $9/5$ units of item 1.
 ![The sandwich of the two problems](img/cap04_sandwich.png)
 
 !!! note "The sandwich, written once and for all"
-    $$\text{minimisation:}\quad z(\mathrm{D}) \le z(\mathrm{LP}) \le z(\mathrm{LP}^+) \le z(\mathrm{MILP}) \le \mathit{UB}_{\text{heur}}$$
-    $$\text{maximisation:}\quad \mathit{LB}_{\text{heur}} \le z(\mathrm{MILP}) \le z(\mathrm{LP}^+) \le z(\mathrm{LP}) \le z(\mathrm{D})$$
+    $$\text{minimisation:}\quad \textstyle\sum_i b_i \bar u_i \le z(\mathit{D}(\mathit{LP})) = z(\mathit{LP}) \le z(\mathit{LP}^+) \le z(\mathit{MILP}) \le \sum_j c_j \bar x_j$$
+    $$\text{maximisation:}\quad \textstyle\sum_j c_j \bar x_j \le z(\mathit{MILP}) \le z(\mathit{LP}^+) \le z(\mathit{LP}) = z(\mathit{D}(\mathit{LP})) \le \sum_i b_i \bar u_i$$
 
     The *relaxation side* is optimistic and holds all the dual bounds; the
     *heuristic side* is pessimistic and holds all the feasible solutions. The
@@ -179,8 +179,8 @@ $x_j \le 1$ bites, because without it the LP takes $9/5$ units of item 1.
 ## Valid inequalities and constraints that preserve optimality
 
 - A **valid inequality** is satisfied by *all* feasible integer solutions:
-  adding it does not change $z(\mathrm{MILP})$; if it reduces
-  $z(\mathrm{LP}^+)$ it is called a **cut**.
+  adding it does not change $z(\mathit{MILP})$; if it reduces
+  $z(\mathit{LP}^+)$ it is called a **cut**.
 - A **constraint that preserves optimality** cuts off some feasible solutions
   but not all the optimal ones. It is not a valid inequality, and must be
   declared as such (example: $z_j \le M_j y_j$ in
@@ -198,8 +198,8 @@ relaxation is $\tilde x = (1,\ 1/4,\ 1,\ 0)$:
 | $\{1,3,4\}$ | $2$ | 2 | satisfied (with equality) |
 | $\{2,3,4\}$ | $5/4$ | 2 | satisfied |
 
-Adding the four cuts, $z(\mathrm{LP}^+)$ drops from $71/4 = 17.75$ to
-$69/4 = 17.25$ and $z(\mathrm{MILP})$ stays $17$.
+Adding the four cuts, $z(\mathit{LP}^+)$ drops from $71/4 = 17.75$ to
+$69/4 = 17.25$ and $z(\mathit{MILP})$ stays $17$.
 
 ## Stronger formulations
 
@@ -230,7 +230,7 @@ reference case is [activation](links-01.md).
 
 ## LP duals are not the marginal prices of the MILP
 
-| $C$ | $z(\mathrm{MILP})$ | $z(\mathrm{LP}^+)$ | LP dual | true change |
+| $C$ | $z(\mathit{MILP})$ | $z(\mathit{LP}^+)$ | LP dual | true change |
 |---:|---:|---:|---:|---:|
 | 8 | 16 | 16 | $2$ | — |
 | 9 | 17 | $71/4$ | $7/4$ | $+1$ |
@@ -246,7 +246,7 @@ the integer optimum comes in jumps: from $C = 9$ to $C = 10$ it does not change
     Of the LP dual, the only use this course makes of it remains true: it is a
     **bound**. As managerial advice ("is it worth buying one more unit?") it must
     be checked by solving the MILP again: the difference
-    $z(\mathrm{MILP})(b_i + 1) - z(\mathrm{MILP})(b_i)$ is the only correct
+    $z(\mathit{MILP})(b_i + 1) - z(\mathit{MILP})(b_i)$ is the only correct
     answer, and there is no closed formula for it.
 
 ## The bound protocol of the course
@@ -256,7 +256,7 @@ integer** solution from a heuristic, checked on constraints, bounds and
 integrality; (2) the dual of the relaxation without the bounds, in general form and for the
 instance; (3) a feasible dual solution built by hand, with the recipe declared;
 (4) the two relaxations from the solver; (5) the optimum and the table
-$\mathit{UB} \cdot \mathit{LB} \cdot z(\mathrm{LP}) \cdot z(\mathrm{LP}^+) \cdot z(\mathrm{MILP}) \cdot$ gap;
+$\mathit{UB} \cdot \mathit{LB} \cdot z(\mathit{LP}) \cdot z(\mathit{LP}^+) \cdot z(\mathit{MILP}) \cdot$ gap;
 (6) the additional considerations.
 
 Every number in the table exists in a CSV produced by the problem's script, and
@@ -279,7 +279,7 @@ the notebook is
     A minimisation and a maximisation problem, written with their duals; a dual
     solution built by hand and the check of weak duality; the comparison between the
     relaxation without the bounds and the one with the bounds kept; a cover cut; the
-    branch-and-bound bound read from Gurobi; and the counterexample showing why the
+    bound read from Gurobi at the end of the solve; and the counterexample showing why the
     LP duals are not the marginal prices of the MILP.
     """
     import gurobipy as gp
@@ -444,8 +444,8 @@ the notebook is
                               "z_lp_with_cuts": zlp43_dopo, "z_milp": z43}]), "cap04_tagli")
 
     # ---------- 4. WHAT THE SOLVER DOES: relax() AND ObjBound ----------
-    intestazione("4.4  The root relaxation and the branch-and-bound bound")
-    m44, x44 = primale_41()          # the covering: here branch-and-bound must branch
+    intestazione("4.4  The first relaxation and the solver's final bound")
+    m44, x44 = primale_41()          # the covering: here the solver has work to do
     m44.Params.OutputFlag = 0
     m44.optimize()
     print(f"  Status = {m44.Status} (2 = OPTIMAL), SolCount = {m44.SolCount}")
@@ -458,8 +458,8 @@ the notebook is
     assert zrad <= m44.ObjVal + 1e-9         # minimisation: the relaxation lies below the optimum
     print(f"  The relaxation is {frazione(zrad)} and the integer optimum {frazione(m44.ObjVal)}:")
     print("  the gap is there, but NodeCount = 0. Gurobi closes it *at the root*, with")
-    print("  presolve, its own cuts and heuristics, without ever branching.")
-    # to see branch-and-bound at work, switch off presolve, cuts and heuristics
+    print("  presolve, its own cuts and heuristics, without ever splitting the problem.")
+    # to see the solver at work, switch off presolve, cuts and heuristics
     m45, x45 = primale_41()
     m45.Params.Presolve = 0
     m45.Params.Cuts = 0

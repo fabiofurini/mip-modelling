@@ -109,7 +109,7 @@ as one of the three constraints would break.
 - **Camp 2** (capacity 8): nationality 1 is exhausted, so any child of
   nationality 2 would violate the majority. The camp stays empty.
 
-$$z(\mathrm{MILP}) \ge \mathit{LB} = 15 .$$
+$$z(\mathit{MILP}) \ge \mathit{LB} = 15 .$$
 
 ## LP relaxation and dual: the dual bound
 
@@ -146,7 +146,7 @@ $$\mathit{UB} = \sum_{j=1}^{r} d_j = 15 + 8 = 23 .$$
 
 Every child accepted takes one place, so no more children can be accepted than
 there are places. And it is also **optimal**: on the relaxation without the
-bounds $z(\mathrm{LP}) = 23$.
+bounds $z(\mathit{LP}) = 23$.
 
 ## Two more combinatorial arguments
 
@@ -176,7 +176,7 @@ camp 1 and hands command to the majority nationality.
 
 Both camps are full.
 
-| $LB$ (heuristic) | $z(\mathrm{MILP})$ | $z(\mathrm{LP})$ | $UB$ (dual) | gap |
+| $LB$ (heuristic) | $z(\mathit{MILP})$ | $z(\mathit{LP})$ | $UB$ (dual) | gap |
 |---:|---:|---:|---:|---:|
 | 15 | 23 | 23 | 23 | $34.8\%$ |
 

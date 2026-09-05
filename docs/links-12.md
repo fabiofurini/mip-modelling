@@ -33,7 +33,7 @@ between $v$ and $(b_0, \dots, b_{K-1})$ is one-to-one.
 !!! note "Alldiff has an exact relaxation, expansion does not help"
     The matrix of the double partitioning is the one of the assignment problem:
     it is **totally unimodular**, so every vertex of the relaxation is integer
-    and $z(\mathrm{LP}^+) = z(\mathrm{MILP})$. On the $3 \times 3$ instance of
+    and $z(\mathit{LP}^+) = z(\mathit{MILP})$. On the $3 \times 3$ instance of
     the script both are $7$: integrality is free.
 
     Binary expansion, by contrast, adds no strength: $\sum_k 2^k b_k$ with

@@ -3,7 +3,7 @@
 A minimisation and a maximisation problem, written with their duals; a dual
 solution built by hand and the check of weak duality; the comparison between the
 relaxation without the bounds and the one with the bounds kept; a cover cut; the
-branch-and-bound bound read from Gurobi; and the counterexample showing why the
+bound read from Gurobi at the end of the solve; and the counterexample showing why the
 LP duals are not the marginal prices of the MILP.
 """
 import gurobipy as gp
@@ -168,8 +168,8 @@ salva_dati(pd.DataFrame([{"model": "knapsack", "z_lp_without_cuts": zlp43_prima,
                           "z_lp_with_cuts": zlp43_dopo, "z_milp": z43}]), "cap04_tagli")
 
 # ---------- 4. WHAT THE SOLVER DOES: relax() AND ObjBound ----------
-intestazione("4.4  The root relaxation and the branch-and-bound bound")
-m44, x44 = primale_41()          # the covering: here branch-and-bound must branch
+intestazione("4.4  The first relaxation and the solver's final bound")
+m44, x44 = primale_41()          # the covering: here the solver has work to do
 m44.Params.OutputFlag = 0
 m44.optimize()
 print(f"  Status = {m44.Status} (2 = OPTIMAL), SolCount = {m44.SolCount}")
@@ -182,8 +182,8 @@ assert abs(m44.ObjBound - m44.ObjVal) <= 1e-6
 assert zrad <= m44.ObjVal + 1e-9         # minimisation: the relaxation lies below the optimum
 print(f"  The relaxation is {frazione(zrad)} and the integer optimum {frazione(m44.ObjVal)}:")
 print("  the gap is there, but NodeCount = 0. Gurobi closes it *at the root*, with")
-print("  presolve, its own cuts and heuristics, without ever branching.")
-# to see branch-and-bound at work, switch off presolve, cuts and heuristics
+print("  presolve, its own cuts and heuristics, without ever splitting the problem.")
+# to see the solver at work, switch off presolve, cuts and heuristics
 m45, x45 = primale_41()
 m45.Params.Presolve = 0
 m45.Params.Cuts = 0

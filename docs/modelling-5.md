@@ -23,8 +23,8 @@ solution that really exists.
 
 !!! danger "The side of the bound depends on the objective, not on the heuristic"
     In a **minimisation** the value of a feasible solution is an *upper* bound:
-    $z(\mathrm{MILP}) \le \mathit{UB}$. In a **maximisation** it is a *lower*
-    bound: $\mathit{LB} \le z(\mathrm{MILP})$. Calling $UB$ the result
+    $z(\mathit{MILP}) \le \mathit{UB}$. In a **maximisation** it is a *lower*
+    bound: $\mathit{LB} \le z(\mathit{MILP})$. Calling $UB$ the result
     of a constructive heuristic on a maximisation is the commonest sign error in the course.
 
 ## The three bin-packing heuristics
@@ -48,7 +48,7 @@ smallest index, so the run is reproducible.
 
 On the instance of [problem 7.1](scheduling-1.md) (a **minimisation**):
 
-| Heuristic | $UB$ | $z(\mathrm{MILP})$ | gap |
+| Heuristic | $UB$ | $z(\mathit{MILP})$ | gap |
 |---|---:|---:|---:|
 | next-fit | 14 | 11 | $27.3\%$ |
 | first-fit | 14 | 11 | $27.3\%$ |
@@ -88,7 +88,7 @@ impossible to place.
 
     **The elementary bound.** The makespan is at least
     $\max(\max_j t_j,\ \sum_j t_j / k) = \max(5, 9) = 9$. The optimum is exactly
-    $z(\mathrm{MILP}) = 9$ — attained with $\{5,4\}$, $\{5,4\}$, $\{3,3,3\}$ —
+    $z(\mathit{MILP}) = 9$ — attained with $\{5,4\}$, $\{5,4\}$, $\{3,3,3\}$ —
     and LPT is off by $22.2\%$.
 
 !!! tip "Two free bounds, to be compared"
@@ -130,7 +130,7 @@ KnapsackConstructive heuristic(p, w, C):
 
 On $p = (10,7,6,4)$, $w = (5,4,3,3)$, $C = 9$: ratios $2$, $7/4$, $2$, $4/3$;
 items 1 and 3 are taken (weight $8$), value $16$. Since the problem is a
-**maximisation**, $\mathit{LB} = 16 \le z(\mathrm{MILP}) = 17$, gap $5.9\%$: the
+**maximisation**, $\mathit{LB} = 16 \le z(\mathit{MILP}) = 17$, gap $5.9\%$: the
 optimum takes items 1 and 2, filling the knapsack exactly. The constructive heuristic goes wrong
 because item 3 leaves an unusable residual.
 
@@ -157,7 +157,7 @@ LeastUnitCost(d, f, h):
 On $d = (20, 10, 30, 40, 10)$, setup $f = 50$, holding $h = 1$: from period 1 it
 pays to cover 2 periods (unit cost $2$); from period 3 another 2 (unit cost
 $\approx 1.286$); from period 5 only that one (unit cost $5$). Cost
-$\mathit{UB} = 200$ against $z(\mathrm{MILP}) = 170$, gap $17.6\%$ — which is
+$\mathit{UB} = 200$ against $z(\mathit{MILP}) = 170$, gap $17.6\%$ — which is
 also the value Wagner–Whitin would give, being exact on this model.
 
 ## Local search, and what it does not give
@@ -192,7 +192,7 @@ between two machines is needed.
 
 ## The overview of the heuristics
 
-| Heuristic | Direction | value | $z(\mathrm{MILP})$ | gap |
+| Heuristic | Direction | value | $z(\mathit{MILP})$ | gap |
 |---|---|---:|---:|---:|
 | next-fit / first-fit (assignment) | min ($UB$) | 14 | 11 | $27.3\%$ |
 | best-fit on cost (assignment) | min ($UB$) | 11 | 11 | $0.0\%$ |

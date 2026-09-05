@@ -86,7 +86,7 @@ rule, with two different orders, gives two results.
   $6 \to$ CD2, $5 \to$ CD1, $4 \to$ CD2, $3 \to$ CD1. Final durations $18$ and
   $17$: difference $1$.
 
-The better one is kept: $z(\mathrm{MILP}) \le \mathit{UB} = 1$.
+The better one is kept: $z(\mathit{MILP}) \le \mathit{UB} = 1$.
 
 ## LP relaxation and dual: zero again
 
@@ -134,7 +134,7 @@ to an odd number cannot be equal, and their difference $|D_1 - D_2|$ has the
 same parity as $D$, that is, it is odd. An odd, non-negative difference is at
 least $1$:
 
-$$z(\mathrm{MILP}) \ge \mathit{LB} = 1 .$$
+$$z(\mathit{MILP}) \ge \mathit{LB} = 1 .$$
 
 The LPT heuristic reaches exactly $1$: the two bounds coincide, and the
 heuristic solution is optimal. This is known *before* calling the solver, and it
@@ -148,7 +148,7 @@ the job the LP relaxation cannot do.
 | CD 1 | 1, 2, 3 | 18 |
 | CD 2 | 4, 5, 6 | 17 |
 
-| $LB$ (parity) | $z(\mathrm{LP})$ | $z(\mathrm{LP}^+)$ | $z(\mathrm{MILP})$ | $UB$ (heuristic) | gap |
+| $LB$ (parity) | $z(\mathit{LP})$ | $z(\mathit{LP}^+)$ | $z(\mathit{MILP})$ | $UB$ (heuristic) | gap |
 |---:|---:|---:|---:|---:|---:|
 | 1 | 0 | 0 | 1 | 1 | $0\%$ |
 

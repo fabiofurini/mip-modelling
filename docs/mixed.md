@@ -21,7 +21,7 @@ modelling work consists precisely in recognising which.
   one another.
 
 Four of these problems share a trait that did not appear in the three families:
-the **linear relaxation is weak**, and in two cases it is exactly zero. The
+the **LP relaxation is weak**, and in two cases it is exactly zero. The
 reason is always the same: a fractional solution can split every object in half
 and put one half in each container, levelling everything.
 
@@ -85,7 +85,7 @@ and put one half in each container, levelling everything.
 
     ---
 
-    Integer counts and composition constraints. The linear relaxation does not
+    Integer counts and composition constraints. The LP relaxation does not
     see parity: the useful bound is combinatorial.
 
     [:octicons-arrow-right-24: ILP · integer counts](mixed-6.md)

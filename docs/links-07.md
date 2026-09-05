@@ -44,7 +44,7 @@ be imposed — that is, $0 \ge 2k$, infeasible for $k > 0$.
 ## The strength of the relaxation
 
 On the five-weight instance, $\min |L_1 - L_2|$ has optimum
-$z(\mathrm{MILP}) = 1$ and relaxation $z(\mathrm{LP}^+) = 0$: the continuous
+$z(\mathit{MILP}) = 1$ and relaxation $z(\mathit{LP}^+) = 0$: the continuous
 problem splits $21$ into two equal halves and zeroes the gap. The relaxation of
 an absolute-value objective is typically $0$, that is, useless.
 

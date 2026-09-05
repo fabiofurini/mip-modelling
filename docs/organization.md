@@ -25,7 +25,7 @@ four-question scheme:
    for the instance, and hand-build a feasible dual solution to obtain the
    bound from the other side.
 
-The resulting `lb ≤ z(MILP) ≤ ub` is the thread running through the course: a
+The resulting `lb ≤ z(\mathit{MILP}) ≤ ub` is the thread running through the course: a
 model is not just written down, it is squeezed from both sides before it is
 handed to the solver. A solver stopped halfway does provide a certificate, of
 course — the incumbent `ObjVal` and the bound `ObjBound` enclose the optimum in

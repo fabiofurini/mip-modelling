@@ -28,9 +28,9 @@ as infeasibility only if $y_j$ is forced to 1 by other constraints.
 ## The strength of the relaxation
 
 On the same instance as [technique 3.2](links-02.md) with $\ell = 5$: the
-optimum goes from $44$ to $z(\mathrm{MILP}) = 49$, with $q = (5, 5)$ instead of
+optimum goes from $44$ to $z(\mathit{MILP}) = 49$, with $q = (5, 5)$ instead of
 $(2, 7)$ — the threshold forces production of 5 at the second plant even though
-the first is cheaper to run. But $z(\mathrm{LP}^+)$ stays at $112/3$,
+the first is cheaper to run. But $z(\mathit{LP}^+)$ stays at $112/3$,
 **identical** to the case without the threshold.
 
 !!! warning "Why the minimum lot is invisible in the relaxation"

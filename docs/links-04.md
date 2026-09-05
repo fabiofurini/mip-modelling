@@ -30,7 +30,7 @@ cost on $w$ the conclusion weakens to "there exists an optimum".
 ## The strength of the relaxation
 
 $17$ unit items, capacity $K = 5$: the relaxation gives $w \ge 17/5 = 3.4$ and
-the integer optimum is $z(\mathrm{MILP}) = 4$. The gap $4 - 17/5 = 3/5$ comes
+the integer optimum is $z(\mathit{MILP}) = 4$. The gap $4 - 17/5 = 3/5$ comes
 entirely from integrality: no linear cut on the $x$ alone closes it, an
 inequality using $w$ integer is needed.
 

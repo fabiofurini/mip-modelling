@@ -30,10 +30,10 @@ optimality only if $f_j > 0$, as in [technique 3.1](links-01.md).
 ## The strength of the relaxation
 
 Two plants, fixed costs $f = (10, 14)$, unit costs $c = (3, 2)$, capacities
-$C = (6, 7)$, demand $D = 9$. The optimum is $z(\mathrm{MILP}) = 44$ (both open,
+$C = (6, 7)$, demand $D = 9$. The optimum is $z(\mathit{MILP}) = 44$ (both open,
 $q = (2, 7)$).
 
-| Coefficient of the binary | $z(\mathrm{LP}^+)$ |
+| Coefficient of the binary | $z(\mathit{LP}^+)$ |
 |---|---:|
 | the capacity $C_j$ | $112/3 \approx 37.33$ |
 | a big-M $= 100$ (plus $q_j \le C_j$ separately) | $1059/50 = 21.18$ |

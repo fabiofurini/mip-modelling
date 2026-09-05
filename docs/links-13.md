@@ -45,7 +45,7 @@ inequalities.
 
 Demand $6$ in each of three periods, total availability $15 < 18$, penalties
 $\pi^+ = 3$ and $\pi^- = 2$. The hard model would be **infeasible**; the soft
-one gives $z(\mathrm{MILP}) = 6$, with $q = (3, 6, 6)$ and a shortfall of $3$
+one gives $z(\mathit{MILP}) = 6$, with $q = (3, 6, 6)$ and a shortfall of $3$
 concentrated in the first period. Nothing in the data says it should be
 concentrated: any split of the total shortfall $3$ has the same cost, and the
 solver returns one of them.
