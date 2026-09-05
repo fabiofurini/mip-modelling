@@ -26,67 +26,94 @@ and inequalities that make a solution feasible).
     be explicit.
 
 **Classes of models.** Upright LP is the *class* of problems, italic
-$\mathit{LP}$ is *one* problem of that class; the same for ILP, BIP and MILP. In
-every class objective and constraints are linear: only the domain of the
-variables changes, that is, the last row of the model. A model has $n$
-variables, with $j \in \{1, 2, \dots, n\}$, and $m$ constraints, with
-$i \in \{1, 2, \dots, m\}$; the data are the costs $c_j$, the coefficients
-$a_{ij}$ and the right-hand sides $b_i$. Here the constraints are $\ge$, the
-variables non-negative and the objective a minimisation; with $\max$ only the
-direction of the optimisation changes.
+$\mathit{LP}$ is *one* problem of that class; the same for ILP, BIP and MILP. A
+model has $n$ variables, with $j \in \{1, 2, \dots, n\}$, and $m$ constraints,
+with $i \in \{1, 2, \dots, m\}$; the data are the costs $c_j$, the coefficients
+$a_{ij}$ and the right-hand sides $b_i$.
 
-**A model of LP type** — all variables continuous:
+**What a model can contain:**
 
-$$
-\begin{aligned}
-\min ~~ \sum_{j=1}^{n} c_j\, x_j & & \\
-\text{subject to} \quad \sum_{j=1}^{n} a_{ij}\, x_j &\ge b_i, & \forall i \in \{1, 2, \dots, m\},\\
-x_j &\ge 0, & \forall j \in \{1, 2, \dots, n\}.
-\end{aligned}
-$$
+- a **linear objective function** of the variables, to be minimised or
+  maximised;
+- **linear constraints** of three types: $\ge$, for a requirement to be met;
+  $\le$, for a capacity to be respected; equality, for a balance or an exact
+  assignment;
+- **variables**, in one or more families, each with its own domain, declared at
+  the end of the model.
 
-**A model of ILP type** — all variables integer:
+None of the three has a fixed shape: how many constraints, of which type and
+with how many families of variables is decided by the problem.
 
-$$
-\begin{aligned}
-\min ~~ \sum_{j=1}^{n} c_j\, x_j & & \\
-\text{subject to} \quad \sum_{j=1}^{n} a_{ij}\, x_j &\ge b_i, & \forall i \in \{1, 2, \dots, m\},\\
-x_j &\in \mathbb{Z}_{\ge 0}, & \forall j \in \{1, 2, \dots, n\}.
-\end{aligned}
-$$
+**What tells the four classes apart: the domains.**
 
-**A model of BIP type** — all variables binary:
+- **LP**: all the variables continuous. In this course a model of LP type is
+  never written from scratch: it arrives as the *relaxation* of a MIP model,
+  when the integrality constraints are dropped.
+- **ILP**: all the variables integer.
+- **BIP**: all the variables binary.
+- **MILP**: some integer or binary and others continuous.
 
-$$
-\begin{aligned}
-\min ~~ \sum_{j=1}^{n} c_j\, x_j & & \\
-\text{subject to} \quad \sum_{j=1}^{n} a_{ij}\, x_j &\ge b_i, & \forall i \in \{1, 2, \dots, m\},\\
-x_j &\in \{0, 1\}, & \forall j \in \{1, 2, \dots, n\}.
-\end{aligned}
-$$
+That is where the difference in difficulty lives: an LP is solved in polynomial
+time, an ILP and a MILP in general are not.
 
-**A model of MILP type** — with $J \subseteq \{1, 2, \dots, n\}$ the set of indices of the integer variables:
+!!! example "A model of ILP type"
+    How many units to buy from two suppliers, $x_1$ and $x_2$, in whole lots.
 
-$$
-\begin{aligned}
-\min ~~ \sum_{j=1}^{n} c_j\, x_j & & \\
-\text{subject to} \quad \sum_{j=1}^{n} a_{ij}\, x_j &\ge b_i, & \forall i \in \{1, 2, \dots, m\},\\
-x_j &\in \mathbb{Z}_{\ge 0}, & \forall j \in J,\\
-x_j &\ge 0, & \forall j \in \{1, 2, \dots, n\} \setminus J.
-\end{aligned}
-$$
+    $$
+    \begin{aligned}
+    \min ~~ 4x_1 + 7x_2 & & \\
+    \text{subject to} \quad 2x_1 + 3x_2 &\ge 12, & \\
+    x_1 + x_2 &\le 5, & \\
+    x_1,\ x_2 &\in \mathbb{Z}_{\ge 0}. &
+    \end{aligned}
+    $$
 
-These are the models in their simplest form: a model can also contain $\le$
-constraints and equality constraints — and the ones in the following chapters
-use all three — as well as several different families of variables.
+    The objective minimises the spending; the $\ge$ constraint covers the demand
+    of $12$ units, the $\le$ one caps the total lots at five. All the variables
+    are integer: it is an ILP.
 
-The objective adds up the costs of the decisions taken; each constraint $i$ ties
-the variables to the right-hand side $b_i$; the last row declares the domain and
-is the only thing that tells the four classes apart. Every datum and every
-symbol is defined before it is used: in every model the variables are introduced
-before the formulation, the domain constraints close the model, and a list
-explains objective and constraints family by family. This course works almost
-exclusively with MILPs.
+!!! example "A model of BIP type"
+    Which projects to fund: $y_k = 1$ if project $k$ is funded, $0$ otherwise.
+
+    $$
+    \begin{aligned}
+    \max ~~ 5y_1 + 4y_2 + 6y_3 & & \\
+    \text{subject to} \quad y_1 + y_2 + y_3 &\le 2, & \\
+    y_1 + y_3 &\ge 1, & \\
+    y_1,\ y_2,\ y_3 &\in \{0, 1\}. &
+    \end{aligned}
+    $$
+
+    The objective maximises the value of the projects chosen; the $\le$
+    constraint allows at most two of them, the $\ge$ one requires at least one of
+    the first and the third. All the variables are binary: it is a BIP.
+
+!!! example "A model of MILP type"
+    Two products to make, with $x_1$ and $x_2$ the quantities produced, and a
+    plant to switch on or not, with $y = 1$ if it is switched on and $y = 0$
+    otherwise.
+
+    $$
+    \begin{aligned}
+    \max ~~ 3x_1 + 8x_2 - 10y & & \\
+    \text{subject to} \quad x_1 + x_2 &= 6, & \\
+    x_2 - 4y &\le 0, & \\
+    x_1 &\ge 1, & \\
+    x_1,\ x_2 &\ge 0, & \\
+    y &\in \{0, 1\}. &
+    \end{aligned}
+    $$
+
+    The objective maximises the revenue minus the cost of the plant; the equality
+    requires exactly six units to be produced, the $\le$ constraint allows at
+    most four units of the second product and only with the plant on (with
+    $y = 0$ it leaves $x_2 \le 0$), the $\ge$ constraint asks for at least one
+    unit of the first. Two continuous variables and one binary: it is a MILP.
+
+Every datum and every symbol is defined before it is used: in every model the
+variables are introduced before the formulation, the domain constraints close
+the model, and a list explains objective and constraints family by family. This
+course works almost exclusively with MILPs.
 
 ## Why integrality matters
 
