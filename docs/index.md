@@ -61,6 +61,75 @@ Every model can be run **right away in the browser**: each chapter has its own
 
 </div>
 
+## Full contents
+
+**[Modelling](modelling.md)**
+
+1. [What is a MIP model](modelling-1.md) — data, variables, objective,
+   constraints; relaxations, bounds and gaps
+2. [Logic and binary variables](modelling-2.md) — CNF, the three translation
+   rules, five exercises
+3. [Links between variables](links.md) — the fourteen techniques, one per
+   subpage, with the [map](links.md)
+4. [Relaxations, duality and bounds](modelling-4.md) — the conversion table,
+   three recipes for a hand-built dual solution
+5. [Constructive heuristics](modelling-5.md) — the six rules, and when they
+   fail
+6. [From the model to Python/Gurobi](modelling-6.md) — the four classes of
+   variables, the tolerances, the course protocol
+
+**[The problems](problems.md)**
+
+*[Assignment and scheduling](scheduling.md)*
+
+7.1 [Minimum-cost assignment](scheduling-1.md) ·
+7.2 [Machines with fixed cost](scheduling-2.md) ·
+7.3 [Job selection](scheduling-3.md) ·
+7.4 [Parallel jobs](scheduling-4.md) ·
+7.5 [Classes with setup](scheduling-5.md) ·
+7.6 [Classes with bonus](scheduling-6.md) ·
+7.7 [Total tardiness](scheduling-7.md)
+
+*[Location and coverage](location.md)*
+
+8.1 [Capacitated location](location-1.md) ·
+8.2 [p-median](location-2.md) ·
+8.3 [Coverage with interference](location-3.md) ·
+8.4 [Hub with maximum cost](location-4.md)
+
+*[Production planning](production.md)*
+
+9.1 [Lot sizing with fixed cost](production-1.md) ·
+9.2 [Production and workforce](production-2.md) ·
+9.3 [Vehicles with a minimum lot](production-3.md)
+
+*[Mixed models](mixed.md)*
+
+10.1 [Prizes in two ways](mixed-1.md) ·
+10.2 [Combinatorial auction](mixed-2.md) ·
+10.3 [Diet with a minimum lot](mixed-3.md) ·
+10.4 [Trees and boxes of lights](mixed-4.md) ·
+10.5 [Shipments in boxes](mixed-5.md) ·
+10.6 [Children across summer camps](mixed-6.md) ·
+10.7 [Branches across two companies](mixed-7.md) ·
+10.8 [Songs across CDs](mixed-8.md) ·
+10.9 [Books across shelves](mixed-9.md)
+
+*Numerical models*
+
+EX 2 [Bus lines](ex-02.md) ·
+EX 3 [Relay](ex-03.md) ·
+EX 6 [Hub-and-spoke](ex-06.md) ·
+EX 8 [Seminars](ex-08.md) ·
+EX 10 [CNC tools](ex-10.md) ·
+EX 11 [Balancing](ex-11.md)
+
+**The course**
+
+- [Organisation of the course](organization.md) — the path, the exam, the
+  mistakes to avoid
+- [Notebooks in Colab](notebooks.md) — one per problem, they open in the browser
+
 ## Installation and licence
 
 ```bash

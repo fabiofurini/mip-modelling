@@ -36,13 +36,13 @@ Minimisation primal, constraints indexed by $i$, variables by $j$:
 
 | In the primal (min) | In the dual (max) |
 |---|---|
-| constraint $i$ of type $\ge$ | variable $u_i \ge 0$ |
-| constraint $i$ of type $\le$ | variable $u_i \le 0$ |
-| equality constraint $i$ | free variable $u_i$ |
+| constraint $i$ of type $\ge$ | variable $\pi_i \ge 0$ |
+| constraint $i$ of type $\le$ | variable $\pi_i \le 0$ |
+| equality constraint $i$ | free variable $\pi_i$ |
 | variable $x_j \ge 0$ | constraint $j$ of type $\le c_j$ |
 | free variable $x_j$ | equality constraint $j$, $= c_j$ |
 
-The dual objective is $\max \sum_i b_i u_i$. If the primal is a **maximisation**,
+The dual objective is $\max \sum_i b_i \pi_i$. If the primal is a **maximisation**,
 every direction is reversed and the dual is a minimisation.
 
 Dual constraint $j$ says: "the value I attach to the resources consumed by
@@ -51,16 +51,16 @@ building a dual solution has an economic meaning.
 
 ## Weak duality, strong duality
 
-- **Weak duality**: $b'\bar u \le c'\bar x$ for every pair of feasible
+- **Weak duality**: $\sum_i b_i \bar\pi_i \le \sum_j c_j \bar x_j$ for every pair of feasible
   solutions. *Always*, with no assumptions. This is the one we need: it gives a
   lower bound from **any** feasible dual solution, even one built by hand.
-- **Strong duality**: if the LP has a finite optimum, $\max b'u = \min c'x$. It
+- **Strong duality**: if the relaxation has a finite optimum, $z(\mathit{D}(\mathit{LP})) = z(\mathit{LP})$. It
   serves as a **check**: the optimum of the dual written by hand must coincide
   with $z(\mathit{LP})$. The course scripts verify it with an `assert`.
 
 And then: since $X_{\mathit{MILP}} \subseteq X_{\mathit{LP}}$,
 
-$$b'\bar u ~\le~ z(\mathit{LP}) ~\le~ z(\mathit{MILP}).$$
+$$\textstyle\sum_i b_i \bar\pi_i ~\le~ z(\mathit{LP}) ~\le~ z(\mathit{MILP}).$$
 
 !!! danger "There is no such thing as «the dual of the MILP»"
     The dual one writes is that of the **relaxation**. A MILP has no linear
@@ -103,31 +103,31 @@ x_j &\in \{0,1\}, & \forall j \in \{1, \dots, 4\}.
 \end{aligned}
 $$
 
-**The dual of the relaxation without the bounds**, with $u_i \ge 0$ for every covering
+**The dual of the relaxation without the bounds**, with $\pi_i \ge 0$ for every covering
 constraint:
 
 $$
 \begin{aligned}
-\max ~~ \sum_{i=1}^{6} u_i & &\\
-\text{subject to}\quad \sum_{i \,:\, j \in S_i} u_i &\le c_j, & \forall j,\\
-u_i &\ge 0, & \forall i.
+\max ~~ \sum_{i=1}^{6} \pi_i & &\\
+\text{subject to}\quad \sum_{i \,:\, j \in S_i} \pi_i &\le c_j, & \forall j,\\
+\pi_i &\ge 0, & \forall i.
 \end{aligned}
 $$
 
 For the instance, every team covers three zones:
-$u_1 + u_3 + u_4 \le 4$, $u_1 + u_2 + u_5 \le 3$, $u_2 + u_3 + u_6 \le 5$,
-$u_4 + u_5 + u_6 \le 3$.
+$\pi_1 + \pi_3 + \pi_4 \le 4$, $\pi_1 + \pi_2 + \pi_5 \le 3$, $\pi_2 + \pi_3 + \pi_6 \le 5$,
+$\pi_4 + \pi_5 + \pi_6 \le 3$.
 
 **A dual solution by hand (recipe 2).**
 
 - **Zone 1** ($\{1,2\}$): residuals $(4,3,5,3)$, the smallest among teams 1 and
-  2 is $3$. $\bar u_1 = 3$; residuals $(1,0,5,3)$.
-- **Zone 2** ($\{2,3\}$): the residual of team 2 is $0$, so $\bar u_2 = 0$.
-- **Zone 3** ($\{1,3\}$): the smallest of $1$ and $5$ is $1$. $\bar u_3 = 1$;
+  2 is $3$. $\bar \pi_1 = 3$; residuals $(1,0,5,3)$.
+- **Zone 2** ($\{2,3\}$): the residual of team 2 is $0$, so $\bar \pi_2 = 0$.
+- **Zone 3** ($\{1,3\}$): the smallest of $1$ and $5$ is $1$. $\bar \pi_3 = 1$;
   residuals $(0,0,4,3)$.
 - **Zones 4 and 5**: teams 1 and 2 have zero residual, so
-  $\bar u_4 = \bar u_5 = 0$.
-- **Zone 6** ($\{3,4\}$): the smallest of $4$ and $3$ is $3$. $\bar u_6 = 3$.
+  $\bar \pi_4 = \bar \pi_5 = 0$.
+- **Zone 6** ($\{3,4\}$): the smallest of $4$ and $3$ is $3$. $\bar \pi_6 = 3$.
 
 $$\mathit{LB} = 3 + 0 + 1 + 0 + 0 + 3 = 7.$$
 
@@ -168,12 +168,17 @@ $x_j \le 1$ bites, because without it the LP takes $9/5$ units of item 1.
 ![The sandwich of the two problems](img/cap04_sandwich.png)
 
 !!! note "The sandwich, written once and for all"
-    $$\text{minimisation:}\quad \textstyle\sum_i b_i \bar u_i \le z(\mathit{D}(\mathit{LP})) = z(\mathit{LP}) \le z(\mathit{LP}^+) \le z(\mathit{MILP}) \le \sum_j c_j \bar x_j$$
-    $$\text{maximisation:}\quad \textstyle\sum_j c_j \bar x_j \le z(\mathit{MILP}) \le z(\mathit{LP}^+) \le z(\mathit{LP}) = z(\mathit{D}(\mathit{LP})) \le \sum_i b_i \bar u_i$$
+    $$\text{minimisation:}\quad \mathit{LB}(\bar\pi) \le z(\mathit{D}(\mathit{LP})) = z(\mathit{LP}) \le z(\mathit{LP}^+) \le z(\mathit{MILP}) \le \mathit{UB}(\bar x)$$
+    $$\text{maximisation:}\quad \mathit{LB}(\bar x) \le z(\mathit{MILP}) \le z(\mathit{LP}^+) \le z(\mathit{LP}) = z(\mathit{D}(\mathit{LP})) \le \mathit{UB}(\bar\pi)$$
+
+    where $(\bar\pi_1, \bar\pi_2, \dots, \bar\pi_m)$ is a feasible dual
+    solution of the relaxation, of value $\sum_{i=1}^{m} b_i\, \bar\pi_i$, and
+    $(\bar x_1, \bar x_2, \dots, \bar x_n)$ a feasible solution of the MILP, of
+    value $\sum_{j=1}^{n} c_j\, \bar x_j$.
 
     The *relaxation side* is optimistic and holds all the dual bounds; the
     *heuristic side* is pessimistic and holds all the feasible solutions. The
-    name ($LB$ or $UB$) depends on the direction of the
+    name ($\mathit{LB}$ or $\mathit{UB}$) depends on the direction of the
     objective, the role does not.
 
 ## Valid inequalities and constraints that preserve optimality

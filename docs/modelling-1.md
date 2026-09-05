@@ -17,15 +17,69 @@ and inequalities that make a solution feasible).
     included); $z(\mathit{MILP})$, $z(\mathit{LP})$, $z(\mathit{D})$ are the
     optimal values of the MILP, of its relaxation and of the dual of the
     relaxation. **Feasible** solutions carry a bar ($\bar x$), **optimal**
-    ones a tilde ($\tilde x$). The bounds are called $LB$ and
-    $UB$, whatever the direction of the objective. We always write
+    ones a tilde ($\tilde x$). The bounds are called $\mathit{LB}$ and
+    $\mathit{UB}$, whatever the direction of the objective; when the solution
+    they come from matters we write $\mathit{LB}(\bar x)$, $\mathit{UB}(\bar x)$
+    for a feasible solution of the model and $\mathit{LB}(\bar\pi)$,
+    $\mathit{UB}(\bar\pi)$ for a feasible solution of the dual. We always write
     $z(\mathit{MILP})$ and never $z^\star$: which model is being optimised must
     be explicit.
 
-**Classes of models.** **LP** if objective and constraints are linear and the
-variables continuous; **ILP** if all variables are integer; **BIP** if all are
-$0/1$; **MILP** if some are integer or binary and others continuous. This course
-works almost exclusively with MILPs.
+**Classes of models.** A model has $n$ variables $x_1, x_2, \dots, x_n$, indexed
+by $j \in \{1, 2, \dots, n\}$, and $m$ constraints, indexed by
+$i \in \{1, 2, \dots, m\}$. The data are the $n$ cost coefficients $c_j$, the
+$m \cdot n$ coefficients $a_{ij}$ and the $m$ right-hand sides $b_i$. In every
+class objective and constraints are the same linear functions: only the
+**domain** of the variables changes, that is, the last row of the model. Below
+they are in canonical minimisation form; a maximisation model is written with
+$\max$ and $\le$ constraints.
+
+**A model of LP type** — all variables continuous:
+
+$$
+\begin{aligned}
+\min ~~ \sum_{j=1}^{n} c_j\, x_j & & \\
+\text{subject to} \quad \sum_{j=1}^{n} a_{ij}\, x_j &\ge b_i, & \forall i \in \{1, 2, \dots, m\},\\
+x_j &\ge 0, & \forall j \in \{1, 2, \dots, n\}.
+\end{aligned}
+$$
+
+**A model of ILP type** — all variables integer:
+
+$$
+\begin{aligned}
+\min ~~ \sum_{j=1}^{n} c_j\, x_j & & \\
+\text{subject to} \quad \sum_{j=1}^{n} a_{ij}\, x_j &\ge b_i, & \forall i \in \{1, 2, \dots, m\},\\
+x_j &\in \mathbb{Z}_{\ge 0}, & \forall j \in \{1, 2, \dots, n\}.
+\end{aligned}
+$$
+
+**A model of BIP type** — all variables binary:
+
+$$
+\begin{aligned}
+\min ~~ \sum_{j=1}^{n} c_j\, x_j & & \\
+\text{subject to} \quad \sum_{j=1}^{n} a_{ij}\, x_j &\ge b_i, & \forall i \in \{1, 2, \dots, m\},\\
+x_j &\in \{0, 1\}, & \forall j \in \{1, 2, \dots, n\}.
+\end{aligned}
+$$
+
+**A model of MILP type** — integer and continuous variables together, with
+$J \subseteq \{1, 2, \dots, n\}$ the set of indices of the integer variables:
+
+$$
+\begin{aligned}
+\min ~~ \sum_{j=1}^{n} c_j\, x_j & & \\
+\text{subject to} \quad \sum_{j=1}^{n} a_{ij}\, x_j &\ge b_i, & \forall i \in \{1, 2, \dots, m\},\\
+x_j &\in \mathbb{Z}_{\ge 0}, & \forall j \in J,\\
+x_j &\ge 0, & \forall j \in \{1, 2, \dots, n\} \setminus J.
+\end{aligned}
+$$
+
+The objective adds up the costs of the decisions taken; each constraint $i$
+requires the linear combination $\sum_{j=1}^{n} a_{ij}\, x_j$ to reach at least
+the threshold $b_i$; the last row declares the domain and is the only thing that
+tells the four classes apart. This course works almost exclusively with MILPs.
 
 ## Why integrality matters
 
@@ -44,10 +98,13 @@ square — among them $(3/4, 3/4)$, $(1, 1/2)$ and $(1/2, 1)$. Which one the
 solver returns depends on the algorithm: on our installation Gurobi gives
 $(1/2, 1)$.
 
-Rounding $(3/4, 3/4)$ to the nearest integer gives $(1,1)$, which violates the
-constraint ($2+2 = 4 > 3$): it is **not even feasible**. Rounding $(1, 1/2)$
-gives $(1, 0)$, feasible with value $1$ — which is exactly the integer optimum,
-$z(\mathit{MILP}) = 1$.
+The outcome of rounding depends on the starting point **and** on the direction.
+From $(3/4, 3/4)$: upwards it gives $(1,1)$, which violates the constraint
+($2+2 = 4 > 3$); downwards it gives $(0,0)$, feasible but of value $0$. From
+this point **neither** direction finds the optimum. From $(1, 1/2)$: upwards it
+gives $(1,1)$ again, infeasible; downwards it gives $(1, 0)$, feasible with
+value $1$ — which is exactly the integer optimum, $z(\mathit{MILP}) = 1$. There
+is no "right" direction.
 
 ![The relaxation and the integer points](img/cap01_rilassamento.png)
 
@@ -85,18 +142,27 @@ cases it is an **optimistic** bound.
     most $z(\mathit{LP})$, hence at most $z(\mathit{MILP})$: it sits on the
     *same* side as the relaxation. The bound from the other side — the
     *pessimistic* one — comes only from a feasible solution of the MILP, that
-    is, from a heuristic or from the solver. In a **minimisation**:
+    is, from a heuristic or from the solver. Let
+    $(\bar x_1, \bar x_2, \dots, \bar x_n)$ be a feasible solution of the MILP,
+    of value $\sum_{j=1}^{n} c_j\, \bar x_j$, and
+    $(\bar\pi_1, \bar\pi_2, \dots, \bar\pi_m)$ a feasible solution of the dual
+    of the relaxation, of value $\sum_{i=1}^{m} b_i\, \bar\pi_i$. In a
+    **minimisation** the first gives $\mathit{UB}(\bar x)$ and the second
+    $\mathit{LB}(\bar\pi)$:
 
-    $$\textstyle\sum_i b_i \bar u_i \le z(\mathit{D}(\mathit{LP})) = z(\mathit{LP}) \le z(\mathit{LP}^+) \le z(\mathit{MILP}) \le \sum_j c_j \bar x_j$$
+    $$\mathit{LB}(\bar\pi) \le z(\mathit{D}(\mathit{LP})) = z(\mathit{LP}) \le z(\mathit{LP}^+) \le z(\mathit{MILP}) \le \mathit{UB}(\bar x)$$
 
-    for every feasible integer $\bar x$; in a **maximisation** all directions
-    are reversed.
+    in a **maximisation** the roles are swapped, the first gives
+    $\mathit{LB}(\bar x)$ and the second $\mathit{UB}(\bar\pi)$:
+
+    $$\mathit{LB}(\bar x) \le z(\mathit{MILP}) \le z(\mathit{LP}^+) \le z(\mathit{LP}) = z(\mathit{D}(\mathit{LP})) \le \mathit{UB}(\bar\pi)$$
 
 ## Three "gaps" not to be confused
 
 1. **Heuristic gap.** If $\bar x$ is the solution built by the heuristic, its
-   value is $\sum_j c_j\, \bar x_j$ and the gap is
-   $\bigl|\sum_j c_j\, \bar x_j - z(\mathit{MILP})\bigr| / |z(\mathit{MILP})|$
+   value $\sum_{j=1}^{n} c_j\, \bar x_j$ is the bound $\mathit{UB}(\bar x)$ in a
+   minimisation (and $\mathit{LB}(\bar x)$ in a maximisation), and the gap is
+   $\bigl|\mathit{UB}(\bar x) - z(\mathit{MILP})\bigr| / |z(\mathit{MILP})|$
    when the optimum is known — it is the one reported in the exercise tables.
    When the optimum is not known it is computed against a dual bound, which
    takes its place.
