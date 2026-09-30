@@ -226,7 +226,7 @@ print("  the dual keeps promising 7/4. The LP dual is not the marginal price of 
 print("  MILP, and using it as such is a mistake, not an approximation.")
 
 # ---------- 6. FIGURE: THE SANDWICH OF THE TWO PROBLEMS ----------
-fig, ax = plt.subplots(figsize=(7.2, 3.4))
+fig, ax = plt.subplots(figsize=(7.2, 2.5))
 etichette = ["covering (min)", "knapsack (max)"]
 lb = [lb41, lb42]
 ub = [ub41_primale, ub42]

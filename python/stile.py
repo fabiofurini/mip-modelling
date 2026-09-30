@@ -48,6 +48,8 @@ ARANCIO = "#CA6F1E"
 GRIGIO = "#7F8C8D"
 CICLO = [TEAL, ROSSO, VERDE, ARANCIO, BLU, GRIGIO, "#8E44AD", "#B7950B"]
 
+# Il titolo sta a sinistra e staccato dagli assi: cosi' non tocca mai il bordo
+# della figura, per quanto sia lungo, e la figura resta leggibile anche piccola.
 plt.rcParams.update({
     "figure.figsize": (7.2, 4.2),
     "figure.dpi": 120,
@@ -56,37 +58,62 @@ plt.rcParams.update({
     "axes.prop_cycle": plt.cycler(color=CICLO),
     "axes.spines.top": False,
     "axes.spines.right": False,
+    "axes.edgecolor": "#B9C2C9",
+    "axes.linewidth": 0.8,
+    "axes.labelcolor": BLU,
+    "axes.labelsize": 9.5,
     "axes.grid": True,
-    "grid.alpha": 0.25,
-    "grid.linewidth": 0.6,
+    "axes.axisbelow": True,
+    "grid.color": "#C9D2D8",
+    "grid.alpha": 0.55,
+    "grid.linewidth": 0.5,
     "axes.titlesize": 11,
     "axes.titleweight": "bold",
     "axes.titlecolor": BLU,
+    "axes.titlelocation": "left",
+    "axes.titlepad": 10,
+    "xtick.color": "#5B6B77",
+    "ytick.color": "#5B6B77",
+    "xtick.labelsize": 9,
+    "ytick.labelsize": 9,
+    "xtick.direction": "out",
+    "ytick.direction": "out",
+    "text.color": BLU,
     "legend.frameon": False,
+    "legend.fontsize": 9,
+    "lines.linewidth": 1.9,
+    "lines.markersize": 6,
+    "patch.linewidth": 0.8,
     "savefig.bbox": "tight",
+    "savefig.pad_inches": 0.08,
 })
 
 
 def _legenda_fuori(fig):
-    """Sposta ogni legenda fuori dall'area del grafico, sotto gli assi.
+    """Moves the legends out of the plotting area, below the whole figure.
 
-    Una legenda dentro il grafico copre le linee e i punti: si perde
-    informazione proprio dove serve. Qui la si ricostruisce sotto gli assi,
-    su una o piu' colonne a seconda di quante voci ha.
+    A legend inside the plot covers the lines and the points: information is
+    lost exactly where it is needed. Here the entries of every axes are
+    collected into a single legend below the figure, so that it never ends up
+    on top of the label of the horizontal axis.
     """
+    maniglie, etichette = [], []
     for ax in fig.get_axes():
         leg = ax.get_legend()
-        if leg is None:
-            continue
-        maniglie, etichette = ax.get_legend_handles_labels()
-        if not etichette:
-            continue
-        leg.remove()
-        colonne = min(len(etichette), 3)
-        ax.legend(maniglie, etichette, fontsize=8, frameon=False,
-                  loc="upper center", bbox_to_anchor=(0.5, -0.16),
-                  ncol=colonne, borderaxespad=0.0)
-
+        if leg is not None:
+            leg.remove()
+        m, e = ax.get_legend_handles_labels()
+        for mm, ee in zip(m, e):
+            if ee and not ee.startswith("_") and ee not in etichette:
+                maniglie.append(mm)
+                etichette.append(ee)
+    if not etichette:
+        return
+    colonne = len(etichette) if len(etichette) <= 4 else 3
+    fig.legend(maniglie, etichette, fontsize=9, frameon=False,
+               loc="upper center", bbox_to_anchor=(0.5, -0.08),
+               bbox_transform=fig.transFigure,
+               ncol=colonne, borderaxespad=0.0)
 
 def salva_figura(fig, nome: str) -> None:
     """Save the figure as PDF (preview) and as PNG for the website (docs/img/).
