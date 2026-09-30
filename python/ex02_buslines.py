@@ -12,6 +12,7 @@ from gurobipy import GRB
 from mip import (ammissibile, due_rilassamenti, frazione, nuovo_modello, registra_bound,
                  risolvi, stampa_soluzione, valuta)
 from stile import intestazione, plt, salva_dati, salva_figura
+from esteso import salva_modello
 
 R = range
 
@@ -47,6 +48,7 @@ def duale(c, p):
 
 
 m, x = modello(c, p)
+salva_modello(m, "ex02_primale")
 
 # ---------- 2. CONSTRUCTIVE HEURISTIC (UPPER BOUND) ----------
 # constructive heuristic on the lines: every line to the cheapest company among those not yet full
@@ -68,6 +70,7 @@ print("  Heuristic solution: " + ", ".join(f"line {j + 1} -> company {scelta[j] 
 
 # ---------- 3. LP RELAXATION AND DUAL (LOWER BOUND) ----------
 d = duale(c, p)
+salva_modello(d, "ex02_duale")
 mano = {f"alpha[{j}]": min(c[i][j] for i in R(nc)) for j in R(nl)}   # beta = 0
 lb, viol = valuta(d, mano)
 assert viol <= 1e-9, viol

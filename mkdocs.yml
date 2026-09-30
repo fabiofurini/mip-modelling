@@ -116,12 +116,21 @@ nav:
       - problems.md
       - Numerical models:
           - numerical.md
+          - EX 1 The eight-seat van: ex-01.md
           - EX 2 Bus lines: ex-02.md
           - EX 3 Relay: ex-03.md
+          - EX 4 Shoes, production and hiring: ex-04.md
+          - EX 5 Vehicles with a minimum quantity: ex-05.md
           - EX 6 Hub-and-spoke: ex-06.md
+          - EX 7 Custom aircraft: ex-07.md
           - EX 8 Seminars: ex-08.md
+          - EX 9 The eight queens: ex-09.md
           - EX 10 CNC tools: ex-10.md
           - EX 11 Balancing: ex-11.md
+          - EX 12 Shoes with a threshold: ex-12.md
+          - EX 13 Funds in lots: ex-13.md
+          - EX 14 Emergency room shifts: ex-14.md
+          - EX 15 Music school timetable: ex-15.md
       - Assignment and scheduling:
           - scheduling.md
           - 7.1 Minimum-cost assignment: scheduling-1.md
@@ -156,3 +165,4 @@ nav:
   - The course:
       - organization.md
       - Notebooks in Colab: notebooks.md
+      - Downloads: downloads.md

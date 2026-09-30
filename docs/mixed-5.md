@@ -24,8 +24,8 @@ loaded.
 
 ## Model
 
-For brevity $P = \{1, \dots, k\}$ is the set of products, $S = \{1, \dots, n\}$
-the set of plants and $C = \{1, \dots, m\}$ the set of customers.
+For brevity $P = \{1, 2, \dots, k\}$ is the set of products, $S = \{1, 2, \dots, n\}$
+the set of plants and $C = \{1, 2, \dots, m\}$ the set of customers.
 
 **Variables.** $x_{psc} \in \mathbb{Z}_{\ge 0}$ units of product $p$ shipped
 from $s$ to $c$; $y_{sc} \in \mathbb{Z}_{\ge 0}$ boxes shipped from $s$ to $c$.

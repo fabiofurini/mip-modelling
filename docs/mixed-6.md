@@ -6,14 +6,14 @@
 
 !!! abstract "Problem 10.6"
     A company runs $r \in \mathbb{Z}_{\ge 1}$ summer camps to host children
-    during the holidays. For every camp $j \in \{1, \dots, r\}$, the value
+    during the holidays. For every camp $j \in \{1, 2, \dots, r\}$, the value
     $d_j \in \mathbb{Z}_{\ge 1}$ is the maximum number of children it can host.
     The company has received applications from children of
     $s \in \mathbb{Z}_{\ge 1}$ different nationalities: for every nationality
-    $i \in \{1, \dots, s\}$ there are $f_i \in \mathbb{Z}_{\ge 0}$ girls and
+    $i \in \{1, 2, \dots, s\}$ there are $f_i \in \mathbb{Z}_{\ge 0}$ girls and
     $g_i \in \mathbb{Z}_{\ge 0}$ boys. In every camp the number of girls must be
     greater than or equal to the number of boys, and the number of children of
-    nationality $c \in \{1, \dots, s\}$ must be greater than or equal to that of
+    nationality $c \in \{1, 2, \dots, s\}$ must be greater than or equal to that of
     every other nationality. The company wants to maximise the total number of
     children accepted.
 
@@ -31,11 +31,11 @@ $y_{ij}$ the boys.
 $$
 \begin{aligned}
 \max ~~ & \sum_{i=1}^{s} \sum_{j=1}^{r} \bigl(x_{ij} + y_{ij}\bigr)\\
-\text{s.t.} \quad & \sum_{j=1}^{r} x_{ij} \le f_i, && \forall i \in \{1, \dots, s\},\\
-& \sum_{j=1}^{r} y_{ij} \le g_i, && \forall i \in \{1, \dots, s\},\\
-& \sum_{i=1}^{s} \bigl(x_{ij} + y_{ij}\bigr) \le d_j, && \forall j \in \{1, \dots, r\},\\
-& \sum_{i=1}^{s} \bigl(x_{ij} - y_{ij}\bigr) \ge 0, && \forall j \in \{1, \dots, r\},\\
-& x_{cj} + y_{cj} - \sum_{i \ne c} \bigl(x_{ij} + y_{ij}\bigr) \ge 0, && \forall j \in \{1, \dots, r\},\\
+\text{s.t.} \quad & \sum_{j=1}^{r} x_{ij} \le f_i, && \forall i \in \{1, 2, \dots, s\},\\
+& \sum_{j=1}^{r} y_{ij} \le g_i, && \forall i \in \{1, 2, \dots, s\},\\
+& \sum_{i=1}^{s} \bigl(x_{ij} + y_{ij}\bigr) \le d_j, && \forall j \in \{1, 2, \dots, r\},\\
+& \sum_{i=1}^{s} \bigl(x_{ij} - y_{ij}\bigr) \ge 0, && \forall j \in \{1, 2, \dots, r\},\\
+& x_{cj} + y_{cj} - \sum_{i \ne c} \bigl(x_{ij} + y_{ij}\bigr) \ge 0, && \forall j \in \{1, 2, \dots, r\},\\
 & x_{ij} \in \mathbb{Z}_{\ge 0}, \quad y_{ij} \in \mathbb{Z}_{\ge 0}.
 \end{aligned}
 $$
@@ -54,7 +54,7 @@ minority.
     $s > 2$ the statement of the problem asks for
 
     $$x_{cj} + y_{cj} \;\ge\; x_{ij} + y_{ij}
-    \qquad \forall i \in \{1, \dots, s\},\ i \ne c,\ \forall j \in \{1, \dots, r\} ,$$
+    \qquad \forall i \in \{1, 2, \dots, s\},\ i \ne c,\ \forall j \in \{1, 2, \dots, r\} ,$$
 
     that is $(s-1)\,r$ inequalities. The aggregated form written above is
     *stronger*: it imposes that nationality $c$ is no fewer than *all the others
@@ -121,8 +121,8 @@ $$
 \begin{aligned}
 \min ~~ & \sum_{i=1}^{s} f_i\, \alpha_i + \sum_{i=1}^{s} g_i\, \beta_i
       + \sum_{j=1}^{r} d_j\, \gamma_j\\
-\text{s.t.} \quad & \alpha_i + \gamma_j - \delta_j + \sigma_i\, \varepsilon_j \ge 1, && \forall i \in \{1, \dots, s\},\ \forall j \in \{1, \dots, r\},\\
-& \beta_i + \gamma_j + \delta_j + \sigma_i\, \varepsilon_j \ge 1, && \forall i \in \{1, \dots, s\},\ \forall j \in \{1, \dots, r\},\\
+\text{s.t.} \quad & \alpha_i + \gamma_j - \delta_j + \sigma_i\, \varepsilon_j \ge 1, && \forall i \in \{1, 2, \dots, s\},\ \forall j \in \{1, 2, \dots, r\},\\
+& \beta_i + \gamma_j + \delta_j + \sigma_i\, \varepsilon_j \ge 1, && \forall i \in \{1, 2, \dots, s\},\ \forall j \in \{1, 2, \dots, r\},\\
 & \alpha_i \ge 0, \quad \beta_i \ge 0, \quad \gamma_j \ge 0, \quad \delta_j \ge 0, \quad \varepsilon_j \ge 0.
 \end{aligned}
 $$

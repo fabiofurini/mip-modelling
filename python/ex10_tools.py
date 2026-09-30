@@ -15,6 +15,7 @@ from gurobipy import GRB
 from mip import (ammissibile, due_rilassamenti, frazione, nuovo_modello, registra_bound,
                  risolvi, valuta)
 from stile import intestazione, plt, salva_dati, salva_figura
+from esteso import salva_modello
 
 R = range
 
@@ -56,6 +57,7 @@ def duale(pr, T, K):
 
 
 m, x, y = modello(pr, T, K)
+salva_modello(m, "ex10_primale")
 
 # ---------- 2. CONSTRUCTIVE HEURISTIC (LOWER BOUND: IT IS A MAXIMISATION) ----------
 carichi, eseguite = set(), []
@@ -79,6 +81,7 @@ print("  Heuristic solution: operations " + ", ".join(str(i + 1) for i in sorted
 
 # ---------- 3. LP RELAXATION AND DUAL (UPPER BOUND) ----------
 d = duale(pr, T, K)
+salva_modello(d, "ex10_duale")
 mano = {f"beta[{i},{j}]": pr[i] / len(T[i]) for i in R(no) for j in T[i]}
 carico = {j: sum(mano[f"beta[{i},{j}]"] for i in R(no) if j in T[i]) for j in R(nu)}
 mano["alpha"] = max(carico.values())

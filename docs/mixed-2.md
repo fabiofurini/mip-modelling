@@ -7,7 +7,7 @@
 !!! abstract "Problem 10.2"
     An auctioneer has a set $S = \{1, 2, \dots, n\}$ of $n \in \mathbb{Z}_{\ge 1}$
     items to sell and has received $r \in \mathbb{Z}_{\ge 1}$ bids. For every bid
-    $j \in \{1, \dots, r\}$, the set $B_j \subseteq S$ is the subset of items
+    $j \in \{1, 2, \dots, r\}$, the set $B_j \subseteq S$ is the subset of items
     requested and $p_j \in \mathbb{Q}_{>0}$ the profit in euros if the bid is
     accepted. Every item can be sold at most once, and a bid can be accepted only
     if all its items are available. The auctioneer wants to choose a set of bids
@@ -26,7 +26,7 @@ $$
 \begin{aligned}
 \max ~~ & \sum_{j=1}^{r} p_j\, x_j\\
 \text{s.t.} \quad & \sum_{j :\, i \in B_j} x_j \le 1, && \forall i \in S,\\
-& x_j \in \{0,1\}, && \forall j \in \{1, \dots, r\}.
+& x_j \in \{0,1\}, && \forall j \in \{1, 2, \dots, r\}.
 \end{aligned}
 $$
 
@@ -107,7 +107,7 @@ Associate a non-negative dual variable $\lambda_i$ with each item constraint.
 $$
 \begin{aligned}
 \min ~~ & \sum_{i \in S} \lambda_i\\
-\text{s.t.} \quad & \sum_{i \in B_j} \lambda_i \ge p_j, && \forall j \in \{1, \dots, r\},\\
+\text{s.t.} \quad & \sum_{i \in B_j} \lambda_i \ge p_j, && \forall j \in \{1, 2, \dots, r\},\\
 & \lambda_i \ge 0, && \forall i \in S.
 \end{aligned}
 $$

@@ -13,8 +13,13 @@ model and a useful one.
 
 In place of $a' x = \beta$ one writes
 
-$$a' x + s^- - s^+ = \beta, \qquad s^-,\ s^+ \ge 0
-\qquad (1 \text{ constraint}, 2 \text{ continuous variables}),$$
+$$
+\begin{aligned}
+a' x + s^- - s^+ &= \beta, & &\qquad (1 \text{ constraint}),\\
+s^- &\ge 0, & &\qquad (1 \text{ continuous variable}),\\
+s^+ &\ge 0, & &\qquad (1 \text{ continuous variable}),
+\end{aligned}
+$$
 
 and adds $\pi^- s^- + \pi^+ s^+$ to the objective, with penalties
 $\pi^-, \pi^+ > 0$. The variable $s^-$ measures how far **below** the target one

@@ -11,7 +11,12 @@ and the case in a constraint behave **radically differently**.
 
 - **In the objective, minimising**: a variable $d \ge 0$ and two constraints,
 
-    $$d \ge u - v, \qquad d \ge v - u \qquad (2 \text{ constraints}),$$
+    $$
+    \begin{aligned}
+    d &\ge u - v, & &\qquad (1 \text{ constraint}),\\
+    d &\ge v - u, & &\qquad (1 \text{ constraint}),
+    \end{aligned}
+    $$
 
     with $d$ in the objective to be minimised. No binary.
 
@@ -22,7 +27,12 @@ and the case in a constraint behave **radically differently**.
   binaries. It is the disjunction "$u - v \ge k$ *or* $v - u \ge k$", and needs
   a binary $b$ and a big-M:
 
-    $$u - v \ge k - M(1 - b), \qquad v - u \ge k - M b \qquad (2 \text{ constraints}, 1 \text{ binary}).$$
+    $$
+    \begin{aligned}
+    u - v &\ge k - M(1 - b), & &\qquad (1 \text{ constraint}),\\
+    v - u &\ge k - M\, b. & &\qquad (1 \text{ constraint}, 1 \text{ binary})
+    \end{aligned}
+    $$
 
 ## The proof
 

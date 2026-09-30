@@ -21,6 +21,7 @@ from gurobipy import GRB
 
 from mip import ammissibile, frazione, nuovo_modello, risolvi, rilassamento, valuta
 from stile import ARANCIO, BLU, GRIGIO, TEAL, intestazione, plt, salva_dati, salva_figura
+from esteso import salva_modello
 
 R = range
 
@@ -84,6 +85,7 @@ def modello(h, c, minimo_strumenti=2, legame_doppio=True):
 
 
 m14, x14, y14 = modello(h14, c14)
+salva_modello(m14, "ex15_primale")
 
 
 def stampa_orario(valore):

@@ -11,7 +11,12 @@ called **semicontinuous**.
 
 ## The constraints
 
-$$\ell\, y_j ~\le~ q_j ~\le~ c_j\, y_j, \qquad \forall j \qquad (2m \text{ constraints}).$$
+$$
+\begin{aligned}
+\ell\, y_j &~\le~ q_j, & \forall j & \qquad (m \text{ constraints}),\\
+q_j &~\le~ c_j\, y_j, & \forall j & \qquad (m \text{ constraints}).
+\end{aligned}
+$$
 
 ## The proof
 

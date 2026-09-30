@@ -62,9 +62,9 @@ time, an ILP and a MILP in general are not.
     $$
     \begin{array}{r r c r c l}
     \min & 4x_1 & + & 7x_2 &  & \\
-    \text{subject to} & 2x_1 & + & 3x_2 & \ge & 12,\\
-     & x_1 & + & x_2 & \le & 5,\\
-     & x_1 & , & x_2 & \in & \mathbb{Z}_{\ge 0}.
+    \text{subject to} & 2x_1 & + & 3x_2 & \ge & 12\\
+     & x_1 & + & x_2 & \le & 5\\
+     & x_1,& & x_2 & \in & \mathbb{Z}_{\ge 0}
     \end{array}
     $$
 
@@ -78,9 +78,9 @@ time, an ILP and a MILP in general are not.
     $$
     \begin{array}{r r c r c r c l}
     \max & 5y_1 & + & 4y_2 & + & 6y_3 &  & \\
-    \text{subject to} & y_1 & + & y_2 & + & y_3 & \le & 2,\\
-     & y_1 &  &  & + & y_3 & \ge & 1,\\
-     & y_1 & , & y_2 & , & y_3 & \in & \{0, 1\}.
+    \text{subject to} & y_1 & + & y_2 & + & y_3 & \le & 2\\
+     & y_1 &  &  & + & y_3 & \ge & 1\\
+     & y_1,& & y_2,& & y_3 & \in & \{0, 1\}
     \end{array}
     $$
 
@@ -96,11 +96,11 @@ time, an ILP and a MILP in general are not.
     $$
     \begin{array}{r r c r c r c l}
     \max & 3x_1 & + & 8x_2 & - & 10y &  & \\
-    \text{subject to} & x_1 & + & x_2 &  &  & = & 6,\\
-     &  &  & x_2 & - & 4y & \le & 0,\\
-     & x_1 &  &  &  &  & \ge & 1,\\
-     & x_1 & , & x_2 &  &  & \ge & 0,\\
-     &  &  &  &  & y & \in & \{0, 1\}.
+    \text{subject to} & x_1 & + & x_2 &  &  & = & 6\\
+     &  &  & x_2 & - & 4y & \le & 0\\
+     & x_1 &  &  &  &  & \ge & 1\\
+     & x_1,& & x_2 &  &  & \ge & 0\\
+     &  &  &  &  & y & \in & \{0, 1\}
     \end{array}
     $$
 
@@ -120,8 +120,8 @@ course works almost exclusively with MILPs.
 $$
 \begin{array}{r r c r c l}
 \max & x_1 & + & x_2 &  & \\
-\text{subject to} & 2x_1 & + & 2x_2 & \le & 3,\\
- & x_1 & , & x_2 & \in & \{0, 1\}.
+\text{subject to} & 2x_1 & + & 2x_2 & \le & 3\\
+ & x_1,& & x_2 & \in & \{0, 1\}
 \end{array}
 $$
 

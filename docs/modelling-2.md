@@ -202,10 +202,10 @@ and budget $B = 14$:
 
 $$
 \begin{aligned}
-\max ~~ \sum_{p=1}^{10} r_p x_p & &\\
-\text{subject to}\quad \sum_{p=1}^{10} b_p x_p &\le B, &\\
+\max ~~ \sum_{p=1}^{n} r_p\, x_p & &\\
+\text{subject to}\quad \sum_{p=1}^{n} b_p\, x_p &\le B, &\\
 \text{the 8 constraints} &\text{ of exercise 2.1}, &\\
-x_p &\in \{0,1\}. &
+x_p &\in \{0, 1\}, & \forall p \in \{1, 2, \dots, n\}.
 \end{aligned}
 $$
 

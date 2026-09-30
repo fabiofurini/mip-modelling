@@ -8,18 +8,45 @@
   --md-accent-fg-color: #4dd0e1;
 }
 
-/* titoli */
+/* ------------------------------------------------------------- breathing */
+/* The pages of the course are long: the line height is widened and every
+   section is set apart from the previous one, so the page does not read dense. */
+.md-typeset {
+  line-height: 1.68;
+}
+.md-typeset h2 {
+  margin-top: 2.6em;
+  border-bottom: 2px solid #0E749033;
+  padding-bottom: .2em;
+}
+.md-typeset h3 {
+  margin-top: 1.9em;
+}
 .md-typeset h1 {
   color: var(--md-primary-fg-color);
   font-weight: 700;
+  margin-bottom: .6em;
 }
 [data-md-color-scheme="slate"] .md-typeset h1 { color: #7fd4e4; }
-.md-typeset h2 {
-  border-bottom: 2px solid #0E749033;
-  padding-bottom: .15em;
+
+/* ---------------------------------------------------- models and long maths */
+/* The instance models have one column per variable: on a narrow screen they
+   scroll horizontally instead of spilling out of the page. */
+.md-typeset mjx-container[display="true"] {
+  overflow-x: auto;
+  overflow-y: hidden;
+  max-width: 100%;
+  padding: 0.55em 0.1em;
+  margin: 1.35em 0;
+  scrollbar-width: thin;
+}
+.md-typeset mjx-container[display="true"]::-webkit-scrollbar { height: 6px; }
+.md-typeset mjx-container[display="true"]::-webkit-scrollbar-thumb {
+  background: #0E749055;
+  border-radius: 3px;
 }
 
-/* schede della homepage */
+/* ---------------------------------------------------------------- cards */
 .md-typeset .grid.cards > ul > li {
   border: 1px solid #0E749030;
   border-left: 4px solid #0E7490;
@@ -31,12 +58,74 @@
   transform: translateY(-2px);
 }
 
-/* figure centrate con angoli morbidi */
+/* --------------------------------------------------------------- tables */
+/* The bound tables are made of numbers: fixed-width digits, so the columns
+   stay lined up to the eye as well. */
+.md-typeset table:not([class]) {
+  font-variant-numeric: tabular-nums;
+  margin: 1.4em 0;
+}
+.md-typeset table:not([class]) th {
+  background: #0E74900f;
+  font-weight: 600;
+}
+[data-md-color-scheme="slate"] .md-typeset table:not([class]) th {
+  background: #4dd0e11a;
+}
+.md-typeset table:not([class]) td,
+.md-typeset table:not([class]) th {
+  padding: .58em .9em;
+}
+
+/* --------------------------------------------------------------- figures */
 .md-typeset img {
   border-radius: 6px;
   display: block;
-  margin: 0 auto;
+  margin: 1.6em auto;
+  max-width: 100%;
+}
+/* the line of text following an image acts as its caption */
+.md-typeset img + em,
+.md-typeset figcaption {
+  display: block;
+  text-align: center;
+  font-size: .82em;
+  color: var(--md-default-fg-color--light);
 }
 
-/* blocchi codice piu' morbidi */
+/* ------------------------------------------------------------ admonition */
+.md-typeset .admonition,
+.md-typeset details {
+  margin: 1.6em 0;
+  border-radius: 7px;
+  box-shadow: none;
+  border-left-width: 4px;
+}
+
+/* -------------------------------------------------------------- code */
 .md-typeset pre > code { border-radius: 6px; }
+.md-typeset code { font-size: .84em; }
+
+/* ----------------------------------------------------- the instance model */
+/* One column per variable: on a narrow screen the block scrolls, and the thin
+   scrollbar signals that there is more to see. */
+.md-typeset .modello-esteso {
+  position: relative;
+  overflow-x: auto;
+  overflow-y: hidden;
+  margin: 1.4em 0;
+  padding-bottom: .2em;
+  scrollbar-width: thin;
+}
+.md-typeset .modello-esteso.largo mjx-container[display="true"] {
+  font-size: .86em;
+}
+.md-typeset .modello-esteso mjx-container[display="true"] {
+  margin: .4em 0;
+  overflow: visible;
+}
+.md-typeset .modello-esteso::-webkit-scrollbar { height: 6px; }
+.md-typeset .modello-esteso::-webkit-scrollbar-thumb {
+  background: #0E749055;
+  border-radius: 3px;
+}

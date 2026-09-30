@@ -6,10 +6,10 @@
 
 !!! abstract "Problem 10.8"
     A record company publishes a collection of $n \in \mathbb{Z}_{\ge 1}$ songs.
-    For every song $i \in \{1, \dots, n\}$, the value
+    For every song $i \in \{1, 2, \dots, n\}$, the value
     $d_i \in \mathbb{Q}_{\ge 1}$ is its duration in minutes. The collection must
     be distributed over $m \in \mathbb{Z}_{\ge 1}$ compact discs; every song must
-    be assigned to exactly one CD, and every CD $j \in \{1, \dots, m\}$ must
+    be assigned to exactly one CD, and every CD $j \in \{1, 2, \dots, m\}$ must
     contain at least $w_j \in \mathbb{Z}_{\ge 1}$ songs. The record company wants
     to minimise the difference between the total duration of the longest CD and
     that of the shortest.
@@ -26,10 +26,10 @@ $y \ge 0$ is the duration of the longest CD and $z \ge 0$ that of the shortest.
 $$
 \begin{aligned}
 \min ~~ & y - z\\
-\text{s.t.} \quad & \sum_{j=1}^{m} x_{ij} = 1, && \forall i \in \{1, \dots, n\},\\
-& \sum_{i=1}^{n} x_{ij} \ge w_j, && \forall j \in \{1, \dots, m\},\\
-& -\sum_{i=1}^{n} d_i\, x_{ij} + y \ge 0, && \forall j \in \{1, \dots, m\},\\
-& \sum_{i=1}^{n} d_i\, x_{ij} - z \ge 0, && \forall j \in \{1, \dots, m\},\\
+\text{s.t.} \quad & \sum_{j=1}^{m} x_{ij} = 1, && \forall i \in \{1, 2, \dots, n\},\\
+& \sum_{i=1}^{n} x_{ij} \ge w_j, && \forall j \in \{1, 2, \dots, m\},\\
+& -\sum_{i=1}^{n} d_i\, x_{ij} + y \ge 0, && \forall j \in \{1, 2, \dots, m\},\\
+& \sum_{i=1}^{n} d_i\, x_{ij} - z \ge 0, && \forall j \in \{1, 2, \dots, m\},\\
 & x_{ij} \in \{0,1\}, \quad y \ge 0, \quad z \ge 0.
 \end{aligned}
 $$
@@ -98,7 +98,7 @@ $$
 \max ~~ & \sum_{i=1}^{n} \alpha_i + \sum_{j=1}^{m} w_j\, \beta_j\\
 \text{s.t.} \quad & \sum_{j=1}^{m} \gamma_j = 1,\\
 & \sum_{j=1}^{m} \delta_j = 1,\\
-& \alpha_i + \beta_j - d_i\, \gamma_j + d_i\, \delta_j \le 0, && \forall i \in \{1, \dots, n\},\ \forall j \in \{1, \dots, m\},\\
+& \alpha_i + \beta_j - d_i\, \gamma_j + d_i\, \delta_j \le 0, && \forall i \in \{1, 2, \dots, n\},\ \forall j \in \{1, 2, \dots, m\},\\
 & \alpha_i \gtreqless 0, \quad \beta_j \ge 0, \quad \gamma_j \ge 0, \quad \delta_j \ge 0.
 \end{aligned}
 $$

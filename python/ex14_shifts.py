@@ -14,6 +14,7 @@ from gurobipy import GRB
 from mip import (ammissibile, due_rilassamenti, frazione, nuovo_modello, registra_bound,
                  risolvi, stampa_lp, valuta)
 from stile import ARANCIO, BLU, GRIGIO, TEAL, intestazione, plt, salva_dati, salva_figura
+from esteso import salva_modello
 
 R = range
 
@@ -64,6 +65,7 @@ def duale(a, b, c):
 
 
 m13, x13 = modello(a13, b13, c13)
+salva_modello(m13, "ex14_primale")
 print("  The model of the instance:")
 stampa_lp(m13)
 
@@ -104,6 +106,7 @@ print("  Heuristic solution: " + ", ".join(f"{x_eur[j]} of pattern {j + 1}" for 
 
 # ---------- 3. LP RELAXATION AND DUAL (LOWER BOUND) ----------
 d13 = duale(a13, b13, c13)
+salva_modello(d13, "ex14_duale")
 # best-ratio recipe: the same price t on all the days. Every pattern covers
 # 4 + 1/2 = 9/2 person-days, so the dual constraint is (9/2) t <= c_j: the largest
 # feasible t is min_j c_j / (9/2).

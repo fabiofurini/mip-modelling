@@ -10,7 +10,12 @@ machine.
 
 ## The constraints
 
-$$z ~\ge~ t_j\, x_j, \qquad \forall j \qquad (n \text{ constraints}), \qquad z \ge 0.$$
+$$
+\begin{aligned}
+z &~\ge~ t_j\, x_j, & \forall j & \qquad (n \text{ constraints}),\\
+z &~\ge~ 0. & &
+\end{aligned}
+$$
 
 ## The proof, in three steps
 

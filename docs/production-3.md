@@ -7,7 +7,7 @@
 !!! abstract "Problem 9.3"
     A company produces $s \in \mathbb{Z}_{\ge 1}$ types of vehicle using
     $k \in \mathbb{Z}_{\ge 1}$ resources. For every resource
-    $i \in \{1, \dots, k\}$ and every type $j \in \{1, \dots, s\}$, the value
+    $i \in \{1, 2, \dots, k\}$ and every type $j \in \{1, 2, \dots, s\}$, the value
     $a_{ij} \in \mathbb{Q}_{\ge 0}$ is the amount of resource $i$ needed for one
     unit of type $j$, and $b_i \in \mathbb{Q}_{>0}$ is the availability of
     resource $i$. For every type $j$, the value $\bar p_j \in \mathbb{Q}_{>0}$ is
@@ -33,9 +33,9 @@ $j$ alone.
 $$
 \begin{aligned}
 \max ~~ & \sum_{j=1}^{s} \bar p_j\, x_j + \bar r\, z\\
-\text{s.t.} \quad & \sum_{j=1}^{s} a_{ij}\, x_j \le b_i, && \forall i \in \{1, \dots, k\},\\
-& x_j - \bar q_j\, y_j \ge 0, && \forall j \in \{1, \dots, s\},\\
-& x_j - M_j\, y_j \le 0, && \forall j \in \{1, \dots, s\},\\
+\text{s.t.} \quad & \sum_{j=1}^{s} a_{ij}\, x_j \le b_i, && \forall i \in \{1, 2, \dots, k\},\\
+& x_j - \bar q_j\, y_j \ge 0, && \forall j \in \{1, 2, \dots, s\},\\
+& x_j - M_j\, y_j \le 0, && \forall j \in \{1, 2, \dots, s\},\\
 & -\sum_{j=1}^{s} y_j + 2\, z \le 0,\\
 & x_j \in \mathbb{Z}_{\ge 0}, \quad y_j \in \{0,1\}, \quad z \in \{0,1\}.
 \end{aligned}
@@ -131,8 +131,8 @@ with the activation and $\gamma \ge 0$ with the bonus.
 $$
 \begin{aligned}
 \min ~~ & \sum_{i=1}^{k} b_i\, \pi_i\\
-\text{s.t.} \quad & \sum_{i=1}^{k} a_{ij}\, \pi_i - \ell_j + \beta_j \ge \bar p_j, && \forall j \in \{1, \dots, s\},\\
-& \bar q_j\, \ell_j - M_j\, \beta_j - \gamma \ge 0, && \forall j \in \{1, \dots, s\},\\
+\text{s.t.} \quad & \sum_{i=1}^{k} a_{ij}\, \pi_i - \ell_j + \beta_j \ge \bar p_j, && \forall j \in \{1, 2, \dots, s\},\\
+& \bar q_j\, \ell_j - M_j\, \beta_j - \gamma \ge 0, && \forall j \in \{1, 2, \dots, s\},\\
 & 2\, \gamma \ge \bar r,\\
 & \pi_i \ge 0, \quad \ell_j \ge 0, \quad \beta_j \ge 0, \quad \gamma \ge 0.
 \end{aligned}

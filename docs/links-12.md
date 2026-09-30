@@ -13,14 +13,20 @@ Two different but related needs: giving $n$ objects $n$ **all distinct** values
 **Alldiff**, with $p_{iv} = 1$ if object $i$ gets value $v$:
 
 $$
-\sum_{v} p_{iv} = 1 \quad \forall i \qquad (n \text{ constraints}), \qquad
-\sum_{i} p_{iv} = 1 \quad \forall v \qquad (n \text{ constraints}).
+\begin{aligned}
+\sum_{v} p_{iv} &= 1, & \forall i & \qquad (n \text{ constraints}),\\
+\sum_{i} p_{iv} &= 1, & \forall v & \qquad (n \text{ constraints}).
+\end{aligned}
 $$
 
 **Binary expansion** of $v \in \{0, 1, \dots, 2^p - 1\}$:
 
-$$v = \sum_{k=0}^{p-1} 2^k\, b_k, \qquad b_k \in \{0,1\}
-\qquad (1 \text{ constraint}, p \text{ binaries}).$$
+$$
+\begin{aligned}
+v &= \sum_{k=0}^{p-1} 2^k\, b_k, & &\qquad (1 \text{ constraint}),\\
+b_k &\in \{0, 1\}, & \forall k \in \{0, 1, \dots, p-1\} & \qquad (p \text{ binaries}).
+\end{aligned}
+$$
 
 ## The proof
 

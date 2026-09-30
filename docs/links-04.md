@@ -10,8 +10,12 @@ workers) and each carries a capacity $c$.
 
 ## The constraints
 
-$$\sum_{i} a_i\, x_i ~\le~ c\, w, \qquad w \in \mathbb{Z}_{\ge 0}
-\qquad (1 \text{ constraint}, 1 \text{ integer variable}).$$
+$$
+\begin{aligned}
+\sum_{i} a_i\, x_i &~\le~ c\, w, & &\qquad (1 \text{ constraint}),\\
+w &~\in~ \mathbb{Z}_{\ge 0}. & &\qquad (1 \text{ integer variable})
+\end{aligned}
+$$
 
 ## The proof
 

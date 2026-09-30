@@ -12,6 +12,7 @@ from gurobipy import GRB
 from mip import (ammissibile, due_rilassamenti, frazione, nuovo_modello, registra_bound,
                  risolvi, stampa_lp, valuta)
 from stile import ARANCIO, GRIGIO, TEAL, intestazione, plt, salva_dati, salva_figura
+from esteso import salva_modello
 
 R = range
 
@@ -52,6 +53,7 @@ def duale(a, p, K, G, imp):
 
 
 m0, x0 = modello(a0, p0, K0, G0, IMP)
+salva_modello(m0, "ex01_primale")
 print("  The model of the instance:")
 stampa_lp(m0)
 
@@ -94,6 +96,7 @@ print(f"  Heuristic solution: groups {[j + 1 for j in R(n0) if x_eur[j]]}   "
 
 # ---------- 3. LP RELAXATION AND DUAL (UPPER BOUND) ----------
 d0 = duale(a0, p0, K0, G0, IMP)
+salva_modello(d0, "ex01_duale")
 # recipe: only the seats are priced (beta = gamma = 0), at the highest price per seat
 alpha_min = max(p0[j] / a0[j] for j in R(n0))
 mano = {"alpha": alpha_min, "beta": 0.0, "gamma": 0.0}

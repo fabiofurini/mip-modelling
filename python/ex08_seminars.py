@@ -12,6 +12,7 @@ from gurobipy import GRB
 from mip import (ammissibile, due_rilassamenti, frazione, nuovo_modello, registra_bound,
                  risolvi, valuta)
 from stile import intestazione, plt, salva_dati, salva_figura
+from esteso import salva_modello
 
 R = range
 
@@ -57,6 +58,7 @@ def duale(p, q):
 
 
 m, x = modello(p, q)
+salva_modello(m, "ex08_primale")
 
 # ---------- 2. CONSTRUCTIVE HEURISTIC (LOWER BOUND: IT IS A MAXIMISATION) ----------
 def ammesse(scelte):
@@ -84,6 +86,7 @@ print("  Heuristic solution: " + ", ".join(f"seminar {s + 1} in slot {k + 1}" fo
 
 # ---------- 3. LP RELAXATION AND DUAL (UPPER BOUND) ----------
 d = duale(p, q)
+salva_modello(d, "ex08_duale")
 pmax = max(p[s][k] for s in R(ns) for k in R(nk))
 mano = {"gamma": pmax}
 ub, viol = valuta(d, mano)

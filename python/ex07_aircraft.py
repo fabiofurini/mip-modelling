@@ -12,6 +12,7 @@ from gurobipy import GRB
 from mip import (ammissibile, due_rilassamenti, frazione, nuovo_modello, registra_bound,
                  risolvi, stampa_lp, valuta)
 from stile import ARANCIO, GRIGIO, TEAL, intestazione, plt, salva_dati, salva_figura
+from esteso import salva_modello
 
 R = range
 
@@ -64,6 +65,7 @@ def duale(p, f, h, M, H):
 
 
 m6, x6, y6 = modello(p6, f6, h6, M6, H6)
+salva_modello(m6, "ex07_primale")
 print("  The model of the instance:")
 stampa_lp(m6)
 
@@ -102,6 +104,7 @@ print(f"  Heuristic solution: " + ", ".join(f"{aerei(x_e[j])} to client {j + 1}"
 
 # ---------- 3. LP RELAXATION AND DUAL (UPPER BOUND) ----------
 d6 = duale(p6, f6, h6, M6, H6)
+salva_modello(d6, "ex07_duale")
 # recipe: beta_j = f_j / M_j (the largest value allowed by the column of y_j, that is
 # the set-up spread over the aircraft ordered) and alpha the smallest value that makes
 # all the columns of x feasible

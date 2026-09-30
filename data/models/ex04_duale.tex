@@ -1,0 +1,17 @@
+\begin{array}{r@{\,}r@{\,}r@{\,}r@{\,}r@{\,}r@{\,}r@{\,}r@{\,}r@{\,}r c l}
+\max & 2500\alpha_1 & +5000\alpha_2 & +7000\alpha_3 &  &  &  & +100\gamma_1 &  &  &  & \\
+\text{subject to} & \alpha_1 &  &  & -4\beta_1 &  &  &  &  &  & \le & 15\\
+ &  & \alpha_2 &  &  & -4\beta_2 &  &  &  &  & \le & 15\\
+ &  &  & \alpha_3 &  &  & -4\beta_3 &  &  &  & \le & 15\\
+ & -\alpha_1 & +\alpha_2 &  &  &  &  &  &  &  & \le & 3\\
+ &  & -\alpha_2 & +\alpha_3 &  &  &  &  &  &  & \le & 3\\
+ &  &  &  & 160\beta_1 &  &  & +\gamma_1 & -\gamma_2 &  & \le & 1500\\
+ &  &  &  &  & 160\beta_2 &  &  & +\gamma_2 & -\gamma_3 & \le & 1500\\
+ &  &  &  &  &  & 160\beta_3 &  &  & +\gamma_3 & \le & 1500\\
+ &  &  &  &  &  &  & -\gamma_1 &  &  & \le & 100\\
+ &  &  &  &  &  &  &  & -\gamma_2 &  & \le & 100\\
+ &  &  &  &  &  &  &  &  & -\gamma_3 & \le & 100\\
+ & \alpha_1, & \alpha_2, & \alpha_3 &  &  &  &  &  &  & \gtreqless & 0\\
+ &  &  &  & \beta_1, & \beta_2, & \beta_3 &  &  &  & \ge & 0\\
+ &  &  &  &  &  &  & \gamma_1, & \gamma_2, & \gamma_3 & \gtreqless & 0
+\end{array}

@@ -19,6 +19,7 @@ from gurobipy import GRB
 from mip import (ammissibile, due_rilassamenti, frazione, nuovo_modello, registra_bound,
                  risolvi, valuta)
 from stile import intestazione, plt, salva_dati, salva_figura
+from esteso import salva_modello
 
 R = range
 
@@ -69,6 +70,7 @@ def duale_minmax(d):
 
 
 m, x, z = modello_minmax(d)
+salva_modello(m, "ex11_primale")
 
 # ---------- 2. CONSTRUCTIVE HEURISTIC (UPPER BOUND) ----------
 carico = [0, 0]
@@ -88,6 +90,7 @@ print(f"  ub = max of the loads = {frazione(ub)}")
 
 # ---------- 3. LP RELAXATION AND DUAL (LOWER BOUND) ----------
 dl, pi1, pi2 = duale_minmax(d)
+salva_modello(dl, "ex11_duale")
 mano = {"pi1": -0.5, "pi2": -0.5}
 lb, viol = valuta(dl, mano)
 assert viol <= 1e-9, viol

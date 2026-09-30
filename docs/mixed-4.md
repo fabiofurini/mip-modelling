@@ -9,12 +9,12 @@
     holidays. Every tree can be decorated according to one of
     $n \in \mathbb{Z}_{\ge 1}$ possible configurations, each characterised by
     lights of $m \in \mathbb{Z}_{\ge 1}$ different colours. For every
-    configuration $c \in \{1, \dots, n\}$ and every colour $l \in \{1, \dots, m\}$,
+    configuration $c \in \{1, 2, \dots, n\}$ and every colour $l \in \{1, 2, \dots, m\}$,
     the value $u_{cl} \in \mathbb{Z}_{\ge 0}$ is the number of lights of colour
     $l$ required by configuration $c$, and $i_c \in \mathbb{Q}_{>0}$ is the
     installation cost of a tree decorated that way. All the lights must be bought
     on the market, where they are sold in boxes of $k \in \mathbb{Z}_{\ge 1}$
-    types: for every type $b \in \{1, \dots, k\}$ and every colour $l$, the value
+    types: for every type $b \in \{1, 2, \dots, k\}$ and every colour $l$, the value
     $v_{bl} \in \mathbb{Z}_{\ge 0}$ is the number of lights of colour $l$ in a box
     of type $b$, and $p_b \in \mathbb{Q}_{\ge 0}$ is its cost. To guarantee a
     pleasant visual variety, at least $f \in \mathbb{Z}_{\ge 1}$ different
@@ -37,9 +37,9 @@ $$
 \begin{aligned}
 \min ~~ & \sum_{c=1}^{n} i_c\, x_c + \sum_{b=1}^{k} p_b\, y_b\\
 \text{s.t.} \quad & \sum_{c=1}^{n} x_c = q,\\
-& \sum_{b=1}^{k} v_{bl}\, y_b - \sum_{c=1}^{n} u_{cl}\, x_c \ge 0, && \forall l \in \{1, \dots, m\},\\
+& \sum_{b=1}^{k} v_{bl}\, y_b - \sum_{c=1}^{n} u_{cl}\, x_c \ge 0, && \forall l \in \{1, 2, \dots, m\},\\
 & \sum_{c=1}^{n} z_c \ge f,\\
-& x_c - z_c \ge 0, && \forall c \in \{1, \dots, n\},\\
+& x_c - z_c \ge 0, && \forall c \in \{1, 2, \dots, n\},\\
 & x_c \in \mathbb{Z}_{\ge 0}, \quad y_b \in \mathbb{Z}_{\ge 0}, \quad z_c \in \{0,1\}.
 \end{aligned}
 $$
@@ -136,9 +136,9 @@ with the colours, $\gamma \ge 0$ with variety and $\delta_c \ge 0$ with the link
 $$
 \begin{aligned}
 \max ~~ & q\, \alpha + f\, \gamma\\
-\text{s.t.} \quad & \alpha - \sum_{l=1}^{m} u_{cl}\, \beta_l + \delta_c \le i_c, && \forall c \in \{1, \dots, n\},\\
-& \sum_{l=1}^{m} v_{bl}\, \beta_l \le p_b, && \forall b \in \{1, \dots, k\},\\
-& \gamma - \delta_c \le 0, && \forall c \in \{1, \dots, n\},\\
+\text{s.t.} \quad & \alpha - \sum_{l=1}^{m} u_{cl}\, \beta_l + \delta_c \le i_c, && \forall c \in \{1, 2, \dots, n\},\\
+& \sum_{l=1}^{m} v_{bl}\, \beta_l \le p_b, && \forall b \in \{1, 2, \dots, k\},\\
+& \gamma - \delta_c \le 0, && \forall c \in \{1, 2, \dots, n\},\\
 & \alpha \gtreqless 0, \quad \beta_l \ge 0, \quad \gamma \ge 0, \quad \delta_c \ge 0.
 \end{aligned}
 $$

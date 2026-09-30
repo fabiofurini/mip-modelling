@@ -35,7 +35,7 @@ models describe the same set of plans.
 **Formulation A: the hirings.** The staffing variables are
 
 $$
-z_t = \text{workers hired at the start of month } t, \qquad \forall t \in \{1, \dots, n\},
+z_t = \text{workers hired at the start of month } t, \qquad \forall t \in \{1, 2, \dots, n\},
 $$
 
 integer and non-negative. A worker hired in month $t$ stays until the end of the
@@ -46,7 +46,7 @@ constant term: it is left out of the model and added to the final value.
 **Formulation B: the headcount.** The staffing variables are
 
 $$
-y_t = \text{workers on duty in month } t, \qquad \forall t \in \{1, \dots, n\},
+y_t = \text{workers on duty in month } t, \qquad \forall t \in \{1, 2, \dots, n\},
 $$
 
 integer and non-negative, with $y_t \ge y_{t-1}$ because nobody is laid off. The
@@ -70,7 +70,7 @@ $$
 \text{s.t.} \quad & x_1 - s_1 = d_1,\\
 & x_t + s_{t-1} - s_t = d_t, && \forall t \in \{2, \dots, n-1\},\\
 & x_n + s_{n-1} = d_n,\\
-& -g\, x_t + r \sum_{j=1}^{t} z_j \ge -r\, m_0, && \forall t \in \{1, \dots, n\},\\
+& -g\, x_t + r \sum_{j=1}^{t} z_j \ge -r\, m_0, && \forall t \in \{1, 2, \dots, n\},\\
 & x_t \in \mathbb{Z}_{\ge 0},\quad s_t \in \mathbb{Z}_{\ge 0},\quad z_t \in \mathbb{Z}_{\ge 0}.
 \end{aligned}
 $$
@@ -84,7 +84,7 @@ $$
 \text{s.t.} \quad & x_1 - s_1 = d_1,\\
 & x_t + s_{t-1} - s_t = d_t, && \forall t \in \{2, \dots, n-1\},\\
 & x_n + s_{n-1} = d_n,\\
-& -g\, x_t + r\, y_t \ge 0, && \forall t \in \{1, \dots, n\},\\
+& -g\, x_t + r\, y_t \ge 0, && \forall t \in \{1, 2, \dots, n\},\\
 & y_1 \ge m_0,\\
 & -y_{t-1} + y_t \ge 0, && \forall t \in \{2, \dots, n\},\\
 & x_t \in \mathbb{Z}_{\ge 0},\quad s_t \in \mathbb{Z}_{\ge 0},\quad y_t \in \mathbb{Z}_{\ge 0}.
@@ -186,9 +186,9 @@ each hours constraint:
 $$
 \begin{aligned}
 \max ~~ & \sum_{t=1}^{n} d_t\, \mu_t - r\, m_0 \sum_{t=1}^{n} \nu_t\\
-\text{s.t.} \quad & \mu_t - g\, \nu_t \le p_t, && \forall t \in \{1, \dots, n\},\\
-& -\mu_t + \mu_{t+1} \le h_t, && \forall t \in \{1, \dots, n-1\},\\
-& r \sum_{t=j}^{n} \nu_t \le u + w\,(n - j + 1), && \forall j \in \{1, \dots, n\},\\
+\text{s.t.} \quad & \mu_t - g\, \nu_t \le p_t, && \forall t \in \{1, 2, \dots, n\},\\
+& -\mu_t + \mu_{t+1} \le h_t, && \forall t \in \{1, 2, \dots, n-1\},\\
+& r \sum_{t=j}^{n} \nu_t \le u + w\,(n - j + 1), && \forall j \in \{1, 2, \dots, n\},\\
 & \mu_t \gtreqless 0, \quad \nu_t \ge 0.
 \end{aligned}
 $$

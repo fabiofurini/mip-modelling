@@ -6,7 +6,7 @@
 
 !!! abstract "Problem 10.1"
     A loyalty programme offers $s \in \mathbb{Z}_{\ge 1}$ prizes and a customer
-    has $p \in \mathbb{Q}_{>0}$ points. Every prize $i \in \{1, \dots, s\}$ can
+    has $p \in \mathbb{Q}_{>0}$ points. Every prize $i \in \{1, 2, \dots, s\}$ can
     be obtained in two alternative ways: with points only, spending
     $a_i \in \mathbb{Q}_{>0}$ of them; or spending only
     $b_i \in \mathbb{Q}_{>0}$ points (with $b_i < a_i$) and adding a money
@@ -31,10 +31,10 @@ all $2s$ binary variables.
 $$
 \begin{aligned}
 \min ~~ & \sum_{i=1}^{s} c_i\, y_i\\
-\text{s.t.} \quad & x_i + y_i \le 1, && \forall i \in \{1, \dots, s\},\\
+\text{s.t.} \quad & x_i + y_i \le 1, && \forall i \in \{1, 2, \dots, s\},\\
 & \sum_{i=1}^{s} \bigl(a_i\, x_i + b_i\, y_i\bigr) \le p,\\
 & \sum_{i=1}^{s} d_i\,(x_i + y_i) \ge \ell,\\
-& x_i \in \{0, 1\}, \quad y_i \in \{0, 1\}, && \forall i \in \{1, \dots, s\}.
+& x_i \in \{0, 1\}, \quad y_i \in \{0, 1\}, && \forall i \in \{1, 2, \dots, s\}.
 \end{aligned}
 $$
 
@@ -125,8 +125,8 @@ is a minimisation, so $\le$ constraints give duals of negative sign.
 $$
 \begin{aligned}
 \max ~~ & -\sum_{i=1}^{s} \sigma_i - p\, \pi + \ell\, \rho\\
-\text{s.t.} \quad & -\sigma_i - a_i\, \pi + d_i\, \rho \le 0, && \forall i \in \{1, \dots, s\},\\
-& -\sigma_i - b_i\, \pi + d_i\, \rho \le c_i, && \forall i \in \{1, \dots, s\},\\
+\text{s.t.} \quad & -\sigma_i - a_i\, \pi + d_i\, \rho \le 0, && \forall i \in \{1, 2, \dots, s\},\\
+& -\sigma_i - b_i\, \pi + d_i\, \rho \le c_i, && \forall i \in \{1, 2, \dots, s\},\\
 & \sigma_i \ge 0, \quad \pi \ge 0, \quad \rho \ge 0.
 \end{aligned}
 $$

@@ -6,7 +6,7 @@
 
 !!! abstract "Problem 10.9"
     A library has to arrange $n \in \mathbb{Z}_{\ge 1}$ books on shelves. Every
-    book $b \in \{1, \dots, n\}$ has width $w_b \in \mathbb{Z}_{\ge 1}$ and
+    book $b \in \{1, 2, \dots, n\}$ has width $w_b \in \mathbb{Z}_{\ge 1}$ and
     height $h_b \in \mathbb{Z}_{\ge 1}$. There are $m \in \mathbb{Z}_{\ge 1}$
     shelves available, each of maximum width $c \in \mathbb{Q}_{>0}$. Every book
     must be assigned to exactly one shelf, and the total width of the books on a
@@ -25,9 +25,9 @@ $y_s \ge 0$ is the height of shelf $s$.
 $$
 \begin{aligned}
 \min ~~ & \sum_{s=1}^{m} y_s\\
-\text{s.t.} \quad & \sum_{s=1}^{m} x_{bs} = 1, && \forall b \in \{1, \dots, n\},\\
-& \sum_{b=1}^{n} w_b\, x_{bs} \le c, && \forall s \in \{1, \dots, m\},\\
-& -h_b\, x_{bs} + y_s \ge 0, && \forall b \in \{1, \dots, n\},\ \forall s \in \{1, \dots, m\},\\
+\text{s.t.} \quad & \sum_{s=1}^{m} x_{bs} = 1, && \forall b \in \{1, 2, \dots, n\},\\
+& \sum_{b=1}^{n} w_b\, x_{bs} \le c, && \forall s \in \{1, 2, \dots, m\},\\
+& -h_b\, x_{bs} + y_s \ge 0, && \forall b \in \{1, 2, \dots, n\},\ \forall s \in \{1, 2, \dots, m\},\\
 & x_{bs} \in \{0,1\}, \quad y_s \ge 0.
 \end{aligned}
 $$
@@ -104,8 +104,8 @@ Associate $\alpha_b$ free with the assignment, $\beta_s \le 0$ with the width
 $$
 \begin{aligned}
 \max ~~ & \sum_{b=1}^{n} \alpha_b + c \sum_{s=1}^{m} \beta_s\\
-\text{s.t.} \quad & \sum_{b=1}^{n} \gamma_{bs} \le 1, && \forall s \in \{1, \dots, m\},\\
-& \alpha_b + w_b\, \beta_s - h_b\, \gamma_{bs} \le 0, && \forall b \in \{1, \dots, n\},\ \forall s \in \{1, \dots, m\},\\
+\text{s.t.} \quad & \sum_{b=1}^{n} \gamma_{bs} \le 1, && \forall s \in \{1, 2, \dots, m\},\\
+& \alpha_b + w_b\, \beta_s - h_b\, \gamma_{bs} \le 0, && \forall b \in \{1, 2, \dots, n\},\ \forall s \in \{1, 2, \dots, m\},\\
 & \alpha_b \gtreqless 0, \quad \beta_s \le 0, \quad \gamma_{bs} \ge 0.
 \end{aligned}
 $$

@@ -12,6 +12,7 @@ from gurobipy import GRB
 from mip import (ammissibile, due_rilassamenti, frazione, nuovo_modello, registra_bound,
                  risolvi, valuta)
 from stile import ARANCIO, BLU, GRIGIO, TEAL, intestazione, plt, salva_dati, salva_figura
+from esteso import salva_modello
 
 R = range
 
@@ -78,6 +79,7 @@ def duale(d, s0, y0):
 
 
 m3, x3, s3, y3, z3 = modello(d3, s0, y0)
+salva_modello(m3, "ex04_primale")
 
 # ---------- 2. CONSTRUCTIVE HEURISTIC (UPPER BOUND) ----------
 # "just in time" production: every month exactly the net demand is produced, with no
@@ -112,6 +114,7 @@ print(f"  Cost of the heuristic solution: ub = {frazione(ub3)}")
 
 # ---------- 3. LP RELAXATION AND DUAL (LOWER BOUND) ----------
 dl3 = duale(d3, s0, y0)
+salva_modello(dl3, "ex04_duale")
 # recipe: an hour of work is worth beta = w / hours (what it really costs), so a pair
 # is worth at most alpha = mat + ore_paio * beta; gamma = 0
 beta_v = w3 / ore3

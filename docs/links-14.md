@@ -17,7 +17,8 @@ $w_t \in \{0,1\}$ the indicator of piece $t$ (between $q_{t-1}$ and $q_t$):
 $$
 \begin{aligned}
 \sum_{k=0}^{p} \lambda_k &= 1 &&\qquad (1 \text{ constraint}),\\
-q = \sum_{k=0}^{p} q_k \lambda_k, \qquad g(q) &= \sum_{k=0}^{p} g_k \lambda_k &&\qquad (2 \text{ constraints}),\\
+q &= \sum_{k=0}^{p} q_k \lambda_k &&\qquad (1 \text{ constraint}),\\
+g(q) &= \sum_{k=0}^{p} g_k \lambda_k &&\qquad (1 \text{ constraint}),\\
 \sum_{t=1}^{p} w_t &= 1 &&\qquad (1 \text{ constraint}),\\
 \lambda_k &\le \!\!\sum_{t \,:\, k \in \{t-1,\,t\}}\!\! w_t, \quad \forall k &&\qquad (p + 1 \text{ constraints}).
 \end{aligned}

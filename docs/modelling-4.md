@@ -98,9 +98,9 @@ order $\{1,2\}$, $\{2,3\}$, $\{1,3\}$, $\{1,4\}$, $\{2,4\}$, $\{3,4\}$.
 
 $$
 \begin{aligned}
-\min ~~ \sum_{j=1}^{4} c_j\, x_j & &\\
-\text{subject to}\quad \sum_{j \in S_i} x_j &\ge 1, & \forall i \in \{1, \dots, 6\},\\
-x_j &\in \{0,1\}, & \forall j \in \{1, \dots, 4\}.
+\min ~~ \sum_{j=1}^{n} c_j\, x_j & &\\
+\text{subject to}\quad \sum_{j \in S_i} x_j &\ge 1, & \forall i \in \{1, 2, \dots, m\},\\
+x_j &\in \{0, 1\}, & \forall j \in \{1, 2, \dots, n\}.
 \end{aligned}
 $$
 
@@ -109,7 +109,7 @@ constraint:
 
 $$
 \begin{aligned}
-\max ~~ \sum_{i=1}^{6} \pi_i & &\\
+\max ~~ \sum_{i=1}^{m} \pi_i & &\\
 \text{subject to}\quad \sum_{i \,:\, j \in S_i} \pi_i &\le c_j, & \forall j,\\
 \pi_i &\ge 0, & \forall i.
 \end{aligned}
