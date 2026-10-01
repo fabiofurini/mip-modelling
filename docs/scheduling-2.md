@@ -46,10 +46,10 @@ $$
 
 $$
 \begin{aligned}
-\min ~~ \sum_{m=1}^{k} c_m\, y_m & & \\
-\text{subject to} \quad \sum_{m=1}^{k} x_{jm} &= 1, & \forall j \in \{1, 2, \dots, n\}, \\
--\sum_{j=1}^{n} t_{jm}\, x_{jm} + a_m\, y_m &\ge 0, & \forall m \in \{1, 2, \dots, k\}, \\
-x_{jm} &\in \{0, 1\}, & \forall j \in \{1, 2, \dots, n\},\ \forall m \in \{1, 2, \dots, k\}, \\
+\min ~~ \sum_{m=1}^{k} c_m\, y_m & &\\
+\text{subject to} \quad \sum_{m=1}^{k} x_{jm} &= 1, & \forall j \in \{1, 2, \dots, n\},\\
+-\sum_{j=1}^{n} t_{jm}\, x_{jm} + a_m\, y_m &\ge 0, & \forall m \in \{1, 2, \dots, k\},\\
+x_{jm} &\in \{0, 1\}, & \forall j \in \{1, 2, \dots, n\},\ \forall m \in \{1, 2, \dots, k\},\\
 y_m &\in \{0, 1\}, & \forall m \in \{1, 2, \dots, k\}.
 \end{aligned}
 $$
@@ -142,9 +142,9 @@ minimisation):
 
 $$
 \begin{aligned}
-\max ~~ \sum_{j=1}^{n} \mu_j & & \\
-\text{subject to} \quad \mu_j - t_{jm}\, \pi_m &\le 0, & \forall j,\ \forall m, \\
-a_m\, \pi_m &\le c_m, & \forall m \in \{1, 2, \dots, k\}, \\
+\max ~~ \sum_{j=1}^{n} \mu_j & &\\
+\text{subject to} \quad \mu_j - t_{jm}\, \pi_m &\le 0, & \forall j,\ \forall m,\\
+a_m\, \pi_m &\le c_m, & \forall m \in \{1, 2, \dots, k\},\\
 \mu_j \gtreqless 0,\quad \pi_m &\ge 0. &
 \end{aligned}
 $$

@@ -151,7 +151,7 @@ nav:
           - 9.1 Lot sizing with fixed cost: production-1.md
           - 9.2 Production and workforce: production-2.md
           - 9.3 Vehicles with a minimum lot: production-3.md
-      - Mixed models:
+      - Mixed problems:
           - mixed.md
           - 10.1 Prizes in two ways: mixed-1.md
           - 10.2 Combinatorial auction: mixed-2.md

@@ -33,10 +33,11 @@ at least one job of class $c$ is executed.
 
 $$
 \begin{aligned}
-\max ~~ \sum_{j=1}^{n} r_j\, x_j - \sum_{c=1}^{q} f_c\, y_c & & \\
-\text{subject to} \quad \sum_{j=1}^{n} t_j\, x_j + \sum_{c=1}^{q} s_c\, y_c &\le a, & \\
-x_j - y_c &\le 0, & \forall c,\ \forall j \in \mathscr{J}_c, \\
-x_j \in \{0, 1\},\quad y_c &\in \{0, 1\}. &
+\max ~~ \sum_{j=1}^{n} r_j\, x_j - \sum_{c=1}^{q} f_c\, y_c & &\\
+\text{subject to} \quad \sum_{j=1}^{n} t_j\, x_j + \sum_{c=1}^{q} s_c\, y_c &\le a, &\\
+x_j - y_c &\le 0, & \forall c,\ \forall j \in \mathscr{J}_c,\\
+x_j &\in \{0, 1\}, & \forall j \in \{1, 2, \dots, n\},\\
+y_c &\in \{0, 1\}, & \forall c \in \{1, 2, \dots, q\}.
 \end{aligned}
 $$
 
@@ -111,9 +112,9 @@ With $\pi \ge 0$ (availability) and $\lambda_j \ge 0$ (link):
 
 $$
 \begin{aligned}
-\min ~~ a\, \pi & & \\
-\text{subject to} \quad t_j\, \pi + \lambda_j &\ge r_j, & \forall j, \\
-s_c\, \pi - \sum_{j \in \mathscr{J}_c} \lambda_j &\ge -f_c, & \forall c, \\
+\min ~~ a\, \pi & &\\
+\text{subject to} \quad t_j\, \pi + \lambda_j &\ge r_j, & \forall j,\\
+s_c\, \pi - \sum_{j \in \mathscr{J}_c} \lambda_j &\ge -f_c, & \forall c,\\
 \pi \ge 0,\quad \lambda_j &\ge 0. &
 \end{aligned}
 $$

@@ -46,10 +46,10 @@ MILP model:
 
 $$
 \begin{aligned}
-\min ~~ \sum_{l=1}^{m} i_l\, x_l + \sum_{l=1}^{m}\sum_{c=1}^{n} t_{lc}\, y_{lc} & & \\
-\text{subject to} \quad u_l\, x_l - \sum_{c=1}^{n} y_{lc} &\ge 0, & \forall l \in \{1, 2, \dots, m\}, \\
-\sum_{l=1}^{m} y_{lc} &= d_c, & \forall c \in \{1, 2, \dots, n\}, \\
-x_l &\in \{0, 1\}, & \forall l \in \{1, 2, \dots, m\}, \\
+\min ~~ \sum_{l=1}^{m} i_l\, x_l + \sum_{l=1}^{m}\sum_{c=1}^{n} t_{lc}\, y_{lc} & &\\
+\text{subject to} \quad u_l\, x_l - \sum_{c=1}^{n} y_{lc} &\ge 0, & \forall l \in \{1, 2, \dots, m\},\\
+\sum_{l=1}^{m} y_{lc} &= d_c, & \forall c \in \{1, 2, \dots, n\},\\
+x_l &\in \{0, 1\}, & \forall l \in \{1, 2, \dots, m\},\\
 y_{lc} &\ge 0, & \forall l, c.
 \end{aligned}
 $$

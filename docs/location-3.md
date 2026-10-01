@@ -30,10 +30,10 @@ binaries $y_c$ (client covered).
 
 $$
 \begin{aligned}
-\max ~~ \sum_{c=1}^{n} p_c\, y_c & & \\
-\text{subject to} \quad -\sum_{l=1}^{m} s_{lc}\, x_l + t\, y_c &\le 0, & \forall c, \\
-\sum_{l \in \mathscr{L}_c} x_l + (m-1)\, y_c &\le m, & \forall c, \\
-\sum_{l=1}^{m} x_l &\le k, & \\
+\max ~~ \sum_{c=1}^{n} p_c\, y_c & &\\
+\text{subject to} \quad -\sum_{l=1}^{m} s_{lc}\, x_l + t\, y_c &\le 0, & \forall c,\\
+\sum_{l \in \mathscr{L}_c} x_l + (m-1)\, y_c &\le m, & \forall c,\\
+\sum_{l=1}^{m} x_l &\le k, &\\
 x_l, y_c &\in \{0, 1\}. & &
 \end{aligned}
 $$

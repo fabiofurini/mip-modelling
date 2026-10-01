@@ -65,13 +65,15 @@ $z_t \in \mathbb{Z}_{\ge 0}$ workers hired at the start of month $t$.
 
 $$
 \begin{aligned}
-\min ~~ & \sum_{t=1}^{n} p_t\, x_t + \sum_{t=1}^{n-1} h_t\, s_t
-       + \sum_{t=1}^{n} \bigl(u + w\,(n - t + 1)\bigr) z_t\\
-\text{s.t.} \quad & x_1 - s_1 = d_1,\\
-& x_t + s_{t-1} - s_t = d_t, && \forall t \in \{2, \dots, n-1\},\\
-& x_n + s_{n-1} = d_n,\\
-& -g\, x_t + r \sum_{j=1}^{t} z_j \ge -r\, m_0, && \forall t \in \{1, 2, \dots, n\},\\
-& x_t \in \mathbb{Z}_{\ge 0},\quad s_t \in \mathbb{Z}_{\ge 0},\quad z_t \in \mathbb{Z}_{\ge 0}.
+\min ~~ \sum_{t=1}^{n} p_t\, x_t + \sum_{t=1}^{n-1} h_t\, s_t
+       + \sum_{t=1}^{n} \bigl(u + w\,(n - t + 1)\bigr) z_t &\\
+\text{subject to} \quad x_1 - s_1 &= d_1,\\
+x_t + s_{t-1} - s_t &= d_t, & \forall t \in \{2, \dots, n-1\},\\
+x_n + s_{n-1} &= d_n,\\
+-g\, x_t + r \sum_{j=1}^{t} z_j &\ge -r\, m_0, & \forall t \in \{1, 2, \dots, n\},\\
+x_t &\in \mathbb{Z}_{\ge 0}, & \forall t \in \{1, 2, \dots, n\},\\
+s_t &\in \mathbb{Z}_{\ge 0}, & \forall t \in \{1, 2, \dots, n-1\},\\
+z_t &\in \mathbb{Z}_{\ge 0}, & \forall t \in \{1, 2, \dots, n\}.
 \end{aligned}
 $$
 
@@ -79,15 +81,17 @@ $$
 
 $$
 \begin{aligned}
-\min ~~ & \sum_{t=1}^{n} p_t\, x_t + \sum_{t=1}^{n-1} h_t\, s_t
-       + \sum_{t=1}^{n} w\, y_t + u\,(y_n - m_0)\\
-\text{s.t.} \quad & x_1 - s_1 = d_1,\\
-& x_t + s_{t-1} - s_t = d_t, && \forall t \in \{2, \dots, n-1\},\\
-& x_n + s_{n-1} = d_n,\\
-& -g\, x_t + r\, y_t \ge 0, && \forall t \in \{1, 2, \dots, n\},\\
-& y_1 \ge m_0,\\
-& -y_{t-1} + y_t \ge 0, && \forall t \in \{2, \dots, n\},\\
-& x_t \in \mathbb{Z}_{\ge 0},\quad s_t \in \mathbb{Z}_{\ge 0},\quad y_t \in \mathbb{Z}_{\ge 0}.
+\min ~~ \sum_{t=1}^{n} p_t\, x_t + \sum_{t=1}^{n-1} h_t\, s_t
+       + \sum_{t=1}^{n} w\, y_t + u\,(y_n - m_0) &\\
+\text{subject to} \quad x_1 - s_1 &= d_1,\\
+x_t + s_{t-1} - s_t &= d_t, & \forall t \in \{2, \dots, n-1\},\\
+x_n + s_{n-1} &= d_n,\\
+-g\, x_t + r\, y_t &\ge 0, & \forall t \in \{1, 2, \dots, n\},\\
+y_1 &\ge m_0,\\
+-y_{t-1} + y_t &\ge 0, & \forall t \in \{2, \dots, n\},\\
+x_t &\in \mathbb{Z}_{\ge 0}, & \forall t \in \{1, 2, \dots, n\},\\
+s_t &\in \mathbb{Z}_{\ge 0}, & \forall t \in \{1, 2, \dots, n-1\},\\
+y_t &\in \mathbb{Z}_{\ge 0}, & \forall t \in \{1, 2, \dots, n\}.
 \end{aligned}
 $$
 
@@ -185,11 +189,11 @@ each hours constraint:
 
 $$
 \begin{aligned}
-\max ~~ & \sum_{t=1}^{n} d_t\, \mu_t - r\, m_0 \sum_{t=1}^{n} \nu_t\\
-\text{s.t.} \quad & \mu_t - g\, \nu_t \le p_t, && \forall t \in \{1, 2, \dots, n\},\\
-& -\mu_t + \mu_{t+1} \le h_t, && \forall t \in \{1, 2, \dots, n-1\},\\
-& r \sum_{t=j}^{n} \nu_t \le u + w\,(n - j + 1), && \forall j \in \{1, 2, \dots, n\},\\
-& \mu_t \gtreqless 0, \quad \nu_t \ge 0.
+\max ~~ \sum_{t=1}^{n} d_t\, \mu_t - r\, m_0 \sum_{t=1}^{n} \nu_t &\\
+\text{subject to} \quad \mu_t - g\, \nu_t &\le p_t, & \forall t \in \{1, 2, \dots, n\},\\
+-\mu_t + \mu_{t+1} &\le h_t, & \forall t \in \{1, 2, \dots, n-1\},\\
+r \sum_{t=j}^{n} \nu_t &\le u + w\,(n - j + 1), & \forall j \in \{1, 2, \dots, n\},\\
+\mu_t \gtreqless 0, \quad \nu_t &\ge 0.
 \end{aligned}
 $$
 

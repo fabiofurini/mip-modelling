@@ -5,7 +5,7 @@
 | | Content | Learning objectives |
 |---|---|---|
 | **Part I** | Modelling | recognise a link between variables (activation, maximum, big-M, if and only if…) and prove that the model really imposes it |
-| **Part II** | The problems | apply the links to three families of real problems and to the mixed models, from the model to Gurobi code |
+| **Part II** | The problems | apply the links to three families of real problems and to the mixed problems, from the model to Gurobi code |
 | **Part III** | The course | put what was learned to the test with the additional modelling questions |
 
 ## The format of every exercise (and of the exam)

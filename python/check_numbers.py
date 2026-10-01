@@ -273,7 +273,7 @@ for csv in sorted(DATI.glob("fam[01][0-9]_*[ab]_bound.csv")):
     r = pd.read_csv(csv).iloc[0]
     nome = csv.stem.replace("_bound", "")
     # the direction is not needed: either way the two bounds enclose the optimum.
-    # The relaxation, instead, may sit outside the sandwich: in the mixed models
+    # The relaxation, instead, may sit outside the sandwich: in the mixed problems
     # it is often zero, and the bound from below comes from a combinatorial
     # argument stronger than it (this is the case of 10.7a).
     assert r.lb - TOLL <= r.z_milp <= r.ub + TOLL, (nome, "optimum outside the sandwich")

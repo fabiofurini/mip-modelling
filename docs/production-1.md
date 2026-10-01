@@ -26,12 +26,12 @@ period $t$ ($t \le n-1$), $y_t \in \{0,1\}$ production setup.
 
 $$
 \begin{aligned}
-\min ~~ & \sum_{t=1}^{n} p_t\, x_t + \sum_{t=1}^{n} q_t\, y_t + \sum_{t=1}^{n-1} h_t\, s_t \\
-\text{s.t.} \quad & x_1 - s_1 = d_1 - r_0, \\
-& x_t + s_{t-1} - s_t = d_t, && t = 2, \dots, n-1, \\
-& x_n + s_{n-1} = d_n + r_n, \\
-& -x_t + M_t\, y_t \ge 0, && t = 1, \dots, n, \\
-& x_t,\ s_t \ge 0, \qquad y_t \in \{0,1\}.
+\min ~~ \sum_{t=1}^{n} p_t\, x_t + \sum_{t=1}^{n} q_t\, y_t + \sum_{t=1}^{n-1} h_t\, s_t &\\
+\text{subject to} \quad x_1 - s_1 &= d_1 - r_0,\\
+x_t + s_{t-1} - s_t &= d_t, && t = 2, \dots, n-1,\\
+x_n + s_{n-1} &= d_n + r_n,\\
+-x_t + M_t\, y_t &\ge 0, && t = 1, \dots, n,\\
+x_t,\ s_t &\ge 0, \qquad y_t \in \{0,1\}.
 \end{aligned}
 $$
 
@@ -103,8 +103,8 @@ constraint:
 
 $$
 \begin{aligned}
-\max ~~ & \sum_t b_t\, \mu_t \\
-\text{s.t.} \quad & \mu_t - \pi_t \le p_t, \qquad M_t\, \pi_t \le q_t, \qquad
+\max ~~ \sum_t b_t\, \mu_t &\\
+\text{subject to} \quad \mu_t - \pi_t &\le p_t, \qquad M_t\, \pi_t \le q_t, \qquad
 -\mu_t + \mu_{t+1} \le h_t .
 \end{aligned}
 $$

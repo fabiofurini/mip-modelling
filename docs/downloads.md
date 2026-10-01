@@ -9,24 +9,45 @@ licence.
 
 <div class="grid cards" markdown>
 
--   :material-book-open-variant: **The notes**
+-   :material-book-open-variant: **Notes I --- Modelling**
 
     ---
 
-    The whole course: the six modelling chapters, the fifteen numerical models,
-    the four families of problems with heuristics, duals and additional
-    questions, and the organisation of the course.
+    The methodological part: what a MIP model is, logic and binary variables,
+    the fourteen links between variables with their proofs, relaxations, duality
+    and bounds, constructive heuristics, and the step to Python/Gurobi.
 
-    [:octicons-download-24: mip-notes.pdf](pdf/mip-notes.pdf)
+    [:octicons-download-24: notes-1-modelling.pdf](pdf/notes-1-modelling.pdf)
 
--   :material-file-document-edit: **The collection of statements**
+-   :material-numeric: **Notes II --- Numerical problems**
 
     ---
 
-    The same problems, in the same order, with the texts only: to practise
-    before reading the solution. Forty-seven statements.
+    The fifteen numerical models, from EX 1 to EX 15: explicit data, few
+    variables, one step per technique. They are read to get the measure of
+    things before the general problems.
 
-    [:octicons-download-24: statements-collection.pdf](pdf/statements-collection.pdf)
+    [:octicons-download-24: notes-2-numerical.pdf](pdf/notes-2-numerical.pdf)
+
+-   :material-function-variant: **Notes III --- Problems with a symbolic model**
+
+    ---
+
+    The twenty-three problems of the four families: statement, symbolic model,
+    instance, heuristic, dual of the relaxation, optimum, additional questions
+    and one variant worked out in full.
+
+    [:octicons-download-24: notes-3-symbolic.pdf](pdf/notes-3-symbolic.pdf)
+
+-   :material-school-outline: **Notes IV --- Organisation of the course**
+
+    ---
+
+    How the course is built, how every exercise is built and how the exam is
+    built: the path, the grading criteria, the typical discussion questions, the
+    most common mistakes, and the reproducibility of the numbers.
+
+    [:octicons-download-24: notes-4-organization.pdf](pdf/notes-4-organization.pdf)
 
 -   :material-presentation: **The slides**
 

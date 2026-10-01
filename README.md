@@ -28,7 +28,7 @@ with Gurobi.
 
 **▶️ Runnable notebooks in Colab: [the list of chapters](https://fabiofurini.github.io/mip-modelling/notebooks/)** — they run in the browser, with nothing to install.
 
-**⬇️ Downloads: [the PDF page](https://fabiofurini.github.io/mip-modelling/downloads/)** — the notes, the collection of the 47 statements to practise on, and the 43 slides of the course.
+**⬇️ Downloads: [the PDF page](https://fabiofurini.github.io/mip-modelling/downloads/)** — the three volumes of notes (modelling, numerical problems, problems with a symbolic model) and the 43 slides of the course.
 
 ## Running the models
 

@@ -24,9 +24,9 @@ bid $j$ is accepted.
 
 $$
 \begin{aligned}
-\max ~~ & \sum_{j=1}^{r} p_j\, x_j\\
-\text{s.t.} \quad & \sum_{j :\, i \in B_j} x_j \le 1, && \forall i \in S,\\
-& x_j \in \{0,1\}, && \forall j \in \{1, 2, \dots, r\}.
+\max ~~ \sum_{j=1}^{r} p_j\, x_j &\\
+\text{subject to} \quad \sum_{j :\, i \in B_j} x_j &\le 1, & \forall i \in S,\\
+x_j &\in \{0,1\}, & \forall j \in \{1, 2, \dots, r\}.
 \end{aligned}
 $$
 
@@ -106,9 +106,9 @@ Associate a non-negative dual variable $\lambda_i$ with each item constraint.
 
 $$
 \begin{aligned}
-\min ~~ & \sum_{i \in S} \lambda_i\\
-\text{s.t.} \quad & \sum_{i \in B_j} \lambda_i \ge p_j, && \forall j \in \{1, 2, \dots, r\},\\
-& \lambda_i \ge 0, && \forall i \in S.
+\min ~~ \sum_{i \in S} \lambda_i &\\
+\text{subject to} \quad \sum_{i \in B_j} \lambda_i &\ge p_j, & \forall j \in \{1, 2, \dots, r\},\\
+\lambda_i &\ge 0, & \forall i \in S.
 \end{aligned}
 $$
 

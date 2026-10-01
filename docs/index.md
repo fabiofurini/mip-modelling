@@ -45,7 +45,7 @@ Every model can be run **right away in the browser**: each chapter has its own
     ---
 
     Three families — assignment and scheduling, location and coverage,
-    production planning — plus a chapter of mixed models, for the problems that
+    production planning — plus a chapter of mixed problems, for the problems that
     have no family. Solved exercises and additional questions.
 
     [:octicons-arrow-right-24: The problems](problems.md)
@@ -54,8 +54,8 @@ Every model can be run **right away in the browser**: each chapter has its own
 
     ---
 
-    Organization, the exam format, the collection of statements to practise
-    on, the notebooks.
+    Organization, the exam format, the three volumes of notes in PDF, the
+    notebooks.
 
     [:octicons-arrow-right-24: Organization](organization.md)
 
@@ -112,7 +112,7 @@ EX 11 [Balancing](ex-11.md)
 9.2 [Production and workforce](production-2.md) ·
 9.3 [Vehicles with a minimum lot](production-3.md)
 
-*[Mixed models](mixed.md)*
+*[Mixed problems](mixed.md)*
 
 10.1 [Prizes in two ways](mixed-1.md) ·
 10.2 [Combinatorial auction](mixed-2.md) ·

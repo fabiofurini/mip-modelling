@@ -1,0 +1,259 @@
+% ============================================================
+% Preambolo comune della dispensa del Laboratorio di RO
+% ============================================================
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[english]{babel}
+\emergencystretch=3em  % evita overfull nella prosa inglese
+\usepackage[a4paper,top=2.6cm,bottom=3.4cm,left=2.6cm,right=2.6cm,footskip=1.7cm]{geometry}
+\usepackage{amsmath,amssymb,amsthm,mathtools}
+\usepackage{booktabs}
+\usepackage{graphicx}
+% figures are also reachable from solutions/ (shared preamble)
+\graphicspath{{./}{figure/}}
+\usepackage{xcolor}
+\usepackage{enumitem}
+\usepackage{caption}
+\usepackage[most]{tcolorbox}
+\usepackage{listings}
+\usepackage{etoolbox}
+\usepackage{titlesec}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.16}
+\usetikzlibrary{shapes.geometric,arrows.meta}
+\usepackage{hyperref}
+\hypersetup{
+  colorlinks=true,
+  linkcolor=blunotte,
+  citecolor=blunotte,
+  urlcolor=teal,
+  filecolor=teal,
+  bookmarks=true, bookmarksopen=true, bookmarksopenlevel=1, bookmarksnumbered=true,
+  pdftitle={MIP Modelling},
+  pdfauthor={Fabio Furini},
+  pdfsubject={Mixed-integer linear models for Management Engineering},
+  pdfkeywords={operations research, integer linear programming, modelling, binary variables, Gurobi, Python},
+  pdfdisplaydoctitle=true
+}
+
+% ---------- intestazione e piè di pagina (style of Fabio Furini's lecture notes) ----------
+% il logo: chi importa il preambolo da un'altra cartella ridefinisce il percorso
+\providecommand{\logosapienza}{figure/sapienza.jpeg}
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\renewcommand{\footrulewidth}{0.4pt}
+\fancyhead{}
+\fancyhead[RO,LE]{\href{https://github.com/fabiofurini/mip-modelling}{\textbf{MIP Modelling}}}
+\fancyfoot{}
+\fancyfoot[LE,RO]{\thepage}
+\fancyfoot[LO,CE]{\textbf{Author}: \href{https://sites.google.com/view/fabiofurini/home-page}{\underline{Fabio Furini}}}
+\fancyfoot[CO,RE]{\href{https://www.diag.uniroma1.it/}{\includegraphics[scale=0.3]{\logosapienza}}}
+% anche le pagine di apertura dei capitoli usano lo stesso piè di pagina
+\fancypagestyle{plain}{%
+  \fancyhf{}%
+  \renewcommand{\headrulewidth}{0pt}%
+  \renewcommand{\footrulewidth}{0.4pt}%
+  \fancyfoot[LE,RO]{\thepage}%
+  \fancyfoot[LO,CE]{\textbf{Author}: \href{https://sites.google.com/view/fabiofurini/home-page}{\underline{Fabio Furini}}}%
+  \fancyfoot[CO,RE]{\href{https://www.diag.uniroma1.it/}{\includegraphics[scale=0.3]{\logosapienza}}}%
+}
+
+
+% ---------- palette istituzionale della dispensa ----------
+\definecolor{blunotte}{HTML}{16324A}
+\definecolor{teal}{HTML}{0E7490}
+\definecolor{tealchiaro}{HTML}{E3F2F5}
+\definecolor{grigiochiaro}{HTML}{F4F6F7}
+\definecolor{verde}{HTML}{1E8449}
+\definecolor{verdechiaro}{HTML}{EAF7EE}
+\definecolor{giallo}{HTML}{B9770E}
+\definecolor{giallochiaro}{HTML}{FEF9E7}
+\definecolor{rossomattone}{HTML}{C0392B}
+\definecolor{arancio}{HTML}{CA6F1E}
+\definecolor{grigiomedio}{HTML}{7F8C8D}
+\definecolor{viola}{HTML}{8E44AD}
+\definecolor{ocra}{HTML}{B7950B}
+\definecolor{codicebg}{HTML}{FBFCFC}
+
+% ---------- titoli ----------
+\titleformat{\chapter}[display]
+  {\normalfont\huge\bfseries\color{blunotte}}
+  {\filleft\Large Chapter \thechapter}{1ex}{\titlerule\vspace{1ex}\filright}
+[\vspace{1ex}\titlerule]
+\titleformat{\section}{\Large\bfseries\color{teal}}{\thesection}{0.8em}{}
+\titleformat{\subsection}{\large\bfseries\color{blunotte}}{\thesubsection}{0.8em}{}
+
+% ---------- box didattici ----------
+\newtcolorbox{modello}[1][Model]{%
+  enhanced, breakable, colback=green!7!white, colframe=green!55!black,
+  title={#1}, fonttitle=\bfseries, boxrule=0.8pt, arc=1.5mm,
+  left=1mm, right=1mm, top=1.5mm, bottom=1.5mm}
+
+\newtcolorbox{spiegazione}[1][Line-by-line explanation]{%
+  enhanced, breakable, colback=grigiochiaro, colframe=gray!60,
+  title={#1}, fonttitle=\bfseries, coltitle=blunotte,
+  boxrule=0.5pt, arc=1.5mm, left=2mm, right=2mm}
+
+\newtcolorbox{esempio}[1][Worked example]{%
+  enhanced, breakable, colback=teal!6!white, colframe=teal,
+  title={#1}, fonttitle=\bfseries, boxrule=0.8pt, arc=1.5mm,
+  left=2mm, right=2mm}
+
+\newtcolorbox{insight}[1][Managerial insight]{%
+  enhanced, breakable, colback=blunotte!4!white, colframe=blunotte,
+  borderline west={2.5pt}{0pt}{blunotte}, sharp corners,
+  title={#1}, fonttitle=\bfseries, coltitle=blunotte, boxrule=0pt, frame hidden,
+  left=3mm, right=2mm}
+
+\newtcolorbox{attenzione}[1][Warning]{%
+  enhanced, breakable, colback=giallochiaro, colframe=giallo,
+  borderline west={2.5pt}{0pt}{giallo}, sharp corners,
+  title={#1}, fonttitle=\bfseries, boxrule=0pt, frame hidden,
+  left=3mm, right=2mm}
+
+\newcounter{esercizio}[chapter]
+\renewcommand{\theesercizio}{\thechapter.\arabic{esercizio}}
+\newtcolorbox{esercizio}[1][]{%
+  enhanced, breakable, colback=white, colframe=blunotte,
+  boxrule=0.7pt, arc=1.5mm, left=2mm, right=2mm,
+  title={Exercise \refstepcounter{esercizio}\theesercizio\ifstrempty{#1}{}{ --- #1}},
+  fonttitle=\bfseries}
+
+% ---------- codice Python ----------
+\lstdefinestyle{python}{
+  language=Python,
+  basicstyle=\ttfamily\small,
+  keywordstyle=\color{blunotte}\bfseries,
+  stringstyle=\color{verde},
+  commentstyle=\color{gray}\itshape,
+  numbers=left, numberstyle=\tiny\color{gray}, numbersep=7pt,
+  backgroundcolor=\color{codicebg},
+  frame=single, rulecolor=\color{gray!40}, framesep=3pt,
+  breaklines=true, showstringspaces=false,
+  literate={à}{{\`a}}1 {è}{{\`e}}1 {é}{{\'e}}1 {ì}{{\`\i}}1 {ò}{{\`o}}1 {ù}{{\`u}}1
+           {À}{{\`A}}1 {È}{{\`E}}1 {²}{{$^2$}}1 {≤}{{$\leq$}}1 {≥}{{$\geq$}}1
+           {α}{{$\alpha$}}1 {γ}{{$\gamma$}}1 {λ}{{$\lambda$}}1 {μ}{{$\mu$}}1
+           {σ}{{$\sigma$}}1 {ξ}{{$\xi$}}1 {η}{{$\eta$}}1 {π}{{$\pi$}}1 {τ}{{$\tau$}}1
+           {ν}{{$\nu$}}1 {ε}{{$\varepsilon$}}1 {ρ}{{$\rho$}}1 {→}{{$\to$}}1 {ombra}{{ombra}}5}
+\lstdefinestyle{output}{
+  basicstyle=\ttfamily\footnotesize,
+  backgroundcolor=\color{grigiochiaro},
+  frame=single, rulecolor=\color{gray!40},
+  breaklines=true, showstringspaces=false,
+  literate={à}{{\`a}}1 {è}{{\`e}}1 {é}{{\'e}}1 {ì}{{\`\i}}1 {ò}{{\`o}}1 {ù}{{\`u}}1 {€}{{\officialeuro}}1}
+
+% ---------- stile comune delle figure pgfplots ----------
+% Tutte le figure leggono i CSV in figure/dat/ generati dagli script Python:
+% sono quindi completamente modificabili qui in LaTeX (colori, assi, etichette)
+% e si aggiornano da sole rieseguendo python3 ../python/esegui_tutti.py
+\pgfplotsset{
+  lab/.style={
+    width=0.74\textwidth, height=6.0cm, grid=major,
+    grid style={black!10}, axis line style={black!45},
+    tick label style={font=\scriptsize}, label style={font=\small},
+    title style={font=\small\bfseries, color=blunotte, align=center},
+    legend style={font=\scriptsize, draw=none, fill=none,
+      at={(0.5,-0.24)}, anchor=north, /tikz/every even column/.append style={column sep=0.35cm}},
+    legend columns=3,
+    legend cell align=left,
+    cycle list={teal, rossomattone, verde, arancio, blunotte, grigiomedio, viola, ocra},
+  },
+  labmezza/.style={lab, width=0.495\textwidth, height=5.4cm},
+}
+\newcommand{\figdat}[1]{figure/dat/#1.csv}
+% filtro per riga: scarta i punti la cui colonna #1 non vale #2
+\pgfplotsset{
+  discard if not/.style 2 args={
+    x filter/.append code={%
+      \edef\tempa{\thisrow{#1}}\edef\tempb{#2}%
+      \ifx\tempa\tempb\else\def\pgfmathresult{nan}\fi
+    }
+  }
+}
+
+% ---------- comandi matematici ricorrenti ----------
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\Q}{\mathbb{Q}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\Prob}{\mathbb{P}}
+\newcommand{\var}{\mathrm{VaR}}
+\newcommand{\cvar}{\mathrm{CVaR}}
+\DeclareMathOperator*{\argmin}{arg\,min}
+\DeclareMathOperator*{\argmax}{arg\,max}
+\usepackage{eurosym}
+
+
+% ---------- additions of the MIP modelling course ----------
+% pseudocode of the heuristics (same package and look as the original exercises)
+\usepackage[lined,ruled,linesnumbered]{algorithm2e}
+\SetKwInput{Input}{Input}
+\SetKwInput{Output}{Output}
+\SetKwProg{Function}{Function}{}{}
+\definecolor{rossochiaro}{HTML}{FBECEA}
+% red box of the algorithms: pseudocode of the constructive heuristics
+\newtcolorbox{algoritmo}[1][Algorithm]{%
+  enhanced, breakable, colback=red!7!white, colframe=red!55!black,
+  title={#1}, fonttitle=\bfseries, boxrule=0.8pt, arc=1.5mm,
+  left=1mm, right=1mm, top=1.5mm, bottom=1.5mm}
+% statement of a problem (green like the model, title «Problem»)
+\newtcolorbox{problema}[1][Problem]{%
+  enhanced, breakable, colback=green!7!white, colframe=green!55!black,
+  title={#1}, fonttitle=\bfseries, boxrule=0.8pt, arc=1.5mm,
+  left=1mm, right=1mm, top=1.5mm, bottom=1.5mm}
+% additional modelling questions with solution (white, midnight-blue frame, like the exercises)
+\newcounter{domanda}[chapter]
+\renewcommand{\thedomanda}{\thechapter.\arabic{domanda}}
+\newtcolorbox{domanda}[1][]{%
+  enhanced, breakable, colback=white, colframe=blunotte,
+  boxrule=0.7pt, arc=1.5mm, left=2mm, right=2mm,
+  title={Modelling question \refstepcounter{domanda}\thedomanda\ifstrempty{#1}{}{ --- #1}},
+  fonttitle=\bfseries}
+\newtcolorbox{soluzione}[1][Solution]{%
+  enhanced, breakable, colback=teal!6!white, colframe=teal,
+  title={#1}, fonttitle=\bfseries, boxrule=0.8pt, arc=1.5mm,
+  left=2mm, right=2mm}
+% boolean operators (from the lecture notes on boolean expressions)
+\newcommand{\AND}{\mathrel{\texttt{ AND }}}
+\newcommand{\OR}{\mathrel{\texttt{ OR }}}
+\newcommand{\NOT}{\mathop{\texttt{NOT}}\,}
+\newcommand{\true}{\texttt{TRUE}}
+\newcommand{\false}{\texttt{FALSE}}
+% optimal values and bounds
+\newcommand{\zmilp}{z(\mathit{MILP})}
+\newcommand{\zlp}{z(\mathit{LP})}
+\newcommand{\zdual}{z(\mathit{D}(\mathit{LP}))}
+\newcommand{\zlpp}{z(\mathit{LP}^+)}
+\newcommand{\zlppp}{z(\mathit{LP}^{++})}
+\newcommand{\ub}{\mathit{UB}}
+\newcommand{\lb}{\mathit{LB}}
+\usepackage{mathrsfs}   % \mathscr{J}_c for the job classes
+% instance models with spaced coefficients: shrunk if wider than the text.
+% They live in a violet box, different from the green of the general models: it
+% tells "the model" from "the model of this instance" at a glance.
+\usepackage{adjustbox}
+\definecolor{violachiaro}{HTML}{F5EEFA}
+\newtcolorbox{istanzabox}[1][The model of the instance]{%
+  enhanced, breakable, colback=violachiaro, colframe=viola,
+  title={#1}, fonttitle=\bfseries, boxrule=0.8pt, arc=1.5mm,
+  left=1mm, right=1mm, top=1.5mm, bottom=1.5mm}
+% Le istanze hanno molte colonne: si stringe lo spazio fra colonne invece
+% di rimpicciolire il corpo del testo.
+\newenvironment{istanza}[1][The model of the instance]
+  {\begin{istanzabox}[#1]\footnotesize\setlength{\arraycolsep}{0.7pt}\renewcommand{\arraystretch}{1.4}%
+   \begin{center}$\displaystyle}
+  {$\end{center}\end{istanzabox}}
+
+% ---------- breathing space of the page ----------
+% The pages must not read dense: a touch more leading, a gap between
+% paragraphs and a margin around the teaching boxes, which are dense by
+% their own nature.
+\linespread{1.06}
+\setlength{\parskip}{0.35ex plus 0.25ex}
+\tcbset{before skip=2.8mm, after skip=2.8mm}
+\titlespacing*{\section}{0pt}{2.8ex plus 1ex minus .2ex}{1.4ex plus .2ex}
+\titlespacing*{\subsection}{0pt}{2.2ex plus 1ex minus .2ex}{1.1ex plus .2ex}
+
+% ---------- indice analitico ----------
+\usepackage{imakeidx}
+\makeindex[intoc=true, title=Index, columns=2]

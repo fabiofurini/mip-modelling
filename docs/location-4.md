@@ -25,10 +25,10 @@ activated), $m$ non-negative continuous $z_j$ (maximum cost of hub $j$).
 
 $$
 \begin{aligned}
-\min ~~ \sum_{j=1}^{m} f_j\, y_j + \sum_{j=1}^{m} z_j & & \\
-\text{subject to} \quad \sum_{j=1}^{m} x_{ij} &= 1, & \forall i, \\
--\sum_{i=1}^{n} x_{ij} + k\, y_j &\ge 0, & \forall j, \\
--c_{ij}\, x_{ij} + z_j &\ge 0, & \forall i, j, \\
+\min ~~ \sum_{j=1}^{m} f_j\, y_j + \sum_{j=1}^{m} z_j & &\\
+\text{subject to} \quad \sum_{j=1}^{m} x_{ij} &= 1, & \forall i,\\
+-\sum_{i=1}^{n} x_{ij} + k\, y_j &\ge 0, & \forall j,\\
+-c_{ij}\, x_{ij} + z_j &\ge 0, & \forall i, j,\\
 x_{ij}, y_j &\in \{0, 1\},\ z_j \ge 0. & &
 \end{aligned}
 $$

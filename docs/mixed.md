@@ -1,4 +1,4 @@
-# Mixed models
+# Mixed problems
 
 **Class:** BIP / MILP · **Script:** one script and one notebook per problem
 (`python/fam10_1_prizes.py` … `fam10_9_shelves.py`).

@@ -32,11 +32,12 @@ from $s$ to $c$; $y_{sc} \in \mathbb{Z}_{\ge 0}$ boxes shipped from $s$ to $c$.
 
 $$
 \begin{aligned}
-\min ~~ & \sum_{s=1}^{n} \sum_{c=1}^{m} y_{sc}\\
-\text{s.t.} \quad & \sum_{s=1}^{n} x_{psc} = d_{pc}, && \forall p \in P,\ \forall c \in C,\\
-& \sum_{c=1}^{m} x_{psc} \le a_{ps}, && \forall p \in P,\ \forall s \in S,\\
-& -\sum_{p=1}^{k} x_{psc} + w\, y_{sc} \ge 0, && \forall s \in S,\ \forall c \in C,\\
-& x_{psc} \in \mathbb{Z}_{\ge 0}, \quad y_{sc} \in \mathbb{Z}_{\ge 0}.
+\min ~~ \sum_{s=1}^{n} \sum_{c=1}^{m} y_{sc} &\\
+\text{subject to} \quad \sum_{s=1}^{n} x_{psc} &= d_{pc}, & \forall p \in P,\ \forall c \in C,\\
+\sum_{c=1}^{m} x_{psc} &\le a_{ps}, & \forall p \in P,\ \forall s \in S,\\
+-\sum_{p=1}^{k} x_{psc} + w\, y_{sc} &\ge 0, & \forall s \in S,\ \forall c \in C,\\
+x_{psc} &\in \mathbb{Z}_{\ge 0}, & \forall p \in P,\ \forall s \in S,\ \forall c \in C,\\
+y_{sc} &\in \mathbb{Z}_{\ge 0}, & \forall s \in S,\ \forall c \in C.
 \end{aligned}
 $$
 
@@ -121,10 +122,10 @@ and $\gamma_{sc} \ge 0$ with capacity.
 
 $$
 \begin{aligned}
-\max ~~ & \sum_{p=1}^{k}\sum_{c=1}^{m} d_{pc}\, \alpha_{pc} + \sum_{p=1}^{k}\sum_{s=1}^{n} a_{ps}\, \beta_{ps}\\
-\text{s.t.} \quad & \alpha_{pc} + \beta_{ps} - \gamma_{sc} \le 0, && \forall p \in P,\ \forall s \in S,\ \forall c \in C,\\
-& w\, \gamma_{sc} \le 1, && \forall s \in S,\ \forall c \in C,\\
-& \alpha_{pc} \gtreqless 0, \quad \beta_{ps} \le 0, \quad \gamma_{sc} \ge 0.
+\max ~~ \sum_{p=1}^{k}\sum_{c=1}^{m} d_{pc}\, \alpha_{pc} + \sum_{p=1}^{k}\sum_{s=1}^{n} a_{ps}\, \beta_{ps} &\\
+\text{subject to} \quad \alpha_{pc} + \beta_{ps} - \gamma_{sc} &\le 0, & \forall p \in P,\ \forall s \in S,\ \forall c \in C,\\
+w\, \gamma_{sc} &\le 1, & \forall s \in S,\ \forall c \in C,\\
+\alpha_{pc} \gtreqless 0, \quad \beta_{ps} &\le 0, \quad \gamma_{sc} \ge 0.
 \end{aligned}
 $$
 

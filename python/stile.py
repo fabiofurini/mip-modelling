@@ -1,8 +1,9 @@
 """Shared plotting style and helpers for the laboratory scripts.
 
 Every script imports from here: palette consistent with the lecture notes,
-figures saved into notes/figure/, data saved into data/.
+figures saved into the folder of the volume they belong to, data into data/.
 """
+import re
 import os
 import sys
 from pathlib import Path
@@ -28,15 +29,26 @@ if not NOTEBOOK:
 import matplotlib.pyplot as plt
 
 BASE = Path(__file__).resolve().parent.parent
-DIR_FIGURE = BASE / "notes" / "figure"
-DIR_DAT = DIR_FIGURE / "dat"
+# the three sets of notes are independent: each keeps its own figures
+VOLUMI = {1: BASE / "notes_1" / "figure", 2: BASE / "notes_2" / "figure",
+          3: BASE / "notes_3" / "figure"}
+
+
+def dir_figure(nome: str) -> Path:
+    """The folder of the volume the figure belongs to, from its name."""
+    m = re.match(r"cap(\d\d)", nome)
+    if m:
+        return VOLUMI[1 if int(m.group(1)) <= 6 else 3]
+    if nome.startswith("ex"):
+        return VOLUMI[2]
+    raise ValueError(f"cannot tell which volume the figure {nome} belongs to")
 DIR_DATI = BASE / "data"
 DIR_IMG = BASE / "docs" / "img"
 
 # make sure the English output folders exist (they must not overwrite the Italian ones);
 # in a notebook there is no repository around the script, so nothing is created
 if not NOTEBOOK:
-    for _d in (DIR_FIGURE, DIR_DAT, DIR_DATI, DIR_IMG):
+    for _d in (*VOLUMI.values(), DIR_DATI, DIR_IMG):
         os.makedirs(_d, exist_ok=True)
 
 # Institutional palette of the lecture notes
@@ -124,8 +136,9 @@ def salva_figura(fig, nome: str) -> None:
         plt.show()
         return
     _legenda_fuori(fig)
-    DIR_FIGURE.mkdir(parents=True, exist_ok=True)
-    percorso = DIR_FIGURE / f"{nome}.pdf"
+    cartella = dir_figure(nome)
+    cartella.mkdir(parents=True, exist_ok=True)
+    percorso = cartella / f"{nome}.pdf"
     fig.savefig(percorso, bbox_inches="tight")
     img = DIR_IMG
     img.mkdir(parents=True, exist_ok=True)
@@ -146,13 +159,13 @@ def salva_dati(df, nome: str) -> None:
 
 
 def salva_dat(df, nome: str) -> None:
-    """Save a pgfplots-ready CSV into notes/figure/dat/<name>.csv.
+    """Save a pgfplots-ready CSV into <volume>/figure/dat/<name>.csv.
 
     Only the printed lecture notes need it: in a notebook it does nothing.
     """
     if NOTEBOOK:
         return
-    d = DIR_DAT
+    d = dir_figure(nome) / "dat"
     d.mkdir(parents=True, exist_ok=True)
     percorso = d / f"{nome}.csv"
     df.to_csv(percorso, index=False)
@@ -166,8 +179,9 @@ def salva_tikz(codice: str, nome: str) -> None:
     """
     if NOTEBOOK:
         return
-    DIR_FIGURE.mkdir(parents=True, exist_ok=True)
-    percorso = DIR_FIGURE / f"{nome}.tex"
+    cartella = dir_figure(nome)
+    cartella.mkdir(parents=True, exist_ok=True)
+    percorso = cartella / f"{nome}.tex"
     percorso.write_text(codice)
     print(f"  [tikz]   {percorso.relative_to(BASE)}")
 

@@ -24,10 +24,10 @@ complete), $z$ (jobs of at least two classes).
 
 $$
 \begin{aligned}
-\max ~~ \sum_{j=1}^{n} r_j\, x_j + \sum_{c=1}^{q} v_c\, y_c & & \\
-\text{subject to} \quad x_j - y_c &\ge 0, & \forall c,\ \forall j \in \mathscr{J}_c, \\
-x_j + x_i - z &\le 1, & \forall c < g,\ \forall j \in \mathscr{J}_c,\ \forall i \in \mathscr{J}_g, \\
-\sum_{j=1}^{n} t_j\, x_j + u\, z &\le a, & \\
+\max ~~ \sum_{j=1}^{n} r_j\, x_j + \sum_{c=1}^{q} v_c\, y_c & &\\
+\text{subject to} \quad x_j - y_c &\ge 0, & \forall c,\ \forall j \in \mathscr{J}_c,\\
+x_j + x_i - z &\le 1, & \forall c < g,\ \forall j \in \mathscr{J}_c,\ \forall i \in \mathscr{J}_g,\\
+\sum_{j=1}^{n} t_j\, x_j + u\, z &\le a, &\\
 x_j,\ y_c,\ z &\in \{0, 1\}. &
 \end{aligned}
 $$
@@ -107,9 +107,9 @@ With $\pi_j \le 0$ (all), $\lambda_{ji} \ge 0$ (mixed), $\mu \ge 0$
 
 $$
 \begin{aligned}
-\min ~~ \sum_{\text{mixed pairs}} \lambda_{ji} + a\, \mu & & \\
-\text{subject to} \quad \pi_j + \sum_{i \notin \mathscr{J}_c} \lambda_{ji} + t_j\, \mu &\ge r_j, & \forall c,\ \forall j \in \mathscr{J}_c, \\
--\sum_{j \in \mathscr{J}_c} \pi_j &\ge v_c, & \forall c, \\
+\min ~~ \sum_{\text{mixed pairs}} \lambda_{ji} + a\, \mu & &\\
+\text{subject to} \quad \pi_j + \sum_{i \notin \mathscr{J}_c} \lambda_{ji} + t_j\, \mu &\ge r_j, & \forall c,\ \forall j \in \mathscr{J}_c,\\
+-\sum_{j \in \mathscr{J}_c} \pi_j &\ge v_c, & \forall c,\\
 -\sum_{\text{mixed pairs}} \lambda_{ji} + u\, \mu &\ge 0. &
 \end{aligned}
 $$

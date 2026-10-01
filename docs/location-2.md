@@ -34,10 +34,10 @@ binaries $y_{lc}$ (client $c$ served by $l$).
 
 $$
 \begin{aligned}
-\min ~~ \sum_{l=1}^{m}\sum_{c=1}^{n} d_{lc}\, y_{lc} & & \\
-\text{subject to} \quad \sum_{l=1}^{m} y_{lc} &= 1, & \forall c, \\
-\sum_{l=1}^{m} x_l &\le k, & \\
-x_l - y_{lc} &\ge 0, & \forall l, c, \\
+\min ~~ \sum_{l=1}^{m}\sum_{c=1}^{n} d_{lc}\, y_{lc} & &\\
+\text{subject to} \quad \sum_{l=1}^{m} y_{lc} &= 1, & \forall c,\\
+\sum_{l=1}^{m} x_l &\le k, &\\
+x_l - y_{lc} &\ge 0, & \forall l, c,\\
 x_l, y_{lc} &\in \{0, 1\}. & &
 \end{aligned}
 $$

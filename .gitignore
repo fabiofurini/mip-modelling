@@ -9,7 +9,6 @@
 *.nav
 *.snm
 *.vrb
-notes/main.pdf
 # Python
 __pycache__/
 *.pyc
@@ -20,7 +19,9 @@ site/
 
 # internal material, not published
 STYLE_AND_FORMAT.md
-notes/
+notes_1/
+notes_2/
+notes_3/
 solutions/
 slides/
 

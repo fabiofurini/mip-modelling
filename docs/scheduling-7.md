@@ -26,11 +26,11 @@ $M = \sum_j t_j$.
 
 $$
 \begin{aligned}
-\min ~~ \sum_{j=1}^{n} \tau_j & & \\
-\text{subject to} \quad s_{ji} + s_{ij} &= 1, & \forall j < i, \\
--M\, s_{ji} - \kappa_j + \kappa_i &\ge t_i - M, & \forall j \ne i, \\
--\kappa_j + \tau_j &\ge -d_j, & \forall j, \\
-\kappa_j &\ge t_j, & \forall j, \\
+\min ~~ \sum_{j=1}^{n} \tau_j & &\\
+\text{subject to} \quad s_{ji} + s_{ij} &= 1, & \forall j < i,\\
+-M\, s_{ji} - \kappa_j + \kappa_i &\ge t_i - M, & \forall j \ne i,\\
+-\kappa_j + \tau_j &\ge -d_j, & \forall j,\\
+\kappa_j &\ge t_j, & \forall j,\\
 s_{ji} \in \{0, 1\},\quad \kappa_j \ge 0,\quad \tau_j &\ge 0. &
 \end{aligned}
 $$
@@ -106,9 +106,9 @@ $\gamma_j \ge 0$ (tardiness), $\delta_j \ge 0$ (start):
 
 $$
 \begin{aligned}
-\max ~~ \sum_{j<i} \alpha_{ji} + \sum_{j \ne i} (t_i - M)\, \beta_{ji} - \sum_j d_j\, \gamma_j + \sum_j t_j\, \delta_j & & \\
-\text{subject to} \quad \alpha_{ji} - M\, \beta_{ji} \le 0,\quad \alpha_{ji} - M\, \beta_{ij} &\le 0, & \forall j < i, \\
--\sum_{i \ne j} \beta_{ji} + \sum_{i \ne j} \beta_{ij} - \gamma_j + \delta_j &\le 0, & \forall j, \\
+\max ~~ \sum_{j<i} \alpha_{ji} + \sum_{j \ne i} (t_i - M)\, \beta_{ji} - \sum_j d_j\, \gamma_j + \sum_j t_j\, \delta_j & &\\
+\text{subject to} \quad \alpha_{ji} - M\, \beta_{ji} \le 0,\quad \alpha_{ji} - M\, \beta_{ij} &\le 0, & \forall j < i,\\
+-\sum_{i \ne j} \beta_{ji} + \sum_{i \ne j} \beta_{ij} - \gamma_j + \delta_j &\le 0, & \forall j,\\
 \gamma_j &\le 1, & \forall j.
 \end{aligned}
 $$

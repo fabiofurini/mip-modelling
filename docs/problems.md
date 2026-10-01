@@ -47,7 +47,7 @@ additional modelling questions.
 
     [:octicons-arrow-right-24: The three problems](production.md)
 
--   :material-shape-outline: **Mixed models**
+-   :material-shape-outline: **Mixed problems**
 
     ---
 

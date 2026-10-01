@@ -33,10 +33,10 @@ continuous non-negative $y_m$ = processing time of machine $m$.
 
 $$
 \begin{aligned}
-\min ~~ \sum_{m=1}^{k} y_m & & \\
-\text{subject to} \quad \sum_{m=1}^{k} x_{jm} &= 1, & \forall j, \\
-\sum_{j=1}^{n} x_{jm} &\le p_m, & \forall m, \\
--t_{jm}\, x_{jm} + y_m &\ge 0, & \forall j,\ \forall m, \\
+\min ~~ \sum_{m=1}^{k} y_m & &\\
+\text{subject to} \quad \sum_{m=1}^{k} x_{jm} &= 1, & \forall j,\\
+\sum_{j=1}^{n} x_{jm} &\le p_m, & \forall m,\\
+-t_{jm}\, x_{jm} + y_m &\ge 0, & \forall j,\ \forall m,\\
 x_{jm} \in \{0, 1\},\quad y_m &\ge 0. &
 \end{aligned}
 $$
@@ -106,9 +106,9 @@ $\lambda_{jm} \ge 0$ (maximum):
 
 $$
 \begin{aligned}
-\max ~~ \sum_{j=1}^{n} \mu_j + \sum_{m=1}^{k} p_m\, \pi_m & & \\
-\text{subject to} \quad \mu_j + \pi_m - t_{jm}\, \lambda_{jm} &\le 0, & \forall j,\ \forall m, \\
-\sum_{j=1}^{n} \lambda_{jm} &\le 1, & \forall m, \\
+\max ~~ \sum_{j=1}^{n} \mu_j + \sum_{m=1}^{k} p_m\, \pi_m & &\\
+\text{subject to} \quad \mu_j + \pi_m - t_{jm}\, \lambda_{jm} &\le 0, & \forall j,\ \forall m,\\
+\sum_{j=1}^{n} \lambda_{jm} &\le 1, & \forall m,\\
 \mu_j \gtreqless 0,\quad \pi_m \le 0,\quad \lambda_{jm} &\ge 0. &
 \end{aligned}
 $$
