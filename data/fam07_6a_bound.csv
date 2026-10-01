@@ -1,2 +1,2 @@
-problem,ub,lb,z_lp,z_lp_rafforzato,z_milp
-6a at least one job per class,107.0,32,44.14285714285714,44.14285714285714,40.0
+problem,ub,lb,z_lp,z_lp_rafforzato,z_milp,senso
+6a at least one job per class,107.0,32,44.14285714285714,44.14285714285714,40.0,max

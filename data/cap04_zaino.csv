@@ -1,2 +1,2 @@
-problem,ub,lb,z_lp,z_lp_rafforzato,z_milp
-knapsack,18.0,16,18.0,17.75,17.0
+problem,ub,lb,z_lp,z_lp_rafforzato,z_milp,senso
+knapsack,18.0,16,18.0,17.75,17.0,max

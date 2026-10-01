@@ -19,11 +19,14 @@ BASE = Path(__file__).resolve().parent.parent
 
 CONF = dict(dati=BASE / "data", uscita=BASE / "data/tables",
             testa=("", "value", "what it is"),
-            voci=[("$\\ub$", "ub", "heuristic solution"),
-                  ("$\\lb$", "lb", "dual certificate built by hand"),
-                  ("$\\zlp$", "z_lp", "relaxation without the bounds"),
-                  ("$\\zlpp$", "z_lp_rafforzato", "relaxation with the bounds"),
-                  ("$\\zmilp$", "z_milp", "optimum of the MILP")])
+            voci={"min": [("$\\ub$", "ub", "heuristic solution"),
+                          ("$\\lb$", "lb", "dual certificate built by hand")],
+                  "max": [("$\\ub$", "ub", "dual certificate built by hand"),
+                          ("$\\lb$", "lb", "heuristic solution")]},
+            comuni=[
+                   ("$\\zlp$", "z_lp", "relaxation without the bounds"),
+                   ("$\\zlpp$", "z_lp_rafforzato", "relaxation with the bounds"),
+                   ("$\\zmilp$", "z_milp", "optimum of the MILP")])
 
 def numero(x) -> str:
     """Reduced fraction or integer, as in the notes."""
@@ -31,10 +34,15 @@ def numero(x) -> str:
     return str(f.numerator) if f.denominator == 1 else f"\\frac{{{f.numerator}}}{{{f.denominator}}}"
 
 
+def voci(riga, conf):
+    """The rows of the table, in order, with the notes right for the sense."""
+    return conf["voci"][str(riga.get("senso", "min"))] + conf["comuni"]
+
+
 def tabella(riga, conf) -> str:
     testa = conf["testa"]
     corpo = "\n".join(f"{etichetta} & ${numero(riga[colonna])}$ & {nota} \\\\"
-                      for etichetta, colonna, nota in conf["voci"])
+                      for etichetta, colonna, nota in voci(riga, conf))
     return ("\\begin{center}\\small\n\\begin{tabular}{lrl}\n\\toprule\n"
             f"{testa[0]} & {testa[1]} & {testa[2]} \\\\\n\\midrule\n{corpo}\n"
             "\\bottomrule\n\\end{tabular}\n\\end{center}\n")
@@ -50,7 +58,7 @@ def tabella_md(riga, conf) -> str:
     """The same table, in markdown, for the site pages."""
     testa = conf["testa"]
     righe = [f"| {testa[0]} | {testa[1]} | {testa[2]} |", "|---|---:|---|"]
-    for etichetta, colonna, nota in conf["voci"]:
+    for etichetta, colonna, nota in voci(riga, conf):
         righe.append(f"| {SITO[etichetta]} | ${numero(riga[colonna])}$ | {nota} |")
     return "\n".join(righe) + "\n"
 
@@ -60,7 +68,7 @@ def main(verifica: bool = False) -> int:
     conf = CONF
     if True:
         conf["uscita"].mkdir(parents=True, exist_ok=True)
-        for csv in sorted(conf["dati"].glob("fam0[78]_*[ab]_bound.csv")):
+        for csv in sorted(conf["dati"].glob("fam[01][0-9]_*[ab]_bound.csv")):
             riga = pd.read_csv(csv).iloc[0]
             testo = tabella(riga, conf)
             for suffisso, contenuto in ((".tex", testo), (".md", tabella_md(riga, conf))):

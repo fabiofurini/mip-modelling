@@ -1,2 +1,2 @@
-problem,ub,lb,z_lp,z_lp_rafforzato,z_milp
-3b job 3 only with job 2,34.0,20,34.0,32.38095238095238,20.0
+problem,ub,lb,z_lp,z_lp_rafforzato,z_milp,senso
+3b job 3 only with job 2,34.0,20,34.0,32.38095238095238,20.0,max

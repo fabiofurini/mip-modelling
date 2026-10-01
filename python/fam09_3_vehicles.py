@@ -192,3 +192,96 @@ ax.set_title(f"9.3: optimal plan (z = {frazione(z3v)}, bonus collected)")
 ax.legend(fontsize=8)
 salva_figura(fig, "cap09_veicoli_ottimo")
 print("Done.")
+
+
+# ---------- 5bis. THE SANDWICH ON THE VARIANT 3a ----------
+intestazione("9.3a The sandwich on the variant: the bonus requires at least three types")
+SOGLIA = 3
+
+
+def modello_3a(a, b, p, q, r, soglia=SOGLIA):
+    mm, xx, yy, zz = modello_3(a, b, p, q, r)
+    mm.update()                                   # constraint names exist after the update
+    mm.remove(mm.getConstrByName("bonus"))
+    mm.addConstr(-gp.quicksum(yy[j] for j in R(len(p))) + soglia * zz <= 0, name="bonus")
+    return mm, xx, yy, zz
+
+
+def duale_3a(a, b, p, q, r, soglia=SOGLIA):
+    """Only one row changes with respect to the dual of 9.3: the column of z,
+    which now sees the bonus divided by `soglia` instead of by two. The rest of
+    the dual is identical --- the bonus constraint touches only that column."""
+    nn, mm_ = len(p), len(b)
+    MM = [min(b[i] // a[i][j] for i in R(mm_)) for j in R(nn)]
+    dl = nuovo_modello("duale_veicoli_3a")
+    pi = dl.addVars(mm_, name="pi")
+    alpha = dl.addVars(nn, lb=-GRB.INFINITY, ub=0.0, name="alpha")
+    beta = dl.addVars(nn, name="beta")
+    gm = dl.addVar(name="gamma")
+    dl.setObjective(gp.quicksum(b[i] * pi[i] for i in R(mm_)), GRB.MINIMIZE)
+    dl.addConstrs((gp.quicksum(a[i][j] * pi[i] for i in R(mm_)) + alpha[j] + beta[j] >= p[j]
+                   for j in R(nn)), name="rc_x")
+    dl.addConstrs((-q[j] * alpha[j] - MM[j] * beta[j] - gm >= 0 for j in R(nn)), name="rc_y")
+    dl.addConstr(soglia * gm >= r, name="rc_z")
+    return dl
+
+
+m3a, x3a, y3a, z3a = modello_3a(a3, b3, p3, q3, r3)
+salva_modello(m3a, "fam09_3a_primale")
+
+# -- feasible heuristic: the base one, then a third type is switched on if the bonus pays --
+print("Constructive heuristic: start from the solution of the base problem; if the active")
+print("types are fewer than three, a third is switched on at its minimum lot, taking units")
+print("from the least profitable type until the resources suffice. The best plan is kept.")
+x_3a = list(x_eur)
+attivi_3a = [j for j in R(n3) if x_3a[j] > 0]
+base_3a = sum(p3[j] * x_3a[j] for j in R(n3)) + (r3 if len(attivi_3a) >= SOGLIA else 0)
+print(f"  base solution: active types {[j + 1 for j in attivi_3a]}, value {frazione(base_3a)}")
+migliore_3a = (base_3a, list(x_3a))
+if len(attivi_3a) < SOGLIA:
+    for spento in (j for j in R(n3) if x_3a[j] == 0):
+        prova = list(x_3a)
+        prova[spento] = q3[spento]
+        peggiore = min(attivi_3a, key=lambda j: p3[j])
+        while any(sum(a3[i][j] * prova[j] for j in R(n3)) > b3[i] for i in R(m3)):
+            if prova[peggiore] == 0:
+                break
+            prova[peggiore] -= 1
+        if all(sum(a3[i][j] * prova[j] for j in R(n3)) <= b3[i] for i in R(m3)) \
+                and sum(1 for j in R(n3) if prova[j] > 0) >= SOGLIA:
+            valore = sum(p3[j] * prova[j] for j in R(n3)) + r3
+            print(f"  switching on type {spento + 1} at the minimum {q3[spento]}: {frazione(valore)}")
+            if valore > migliore_3a[0]:
+                migliore_3a = (valore, prova)
+lb3a, x_mig = migliore_3a
+att_mig = [j for j in R(n3) if x_mig[j] > 0]
+sol_3a = ({f"x[{j}]": x_mig[j] for j in R(n3)}
+          | {f"y[{j}]": (1 if x_mig[j] > 0 else 0) for j in R(n3)}
+          | {"z": 1 if len(att_mig) >= SOGLIA else 0})
+assert ammissibile(m3a, sol_3a), "the heuristic solution of the variant must be feasible"
+print(f"  plan chosen {x_mig}  ->  lb = {frazione(lb3a)}")
+
+# -- dual certificate: the bonus is divided by three instead of two --
+dl3a = duale_3a(a3, b3, p3, q3, r3)
+salva_modello(dl3a, "fam09_3a_duale")
+gamma_3a = r3 / SOGLIA
+lam_3a = [gamma_3a / q3[j] for j in R(n3)]
+bound_3a = {i: b3[i] * max((p3[j] + lam_3a[j]) / a3[i][j] for j in R(n3)) for i in R(m3)}
+critica_3a = min(bound_3a, key=bound_3a.get)
+prezzo_3a = max((p3[j] + lam_3a[j]) / a3[critica_3a][j] for j in R(n3))
+mano_3a = ({"gamma": gamma_3a} | {f"pi[{i}]": 0.0 for i in R(m3)}
+           | {f"alpha[{j}]": -lam_3a[j] for j in R(n3)} | {f"beta[{j}]": 0.0 for j in R(n3)})
+mano_3a[f"pi[{critica_3a}]"] = prezzo_3a
+ub3a, viol_3a = valuta(dl3a, mano_3a)
+assert viol_3a <= 1e-9, (viol_3a, mano_3a)
+print(f"Dual solution by hand: the same recipe as the base problem, with gamma = r/{SOGLIA} =")
+print(f"  {frazione(gamma_3a)} instead of r/2: asking for three types instead of two spreads")
+print("  the bonus over more activations, so each type carries less of it and prices fall.")
+print(f"  lambda_j = gamma/q_j = {[frazione(v) for v in lam_3a]}; critical resource: "
+      f"the {critica_3a + 1}")
+print(f"  ->  ub = {frazione(ub3a)}  (with the threshold at two it was {frazione(ub3)})")
+zlp3a, zlp3ar, _ = due_rilassamenti(m3a, dl3a)
+z3a_val = risolvi(m3a)
+riga_3a = registra_bound("3a bonus with three types", ub3a, lb3a, zlp3a, zlp3ar, z3a_val, senso="max")
+salva_dati(pd.DataFrame([riga_3a]), "fam09_3a_bound")
+assert lb3a <= z3a_val <= zlp3a + 1e-9 <= ub3a + 1e-9

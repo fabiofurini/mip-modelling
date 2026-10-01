@@ -1,0 +1,2 @@
+problem,ub,lb,z_lp,z_lp_rafforzato,z_milp,senso
+2a branches 1 and 2 together,6,4,0.0,0.0,6.0,min

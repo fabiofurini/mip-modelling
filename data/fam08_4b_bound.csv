@@ -1,2 +1,2 @@
-problem,ub,lb,z_lp,z_lp_rafforzato,z_milp
-4b forbidden connection,20.0,10.5,12.5,13.166666666666668,19.0
+problem,ub,lb,z_lp,z_lp_rafforzato,z_milp,senso
+4b forbidden connection,20.0,10.5,12.5,13.166666666666668,19.0,min

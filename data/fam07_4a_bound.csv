@@ -1,2 +1,2 @@
-problem,ub,lb,z_lp,z_lp_rafforzato,z_milp
-4a min-max of the times,13,4.406779661016949,4.406779661016949,4.406779661016949,10.0
+problem,ub,lb,z_lp,z_lp_rafforzato,z_milp,senso
+4a min-max of the times,13,4.406779661016949,4.406779661016949,4.406779661016949,10.0,min

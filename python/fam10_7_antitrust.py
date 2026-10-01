@@ -219,3 +219,88 @@ ax.set_title(f"11.2: optimal partition, worst imbalance {frazione(z2)}")
 ax.legend(fontsize=8)
 salva_figura(fig, "cap10_antitrust_ottimo")
 print("Done.")
+
+
+# ---------- 5bis. THE SANDWICH ON THE VARIANT 2a ----------
+intestazione("10.7a The sandwich on the variant: branches 1 and 2 stay together")
+
+
+def modello_2a(v):
+    mm, xx, zz = modello_2(v)
+    mm.addConstr(xx[0] - xx[1] == 0, name="insieme")
+    return mm, xx, zz
+
+
+def duale_2a(v):
+    """To the dual of 10.7 one adds a free sigma for the equality x_1 - x_2 = 0: it
+    appears in the column of branch 1 with a plus sign and in that of branch 2
+    with a minus sign. The right-hand side is zero: the objective does not change."""
+    ss, rr = len(v), len(v[0])
+    dl = nuovo_modello("duale_antitrust_2a")
+    lam = dl.addVars(rr, name="lam")
+    mu = dl.addVars(rr, name="mu")
+    sg = dl.addVar(lb=-GRB.INFINITY, name="sigma")
+    tot = [sum(v[i][j] for i in R(ss)) for j in R(rr)]
+    dl.setObjective(gp.quicksum(tot[j] * (mu[j] - lam[j]) for j in R(rr)), GRB.MAXIMIZE)
+    dl.addConstr(gp.quicksum(lam[j] + mu[j] for j in R(rr)) == 1, name="rcz")
+    for i in R(ss):
+        extra = sg if i == 0 else (-sg if i == 1 else 0)
+        dl.addConstr(2 * gp.quicksum(v[i][j] * (mu[j] - lam[j]) for j in R(rr)) + extra <= 0,
+                     name=f"rcx[{i}]")
+    return dl
+
+
+m2a, x2a, z2a = modello_2a(v2)
+salva_modello(m2a, "fam10_7a_primale")
+
+# -- feasible heuristic: the branches are few, every partition is tried --
+print("Constructive heuristic: the branches are few, so the partitions keeping 1 and 2")
+print("together are enumerated and the one with the lowest maximum imbalance is kept. With")
+print("a constraint tying two branches, the greedy rule of the base problem no longer does:")
+print("it would put the two branches in different groups.")
+migliore_2a = None
+for k in R(s2 + 1):
+    for sotto in itertools.combinations(R(s2), k):
+        if (0 in sotto) != (1 in sotto):
+            continue
+        squilibrio = max(abs(2 * sum(v2[i][j] for i in sotto) - tot2[j]) for j in R(r2))
+        if migliore_2a is None or squilibrio < migliore_2a[0]:
+            migliore_2a = (squilibrio, sotto)
+ub2a, gruppo_A = migliore_2a
+print(f"  best partition: company A = branches {[i + 1 for i in gruppo_A]}, "
+      f"B = {[i + 1 for i in R(s2) if i not in gruppo_A]}")
+sol_2a = {f"x[{i}]": (1 if i in gruppo_A else 0) for i in R(s2)} | {"z": ub2a}
+assert ammissibile(m2a, sol_2a), "the heuristic solution of the variant must be feasible"
+print(f"  ub = {frazione(ub2a)}")
+
+# -- dual certificate: the relaxation stays silent, the bound comes from integrality --
+dl2a = duale_2a(v2)
+salva_modello(dl2a, "fam10_7a_duale")
+mano_2a = {"lam[0]": 0.5, "mu[0]": 0.5, "sigma": 0.0}
+lb_lp_2a, viol_2a = valuta(dl2a, mano_2a)
+assert viol_2a <= 1e-9, viol_2a
+print("Dual solution by hand: lam_1 = mu_1 = 1/2, sigma = 0 and everything else zero. As in")
+print("  the base problem the value is zero, and for the same reason: the objective contains")
+print("  the difference mu_j - lam_j, which the column constraints force to be")
+print("  non-positive. The new sigma does not change it, because its right-hand side is zero.")
+print(f"  ->  relaxation: {frazione(lb_lp_2a)}")
+zlp2a, zlp2ar, _ = due_rilassamenti(m2a, dl2a)
+# the real bound comes from the same combinatorial argument as the base problem,
+# restricted to the partitions that keep branches 1 and 2 together
+def minimo_squilibrio_legato(colonna, tot):
+    ss = len(colonna)
+    return min(abs(2 * sum(colonna[i] for i in sotto) - tot)
+               for k in R(ss + 1) for sotto in itertools.combinations(R(ss), k)
+               if (0 in sotto) == (1 in sotto))
+
+
+gj_2a = [minimo_squilibrio_legato([v2[i][j] for i in R(s2)], tot2[j]) for j in R(r2)]
+lb2a = max(gj_2a)
+for j in R(r2):
+    print(f"  product {j + 1}: with 1 and 2 tied the best possible imbalance is {gj_2a[j]}")
+print(f"  Every feasible partition must respect them all: z >= max_j g_j = {frazione(lb2a)}")
+print("  (with the branches free it was " + frazione(lb2) + ": tying two branches raises the bound)")
+z2a_val = risolvi(m2a)
+riga_2a = registra_bound("2a branches 1 and 2 together", ub2a, lb2a, zlp2a, zlp2ar, z2a_val)
+salva_dati(pd.DataFrame([riga_2a]), "fam10_7a_bound")
+assert lb2a <= z2a_val <= ub2a + 1e-9

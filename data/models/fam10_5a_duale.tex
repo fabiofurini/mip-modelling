@@ -1,0 +1,18 @@
+\begin{array}{r@{}r@{}r@{}r@{}r@{}r@{}r@{}r@{}r@{}r@{}r@{}r@{}r c l}
+\max & 5\alpha_{11} &  & +2\alpha_{21} & +4\alpha_{22} & +8\beta_{11} & +6\beta_{12} & +5\beta_{21} & +7\beta_{22} &  &  &  &  &  & \\
+\text{subject to} & \alpha_{11} &  &  &  & +\beta_{11} &  &  &  & -\gamma_{11} &  &  &  & \le & 0\\
+ &  & \alpha_{12} &  &  & +\beta_{11} &  &  &  &  & -\gamma_{12} &  &  & \le & 0\\
+ & \alpha_{11} &  &  &  &  & +\beta_{12} &  &  &  &  & -\gamma_{21} &  & \le & 0\\
+ &  & \alpha_{12} &  &  &  & +\beta_{12} &  &  &  &  &  & -\gamma_{22} & \le & 0\\
+ &  &  & \alpha_{21} &  &  &  & +\beta_{21} &  & -\gamma_{11} &  &  &  & \le & 0\\
+ &  &  &  & \alpha_{22} &  &  & +\beta_{21} &  &  & -\gamma_{12} &  &  & \le & 0\\
+ &  &  & \alpha_{21} &  &  &  &  & +\beta_{22} &  &  & -\gamma_{21} &  & \le & 0\\
+ &  &  &  & \alpha_{22} &  &  &  & +\beta_{22} &  &  &  & -\gamma_{22} & \le & 0\\
+ &  &  &  &  &  &  &  &  & 4\gamma_{11} &  &  &  & \le & 1\\
+ &  &  &  &  &  &  &  &  &  & 4\gamma_{12} &  &  & \le & 1\\
+ &  &  &  &  &  &  &  &  &  &  & 4\gamma_{21} &  & \le & 1\\
+ &  &  &  &  &  &  &  &  &  &  &  & 4\gamma_{22} & \le & 1\\
+ & \alpha_{11}, & \alpha_{12}, & \alpha_{21}, & \alpha_{22} &  &  &  &  &  &  &  &  & \gtreqless & 0\\
+ &  &  &  &  & \beta_{11}, & \beta_{12}, & \beta_{21}, & \beta_{22} &  &  &  &  & \gtreqless & 0\\
+ &  &  &  &  &  &  &  &  & \gamma_{11}, & \gamma_{12}, & \gamma_{21}, & \gamma_{22} & \ge & 0
+\end{array}

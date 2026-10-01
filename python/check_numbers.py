@@ -216,8 +216,8 @@ attese_var = {
     "fam09_2": {"2a": 19560, "2b": 16660},
     "fam09_3": {"3a": 9200, "3b": 9200},
     "fam10_1": {"1a": 10, "1b": 13},
-    "fam10_3": {"2a": 12, "2b": F("31/3")},
-    "fam10_2": {"3a": 21, "3b": 12},
+    "fam10_3": {"3a": 12, "3b": F("31/3")},
+    "fam10_2": {"2a": 21, "2b": 12},
     "fam10_6": {"1a": 24, "1b": 15},
     "fam10_7": {"2a": 6, "2b": 8},
     "fam10_8": {"3a": 5, "3b": 2},
@@ -269,13 +269,14 @@ print("numerical models EX 1, 3, 4, 6, 8, 11, 12, 13, 14 — bounds and optima m
 # The tables of the notes are generated from these CSVs, so here we check that
 # the sandwich holds and that the optimum of the variant matches the one
 # recorded among the additional questions.
-for csv in sorted(DATI.glob("fam0[78]_*[ab]_bound.csv")):
+for csv in sorted(DATI.glob("fam[01][0-9]_*[ab]_bound.csv")):
     r = pd.read_csv(csv).iloc[0]
     nome = csv.stem.replace("_bound", "")
-    # the direction is not needed: either way the two bounds enclose the optimum,
-    # and the relaxation sits between them, on the optimistic side
+    # the direction is not needed: either way the two bounds enclose the optimum.
+    # The relaxation, instead, may sit outside the sandwich: in the mixed models
+    # it is often zero, and the bound from below comes from a combinatorial
+    # argument stronger than it (this is the case of 10.7a).
     assert r.lb - TOLL <= r.z_milp <= r.ub + TOLL, (nome, "optimum outside the sandwich")
-    assert min(r.lb, r.ub) - TOLL <= r.z_lp <= max(r.lb, r.ub) + TOLL, (nome, "relaxation outside the sandwich")
     sigla = nome.split("_")[-1]
     varianti_csv = DATI / (nome.rsplit("_", 1)[0] + "_varianti.csv")
     if varianti_csv.exists():
@@ -284,5 +285,5 @@ for csv in sorted(DATI.glob("fam0[78]_*[ab]_bound.csv")):
         attesi = v.loc[v[colonna] == sigla, "z"]
         if len(attesi):
             assert uguale(float(attesi.iloc[0]), r.z_milp), (nome, "optimum differs from the variant")
-print("variants of ch. 7-8 - heuristic, certificate and bound table consistent")
+print("variants of ch. 7-10 - heuristic, certificate and bound table consistent")
 print("All checks passed.")

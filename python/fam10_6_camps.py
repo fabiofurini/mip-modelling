@@ -219,3 +219,39 @@ ax.set_title(f"11.1: heuristic {frazione(lb1)} against optimum {frazione(z1)}")
 ax.legend(fontsize=7, ncol=2)
 salva_figura(fig, "cap10_campi_ottimo")
 print("Done.")
+
+
+# ---------- 5bis. THE SANDWICH ON THE VARIANT 1a ----------
+intestazione("10.6a The sandwich on the variant: camp 1 goes up to 20 places")
+d1a = [20] + list(d1[1:])
+
+# A capacity changes, not the structure: same model, same dual, same recipe.
+# The bound 'every child takes a place' follows the places available.
+m1a, x1a, y1a = modello_1(f1, g1, d1a, c1)
+salva_modello(m1a, "fam10_6a_primale")
+dl1a = duale_1(f1, g1, d1a, c1)
+salva_modello(dl1a, "fam10_6a_duale")
+
+# -- feasible heuristic: the same rule, with the new places --
+x_1a, y_1a, passi_1a = euristica(f1, g1, d1a, c1)
+for k, s in enumerate(passi_1a, 1):
+    print(f"  Step {k}. {s}")
+lb1a = sum(x_1a[i, j] + y_1a[i, j] for i in R(s1) for j in R(r1))
+sol_1a = ({f"x[{i},{j}]": x_1a[i, j] for i in R(s1) for j in R(r1)}
+          | {f"y[{i},{j}]": y_1a[i, j] for i in R(s1) for j in R(r1)})
+assert ammissibile(m1a, sol_1a), "the heuristic solution of the variant must be feasible"
+print(f"  lb = {frazione(lb1a)}")
+
+# -- dual certificate: the same recipe, on the new places --
+mano_1a = {f"gamma[{j}]": 1.0 for j in R(r1)}
+ub1a, viol_1a = valuta(dl1a, mano_1a)
+assert viol_1a <= 1e-9, viol_1a
+print("Dual solution by hand: alpha = beta = delta = eps = 0 and gamma_j = 1, as in the")
+print("  base problem: every child accepted takes a place, so no more than sum_j d_j can")
+print(f"  be accepted = {' + '.join(map(str, d1a))} = {frazione(ub1a)}.")
+print("  The certificate does not change shape: the datum it adds up does.")
+zlp1a, zlp1ar, _ = due_rilassamenti(m1a, dl1a)
+z1a_val = risolvi(m1a)
+riga_1a = registra_bound("1a camp 1 at 20 places", ub1a, lb1a, zlp1a, zlp1ar, z1a_val, senso="max")
+salva_dati(pd.DataFrame([riga_1a]), "fam10_6a_bound")
+assert lb1a <= z1a_val <= zlp1a + 1e-9 <= ub1a + 1e-9

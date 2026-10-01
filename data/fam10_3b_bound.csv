@@ -1,0 +1,2 @@
+problem,ub,lb,z_lp,z_lp_rafforzato,z_milp,senso
+3b at least four foods,10.333333333333332,9.0,9.333333333333334,10.333333333333332,10.333333333333332,min

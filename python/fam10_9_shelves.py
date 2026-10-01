@@ -186,3 +186,43 @@ ax.set_xlabel("width")
 ax.set_title(f"11.4: sum of the heights {frazione(z4)}")
 salva_figura(fig, "cap10_scaffali_ottimo")
 print("Done.")
+
+
+# ---------- 5bis. THE SANDWICH ON THE VARIANT 4b ----------
+intestazione("10.9b The sandwich on the variant: shelves 12 wide instead of 10")
+C4B = 12
+
+# The width of the shelves changes, not the structure: same model, same dual,
+# same recipe.
+m4b, x4b, y4b = modello_4(w4, h4, C4B, m4)
+salva_modello(m4b, "fam10_9b_primale")
+dl4b = duale_4(w4, h4, C4B, m4)
+salva_modello(dl4b, "fam10_9b_duale")
+
+# -- feasible heuristic: first-fit by decreasing width, with the new c --
+ordine_4b = sorted(R(n4), key=lambda b: (-w4[b], b))
+dove_4b, alt_4b, _ = first_fit(w4, h4, C4B, m4, ordine_4b,
+                               f"Order by decreasing width, shelves of {C4B}:")
+assert dove_4b is not None, "with wider shelves the first-fit must succeed"
+ub4b = sum(alt_4b)
+sol_4b = ({f"x[{b},{dove_4b[b]}]": 1 for b in R(n4)}
+          | {f"y[{s}]": alt_4b[s] for s in R(m4)})
+assert ammissibile(m4b, sol_4b), "the heuristic solution of the variant must be feasible"
+print(f"  ub = {frazione(ub4b)}")
+
+# -- dual certificate: the same recipe, all the weight on the tallest book --
+alto_4b = max(R(n4), key=lambda b: h4[b])
+mano_4b = ({f"gamma[{alto_4b},{s}]": 1.0 for s in R(m4)}
+           | {f"alpha[{alto_4b}]": float(h4[alto_4b])})
+lb4b, viol_4b = valuta(dl4b, mano_4b)
+assert viol_4b <= 1e-9, viol_4b
+print(f"Dual solution by hand: beta = 0 and all the gamma weight on the tallest book (number")
+print(f"  {alto_4b + 1}, {h4[alto_4b]} tall), as in the base problem: whatever shelf holds it")
+print("  must be at least as tall. The width does not enter the certificate, and indeed the")
+print("  bound does not change: what changes is the heuristic, which now manages to fit.")
+print(f"  ->  lb = {frazione(lb4b)}")
+zlp4b, zlp4br, _ = due_rilassamenti(m4b, dl4b)
+z4b_val = risolvi(m4b)
+riga_4b = registra_bound("4b shelves 12 wide", ub4b, lb4b, zlp4b, zlp4br, z4b_val)
+salva_dati(pd.DataFrame([riga_4b]), "fam10_9b_bound")
+assert lb4b <= zlp4b <= z4b_val <= ub4b + 1e-9

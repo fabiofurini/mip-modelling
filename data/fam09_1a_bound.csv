@@ -1,0 +1,2 @@
+problem,ub,lb,z_lp,z_lp_rafforzato,z_milp,senso
+1a daily capacity,520,270.0,385.5618686868687,385.5618686868687,470.0,min

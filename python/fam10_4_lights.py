@@ -214,3 +214,50 @@ ax.legend(fontsize=8, loc="lower right")
 ax.invert_yaxis()
 salva_figura(fig, "cap10_luci_ottimo")
 print("Done.")
+
+
+# ---------- 5bis. THE SANDWICH ON THE VARIANT 1a ----------
+intestazione("10.4a The sandwich on the variant: all three configurations")
+F1A = 3
+
+# The variant changes a datum --- the required variety goes from f to 3 --- not
+# the structure: model, dual, heuristic and recipe are the same, and the
+# certificate follows the data by itself.
+m1a, x1a, y1a, z1a = modello_1(q1, i1, u1, p1, v1, F1A)
+salva_modello(m1a, "fam10_4a_primale")
+dl1a = duale_1(q1, i1, u1, p1, v1, F1A)
+salva_modello(dl1a, "fam10_4a_duale")
+
+# -- feasible heuristic: the same rule, with the new variety --
+x_1a, y_1a, passi_1a = euristica(q1, i1, u1, p1, v1, F1A)
+for k, s in enumerate(passi_1a[:4], 1):
+    print(f"  Step {k}. {s}")
+print(f"  ... ({len(passi_1a) - 5} further purchases of the same kind)")
+print(f"  Step {len(passi_1a)}. {passi_1a[-1]}")
+ub1a = sum(i1[c] * x_1a[c] for c in R(nc)) + sum(p1[b] * y_1a[b] for b in R(nb))
+sol_1a = ({f"x[{c}]": x_1a[c] for c in R(nc)} | {f"y[{b}]": y_1a[b] for b in R(nb)}
+          | {f"z[{c}]": (1 if x_1a[c] > 0 else 0) for c in R(nc)})
+assert ammissibile(m1a, sol_1a), "the heuristic solution of the variant must be feasible"
+print(f"  ub = {frazione(ub1a)}")
+
+# -- dual certificate: the same recipe, on the new datum --
+migliore_1a, mano_1a, scelto_1a = float("-inf"), None, None
+for l in R(nl):
+    prezzo = min(p1[b] / v1[b][l] for b in R(nb) if v1[b][l] > 0)
+    prova = {f"beta[{l}]": prezzo}
+    prova["alpha"] = min(i1[c] + u1[c][l] * prezzo for c in R(nc))
+    val, viol = valuta(dl1a, prova)
+    if viol <= 1e-9 and val > migliore_1a:
+        migliore_1a, mano_1a, scelto_1a = val, prova, l
+lb1a, viol_1a = valuta(dl1a, mano_1a)
+assert viol_1a <= 1e-9, viol_1a
+print("Dual solution by hand: the same recipe as the base problem --- gamma = delta = 0, a")
+print(f"  single colour priced (number {scelto_1a + 1}) at the lowest price per light, and")
+print("  alpha = min_c (i_c + price of its lights). The right-hand side of the variety has")
+print("  changed, but gamma stays at zero: variety is not priced, so the bound does not move.")
+print(f"  ->  lb = {frazione(lb1a)}")
+zlp1a, zlp1ar, _ = due_rilassamenti(m1a, dl1a)
+z1a_val = risolvi(m1a)
+riga_1a = registra_bound("1a all three configurations", ub1a, lb1a, zlp1a, zlp1ar, z1a_val)
+salva_dati(pd.DataFrame([riga_1a]), "fam10_4a_bound")
+assert lb1a <= zlp1a <= z1a_val <= ub1a + 1e-9

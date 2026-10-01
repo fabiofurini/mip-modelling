@@ -182,3 +182,40 @@ ax.set_title(f"11.3: the difference drops from {frazione(diff_nat)} to {frazione
 ax.invert_yaxis()
 salva_figura(fig, "cap10_cd_ottimo")
 print("Done.")
+
+
+# ---------- 5bis. THE SANDWICH ON THE VARIANT 3b ----------
+intestazione("10.8b The sandwich on the variant: the collection on three CDs")
+M3B = 3
+w3b = [1] * M3B
+
+# The number of CDs changes, not the structure: model, dual, heuristic and recipe
+# are the same with m = 3.
+m3b, x3b, y3b, z3b = modello_3(d3, w3b)
+salva_modello(m3b, "fam10_8b_primale")
+dl3b = duale_3(d3, w3b)
+salva_modello(dl3b, "fam10_8b_duale")
+
+# -- feasible heuristic: LPT on the three CDs --
+ordine_3b = sorted(R(n3), key=lambda i: (-d3[i], i))
+dove_3b, carichi_3b, ub3b = riempi(d3, M3B, ordine_3b,
+                                   "LPT heuristic on the three CDs: tracks in decreasing order.")
+sol_3b = ({f"x[{i},{dove_3b[i]}]": 1 for i in R(n3)}
+          | {"y": max(carichi_3b), "z": min(carichi_3b)})
+assert ammissibile(m3b, sol_3b), "the heuristic solution of the variant must be feasible"
+print(f"  ub = {frazione(ub3b)}")
+
+# -- dual certificate: the same recipe, on three CDs --
+mano_3b = ({f"gamma[{j}]": 1 / M3B for j in R(M3B)}
+           | {f"delta[{j}]": 1 / M3B for j in R(M3B)})
+lb3b, viol_3b = valuta(dl3b, mano_3b)
+assert viol_3b <= 1e-9, viol_3b
+print(f"Dual solution by hand: gamma_j = delta_j = 1/{M3B}, as in the base problem: the two")
+print("  columns of y and z ask the gammas and the deltas to sum to one, and spreading them")
+print("  evenly is the choice that favours no CD. alpha = beta = 0.")
+print(f"  ->  lb = {frazione(lb3b)}")
+zlp3b, zlp3br, _ = due_rilassamenti(m3b, dl3b)
+z3b_val = risolvi(m3b)
+riga_3b = registra_bound("3b collection on three CDs", ub3b, lb3b, zlp3b, zlp3br, z3b_val)
+salva_dati(pd.DataFrame([riga_3b]), "fam10_8b_bound")
+assert lb3b <= zlp3b <= z3b_val <= ub3b + 1e-9

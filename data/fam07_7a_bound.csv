@@ -1,2 +1,2 @@
-problem,ub,lb,z_lp,z_lp_rafforzato,z_milp
-7a release dates,12,2.0,4.0,4.0,12.0
+problem,ub,lb,z_lp,z_lp_rafforzato,z_milp,senso
+7a release dates,12,2.0,4.0,4.0,12.0,min

@@ -216,3 +216,40 @@ ax.axis("off")
 ax.set_title(f"12.2: optimal plan with {frazione(z2)} boxes")
 salva_figura(fig, "cap10_spedizioni_ottimo")
 print("Done.")
+
+
+# ---------- 5bis. THE SANDWICH ON THE VARIANT 2a ----------
+intestazione("10.5a The sandwich on the variant: boxes of 4 units instead of 10")
+W2A = 4
+
+# The capacity of the box changes, not the structure: model, dual, heuristic and
+# recipe are the same with w = 4. The certificate rescales by itself, and that
+# is the point: the bound is 'units ordered divided by the capacity of the box'.
+m2a, x2a, y2a = modello_2(d2, a2, W2A)
+salva_modello(m2a, "fam10_5a_primale")
+dl2a = duale_2(d2, a2, W2A)
+salva_modello(dl2a, "fam10_5a_duale")
+
+# -- feasible heuristic: the same rule, with the smaller box --
+x_2a, y_2a, passi_2a = euristica(d2, a2, W2A)
+ub2a = sum(y_2a.values())
+sol_2a = ({f"x[{p},{s},{c}]": x_2a[p, s, c] for p in R(nk) for s in R(nn) for c in R(nm)}
+          | {f"y[{s},{c}]": y_2a[s, c] for s in R(nn) for c in R(nm)})
+assert ammissibile(m2a, sol_2a), "the heuristic solution of the variant must be feasible"
+print(f"  Boxes used by the heuristic: ub = {frazione(ub2a)}")
+
+# -- dual certificate: the same recipe, with the new 1/w --
+mano_2a = ({f"gamma[{s},{c}]": 1 / W2A for s in R(nn) for c in R(nm)}
+           | {f"alpha[{p},{c}]": 1 / W2A for p in R(nk) for c in R(nm)})
+lb2a, viol_2a = valuta(dl2a, mano_2a)
+assert viol_2a <= 1e-9, viol_2a
+print(f"Dual solution by hand: beta = 0, gamma_sc = alpha_pc = 1/{W2A}, as in the base")
+print("  problem. The dual constraints stay satisfied by construction, and the bound is")
+print(f"  still 'units ordered divided by capacity': {D2} / {W2A} = {frazione(lb2a)}.")
+print(f"  With boxes of {w2} it was {frazione(D2 / w2)}: the bound is inversely"
+      f" proportional to the capacity, so smaller boxes raise it.")
+zlp2a, zlp2ar, _ = due_rilassamenti(m2a, dl2a)
+z2a_val = risolvi(m2a)
+riga_2a = registra_bound("2a boxes of 4", ub2a, lb2a, zlp2a, zlp2ar, z2a_val)
+salva_dati(pd.DataFrame([riga_2a]), "fam10_5a_bound")
+assert lb2a <= zlp2a <= z2a_val <= ub2a + 1e-9

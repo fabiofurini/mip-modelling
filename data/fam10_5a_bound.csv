@@ -1,0 +1,2 @@
+problem,ub,lb,z_lp,z_lp_rafforzato,z_milp,senso
+2a boxes of 4,3,2.75,2.75,2.75,3.0,min
