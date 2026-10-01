@@ -37,7 +37,9 @@ professor at [DIAG](https://www.diag.uniroma1.it/), Sapienza University of Rome.
 - **Two or three additional questions on every problem**: a datum changes or a
   constraint is added, and model and bounds are redone. For each exercise one
   variant is worked out in full, as a model answer.
-- **Two problems given as they really arrive**, with no model already written.
+- **Forty problems to model**, given as they really arrive and with no model
+  already written: twenty with explicit numerical data and twenty in symbolic
+  form.
 - **Forty-four [notebooks](notebooks.md)** that run in Colab with nothing to
   install: the same code as the pages, cell by cell.
 - **No result transcribed by hand**: every number comes from a script you can

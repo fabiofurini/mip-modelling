@@ -49,6 +49,16 @@ licence.
 
     [:octicons-download-24: notes-4-organization.pdf](pdf/notes-4-organization.pdf)
 
+-   :material-help-circle-outline: **Notes V --- Problems to model**
+
+    ---
+
+    Forty problems given as they really arrive, with no model already written:
+    twenty with explicit numerical data and twenty in symbolic form. The
+    solutions are reserved for instructors.
+
+    [:octicons-download-24: notes-5-tomodel.pdf](pdf/notes-5-tomodel.pdf)
+
 -   :material-presentation: **The slides**
 
     ---

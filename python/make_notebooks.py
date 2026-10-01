@@ -190,16 +190,24 @@ def sezioni(codice: str) -> list[tuple[str | None, str]]:
     return [(t, "\n".join(c).strip()) for t, c in blocchi if "\n".join(c).strip()]
 
 
+ACRONIMI = {"LP", "MILP", "MIP", "BIP", "ILP", "CNF", "LPT", "EDD", "SPT", "CD", "EX"}
+
+
 def titolo_sezione(t: str) -> str:
-    """`1. MODELLO E ISTANZA` -> `1. Modello e istanza`."""
-    numero, _, resto = t.partition(". ")
-    if not resto:
+    """`3. RILASSAMENTO LP E DUALE (LOWER BOUND)` -> `3. Rilassamento LP e duale (lower bound)`."""
+    numero, punto, resto = t.partition(". ")
+    if not punto:
         numero, resto = "", t
-    parole = resto.split()
-    fuori = [p if (p.isupper() and len(p) <= 4 and any(c.isdigit() for c in p) or not p.isalpha())
-             else (p.capitalize() if i == 0 else p.lower())
-             for i, p in enumerate(parole)]
-    testo = " ".join(fuori)
+    parole = []
+    for i, p in enumerate(resto.split()):
+        nudo = p.strip("()[],.:;")
+        if nudo in ACRONIMI:
+            parole.append(p)
+        elif i == 0:
+            parole.append(p.capitalize())
+        else:
+            parole.append(p.lower())
+    testo = " ".join(parole)
     return f"{numero}. {testo}" if numero else testo
 
 
