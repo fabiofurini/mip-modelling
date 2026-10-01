@@ -5,7 +5,7 @@ professor at [DIAG](https://www.diag.uniroma1.it/), Sapienza University of Rome.
 
 **Mixed-integer linear models for Management Engineering.**
 
-[:octicons-download-24: The five volumes in PDF](downloads.md){ .md-button .md-button--primary }
+[:octicons-download-24: The notes in PDF](downloads.md){ .md-button .md-button--primary }
 [:octicons-play-24: The notebooks in Colab](notebooks.md){ .md-button }
 
 ## What you learn to do
@@ -81,7 +81,7 @@ professor at [DIAG](https://www.diag.uniroma1.it/), Sapienza University of Rome.
 
     ---
 
-    Organization, the exam format, the volumes of notes in PDF, the notebooks.
+    Organization, the exam format, the notes in PDF, the notebooks.
 
     [:octicons-arrow-right-24: Organization](organization.md)
 

@@ -9,7 +9,7 @@ licence.
 
 <div class="grid cards" markdown>
 
--   :material-book-open-variant: **Notes I --- Modelling**
+-   :material-book-open-variant: **Modelling**
 
     ---
 
@@ -19,7 +19,7 @@ licence.
 
     [:octicons-download-24: notes-1-modelling.pdf](pdf/notes-1-modelling.pdf)
 
--   :material-numeric: **Notes II --- Numerical problems**
+-   :material-numeric: **Numerical problems**
 
     ---
 
@@ -29,7 +29,7 @@ licence.
 
     [:octicons-download-24: notes-2-numerical.pdf](pdf/notes-2-numerical.pdf)
 
--   :material-function-variant: **Notes III --- Problems with a symbolic model**
+-   :material-function-variant: **Problems with a symbolic model**
 
     ---
 
@@ -39,7 +39,7 @@ licence.
 
     [:octicons-download-24: notes-3-symbolic.pdf](pdf/notes-3-symbolic.pdf)
 
--   :material-school-outline: **Notes IV --- Organisation of the course**
+-   :material-school-outline: **Organisation of the course**
 
     ---
 
@@ -49,7 +49,7 @@ licence.
 
     [:octicons-download-24: notes-4-organization.pdf](pdf/notes-4-organization.pdf)
 
--   :material-help-circle-outline: **Notes V --- Problems to model**
+-   :material-help-circle-outline: **Problems to model**
 
     ---
 

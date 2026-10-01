@@ -58,4 +58,14 @@ additional modelling questions.
 
     [:octicons-arrow-right-24: The nine problems](mixed.md)
 
+-   :material-help-circle-outline: **Problems to model**
+
+    ---
+
+    Forty problems given as they really arrive, with no model already written:
+    twenty with explicit numerical data and twenty in symbolic form. The
+    solutions are reserved for instructors.
+
+    [:octicons-arrow-right-24: The forty problems](to-model.md)
+
 </div>

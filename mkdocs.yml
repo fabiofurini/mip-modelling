@@ -162,6 +162,7 @@ nav:
           - 10.7 Branches across two companies: mixed-7.md
           - 10.8 Songs across CDs: mixed-8.md
           - 10.9 Books across shelves: mixed-9.md
+      - Problems to model: to-model.md
   - The notes in PDF: downloads.md
   - The course:
       - organization.md
