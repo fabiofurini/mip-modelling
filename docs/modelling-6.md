@@ -148,12 +148,12 @@ zlp, zlp_str, pi = due_rilassamenti(m, d)                #     checks strong dua
 
 z = risolvi(m)                                           # (5) the MIP
 row = registra_bound("7.1 assignment", ub, lb, zlp, zlp_str, z)   # (6) the table
-salva_dati(pd.DataFrame([row]), "sched1_bound")          #     -> data/sched1_bound.csv
+salva_dati(pd.DataFrame([row]), "fam07_1_bound")          #     -> data/fam07_1_bound.csv
 ```
 
 On the instance of problem 7.1 the protocol produces $\mathit{LB} = 10$,
 $z(\mathit{LP}) = 53/5$, $z(\mathit{MILP}) = 11$, $\mathit{UB} = 11$, and the
-row ends up in `data/sched1_bound.csv`. That is where the notes, the website
+row ends up in `data/fam07_1_bound.csv`. That is where the notes, the website
 page and `check_numbers.py` read it from: **one single place where the number
 exists**.
 

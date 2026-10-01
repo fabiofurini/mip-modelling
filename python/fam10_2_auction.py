@@ -13,6 +13,7 @@ from gurobipy import GRB
 from mip import (ammissibile, due_rilassamenti, frazione, nuovo_modello, registra_bound,
                  risolvi, stampa_lp, valuta)
 from stile import ARANCIO, GRIGIO, TEAL, intestazione, plt, salva_dati, salva_figura
+from esteso import salva_modello
 
 R = range
 
@@ -25,7 +26,7 @@ r3 = len(p3)
 salva_dati(pd.DataFrame({"bid": [j + 1 for j in R(r3)],
                          "items": ["{" + ",".join(str(i + 1) for i in B3[j]) + "}"
                                    for j in R(r3)],
-                         "profit": p3}), "asta3_dati")
+                         "profit": p3}), "fam10_2_dati")
 
 
 def modello_3(n, B, p, extra=None):
@@ -53,6 +54,7 @@ def duale_3(n, B, p):
 
 
 m3, x3 = modello_3(n3, B3, p3)
+salva_modello(m3, "fam10_2_primale")
 print("  The model of the instance:")
 stampa_lp(m3)
 
@@ -90,6 +92,7 @@ print(f"  Heuristic solution: bids {accettate}   lb = {frazione(lb3)}")
 
 # ---------- 3. LP RELAXATION AND DUAL (UPPER BOUND) ----------
 dl3, lam3 = duale_3(n3, B3, p3)
+salva_modello(dl3, "fam10_2_duale")
 # Hand recipe: spread every bid over its items and take the maximum,
 # lam_i = max_{j : i in B_j} p_j / |B_j|. It is always feasible because for every
 # bid j we have sum_{i in B_j} lam_i >= |B_j| * p_j / |B_j| = p_j.
@@ -120,7 +123,7 @@ print(f"  Unsold items: {invenduti if invenduti else 'none'}. The auctioneer sel
 print("  but not because a constraint forces it: the constraints are <=, not =. With other")
 print("  bids the optimal solution could leave items on the shelf.")
 riga = registra_bound("3 auction", ub3, lb3, zlp3, zlp3r, z3, senso="max")
-salva_dati(pd.DataFrame([riga]), "asta3_bound")
+salva_dati(pd.DataFrame([riga]), "fam10_2_bound")
 assert lb3 <= z3 <= zlp3r <= zlp3 <= ub3 + 1e-9
 
 # ---------- 5. THE TWO RELAXATIONS AND INTEGRALITY ----------
@@ -142,7 +145,7 @@ print(f"  Triangle: z(LP) = {frazione(zlp_tri)} (x = 1/2 on all three) against "
 assert zlp_tri > z_tri + 1e-9
 salva_dati(pd.DataFrame([{"instance": "auction 10.3", "z_lp": zlp3, "z_milp": z3},
                          {"instance": "triangle", "z_lp": zlp_tri, "z_milp": z_tri}]),
-           "asta3_triangolo")
+           "fam10_2_triangolo")
 
 # ---------- 6. ADDITIONAL MODELLING QUESTIONS ----------
 varianti = {}
@@ -163,7 +166,7 @@ m, x = modello_3(n3, B3, p3)
 m.addConstr(gp.quicksum(len(B3[j]) * x[j] for j in R(r3)) <= 2, name="deliveries")
 varianti["3b"] = variante("3b. At most two items are delivered (sum_j |B_j| x_j <= 2)", m)
 salva_dati(pd.DataFrame({"variant": list(varianti), "z": list(varianti.values())}),
-           "asta3_varianti")
+           "fam10_2_varianti")
 
 # ---------- 7. FIGURE ----------
 fig, ax = plt.subplots(figsize=(6.8, 3.2))

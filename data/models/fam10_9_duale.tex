@@ -1,0 +1,16 @@
+\begin{array}{r@{}r@{}r@{}r@{}r@{}r@{}r@{}r@{}r@{}r@{}r@{}r@{}r@{}r@{}r c l}
+\max & \alpha_1 & +\alpha_2 & +\alpha_3 & +\alpha_4 & +10\beta_1 & +10\beta_2 &  &  &  &  &  &  &  &  &  & \\
+\text{subject to} &  &  &  &  &  &  & \gamma_{11} &  & +\gamma_{21} &  & +\gamma_{31} &  & +\gamma_{41} &  & \le & 1\\
+ &  &  &  &  &  &  &  & \gamma_{12} &  & +\gamma_{22} &  & +\gamma_{32} &  & +\gamma_{42} & \le & 1\\
+ & \alpha_1 &  &  &  & +3\beta_1 &  & -8\gamma_{11} &  &  &  &  &  &  &  & \le & 0\\
+ & \alpha_1 &  &  &  &  & +3\beta_2 &  & -8\gamma_{12} &  &  &  &  &  &  & \le & 0\\
+ &  & \alpha_2 &  &  & +5\beta_1 &  &  &  & -5\gamma_{21} &  &  &  &  &  & \le & 0\\
+ &  & \alpha_2 &  &  &  & +5\beta_2 &  &  &  & -5\gamma_{22} &  &  &  &  & \le & 0\\
+ &  &  & \alpha_3 &  & +4\beta_1 &  &  &  &  &  & -7\gamma_{31} &  &  &  & \le & 0\\
+ &  &  & \alpha_3 &  &  & +4\beta_2 &  &  &  &  &  & -7\gamma_{32} &  &  & \le & 0\\
+ &  &  &  & \alpha_4 & +6\beta_1 &  &  &  &  &  &  &  & -4\gamma_{41} &  & \le & 0\\
+ &  &  &  & \alpha_4 &  & +6\beta_2 &  &  &  &  &  &  &  & -4\gamma_{42} & \le & 0\\
+ & \alpha_1, & \alpha_2, & \alpha_3, & \alpha_4 &  &  &  &  &  &  &  &  &  &  & \gtreqless & 0\\
+ &  &  &  &  & \beta_1, & \beta_2 &  &  &  &  &  &  &  &  & \gtreqless & 0\\
+ &  &  &  &  &  &  & \gamma_{11}, & \gamma_{12}, & \gamma_{21}, & \gamma_{22}, & \gamma_{31}, & \gamma_{32}, & \gamma_{41}, & \gamma_{42} & \ge & 0
+\end{array}

@@ -12,6 +12,7 @@ from gurobipy import GRB
 from mip import (ammissibile, due_rilassamenti, frazione, nuovo_modello,
                  registra_bound, risolvi, stampa_soluzione, valuta)
 from stile import CICLO, intestazione, plt, salva_dati, salva_figura
+from esteso import salva_modello
 
 R = range
 
@@ -24,9 +25,9 @@ i1 = [60, 90]                    # opening cost
 d1 = [8, 25, 27]                 # client demand
 m, n = 2, 3
 salva_dati(pd.DataFrame([{"location": l + 1, "client": c + 1, "t": t1[l][c]}
-                         for l in R(m) for c in R(n)]), "loc1_costi")
-salva_dati(pd.DataFrame({"location": R(1, m + 1), "u": u1, "i": i1}), "loc1_sedi")
-salva_dati(pd.DataFrame({"client": R(1, n + 1), "d": d1}), "loc1_clienti")
+                         for l in R(m) for c in R(n)]), "fam08_1_costi")
+salva_dati(pd.DataFrame({"location": R(1, m + 1), "u": u1, "i": i1}), "fam08_1_sedi")
+salva_dati(pd.DataFrame({"client": R(1, n + 1), "d": d1}), "fam08_1_clienti")
 
 
 def modello_1(t, u, i, d):
@@ -55,6 +56,7 @@ def duale_1(t, u, i, d):
 
 
 m1, x1, y1 = modello_1(t1, u1, i1, d1)
+salva_modello(m1, "fam08_1_primale")
 
 # ---------- 2. CONSTRUCTIVE HEURISTIC (UPPER BOUND) ----------
 
@@ -94,6 +96,7 @@ print(f"  ub = {ub1}")
 # ---------- 3. LP RELAXATION AND DUAL (LOWER BOUND) ----------
 
 d1_ = duale_1(t1, u1, i1, d1)
+salva_modello(d1_, "fam08_1_duale")
 mano = {f"mu[{l}]": i1[l] / u1[l] for l in R(m)}
 mano.update({f"pi[{c}]": min(t1[l][c] + mano[f"mu[{l}]"] for l in R(m)) for c in R(n)})
 lb1, viol = valuta(d1_, mano)
@@ -109,7 +112,7 @@ z1 = risolvi(m1)
 print("Optimal solution of the MILP:")
 stampa_soluzione(m1, solo_non_nulle=True)
 riga = registra_bound("1 capacitated location", ub1, lb1, zlp1, zlp1r, z1)
-salva_dati(pd.DataFrame([riga]), "loc1_bound")
+salva_dati(pd.DataFrame([riga]), "fam08_1_bound")
 
 # ---------- 5. ADDITIONAL MODELLING QUESTIONS ----------
 
@@ -130,7 +133,7 @@ varianti["1a"] = variante("1a. Every open location ships at least 5 units (sum_c
 mod, x, y = modello_1(t1, u1, i1, d1)
 mod.addConstr(x[1] <= x[0], name="2_only_if_1")
 varianti["1b"] = variante("1b. Location 2 opens only if location 1 opens (x_2 <= x_1)", mod)
-salva_dati(pd.DataFrame({"variant": list(varianti), "z": list(varianti.values())}), "loc1_varianti")
+salva_dati(pd.DataFrame({"variant": list(varianti), "z": list(varianti.values())}), "fam08_1_varianti")
 
 # ---------- 6. FIGURES ----------
 

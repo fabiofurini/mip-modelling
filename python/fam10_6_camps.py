@@ -12,6 +12,7 @@ from gurobipy import GRB
 from mip import (ammissibile, due_rilassamenti, frazione, nuovo_modello, registra_bound,
                  risolvi, valuta)
 from stile import ARANCIO, BLU, GRIGIO, TEAL, intestazione, plt, salva_dati, salva_figura
+from esteso import salva_modello
 
 R = range
 
@@ -23,8 +24,8 @@ d1 = [15, 8]        # capacity of the camps
 c1 = 0              # nationality that must be the majority (index 0 = nationality 1)
 s1, r1 = len(f1), len(d1)
 salva_dati(pd.DataFrame({"nationality": R(1, s1 + 1), "girls": f1, "boys": g1}),
-           "campi1_dati")
-salva_dati(pd.DataFrame({"camp": R(1, r1 + 1), "capacity": d1}), "campi1_capacita")
+           "fam10_6_dati")
+salva_dati(pd.DataFrame({"camp": R(1, r1 + 1), "capacity": d1}), "fam10_6_capacita")
 
 
 def modello_1(f, g, d, c):
@@ -74,6 +75,7 @@ def duale_1(f, g, d, c):
 
 
 m1, x1, y1 = modello_1(f1, g1, d1, c1)
+salva_modello(m1, "fam10_6_primale")
 
 # ---------- 2. CONSTRUCTIVE HEURISTIC (LOWER BOUND) ----------
 # constructive heuristic camp by camp: the current camp is filled taking first the majority
@@ -120,6 +122,7 @@ print("  nobody is left who can form the majority, and the camp stays empty.")
 
 # ---------- 3. LP RELAXATION AND DUAL (UPPER BOUND) ----------
 dl1 = duale_1(f1, g1, d1, c1)
+salva_modello(dl1, "fam10_6_duale")
 # recipe: alpha = beta = delta = eps = 0 and gamma_j = 1, that is only the capacity is
 # priced: every accepted child takes one place, so no more than sum_j d_j can be accepted
 mano = {f"gamma[{j}]": 1.0 for j in R(r1)}
@@ -139,7 +142,7 @@ for j in R(r1):
         f"nat. {i + 1} -> {int(x1[i, j].X)} girls and {int(y1[i, j].X)} boys" for i in R(s1))
         + f"; {int(tot)} places out of {d1[j]}")
 riga = registra_bound("1 camps", ub1, lb1, zlp1, zlp1r, z1, senso="max")
-salva_dati(pd.DataFrame([riga]), "campi1_bound")
+salva_dati(pd.DataFrame([riga]), "fam10_6_bound")
 assert lb1 <= z1 <= zlp1 <= ub1 + 1e-9
 print(f"  The dual bound {frazione(ub1)} coincides with the optimum: the capacity is")
 print("  saturated and the certificate closes the gap. The whole gap was on the heuristic side.")
@@ -157,7 +160,7 @@ print(f"  children are at most 2 * {sum(f1)} = {2 * sum(f1)}.")
 salva_dati(pd.DataFrame([{"argument": "capacity of the camps", "bound": ub1},
                          {"argument": "majority nationality", "bound": 2 * tot_c},
                          {"argument": "girls available", "bound": 2 * sum(f1)}]),
-           "campi1_argomenti")
+           "fam10_6_argomenti")
 
 # ---------- 6. ADDITIONAL MODELLING QUESTIONS ----------
 varianti = {}
@@ -184,7 +187,7 @@ varianti["1b"] = variante("1b. Nationality 1 cannot be split between several cam
 print("       this is exactly what the heuristic does: the second camp stays empty and we")
 print(f"       are back to the value {frazione(lb1)}.")
 salva_dati(pd.DataFrame({"variant": list(varianti), "z": list(varianti.values())}),
-           "campi1_varianti")
+           "fam10_6_varianti")
 
 # ---------- 7. FIGURE ----------
 fig, ax = plt.subplots(figsize=(6.8, 3.0))

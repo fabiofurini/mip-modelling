@@ -12,6 +12,7 @@ from euristiche import euristica_lotti
 from mip import (ammissibile, due_rilassamenti, frazione, nuovo_modello, registra_bound,
                  risolvi, valuta)
 from stile import ARANCIO, BLU, ROSSO, TEAL, VERDE, intestazione, plt, salva_dati, salva_figura
+from esteso import salva_modello
 
 R = range
 
@@ -26,7 +27,7 @@ n1 = len(d1)
 # the smallest valid big-M: at an optimum one never produces more than the residual demand
 M1 = [sum(d1[t:]) + rn for t in R(n1)]
 salva_dati(pd.DataFrame({"day": R(1, n1 + 1), "demand": d1, "unit_cost": p1,
-                         "setup_cost": q1, "M": M1}), "prod1_dati")
+                         "setup_cost": q1, "M": M1}), "fam09_1_dati")
 
 
 def modello_1(d, p, q, h, r0, rn):
@@ -63,6 +64,7 @@ def duale_1(d, p, q, h, r0, rn):
 
 
 m1, x1, s1, y1 = modello_1(d1, p1, q1, h1, r0, rn)
+salva_modello(m1, "fam09_1_primale")
 print(f"  Total demand {sum(d1)}; big-M per day (residual demand): {M1}")
 
 # ---------- 2. CONSTRUCTIVE HEURISTICS (UPPER BOUND) ----------
@@ -92,6 +94,7 @@ print(f"  The better of the two: ub = {frazione(ub1)}")
 
 # ---------- 3. LP RELAXATION AND DUAL (LOWER BOUND) ----------
 dl1 = duale_1(d1, p1, q1, h1, r0, rn)
+salva_modello(dl1, "fam09_1_duale")
 # recipe: pi = 0 (the set-ups are given away) and mu_t = cheapest way to have one
 # unit available on day t
 mu = []
@@ -113,7 +116,7 @@ print(f"  Optimal solution: runs on days {lanci_ott}; quantities "
       + ", ".join(frazione(x1[t].X) for t in R(n1))
       + "; inventories " + ", ".join(frazione(s1[t].X) for t in R(n1 - 1)))
 riga = registra_bound("1 lot sizing with setup", ub1, lb1, zlp1, zlp1r, z1)
-salva_dati(pd.DataFrame([riga]), "prod1_bound")
+salva_dati(pd.DataFrame([riga]), "fam09_1_bound")
 assert lb1 <= zlp1 <= z1 <= ub1 + 1e-9
 
 # ---------- 5. ADDITIONAL MODELLING QUESTIONS ----------
@@ -135,7 +138,7 @@ m, x, s, y = modello_1(d1, p1, q1, h1, r0, rn)
 m.addConstrs((x[t] >= 25 * y[t] for t in R(n1)), name="minimum_lot")
 varianti["1b"] = variante("1b. Minimum lot of 25 litres if producing (x_t >= 25 y_t)", m)
 salva_dati(pd.DataFrame({"variant": list(varianti), "z": list(varianti.values())}),
-           "prod1_varianti")
+           "fam09_1_varianti")
 
 # ---------- 6. FIGURE ----------
 fig, ax = plt.subplots(figsize=(7.0, 3.4))

@@ -18,6 +18,7 @@ from gurobipy import GRB
 from mip import (ammissibile, due_rilassamenti, frazione, nuovo_modello, registra_bound,
                  risolvi, valuta)
 from stile import ARANCIO, BLU, TEAL, intestazione, plt, salva_dati, salva_figura
+from esteso import salva_modello
 
 R = range
 
@@ -30,7 +31,7 @@ v2 = [[3, 3, 2],      # revenue of branch i on product j (millions)
 s2, r2 = len(v2), len(v2[0])
 salva_dati(pd.DataFrame(v2, columns=[f"product_{j + 1}" for j in R(r2)],
                         index=[f"branch_{i + 1}" for i in R(s2)]).reset_index(),
-           "antitrust2_dati")
+           "fam10_7_dati")
 
 
 def modello_2(v):
@@ -72,6 +73,7 @@ def duale_2(v):
 
 
 m2, x2, z2v = modello_2(v2)
+salva_modello(m2, "fam10_7_primale")
 tot2 = [sum(v2[i][j] for i in R(s2)) for j in R(r2)]
 print("  Total revenue per product: "
       + ", ".join(f"product {j + 1} = {tot2[j]}" for j in R(r2)))
@@ -110,6 +112,7 @@ print("  Company A = " + str([i + 1 for i in R(s2) if gruppo[i] == 0])
 
 # ---------- 3. THE LP RELAXATION SAYS NOTHING ----------
 dl2 = duale_2(v2)
+salva_modello(dl2, "fam10_7_duale")
 mano = {"lam[0]": 0.5, "mu[0]": 0.5}      # lam_1 = mu_1 = 1/2, everything else zero
 lb_lp, viol = valuta(dl2, mano)
 assert viol <= 1e-9, viol
@@ -146,7 +149,7 @@ print(f"  Every partition must respect all the products at once, so z >= max_j g
 print("  It is a valid bound that the linear relaxation cannot see: it comes from")
 print("  integrality, not from the constraints.")
 salva_dati(pd.DataFrame({"product": R(1, r2 + 1), "total": tot2, "g_j": gj}),
-           "antitrust2_argomento")
+           "fam10_7_argomento")
 
 # ---------- 5. OPTIMUM OF THE MILP ----------
 z2 = risolvi(m2)
@@ -158,7 +161,7 @@ print("  differences per product: "
       + ", ".join(f"product {j + 1} -> {diff_ott[j]}" for j in R(r2))
       + f"   z = {frazione(z2)}")
 riga = registra_bound("2 antitrust", ub2, lb2, zlp2, zlp2r, z2)
-salva_dati(pd.DataFrame([riga]), "antitrust2_bound")
+salva_dati(pd.DataFrame([riga]), "fam10_7_bound")
 assert lb2 <= z2 <= ub2 + 1e-9
 print(f"  Sandwich: {frazione(lb2)} <= z(MILP) = {frazione(z2)} <= {frazione(ub2)}. Careful:")
 print(f"  here lb is not the value of the dual ({frazione(lb_lp)}) but the combinatorial bound.")
@@ -196,7 +199,7 @@ print("       The two objectives are not comparable in value: the function chang
 print("       the feasible set.")
 assert A_somma == A_max, (A_somma, A_max)
 salva_dati(pd.DataFrame({"variant": list(varianti), "z": list(varianti.values())}),
-           "antitrust2_varianti")
+           "fam10_7_varianti")
 
 # ---------- 7. FIGURE ----------
 fig, ax = plt.subplots(figsize=(6.8, 3.0))

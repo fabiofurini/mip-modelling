@@ -13,6 +13,7 @@ from euristiche import best_fit, first_fit, matrice, next_fit
 from mip import (ammissibile, due_rilassamenti, frazione, nuovo_modello,
                  registra_bound, risolvi, stampa_soluzione, valuta)
 from stile import CICLO, ROSSO, intestazione, plt, salva_dati, salva_figura
+from esteso import salva_modello
 
 R = range
 
@@ -21,8 +22,8 @@ intestazione("4. Parallel jobs: y_m = maximum of the times of the assigned jobs"
 t4 = [[6, 5, 3], [5, 10, 2], [20, 13, 10]]
 p4 = [1, 2, 2]
 salva_dati(pd.DataFrame([{"job": j + 1, "machine": m + 1, "t": t4[j][m]}
-                         for j in R(3) for m in R(3)]), "sched4_lavori")
-salva_dati(pd.DataFrame({"machine": R(1, 4), "p": p4}), "sched4_macchine")
+                         for j in R(3) for m in R(3)]), "fam07_4_lavori")
+salva_dati(pd.DataFrame({"machine": R(1, 4), "p": p4}), "fam07_4_macchine")
 
 
 def modello_4(t, p):
@@ -68,6 +69,7 @@ def euristica_4(t, p):
 
 
 m4, x4, y4 = modello_4(t4, p4)
+salva_modello(m4, "fam07_4_primale")
 
 # ---------- 2. CONSTRUCTIVE HEURISTIC (UPPER BOUND) ----------
 xe, ye, passi = euristica_4(t4, p4)
@@ -79,6 +81,7 @@ print(f"  ub = {frazione(ub4)}")
 
 # ---------- 3. LP RELAXATION AND DUAL (LOWER BOUND) ----------
 d4 = duale_4(t4, p4)
+salva_modello(d4, "fam07_4_duale")
 mano = {f"lam[{j},{mm}]": 1 / 3 for j in R(3) for mm in R(3)}
 mano.update({f"mu[{j}]": min(t4[j][mm] / 3 for mm in R(3)) for j in R(3)})
 lb4, viol = valuta(d4, mano)
@@ -92,7 +95,7 @@ z4 = risolvi(m4)
 print("Optimal solution of the MILP:")
 stampa_soluzione(m4, solo_non_nulle=True)
 riga = registra_bound("4 parallel", ub4, lb4, zlp4, zlp4r, z4)
-salva_dati(pd.DataFrame([riga]), "sched4_bound")
+salva_dati(pd.DataFrame([riga]), "fam07_4_bound")
 
 # ---------- 5. ADDITIONAL MODELLING QUESTIONS ----------
 
@@ -118,6 +121,6 @@ vv = m.addVars(3, vtype=GRB.BINARY, name="v")
 m.addConstrs((y[mm] <= max(t4[j][mm] for j in R(3)) * vv[mm] for mm in R(3)), name="activate")
 m.setObjective(y.sum() + gp.quicksum(g4[mm] * vv[mm] for mm in R(3)), GRB.MINIMIZE)
 varianti["4b"] = variante("4b. Fixed cost 4 if the machine works (y_m <= M_m v_m)", m)
-salva_dati(pd.DataFrame({"variant": list(varianti), "z": list(varianti.values())}), "sched4_varianti")
+salva_dati(pd.DataFrame({"variant": list(varianti), "z": list(varianti.values())}), "fam07_4_varianti")
 
 print("Done.")

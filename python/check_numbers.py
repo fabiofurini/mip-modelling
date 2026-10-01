@@ -81,7 +81,7 @@ print("ch. 6: solver statuses, tolerances and the full protocol")
 # ----------------------------------------------------------------------
 # Chapter 7 — Assignment and scheduling
 # ----------------------------------------------------------------------
-b = pd.concat([pd.read_csv(DATI / f"sched{k}_bound.csv") for k in range(1, 8)],
+b = pd.concat([pd.read_csv(DATI / f"fam07_{k}_bound.csv") for k in range(1, 8)],
           ignore_index=True).set_index("problem")
 attesi = {   # problem: (heuristic, hand dual, pure z(LP), strengthened z(LP+), z(MILP))
     "1 assignment":  (11, 10, F("53/5"), F("53/5"), 11),
@@ -108,7 +108,7 @@ for nome, (eur, duale, zlp, zlpr, zmilp) in attesi.items():
         assert float(r.lb) <= float(r.z_lp) <= float(r.z_milp) <= float(r.ub) + 1e-9, nome
 print("ch. 7: the seven problems — bounds, relaxations and optima match the texts")
 
-v = pd.concat([pd.read_csv(DATI / f"sched{k}_varianti.csv") for k in range(1, 8)],
+v = pd.concat([pd.read_csv(DATI / f"fam07_{k}_varianti.csv") for k in range(1, 8)],
           ignore_index=True).set_index("variant")["z"]
 attese = {"1a": 12, "1b": 18, "2a": 12, "2b": 12, "3a": 20, "3b": 20, "4a": 10, "4b": 23,
           "5a": 17, "5b": 18, "6a": 40, "6b": 42, "7a": 12, "7b": 5}
@@ -119,8 +119,8 @@ print("ch. 7: the fourteen additional questions — optima match the texts")
 # ----------------------------------------------------------------------
 # Chapter 8 — Location and coverage
 # ----------------------------------------------------------------------
-b8 = pd.concat([pd.read_csv(DATI / f"loc{k}_bound.csv") for k in (1, 2, 3)]
-          + [pd.read_csv(DATI / "hub4_bound.csv")], ignore_index=True).set_index("problem")
+b8 = pd.concat([pd.read_csv(DATI / f"fam08_{k}_bound.csv") for k in (1, 2, 3)]
+          + [pd.read_csv(DATI / "fam08_4_bound.csv")], ignore_index=True).set_index("problem")
 attesi8 = {   # problem: (heuristic, hand dual, pure z(LP), strengthened z(LP+), z(MILP))
     "1 capacitated location": (439, F("1581/5"), F("1581/5"), 317, 365),
     "2 p-median":             (18, 13, 15, 15, 15),
@@ -142,8 +142,8 @@ for nome, (eur, duale, zlp, zlpr, zmilp) in attesi8.items():
         assert float(r.lb) <= float(r.z_lp) <= float(r.z_milp) <= float(r.ub) + 1e-9, nome
 print("ch. 8: the four problems — bounds, relaxations and optima match the texts")
 
-v8 = pd.concat([pd.read_csv(DATI / f"loc{k}_varianti.csv") for k in (1, 2, 3)]
-          + [pd.read_csv(DATI / "hub4_varianti.csv")], ignore_index=True).set_index("variant")["z"]
+v8 = pd.concat([pd.read_csv(DATI / f"fam08_{k}_varianti.csv") for k in (1, 2, 3)]
+          + [pd.read_csv(DATI / "fam08_4_varianti.csv")], ignore_index=True).set_index("variant")["z"]
 attese8 = {"1a": 365, "1b": 365, "2a": 15, "2b": 16, "3a": 45, "3b": 45,
            "4a": 19, "4a_without_capacity": 10, "4a_with_capacity": 19, "4b": 19}
 for k, z in attese8.items():
@@ -181,18 +181,18 @@ print("numerical models EX 2, 5, 7, 9, 10, 15 — bounds and optima match the te
 # ----------------------------------------------------------------------
 # (file, ub, lb, z(LP), z(LP+), z(MILP), sense)
 attesi_fam = [
-    ("prod1", 420, 270, F("3890/11"), F("3890/11"), 390, "min"),
-    ("prod2", 18200, 13500, 15960, 15960, 16660, "min"),
-    ("veic3", 11250, 9200, F("20625/2"), 9750, 9700, "max"),
-    ("premi1", 8, 3, 3, 3, 5, "min"),
-    ("dieta2", F("39/4"), 9, F("46/5"), F("48/5"), F("48/5"), "min"),
-    ("asta3", 23, 21, 22, 22, 22, "max"),
-    ("campi1", 23, 15, 23, 23, 23, "max"),
-    ("antitrust2", 6, 2, 0, 0, 4, "min-cert"),
-    ("cd3", 1, 1, 0, 0, 1, "min-cert"),
-    ("scaffali4", 15, 12, 8, 8, 15, "min-cert"),
-    ("luci1", 3121, 2140, 2140, 2141, 2141, "min"),
-    ("spedizioni2", 2, 2, F("11/10"), F("11/10"), 2, "min-cert"),
+    ("fam09_1", 420, 270, F("3890/11"), F("3890/11"), 390, "min"),
+    ("fam09_2", 18200, 13500, 15960, 15960, 16660, "min"),
+    ("fam09_3", 11250, 9200, F("20625/2"), 9750, 9700, "max"),
+    ("fam10_1", 8, 3, 3, 3, 5, "min"),
+    ("fam10_3", F("39/4"), 9, F("46/5"), F("48/5"), F("48/5"), "min"),
+    ("fam10_2", 23, 21, 22, 22, 22, "max"),
+    ("fam10_6", 23, 15, 23, 23, 23, "max"),
+    ("fam10_7", 6, 2, 0, 0, 4, "min-cert"),
+    ("fam10_8", 1, 1, 0, 0, 1, "min-cert"),
+    ("fam10_9", 15, 12, 8, 8, 15, "min-cert"),
+    ("fam10_4", 3121, 2140, 2140, 2141, 2141, "min"),
+    ("fam10_5", 2, 2, F("11/10"), F("11/10"), 2, "min-cert"),
 ]
 for nome, ub, lb, zlp, zlpr, zmilp, senso in attesi_fam:
     r = pd.read_csv(DATI / f"{nome}_bound.csv").iloc[0]
@@ -211,18 +211,18 @@ for nome, ub, lb, zlp, zlpr, zmilp, senso in attesi_fam:
 print("ch. 9-10: the twelve problems — bounds, relaxations and optima match the texts")
 
 attese_var = {
-    "prod1": {"1a": 470, "1b": 390},
-    "prod2": {"2a": 19560, "2b": 16660},
-    "veic3": {"3a": 9200, "3b": 9200},
-    "premi1": {"1a": 10, "1b": 13},
-    "dieta2": {"2a": 12, "2b": F("31/3")},
-    "asta3": {"3a": 21, "3b": 12},
-    "campi1": {"1a": 24, "1b": 15},
-    "antitrust2": {"2a": 6, "2b": 8},
-    "cd3": {"3a": 5, "3b": 2},
-    "scaffali4": {"4a": 15, "4b": 12},
-    "luci1": {"1a": 2239, "1b": 2143},
-    "spedizioni2": {"2a": 3, "2b": 3},
+    "fam09_1": {"1a": 470, "1b": 390},
+    "fam09_2": {"2a": 19560, "2b": 16660},
+    "fam09_3": {"3a": 9200, "3b": 9200},
+    "fam10_1": {"1a": 10, "1b": 13},
+    "fam10_3": {"2a": 12, "2b": F("31/3")},
+    "fam10_2": {"3a": 21, "3b": 12},
+    "fam10_6": {"1a": 24, "1b": 15},
+    "fam10_7": {"2a": 6, "2b": 8},
+    "fam10_8": {"3a": 5, "3b": 2},
+    "fam10_9": {"4a": 15, "4b": 12},
+    "fam10_4": {"1a": 2239, "1b": 2143},
+    "fam10_5": {"2a": 3, "2b": 3},
 }
 for nome, attese in attese_var.items():
     v = pd.read_csv(DATI / f"{nome}_varianti.csv").set_index("variant")["z"]

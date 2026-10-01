@@ -12,6 +12,7 @@ from gurobipy import GRB
 from mip import (ammissibile, due_rilassamenti, frazione, nuovo_modello, registra_bound,
                  risolvi, valuta)
 from stile import ARANCIO, BLU, ROSSO, TEAL, VERDE, intestazione, plt, salva_dati, salva_figura
+from esteso import salva_modello
 
 R = range
 
@@ -27,7 +28,7 @@ n3, m3 = 3, 2
 # the smallest valid big-M per type: how many units the resources allow at most
 M3 = [min(b3[i] // a3[i][j] for i in R(m3)) for j in R(n3)]
 salva_dati(pd.DataFrame({"type": R(1, n3 + 1), "steel": a3[0], "hours": a3[1],
-                         "profit": p3, "minimum": q3, "M": M3}), "veic3_dati")
+                         "profit": p3, "minimum": q3, "M": M3}), "fam09_3_dati")
 print(f"  Resources: {b3[0]} t of steel, {b3[1]} hours. Big-M per type (from the data "
       f"alone): {M3}")
 
@@ -68,6 +69,7 @@ def duale_3(a, b, p, q, r):
 
 
 m3m, x3, y3, z3 = modello_3(a3, b3, p3, q3, r3)
+salva_modello(m3m, "fam09_3_primale")
 
 # ---------- 2. CONSTRUCTIVE HEURISTIC (LOWER BOUND: IT IS A MAXIMISATION) ----------
 # constructive heuristic: two types are activated (to collect the bonus) starting from the highest
@@ -106,6 +108,7 @@ print(f"  lb = {sum(p3[j] * x_eur[j] for j in R(n3))} + {r3} of bonus = {frazion
 
 # ---------- 3. LP RELAXATION AND DUAL (UPPER BOUND) ----------
 dl3 = duale_3(a3, b3, p3, q3, r3)
+salva_modello(dl3, "fam09_3_duale")
 # recipe: gamma = r/2 (the smallest value allowed by 2 gamma >= r), beta = 0, and
 # lambda_j = gamma / q_j (every activated type "carries" its share of the bonus); then
 # a single resource is priced so that it covers all types, and the better bound is kept
@@ -142,7 +145,7 @@ print("  Optimal solution: production " + ", ".join(str(round(x3[j].X)) for j in
 print("  Resources used: " + ", ".join(
     f"{frazione(sum(a3[i][j] * round(x3[j].X) for j in R(n3)))} out of {b3[i]}" for i in R(m3)))
 riga = registra_bound("3 vehicles", ub3, lb3, zlp3, zlp3r, z3v, senso="max")
-salva_dati(pd.DataFrame([riga]), "veic3_bound")
+salva_dati(pd.DataFrame([riga]), "fam09_3_bound")
 assert lb3 <= z3v <= zlp3 + 1e-6 <= ub3 + 1e-6
 
 # ---------- 5. ADDITIONAL MODELLING QUESTIONS ----------
@@ -170,7 +173,7 @@ print("      a zero bonus the optimum has no reason to raise z, and the constrai
 print("      does not force it. Making it a faithful indicator needs the other direction too.")
 varianti["3b"] = zz
 salva_dati(pd.DataFrame({"variant": list(varianti), "z": list(varianti.values())}),
-           "veic3_varianti")
+           "fam09_3_varianti")
 
 # ---------- 6. FIGURE ----------
 fig, ax = plt.subplots(figsize=(6.8, 3.0))

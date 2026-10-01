@@ -12,6 +12,7 @@ from euristiche import best_fit, first_fit, matrice, next_fit
 from mip import (ammissibile, due_rilassamenti, frazione, nuovo_modello,
                  registra_bound, risolvi, stampa_soluzione, valuta)
 from stile import CICLO, ROSSO, intestazione, plt, salva_dati, salva_figura
+from esteso import salva_modello
 
 R = range
 
@@ -23,8 +24,8 @@ J6 = [[0, 1], [2, 3], [4, 5]]
 v6 = [5, 4, 10]
 a6, u6 = 50, 10
 salva_dati(pd.DataFrame({"job": R(1, 7), "r": r6, "t": t6,
-                         "class": [c + 1 for j in R(6) for c in R(3) if j in J6[c]]}), "sched6_lavori")
-salva_dati(pd.DataFrame({"class": R(1, 4), "v": v6}), "sched6_classi")
+                         "class": [c + 1 for j in R(6) for c in R(3) if j in J6[c]]}), "fam07_6_lavori")
+salva_dati(pd.DataFrame({"class": R(1, 4), "v": v6}), "fam07_6_classi")
 
 
 def coppie(J):
@@ -91,6 +92,7 @@ def euristica_6(r, t, J, v, a, u):
 
 
 m6, x6, y6, z6 = modello_6(r6, t6, J6, v6, a6, u6)
+salva_modello(m6, "fam07_6_primale")
 
 # ---------- 2. CONSTRUCTIVE HEURISTIC (LOWER BOUND) ----------
 xe, ye, ze, passi = euristica_6(r6, t6, J6, v6, a6, u6)
@@ -102,6 +104,7 @@ print(f"  lb = {lb6}  (x = {xe}, y = {ye}, z = {ze})")
 
 # ---------- 3. LP RELAXATION AND DUAL (UPPER BOUND) ----------
 d6 = duale_6(r6, t6, J6, v6, a6, u6)
+salva_modello(d6, "fam07_6_duale")
 pi_mano = {f"pi[{J6[c][0]}]": -v6[c] for c in R(3)}      # the first job of every class carries the bonus
 mu_mano = max((r6[j] - pi_mano.get(f"pi[{j}]", 0)) / t6[j] for j in R(6))
 mano = dict(pi_mano, mu=mu_mano)
@@ -116,7 +119,7 @@ z6v = risolvi(m6)
 print("Optimal solution of the MILP:")
 stampa_soluzione(m6, solo_non_nulle=True)
 riga = registra_bound("6 classes bonus", ub6, lb6, zlp6, zlp6r, z6v, senso="max")
-salva_dati(pd.DataFrame([riga]), "sched6_bound")
+salva_dati(pd.DataFrame([riga]), "fam07_6_bound")
 
 # ---------- 5. ADDITIONAL MODELLING QUESTIONS ----------
 
@@ -141,6 +144,6 @@ m.addConstrs((st[c] >= x[j] for c in R(3) for j in J6[c]), name="started")
 m.update()
 m.setObjective(m.getObjective() - w6 * gp.quicksum(st[c] - y[c] for c in R(3)), GRB.MAXIMIZE)
 varianti["6b"] = variante("6b. Penalty 3 per class started and not completed (s_c >= x_j)", m)
-salva_dati(pd.DataFrame({"variant": list(varianti), "z": list(varianti.values())}), "sched6_varianti")
+salva_dati(pd.DataFrame({"variant": list(varianti), "z": list(varianti.values())}), "fam07_6_varianti")
 
 print("Done.")

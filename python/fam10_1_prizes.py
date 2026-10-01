@@ -12,6 +12,7 @@ from gurobipy import GRB
 from mip import (ammissibile, due_rilassamenti, frazione, nuovo_modello, registra_bound,
                  risolvi, valuta)
 from stile import ARANCIO, BLU, ROSSO, TEAL, intestazione, plt, salva_dati, salva_figura
+from esteso import salva_modello
 
 R = range
 
@@ -24,7 +25,7 @@ d1 = [5, 4, 7, 3, 6]         # preference value
 p1, ell1 = 20, 16            # points available and minimum preference required
 s1 = len(a1)
 salva_dati(pd.DataFrame({"prize": R(1, s1 + 1), "a": a1, "b": b1, "c": c1, "d": d1}),
-           "premi1_dati")
+           "fam10_1_dati")
 print(f"  {s1} prizes, {p1} points available, minimum preference required {ell1}")
 
 
@@ -58,6 +59,7 @@ def duale_1(a, b, c, d, p, ell):
 
 
 m1, x1, y1 = modello_1(a1, b1, c1, d1, p1, ell1)
+salva_modello(m1, "fam10_1_primale")
 
 # ---------- 2. CONSTRUCTIVE HEURISTIC (UPPER BOUND) ----------
 # constructive heuristic: the prizes are scanned by decreasing preference; each one is taken with points
@@ -90,6 +92,7 @@ print(f"  Heuristic solution: preference {pref} >= {ell1}, total contribution "
 
 # ---------- 3. LP RELAXATION AND DUAL (LOWER BOUND) ----------
 dl1 = duale_1(a1, b1, c1, d1, p1, ell1)
+salva_modello(dl1, "fam10_1_duale")
 # recipe: one chooses the price pi of a point and the price rho of one unit of
 # preference; the duals of the mutual exclusion follow from these by setting
 # sigma_i = max(0, d_i rho - a_i pi), the smallest value that makes the constraint on
@@ -129,7 +132,7 @@ print(f"  Points used: "
       f" out of {p1}; preference "
       f"{sum(d1[i - 1] for i in soli_punti + con_contributo)} >= {ell1}")
 riga = registra_bound("1 prizes", ub1, lb1, zlp1, zlp1r, z1)
-salva_dati(pd.DataFrame([riga]), "premi1_bound")
+salva_dati(pd.DataFrame([riga]), "fam10_1_bound")
 assert lb1 <= zlp1 <= z1 <= ub1 + 1e-9
 
 # ---------- 5. ADDITIONAL MODELLING QUESTIONS ----------
@@ -151,7 +154,7 @@ m, x, y = modello_1(a1, b1, c1, d1, p1, ell1)
 m.addConstr(gp.quicksum(x[i] + y[i] for i in R(s1)) >= 4, name="at_least_four")
 varianti["1b"] = variante("1b. At least four prizes are wanted (sum_i (x_i+y_i) >= 4)", m)
 salva_dati(pd.DataFrame({"variant": list(varianti), "z": list(varianti.values())}),
-           "premi1_varianti")
+           "fam10_1_varianti")
 
 # ---------- 6. FIGURE ----------
 fig, ax = plt.subplots(figsize=(6.8, 3.0))

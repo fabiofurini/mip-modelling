@@ -12,6 +12,7 @@ from euristiche import best_fit, first_fit, matrice, next_fit
 from mip import (ammissibile, due_rilassamenti, frazione, nuovo_modello,
                  registra_bound, risolvi, stampa_soluzione, valuta)
 from stile import CICLO, ROSSO, intestazione, plt, salva_dati, salva_figura
+from esteso import salva_modello
 
 R = range
 
@@ -24,8 +25,8 @@ f5 = [10, 5, 4]
 s5 = [10, 12, 6]
 a5 = 50
 salva_dati(pd.DataFrame({"job": R(1, 8), "r": r5, "t": t5,
-                         "class": [c + 1 for j in R(7) for c in R(3) if j in J5[c]]}), "sched5_lavori")
-salva_dati(pd.DataFrame({"class": R(1, 4), "f": f5, "s": s5}), "sched5_classi")
+                         "class": [c + 1 for j in R(7) for c in R(3) if j in J5[c]]}), "fam07_5_lavori")
+salva_dati(pd.DataFrame({"class": R(1, 4), "f": f5, "s": s5}), "fam07_5_classi")
 
 
 def modello_5(r, t, J, f, s, a):
@@ -79,6 +80,7 @@ def euristica_5(r, t, J, f, s, a):
 
 
 m5, x5, y5 = modello_5(r5, t5, J5, f5, s5, a5)
+salva_modello(m5, "fam07_5_primale")
 
 # ---------- 2. CONSTRUCTIVE HEURISTIC (LOWER BOUND) ----------
 xe, ye, passi = euristica_5(r5, t5, J5, f5, s5, a5)
@@ -90,6 +92,7 @@ print(f"  lb = {lb5}  (x = {xe}, y = {ye})")
 
 # ---------- 3. LP RELAXATION AND DUAL (UPPER BOUND) ----------
 d5 = duale_5(r5, t5, J5, f5, s5, a5)
+salva_modello(d5, "fam07_5_duale")
 pi_mano = max(r5[j] / t5[j] for j in R(7))
 ub5, viol = valuta(d5, {"pi": pi_mano})
 assert viol <= 1e-9
@@ -101,7 +104,7 @@ z5 = risolvi(m5)
 print("Optimal solution of the MILP:")
 stampa_soluzione(m5, solo_non_nulle=True)
 riga = registra_bound("5 classes setup", ub5, lb5, zlp5, zlp5r, z5, senso="max")
-salva_dati(pd.DataFrame([riga]), "sched5_bound")
+salva_dati(pd.DataFrame([riga]), "fam07_5_bound")
 
 # ---------- 5. ADDITIONAL MODELLING QUESTIONS ----------
 
@@ -122,6 +125,6 @@ varianti["5a"] = variante("5a. At most one class activated (sum y_c <= 1)", m)
 m, x, y = modello_5(r5, t5, J5, f5, s5, a5)
 m.addConstr(y[2] <= y[0], name="3_only_if_1")
 varianti["5b"] = variante("5b. Class 3 is activated only if class 1 is (y_3 <= y_1)", m)
-salva_dati(pd.DataFrame({"variant": list(varianti), "z": list(varianti.values())}), "sched5_varianti")
+salva_dati(pd.DataFrame({"variant": list(varianti), "z": list(varianti.values())}), "fam07_5_varianti")
 
 print("Done.")

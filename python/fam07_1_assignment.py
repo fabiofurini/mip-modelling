@@ -14,6 +14,7 @@ from euristiche import best_fit, first_fit, matrice, next_fit
 from mip import (ammissibile, due_rilassamenti, frazione, nuovo_modello,
                  registra_bound, risolvi, stampa_soluzione, valuta)
 from stile import CICLO, ROSSO, intestazione, plt, salva_dati, salva_figura
+from esteso import salva_modello
 
 R = range
 
@@ -24,8 +25,8 @@ c1 = [[5, 10, 2], [5, 4, 6], [5, 4, 6]]
 a1 = [5, 6, 7]
 n, k = 3, 3
 salva_dati(pd.DataFrame([{"job": j + 1, "machine": m + 1, "t": t1[j][m], "c": c1[j][m]}
-                         for j in R(n) for m in R(k)]), "sched1_lavori")
-salva_dati(pd.DataFrame({"machine": R(1, k + 1), "a": a1}), "sched1_macchine")
+                         for j in R(n) for m in R(k)]), "fam07_1_lavori")
+salva_dati(pd.DataFrame({"machine": R(1, k + 1), "a": a1}), "fam07_1_macchine")
 
 
 def modello_1(t, c, a):
@@ -55,6 +56,7 @@ def valore_1(e, c):
 
 
 m1, x1 = modello_1(t1, c1, a1)
+salva_modello(m1, "fam07_1_primale")
 
 # ---------- 2. CONSTRUCTIVE HEURISTIC (UPPER BOUND) ----------
 print("Constructive heuristics:")
@@ -72,6 +74,7 @@ assert ammissibile(m1, sol_eur)
 
 # ---------- 3. LP RELAXATION AND DUAL (LOWER BOUND) ----------
 d1 = duale_1(t1, c1, a1)
+salva_modello(d1, "fam07_1_duale")
 mano = {f"mu[{j}]": min(c1[j]) for j in R(n)}
 lb1, viol = valuta(d1, mano)
 assert viol <= 1e-9, viol
@@ -85,7 +88,7 @@ z1 = risolvi(m1)
 print("Optimal solution of the MILP:")
 stampa_soluzione(m1, solo_non_nulle=True)
 riga = registra_bound("1 assignment", ub1, lb1, zlp1, zlp1r, z1)
-salva_dati(pd.DataFrame([riga]), "sched1_bound")
+salva_dati(pd.DataFrame([riga]), "fam07_1_bound")
 ott1 = {(j, mm) for j in R(n) for mm in R(k) if x1[j, mm].X > 0.5}
 
 # ---------- 5. ADDITIONAL MODELLING QUESTIONS ----------
@@ -111,7 +114,7 @@ m.addConstrs((x[j, mm] <= y[mm] for j in R(3) for mm in R(3)), name="activate")
 m.update()
 m.setObjective(m.getObjective() + gp.quicksum(g1[mm] * y[mm] for mm in R(3)), GRB.MINIMIZE)
 varianti["1b"] = variante("1b. Fixed cost g_m = 3 per used machine (x_jm <= y_m)", m)
-salva_dati(pd.DataFrame({"variant": list(varianti), "z": list(varianti.values())}), "sched1_varianti")
+salva_dati(pd.DataFrame({"variant": list(varianti), "z": list(varianti.values())}), "fam07_1_varianti")
 
 # ---------- 6. FIGURES ----------
 

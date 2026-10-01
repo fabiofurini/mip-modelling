@@ -12,6 +12,7 @@ from gurobipy import GRB
 from mip import (ammissibile, due_rilassamenti, frazione, nuovo_modello, registra_bound,
                  risolvi, valuta)
 from stile import ARANCIO, BLU, TEAL, intestazione, plt, salva_dati, salva_figura
+from esteso import salva_modello
 
 R = range
 
@@ -21,7 +22,7 @@ d3 = [5, 6, 7, 3, 4, 10]     # duration of the songs, in minutes
 w3 = [1, 1]                  # minimum number of songs per CD
 n3, m3 = len(d3), len(w3)
 D3 = sum(d3)
-salva_dati(pd.DataFrame({"song": R(1, n3 + 1), "duration": d3}), "cd3_dati")
+salva_dati(pd.DataFrame({"song": R(1, n3 + 1), "duration": d3}), "fam10_8_dati")
 print(f"  Total duration of the collection: {D3} minutes on {m3} CDs.")
 
 
@@ -63,6 +64,7 @@ def duale_3(d, w):
 
 
 m3mod, x3, y3, z3v = modello_3(d3, w3)
+salva_modello(m3mod, "fam10_8_primale")
 
 # ---------- 2. TWO HEURISTICS COMPARED (UPPER BOUND) ----------
 def riempi(d, m, ordine, etichetta):
@@ -98,6 +100,7 @@ assert diff_nat >= ub3
 
 # ---------- 3. THE LP RELAXATION SAYS NOTHING ----------
 dl3 = duale_3(d3, w3)
+salva_modello(dl3, "fam10_8_duale")
 mano = {f"gamma[{j}]": 1 / m3 for j in R(m3)} | {f"delta[{j}]": 1 / m3 for j in R(m3)}
 lb_lp, viol = valuta(dl3, mano)
 assert viol <= 1e-9, viol
@@ -124,7 +127,7 @@ print(f"  lb = {frazione(lb3)}, and the LPT heuristic reaches {frazione(ub3)}: t
 print("  coincide and the heuristic solution is already optimal, with no need for the solver.")
 salva_dati(pd.DataFrame([{"argument": "parity of the total duration", "bound": lb3},
                          {"argument": "dual of the LP relaxation", "bound": lb_lp}]),
-           "cd3_argomento")
+           "fam10_8_argomento")
 
 # ---------- 5. OPTIMUM OF THE MILP ----------
 z3 = risolvi(m3mod)
@@ -133,7 +136,7 @@ for j in R(m3):
     brani = [i + 1 for i in R(n3) if x3[i, j].X > 0.5]
     print(f"  CD {j + 1}: songs {brani}, duration {frazione(carichi_ott[j])} minutes")
 riga = registra_bound("3 cds", ub3, lb3, zlp3, zlp3r, z3)
-salva_dati(pd.DataFrame([riga]), "cd3_bound")
+salva_dati(pd.DataFrame([riga]), "fam10_8_bound")
 assert lb3 <= z3 <= ub3 + 1e-9 and abs(z3 - lb3) <= 1e-9
 
 # ---------- 6. ADDITIONAL MODELLING QUESTIONS ----------
@@ -158,7 +161,7 @@ varianti["3b"] = variante("3b. The collection is spread over three CDs", m)
 print(f"       with three CDs the total duration {D3} is no longer divisible into equal")
 print("       parts: the parity argument has to be redone and no longer proves optimality.")
 salva_dati(pd.DataFrame({"variant": list(varianti), "z": list(varianti.values())}),
-           "cd3_varianti")
+           "fam10_8_varianti")
 
 # ---------- 7. FIGURE ----------
 fig, ax = plt.subplots(figsize=(6.8, 2.9))

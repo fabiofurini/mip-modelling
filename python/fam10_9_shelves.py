@@ -12,6 +12,7 @@ from gurobipy import GRB
 from mip import (ammissibile, due_rilassamenti, frazione, nuovo_modello, registra_bound,
                  risolvi, valuta)
 from stile import ARANCIO, BLU, GRIGIO, TEAL, intestazione, plt, salva_dati, salva_figura
+from esteso import salva_modello
 
 R = range
 
@@ -22,7 +23,7 @@ h4 = [8, 5, 7, 4]      # height of the books
 c4 = 10                # width of every shelf
 n4, m4 = len(w4), 2    # books and shelves
 salva_dati(pd.DataFrame({"book": R(1, n4 + 1), "width": w4, "height": h4}),
-           "scaffali4_dati")
+           "fam10_9_dati")
 print(f"  Total width of the books: {sum(w4)}; overall capacity: {m4} * {c4} = {m4 * c4}.")
 
 
@@ -56,6 +57,7 @@ def duale_4(w, h, c, m):
 
 
 m4mod, x4, y4 = modello_4(w4, h4, c4, m4)
+salva_modello(m4mod, "fam10_9_primale")
 
 # ---------- 2. TWO ORDERS FOR THE SAME HEURISTIC ----------
 def first_fit(w, h, c, m, ordine, etichetta):
@@ -101,6 +103,7 @@ print(f"  ub = {frazione(ub4)}")
 
 # ---------- 3. LP RELAXATION AND DUAL (LOWER BOUND) ----------
 dl4 = duale_4(w4, h4, c4, m4)
+salva_modello(dl4, "fam10_9_duale")
 # recipe: beta = 0, and all the gamma "weight" is concentrated on the tallest book
 alto = max(R(n4), key=lambda b: h4[b])
 mano = ({f"gamma[{alto},{s}]": 1.0 for s in R(m4)}
@@ -129,7 +132,7 @@ print(f"  lb = {h4[alto]} + {min(altre)} = {frazione(lb4)}, better than the dual
       f"{frazione(lb_lp)}.")
 salva_dati(pd.DataFrame([{"argument": "dual of the LP relaxation", "bound": lb_lp},
                          {"argument": "shelves used and minimum heights", "bound": lb4}]),
-           "scaffali4_argomento")
+           "fam10_9_argomento")
 
 # ---------- 5. OPTIMUM OF THE MILP ----------
 z4 = risolvi(m4mod)
@@ -138,7 +141,7 @@ for s in R(m4):
     largh = sum(w4[b] for b in R(n4) if x4[b, s].X > 0.5)
     print(f"  Shelf {s + 1}: books {libri}, width {largh}/{c4}, height {frazione(y4[s].X)}")
 riga = registra_bound("4 shelves", ub4, lb4, zlp4, zlp4r, z4)
-salva_dati(pd.DataFrame([riga]), "scaffali4_bound")
+salva_dati(pd.DataFrame([riga]), "fam10_9_bound")
 assert lb4 <= z4 <= ub4 + 1e-9
 
 # ---------- 6. ADDITIONAL MODELLING QUESTIONS ----------
@@ -160,7 +163,7 @@ print("       but splitting the books over three shelves means paying three heig
 m, x, y = modello_4(w4, h4, 12, m4)
 varianti["4b"] = variante("4b. The shelves are 12 wide instead of 10", m)
 salva_dati(pd.DataFrame({"variant": list(varianti), "z": list(varianti.values())}),
-           "scaffali4_varianti")
+           "fam10_9_varianti")
 
 # ---------- 7. FIGURE ----------
 fig, ax = plt.subplots(figsize=(6.4, 3.2))

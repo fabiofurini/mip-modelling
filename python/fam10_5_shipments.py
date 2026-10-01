@@ -13,6 +13,7 @@ from gurobipy import GRB
 from mip import (ammissibile, due_rilassamenti, frazione, nuovo_modello, registra_bound,
                  risolvi, valuta)
 from stile import ARANCIO, BLU, GRIGIO, TEAL, intestazione, plt, salva_dati, salva_figura
+from esteso import salva_modello
 
 R = range
 
@@ -32,9 +33,9 @@ w2 = 10             # capacity of a box, in units of product
 nk, nm, nn = len(d2), len(d2[0]), len(a2[0])   # products, customers, plants
 D2 = sum(d2[p][c] for p in R(nk) for c in R(nm))
 salva_dati(pd.DataFrame([{"product": p + 1, "customer": c + 1, "demand": d2[p][c]}
-                         for p in R(nk) for c in R(nm)]), "spedizioni2_domanda")
+                         for p in R(nk) for c in R(nm)]), "fam10_5_domanda")
 salva_dati(pd.DataFrame([{"product": p + 1, "plant": s + 1, "availability": a2[p][s]}
-                         for p in R(nk) for s in R(nn)]), "spedizioni2_disponibilita")
+                         for p in R(nk) for s in R(nn)]), "fam10_5_disponibilita")
 print(f"  Units to ship in total: {D2}; capacity of a box: {w2}.")
 
 
@@ -75,6 +76,7 @@ def duale_2(d, a, w):
 
 
 m2, x2, y2 = modello_2(d2, a2, w2)
+salva_modello(m2, "fam10_5_primale")
 
 # ---------- 2. CONSTRUCTIVE HEURISTIC (UPPER BOUND) ----------
 # customer by customer: we try to serve them from a single plant, the one that has
@@ -124,6 +126,7 @@ print(f"  Boxes used by the heuristic: {ub2}  ->  ub = {frazione(ub2)}")
 
 # ---------- 3. LP RELAXATION AND DUAL (LOWER BOUND) ----------
 dl2 = duale_2(d2, a2, w2)
+salva_modello(dl2, "fam10_5_duale")
 # recipe: beta = 0, gamma_sc = 1/w (the largest value allowed by w gamma <= 1) and
 # alpha_pc = 1/w: every unit ordered takes 1/w of a box
 mano = ({f"gamma[{s},{c}]": 1 / w2 for s in R(nn) for c in R(nm)}
@@ -151,7 +154,7 @@ lb2 = float(sum(per_cliente))
 print(f"  Summing up: lb = {frazione(lb2)}.")
 salva_dati(pd.DataFrame([{"argument": "dual of the LP relaxation", "bound": lb_lp},
                          {"argument": "boxes per customer", "bound": lb2}]),
-           "spedizioni2_argomento")
+           "fam10_5_argomento")
 
 # ---------- 5. OPTIMUM OF THE MILP ----------
 z2 = risolvi(m2)
@@ -162,7 +165,7 @@ for s in R(nn):
                                if x2[p, s, c].X > 0.5)
             print(f"  Plant {s + 1} -> customer {c + 1}: {scatole(y2[s, c].X)} with {carico}")
 riga = registra_bound("2 shipments", ub2, lb2, zlp2, zlp2r, z2)
-salva_dati(pd.DataFrame([riga]), "spedizioni2_bound")
+salva_dati(pd.DataFrame([riga]), "fam10_5_bound")
 assert lb2 <= z2 <= ub2 + 1e-9
 
 # ---------- 6. ADDITIONAL MODELLING QUESTIONS ----------
@@ -189,7 +192,7 @@ m.addConstrs((w2 * y[p, s, c] - x[p, s, c] >= 0 for p in R(nk) for s in R(nn) fo
              name="capacity")
 varianti["2b"] = variante("2b. Different products cannot travel in the same box", m)
 salva_dati(pd.DataFrame({"variant": list(varianti), "z": list(varianti.values())}),
-           "spedizioni2_varianti")
+           "fam10_5_varianti")
 
 # ---------- 7. FIGURE ----------
 fig, ax = plt.subplots(figsize=(6.4, 3.0))

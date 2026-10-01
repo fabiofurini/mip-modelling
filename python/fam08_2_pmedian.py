@@ -12,6 +12,7 @@ from gurobipy import GRB
 from mip import (due_rilassamenti, frazione, nuovo_modello, registra_bound,
                  risolvi, stampa_soluzione, valuta)
 from stile import CICLO, intestazione, plt, salva_dati, salva_figura
+from esteso import salva_modello
 
 R = range
 
@@ -22,7 +23,7 @@ dist2 = [[5, 6, 10], [3, 12, 9], [10, 9, 4]]   # distance location l -> client c
 k2 = 2
 m, n = 3, 3
 salva_dati(pd.DataFrame([{"location": l + 1, "client": c + 1, "d": dist2[l][c]}
-                         for l in R(m) for c in R(n)]), "loc2_distanze")
+                         for l in R(m) for c in R(n)]), "fam08_2_distanze")
 
 
 def modello_2(dist, k):
@@ -52,6 +53,7 @@ def duale_2(dist, k):
 
 
 m2, x2, y2 = modello_2(dist2, k2)
+salva_modello(m2, "fam08_2_primale")
 
 # ---------- 2. CONSTRUCTIVE HEURISTIC (UPPER BOUND) ----------
 
@@ -84,6 +86,7 @@ print(f"  ub = {ub2}")
 # ---------- 3. LP RELAXATION AND DUAL (LOWER BOUND) ----------
 
 d2 = duale_2(dist2, k2)
+salva_modello(d2, "fam08_2_duale")
 mano = {"varrho": 0.0}
 mano.update({f"mu[{c}]": min(dist2[l][c] for l in R(m)) for c in R(n)})
 lb2, viol = valuta(d2, mano)
@@ -98,7 +101,7 @@ z2 = risolvi(m2)
 print("Optimal solution of the MILP:")
 stampa_soluzione(m2, solo_non_nulle=True)
 riga = registra_bound("2 p-median", ub2, lb2, zlp2, zlp2r, z2)
-salva_dati(pd.DataFrame([riga]), "loc2_bound")
+salva_dati(pd.DataFrame([riga]), "fam08_2_bound")
 
 # ---------- 5. ADDITIONAL MODELLING QUESTIONS ----------
 
@@ -119,7 +122,7 @@ varianti["2a"] = variante("2a. Exactly k open locations (sum x_l = k)", mod)
 mod, x, y = modello_2(dist2, k2)
 mod.addConstrs((y[l, 0] == 0 for l in R(3) if dist2[l][0] > 4), name="max_distance_client1")
 varianti["2b"] = variante("2b. Client 1 served within distance 4 (y_l1 = 0 if d_l1 > 4)", mod)
-salva_dati(pd.DataFrame({"variant": list(varianti), "z": list(varianti.values())}), "loc2_varianti")
+salva_dati(pd.DataFrame({"variant": list(varianti), "z": list(varianti.values())}), "fam08_2_varianti")
 
 # ---------- 6. FIGURES ----------
 
