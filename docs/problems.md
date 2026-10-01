@@ -1,9 +1,18 @@
 # The problems
 
-Fifteen numerical models, three families of problems and a chapter of mixed
-models, each with its solved exercises: model, proof of the links between the variables, instance,
-constructive heuristic, dual of the LP relaxation, solution with Gurobi and
-additional modelling questions.
+**Fifteen introductory numerical models, three families of problems, nine mixed
+problems and forty problems to model.**
+
+The thirty-eight solved problems all follow the same scheme: model, proof of the
+links between the variables, instance, constructive heuristic, dual of the LP
+relaxation, solution with Gurobi and additional modelling questions.
+
+!!! tip "Forty problems to model"
+    Given as they really arrive — a text, some data, a question — with no model
+    already written: twenty with explicit numerical data and twenty in symbolic
+    form. The solutions are reserved for instructors.
+
+    [:octicons-arrow-right-24: Go to the forty problems to model](to-model.md)
 
 <div class="grid cards" markdown>
 
@@ -15,7 +24,7 @@ additional modelling questions.
     technique, to be read before the families to get your bearings. From EX 1 to
     EX 15.
 
-    [:octicons-arrow-right-24: The fifteen models](numerical.md)
+    [:octicons-arrow-right-24: Go to the fifteen numerical models](numerical.md)
 
 -   :material-timer-sand: **Assignment and scheduling**
 
@@ -25,7 +34,7 @@ additional modelling questions.
     selection, parallel jobs, classes with setup, ``if and only if'' bonuses,
     sequencing with big-M. Seven problems.
 
-    [:octicons-arrow-right-24: The seven problems](scheduling.md)
+    [:octicons-arrow-right-24: Explore the seven assignment and scheduling problems](scheduling.md)
 
 -   :material-map-marker-radius: **Location and coverage**
 
@@ -35,7 +44,7 @@ additional modelling questions.
     an ``if and only if'' with two linking constraints, maximum variable. Four
     problems.
 
-    [:octicons-arrow-right-24: The four problems](location.md)
+    [:octicons-arrow-right-24: Explore the four location and coverage problems](location.md)
 
 -   :material-factory: **Production planning**
 
@@ -45,7 +54,7 @@ additional modelling questions.
     cost, workforce and hirings, minimum lot with a variety bonus. Three
     problems.
 
-    [:octicons-arrow-right-24: The three problems](production.md)
+    [:octicons-arrow-right-24: Explore the three production planning problems](production.md)
 
 -   :material-shape-outline: **Mixed problems**
 
@@ -56,7 +65,7 @@ additional modelling questions.
     stops being useful and the dual bound must be found with combinatorial
     arguments. Nine solved problems.
 
-    [:octicons-arrow-right-24: The nine problems](mixed.md)
+    [:octicons-arrow-right-24: Explore the nine mixed problems](mixed.md)
 
 -   :material-help-circle-outline: **Problems to model**
 
@@ -66,6 +75,6 @@ additional modelling questions.
     twenty with explicit numerical data and twenty in symbolic form. The
     solutions are reserved for instructors.
 
-    [:octicons-arrow-right-24: The forty problems](to-model.md)
+    [:octicons-arrow-right-24: Go to the forty problems to model](to-model.md)
 
 </div>

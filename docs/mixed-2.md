@@ -1,6 +1,7 @@
 # Combinatorial auction
 
-**Class:** BIP · **Links:** set packing by rows · **Script:** `python/fam10_2_auction.py`
+**Class:** BIP · **Links:** set packing by rows · **Script:** `python/fam10_2_auction.py`<br>
+**Difficulty:** ★☆☆ · **Time:** 20–30 min
 
 [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/fabiofurini/mip-modelling/blob/main/notebooks/fam10_2_auction.ipynb)
 

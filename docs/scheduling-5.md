@@ -1,6 +1,7 @@
 # One machine, job classes with setup
 
-**Class:** BIP · **Links:** disaggregated activation, CNF · **Script:** `python/fam07_5_classessetup.py`
+**Class:** BIP · **Links:** disaggregated activation, CNF · **Script:** `python/fam07_5_classessetup.py`<br>
+**Difficulty:** ★★☆ · **Time:** 30–45 min
 
 [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/fabiofurini/mip-modelling/blob/main/notebooks/fam07_5_classessetup.ipynb)
 

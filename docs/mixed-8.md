@@ -1,6 +1,7 @@
 # Songs across CDs
 
-**Class:** MILP · **Links:** maximum and minimum variables · **Script:** `python/fam10_8_cds.py`
+**Class:** MILP · **Links:** maximum and minimum variables · **Script:** `python/fam10_8_cds.py`<br>
+**Difficulty:** ★★★ · **Time:** 45–60 min
 
 [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/fabiofurini/mip-modelling/blob/main/notebooks/fam10_8_cds.ipynb)
 

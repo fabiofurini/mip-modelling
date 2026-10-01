@@ -1,6 +1,7 @@
 # Minimum-cost assignment with availability
 
-**Class:** BIP · **Links:** none — a single family of variables · **Script:** `python/fam07_1_assignment.py`
+**Class:** BIP · **Links:** none — a single family of variables · **Script:** `python/fam07_1_assignment.py`<br>
+**Difficulty:** ★☆☆ · **Time:** 20–30 min
 
 [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/fabiofurini/mip-modelling/blob/main/notebooks/fam07_1_assignment.ipynb)
 

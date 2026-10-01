@@ -35,7 +35,7 @@ theme:
     - navigation.instant
     - navigation.tabs
     - navigation.tabs.sticky
-    - navigation.sections
+    - navigation.prune
     - navigation.indexes
     - navigation.top
     - navigation.footer

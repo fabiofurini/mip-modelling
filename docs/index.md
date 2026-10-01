@@ -5,8 +5,38 @@ professor at [DIAG](https://www.diag.uniroma1.it/), Sapienza University of Rome.
 
 **Mixed-integer linear models for Management Engineering.**
 
+<div class="grid cards" markdown>
+
+-   :material-book-open-page-variant:{ .lg .middle } **I am studying the theory**
+
+    ---
+
+    What a MIP model is, logic and binary variables, the fourteen links,
+    relaxations and bounds, heuristics, Gurobi.
+
+    [:octicons-arrow-right-24: The six chapters](modelling.md)
+
+-   :material-pencil-ruler:{ .lg .middle } **I want to do exercises**
+
+    ---
+
+    Thirty-eight problems worked out in full and forty to model, with statement,
+    model, instance, heuristic, dual and optimum.
+
+    [:octicons-arrow-right-24: The problems](problems.md)
+
+-   :material-language-python:{ .lg .middle } **I want to use Gurobi**
+
+    ---
+
+    Forty-four notebooks that run in the browser with nothing to install: the
+    same code as the pages, cell by cell.
+
+    [:octicons-arrow-right-24: The notebooks](notebooks.md)
+
+</div>
+
 [:octicons-download-24: The three sets of notes in PDF](downloads.md){ .md-button .md-button--primary }
-[:octicons-play-24: The notebooks in Colab](notebooks.md){ .md-button }
 
 ## What you learn to do
 

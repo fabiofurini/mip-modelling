@@ -1,6 +1,7 @@
 # Lot sizing with a fixed setup cost
 
-**Class:** MILP · **Links:** fixed cost (big-M read off the data) · **Script:** `python/fam09_1_lotsizing.py`
+**Class:** MILP · **Links:** fixed cost (big-M read off the data) · **Script:** `python/fam09_1_lotsizing.py`<br>
+**Difficulty:** ★★★ · **Time:** 45–60 min
 
 [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/fabiofurini/mip-modelling/blob/main/notebooks/fam09_1_lotsizing.ipynb)
 

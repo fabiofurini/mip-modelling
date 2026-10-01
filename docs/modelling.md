@@ -1,8 +1,21 @@
 # Modelling
 
-Six chapters of techniques: what a MIP model is, the logic of binary variables,
-the links between variables, bounds from the relaxation side (the dual) and from
-the feasible-solutions side (constructive heuristics), and the solver.
+You do not learn models by heart here: you learn the **techniques for building
+them**. Thirty memorised formulations are no help in front of a new text; a
+dozen links between variables, knowing why they work, are.
+
+!!! success "By the end of this part you can"
+    - Translate a logical condition into linear constraints, and prove that they
+      really impose it.
+    - Link a binary variable to a continuous or integer one: activation, fixed
+      cost, minimum lot, a big-M read from the data.
+    - Derive a bound from the linear relaxation and write its dual by hand.
+    - Build a feasible solution by hand, and say which bound it gives.
+    - Take the model into Python/Gurobi and read what the solver answers.
+
+Six chapters, in this order: what a MIP model is, the logic of binary variables,
+the fourteen links between variables, bounds from the relaxation side (the dual)
+and from the feasible-solutions side (constructive heuristics), and the solver.
 
 Every chapter has a **script** producing all the numbers quoted and a
 **notebook** that opens in Colab. No value appears on these pages unless it

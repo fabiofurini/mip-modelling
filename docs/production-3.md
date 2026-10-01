@@ -1,6 +1,7 @@
 # Vehicles: minimum lot and a bonus for variety
 
-**Class:** MILP · **Links:** minimum lot (semicontinuous), counting the types, if and only if · **Script:** `python/fam09_3_vehicles.py`
+**Class:** MILP · **Links:** minimum lot (semicontinuous), counting the types, if and only if · **Script:** `python/fam09_3_vehicles.py`<br>
+**Difficulty:** ★★★ · **Time:** 45–60 min
 
 [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/fabiofurini/mip-modelling/blob/main/notebooks/fam09_3_vehicles.ipynb)
 
