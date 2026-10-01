@@ -1,6 +1,6 @@
 site_name: MIP Modelling · Fabio Furini
 site_description: >-
-  Mixed-integer linear models for Management Engineering:
+  Mixed-integer linear models for making optimal decisions:
   build them, prove them, squeeze them with bounds and solve them with Gurobi.
 site_author: Fabio Furini
 repo_url: https://github.com/fabiofurini/mip-modelling

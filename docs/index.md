@@ -3,7 +3,7 @@
 Teaching material designed and developed by **[Fabio Furini](https://sites.google.com/view/fabiofurini/home-page)**, associate
 professor at [DIAG](https://www.diag.uniroma1.it/), Sapienza University of Rome.
 
-**Mixed-integer linear models for Management Engineering.**
+**Mixed-integer linear models for making optimal decisions.**
 
 <div class="grid cards" markdown>
 

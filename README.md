@@ -18,7 +18,7 @@
 > researcher at IASI-CNR in Rome.
 > Personal website: <https://sites.google.com/view/fabiofurini/home-page>
 
-Mixed-integer linear models for Management Engineering — how to build a model
+Mixed-integer linear models for making optimal decisions — how to build a model
 with binary and integer variables, how to *prove* it does what it should, how
 how to enclose its optimum between a heuristic and a dual bound (the same bounds a real
 solver falls back on when it cannot reach proven optimality), how to solve it
