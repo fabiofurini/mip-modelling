@@ -28,6 +28,7 @@ MODULI = ("stile", "mip", "euristiche", "esteso")   # the shared modules every n
 BADGE = "https://colab.research.google.com/assets/colab-badge.svg"
 
 RIGA = re.compile(r"^# [-=]{10,}$")
+BANNER = re.compile(r"^# [-=]{3,}\s+(.+?)\s+[-=]{3,}$")
 VOCE = re.compile(r"^\s+(\d+)\. ")
 
 PREPARAZIONE = f"""## Setup
@@ -169,6 +170,11 @@ def sezioni(codice: str) -> list[tuple[str | None, str]]:
     blocchi: list[tuple[str | None, list[str]]] = [(None, [])]
     i = 0
     while i < len(righe):
+        m = BANNER.match(righe[i])
+        if m:                       # `# ---------- 1. MODEL AND INSTANCE ----------`
+            blocchi.append((m.group(1).strip(), []))
+            i += 1
+            continue
         if RIGA.match(righe[i]):
             j = i + 1
             titolo = []
@@ -182,6 +188,19 @@ def sezioni(codice: str) -> list[tuple[str | None, str]]:
         blocchi[-1][1].append(righe[i])
         i += 1
     return [(t, "\n".join(c).strip()) for t, c in blocchi if "\n".join(c).strip()]
+
+
+def titolo_sezione(t: str) -> str:
+    """`1. MODELLO E ISTANZA` -> `1. Modello e istanza`."""
+    numero, _, resto = t.partition(". ")
+    if not resto:
+        numero, resto = "", t
+    parole = resto.split()
+    fuori = [p if (p.isupper() and len(p) <= 4 and any(c.isdigit() for c in p) or not p.isalpha())
+             else (p.capitalize() if i == 0 else p.lower())
+             for i, p in enumerate(parole)]
+    testo = " ".join(fuori)
+    return f"{numero}. {testo}" if numero else testo
 
 
 def cella_testo(testo: str) -> dict:
@@ -216,7 +235,7 @@ def notebook(percorso: Path) -> dict:
              cella_codice(CODICE_PREPARAZIONE.strip())]
     for t, c in sezioni(codice):
         if t:
-            celle.append(cella_testo(f"## {t}"))
+            celle.append(cella_testo(f"## {titolo_sezione(t)}"))
         celle.append(cella_codice(c))
     celle.append(cella_testo(CHIUSURA.format(
         nome=nome, sito="https://sites.google.com/view/fabiofurini/home-page")))

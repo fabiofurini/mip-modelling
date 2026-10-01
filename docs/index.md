@@ -5,43 +5,47 @@ professor at [DIAG](https://www.diag.uniroma1.it/), Sapienza University of Rome.
 
 **Mixed-integer linear models for Management Engineering.**
 
-The course teaches three things, in this order: how to **translate** the text of
-a problem into a model with binary and integer variables, how to **solve** it
-with Gurobi from Python, and how to **certify** the solution when the optimum is
-out of reach.
+## What you learn to do
 
-The last one is the part usually missing. As soon as the instance grows, the
-solver stops before it has proved optimality, and what is left in hand are two
-numbers. A feasible solution, built by hand with a heuristic, gives the bound on
-one side; a feasible solution of the dual of the linear relaxation gives the
-bound on the other. The optimum lies between them, and the distance between the
-two says how much there still is to gain: if it is small, the solution in hand
-can be used without waiting any longer.
+- **Translate** the text of a problem into a MIP model: recognise the decisions,
+  choose the variables and their domain, write objective and constraints, and
+  say how many constraints there are as a function of the data.
+- **Justify** every constraint linking two families of variables: which
+  implication it imposes, and whether it is the constraint or optimality that
+  imposes it.
+- **Build a feasible solution by hand** with a heuristic, and say which bound it
+  gives.
+- **Write the dual of the linear relaxation** and build a feasible solution of
+  it by hand, for the bound on the other side.
+- **Certify** a solution when the optimum is out of reach: as soon as the
+  instance grows the solver stops before it has proved optimality, and the two
+  bounds are what is left. The optimum lies between them, and their distance
+  says how much there still is to gain.
+- **Solve** the model with Gurobi from Python, and read what the solver answers.
 
-**What is inside**
+## How the course gets there
 
-- six modelling chapters: logic and binary variables, the fourteen links between
-  variables with their proofs, relaxations and bounds, constructive heuristics,
-  and the step to Python/Gurobi;
-- fifteen numerical models, one per technique, with the data written out in
-  full;
-- twenty-three problems worked out in full — assignment and scheduling, location
-  and covering, production planning, mixed problems — each with heuristic, dual,
-  optimum and one variant solved;
-- two problems given as they really arrive, with no model already written;
-- forty-four [notebooks](notebooks.md) that run in Colab, with nothing to
-  install.
+- **The method, in six chapters**: logic and binary variables, the fourteen
+  links between variables with their proofs, relaxations and bounds,
+  constructive heuristics, Gurobi.
+- **Thirty-eight problems worked out in full**: fifteen numerical models, one
+  per technique, with the data written out; and twenty-three problems of the
+  three families — assignment and scheduling, location and covering, production
+  planning — plus the mixed problems. Each with statement, model, instance,
+  heuristic, dual, optimum and comparison.
+- **Two or three additional questions on every problem**: a datum changes or a
+  constraint is added, and model and bounds are redone. For each exercise one
+  variant is worked out in full, as a model answer.
+- **Two problems given as they really arrive**, with no model already written.
+- **Forty-four [notebooks](notebooks.md)** that run in Colab with nothing to
+  install: the same code as the pages, cell by cell.
+- **No result transcribed by hand**: every number comes from a script you can
+  re-run, and an automatic check verifies that text and code say the same thing.
 
-No result is transcribed by hand: every number you read comes from a script you
-can re-run, and an automatic check verifies that text and code say the same
-thing.
-
-
-!!! tip "The method of the course"
-    For every problem: model → links between the variables → instance →
-    heuristic (upper bound) → dual of the LP relaxation (lower bound) → solver →
-    **additional modelling questions**: a datum changes or a constraint is
-    added, and model and bounds are redone.
+!!! tip "The format of every exercise (and of the exam)"
+    Model → links between the variables → instance → heuristic (upper bound) →
+    dual of the LP relaxation (lower bound) → solver → additional modelling
+    questions.
 
 ## The two parts of the course
 
