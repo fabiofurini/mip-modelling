@@ -77,3 +77,14 @@ systematically.
     [:octicons-arrow-right-24: MILP · minimum lot](production-3.md)
 
 </div>
+
+## Numerical models of the family
+
+Three short models with explicit data on the same techniques: the inventory
+balance, the fixed set-up cost and the minimum lot.
+
+| Model | What it brings into play | $z(\mathit{MILP})$ |
+|---|---|---:|
+| [EX 4 — Shoes: production, inventory and hirings](ex-04.md) | inventory balance and workforce over three months | 774 180 |
+| [EX 7 — Custom aircraft with a fixed set-up cost](ex-07.md) | fixed set-up cost and a free quantity up to the order | 5 |
+| [EX 12 — Shoes with a minimum production threshold](ex-12.md) | minimum lot with three shared resources | 24 000 |

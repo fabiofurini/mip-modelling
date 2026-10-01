@@ -119,3 +119,14 @@ and put one half in each container, levelling everything.
 
 </div>
 
+## Numerical models of the family
+
+Four short models with explicit data: a selection with an implication, a
+minimum lot, a packing and integer counts in lots.
+
+| Model | What it brings into play | $z(\mathit{MILP})$ |
+|---|---|---:|
+| [EX 1 — The eight-seat van](ex-01.md) | selection with a capacity and an implication between groups | 120 |
+| [EX 5 — Vehicles with a minimum quantity](ex-05.md) | minimum lot: a minimum quantity if the type is produced | 25 250 |
+| [EX 9 — The eight queens](ex-09.md) | packing on a chessboard: rows, columns and diagonals | 8 |
+| [EX 13 — Mutual funds bought in lots](ex-13.md) | integer counts in lots, with a proportion constraint | 16 |

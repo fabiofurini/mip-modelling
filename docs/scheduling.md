@@ -111,10 +111,9 @@ due dates when the jobs follow one another on a single machine.
 
 ## Numerical models of the family
 
-Four short models with explicit data, reusing the techniques of this family. The
-format is reduced — no variants and no additional questions — but it keeps the
-model, a feasible solution, the dual with a hand-built solution and the bound
-table.
+Six short models with explicit data, reusing the techniques of this family: the
+model, a feasible solution built by hand, the dual with its own solution and the
+bound table.
 
 | Model | What it exercises | $z(\mathit{MILP})$ |
 |---|---|---:|
@@ -122,3 +121,5 @@ table.
 | [EX 3 — Relay](ex-03.md) | assignment with more resources than tasks; totally unimodular matrix | 95 |
 | [EX 8 — Seminars](ex-08.md) | exact cardinality, non-adjacency, dual with a free variable | 18 |
 | [EX 11 — Balancing](ex-11.md) | min-max versus range: same solutions, different values | 9 |
+| [EX 14 — Emergency department shifts](ex-14.md) | covering the daily requirements with weekly shifts | 7 060 |
+| [EX 15 — The music school timetable](ex-15.md) | conflicts, non-adjacency and preferences to avoid | 0 |
