@@ -55,7 +55,7 @@ licence.
     built: the path, the grading criteria, the typical discussion questions, the
     most common mistakes, and the reproducibility of the numbers.
 
-    [:octicons-download-24: notes-4-organization.pdf](pdf/notes-4-organization.pdf)
+    [:octicons-download-24: course-organization.pdf](pdf/course-organization.pdf)
 
 -   :material-help-circle-outline: **Problems to model**
 
@@ -65,7 +65,7 @@ licence.
     twenty with explicit numerical data and twenty in symbolic form. The
     solutions are reserved for instructors.
 
-    [:octicons-download-24: notes-5-tomodel.pdf](pdf/notes-5-tomodel.pdf)
+    [:octicons-download-24: exercises.pdf](pdf/exercises.pdf)
 
 -   :material-presentation: **The slides**
 

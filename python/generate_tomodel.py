@@ -11,7 +11,7 @@ import sys
 from pathlib import Path
 
 BASE = Path(__file__).resolve().parent.parent
-DIR_CAPITOLI = BASE / "notes_5" / "capitoli"
+DIR_CAPITOLI = BASE / "exercises" / "capitoli"
 USCITA = BASE / "docs" / "to-model.md"
 
 CAPITOLI = [("cap20_numerical", "Twenty numerical problems",
@@ -27,7 +27,7 @@ TESTA = """# Problems to model
 **Forty problems** given as they really arrive — a text, some data, a question —
 with no model already written: twenty with explicit numerical data and twenty in
 symbolic form. They can also be downloaded
-[as a PDF](pdf/notes-5-tomodel.pdf).
+[as a PDF](pdf/exercises.pdf).
 
 The solutions are reserved for instructors. The method for answering is the one
 of every problem of the course: decisions and variables, one constraint per
@@ -50,6 +50,8 @@ def _tabella(testo: str) -> str:
 
 def markdown(corpo: str) -> str:
     """The body of a `problema` box in markdown, with the mathematics intact."""
+    # i trattini lunghi prima della tabella: dopo, mangerebbero la riga `|---|`
+    corpo = corpo.replace("---", "—").replace("``", "\u201c").replace("''", "\u201d")
     corpo = re.sub(r"\\begin\{center\}\\small\s*\\begin\{tabular\}\{[^}]*\}(.*?)\\end\{tabular\}\s*\\end\{center\}",
                    lambda m: "\n\n" + _tabella(m.group(1).replace("\\toprule", "")
                                                .replace("\\midrule", "").replace("\\bottomrule", "")) + "\n",
@@ -59,8 +61,12 @@ def markdown(corpo: str) -> str:
     corpo = re.sub(r"\\emph\{([^}]*)\}", r"*\1*", corpo)
     corpo = re.sub(r"\\textbf\{([^}]*)\}", r"**\1**", corpo)
     corpo = re.sub(r"\\index\{[^}]*\}", "", corpo)
-    corpo = corpo.replace("---", "—").replace("``", "\u201c").replace("''", "\u201d")
     return re.sub(r"\n{3,}", "\n\n", corpo).strip()
+
+
+def rientra(testo: str) -> str:
+    """Il corpo dentro un box: quattro spazi davanti a ogni riga non vuota."""
+    return "\n".join("    " + r if r.strip() else "" for r in testo.split("\n"))
 
 
 def pagina() -> str:
@@ -71,7 +77,8 @@ def pagina() -> str:
         for m in re.finditer(r"\\section\*\{(.+?)\}\s*\n\\begin\{problema\}\[(.+?)\]\n(.*?)\n\\end\{problema\}",
                              testo, re.S):
             etichetta, _, corpo = m.group(1), m.group(2), m.group(3)
-            pezzi.append(f"### {markdown(etichetta)}\n\n{markdown(corpo)}\n")
+            pezzi.append(f'!!! abstract "{markdown(etichetta)}"\n\n'
+                         + rientra(markdown(corpo)) + "\n")
     return "\n".join(pezzi).rstrip() + "\n"
 
 
@@ -88,7 +95,8 @@ def main(verifica: bool = False) -> int:
         print("Page of the problems to model up to date.")
         return 0
     USCITA.write_text(nuovo, encoding="utf-8")
-    print(f"  [page] docs/{USCITA.name} ({nuovo.count(chr(35) * 3 + chr(32))} problems)")
+    quanti = nuovo.count("!!! abstract")
+    print(f"  [page] docs/{USCITA.name} ({quanti} problems)")
     return 0
 
 
