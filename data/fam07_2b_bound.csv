@@ -1,0 +1,2 @@
+problem,ub,lb,z_lp,z_lp_rafforzato,z_milp
+2b machine 1 implies machine 3,12,6.25,6.25,6.365,12.0

@@ -1,0 +1,7 @@
+|  | value | what it is |
+|---|---:|---|
+| $\ub$ | $13$ | heuristic solution |
+| $\lb$ | $\frac{260}{59}$ | dual certificate built by hand |
+| $\zlp$ | $\frac{260}{59}$ | relaxation without the bounds |
+| $\zlpp$ | $\frac{260}{59}$ | relaxation with the bounds |
+| $\zmilp$ | $10$ | optimum of the MILP |

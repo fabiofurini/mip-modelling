@@ -126,5 +126,87 @@ m, x, y = modello_5(r5, t5, J5, f5, s5, a5)
 m.addConstr(y[2] <= y[0], name="3_only_if_1")
 varianti["5b"] = variante("5b. Class 3 is activated only if class 1 is (y_3 <= y_1)", m)
 salva_dati(pd.DataFrame({"variant": list(varianti), "z": list(varianti.values())}), "fam07_5_varianti")
+# ---------- 5bis. THE SANDWICH ON THE VARIANT 5a ----------
+intestazione("5a. The sandwich on the variant: at most one class activated")
+
+
+def modello_5a(r, t, J, f, s, a):
+    mm_, xx, yy = modello_5(r, t, J, f, s, a)
+    mm_.addConstr(yy.sum() <= 1, name="una_classe")
+    return mm_, xx, yy
+
+
+def duale_5a(r, t, J, f, s, a):
+    """To the dual of 7.5 one adds theta >= 0 for the constraint sum_c y_c <= 1.
+    The right-hand side is 1, so theta enters the objective; and it appears
+    with a plus sign in the columns of the y_c, which thus loosen."""
+    nn, q = len(r), len(J)
+    d = nuovo_modello("duale_classi_setup_5a")
+    pi = d.addVar(name="pi")
+    lam = d.addVars(nn, name="lam")
+    th = d.addVar(name="theta")
+    d.setObjective(a * pi + th, GRB.MINIMIZE)
+    d.addConstrs((t[j] * pi + lam[j] >= r[j] for j in R(nn)), name="rc_x")
+    d.addConstrs((s[c] * pi - gp.quicksum(lam[j] for j in J[c]) + th >= -f[c] for c in R(q)),
+                 name="rc_y")
+    return d
+
+
+m5a, x5a, y5a = modello_5a(r5, t5, J5, f5, s5, a5)
+salva_modello(m5a, "fam07_5a_primale")
+
+# -- feasible heuristic: the base one, restricted to the best class --
+print("Constructive heuristic: one class at a time, the best is kept. Inside the class")
+print("the jobs enter by decreasing ratio r_j/t_j while the time allows it.")
+migliore_5a = (0.0, None, [])
+for c in R(len(J5)):
+    residuo = a5 - s5[c]
+    presi = []
+    for j in sorted(J5[c], key=lambda j: -r5[j] / t5[j]):
+        if t5[j] <= residuo:
+            presi.append(j); residuo -= t5[j]
+    valore = sum(r5[j] for j in presi) - f5[c]
+    print(f"  class {c + 1}: setup {s5[c]} minutes and cost {f5[c]}; jobs "
+          f"{[j + 1 for j in sorted(presi)]}  ->  {frazione(valore)}")
+    if valore > migliore_5a[0]:
+        migliore_5a = (valore, c, presi)
+lb5a, classe_5a, presi_5a = migliore_5a
+sol_5a = {f"x[{j}]": 1 for j in presi_5a} | {f"y[{classe_5a}]": 1}
+assert ammissibile(m5a, sol_5a), "the heuristic solution of the variant must be feasible"
+print(f"  the best is class {classe_5a + 1}  ->  lb = {frazione(lb5a)}")
+
+# -- dual certificate: the price of time is searched among the ratios r_j/t_j --
+d5a = duale_5a(r5, t5, J5, f5, s5, a5)
+salva_modello(d5a, "fam07_5a_duale")
+
+
+def valore_duale_5a(pi_val):
+    """Given the price of time, the other dual variables are forced."""
+    lam_v = {j: max(0.0, r5[j] - t5[j] * pi_val) for j in R(len(r5))}
+    th_v = max([0.0] + [sum(lam_v[j] for j in J5[c]) - s5[c] * pi_val - f5[c]
+                        for c in R(len(J5))])
+    return a5 * pi_val + th_v, lam_v, th_v
+
+
+candidati = sorted({r5[j] / t5[j] for j in R(len(r5))})
+scelto = min(candidati, key=lambda p: valore_duale_5a(p)[0])
+ub5a, lam_5a, th_5a = valore_duale_5a(scelto)
+mano_5a = {"pi": scelto, "theta": th_5a} | {f"lam[{j}]": lam_5a[j] for j in R(len(r5))}
+ub5a_val, viol_5a = valuta(d5a, mano_5a)
+assert viol_5a <= 1e-9, viol_5a
+print("Dual solution by hand: the price of time pi is searched among the ratios r_j/t_j;")
+print("  once pi is fixed, the lam_j and theta are forced by the dual constraints. One keeps")
+print(f"  the pi giving the lowest value: pi = {frazione(scelto)}, theta = {frazione(th_5a)}")
+print(f"  ->  ub = {frazione(ub5a_val)}  (the recipe of the base problem, pi = max_j r_j/t_j,")
+print(f"  would give {frazione(a5 * max(r5[j] / t5[j] for j in R(len(r5))))})")
+zlp5a, zlp5ar, _ = due_rilassamenti(m5a, d5a)
+z5a = risolvi(m5a)
+riga_5a = registra_bound("5a at most one class", ub5a_val, lb5a, zlp5a, zlp5ar, z5a, senso="max")
+salva_dati(pd.DataFrame([riga_5a]), "fam07_5a_bound")
+assert lb5a <= z5a <= zlp5a + 1e-9 <= ub5a_val + 1e-9
+
+
+print("Fine.")
+
 
 print("Done.")

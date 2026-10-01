@@ -1,0 +1,20 @@
+\begin{array}{r@{}r@{}r@{}r@{}r@{}r@{}r@{}r@{}r@{}r@{}r@{}r@{}r@{}r@{}r@{}r c l}
+\max & \alpha_1 & +\alpha_2 & +\alpha_3 &  &  &  &  &  &  &  &  &  &  &  &  &  & \\
+\text{subject to} & \alpha_1 &  &  & -\beta_1 &  &  & -5\gamma_{11} &  &  &  &  &  &  &  &  & \le & 0\\
+ & \alpha_1 &  &  &  &  & -\beta_3 &  &  & -2\gamma_{13} &  &  &  &  &  &  & \le & 0\\
+ &  & \alpha_2 &  & -\beta_1 &  &  &  &  &  & -5\gamma_{21} &  &  &  &  &  & \le & 0\\
+ &  & \alpha_2 &  &  & -\beta_2 &  &  &  &  &  & -4\gamma_{22} &  &  &  &  & \le & 0\\
+ &  & \alpha_2 &  &  &  & -\beta_3 &  &  &  &  &  & -6\gamma_{23} &  &  &  & \le & 0\\
+ &  &  & \alpha_3 & -\beta_1 &  &  &  &  &  &  &  &  & -5\gamma_{31} &  &  & \le & 0\\
+ &  &  & \alpha_3 &  & -\beta_2 &  &  &  &  &  &  &  &  & -4\gamma_{32} &  & \le & 0\\
+ &  &  & \alpha_3 &  &  & -\beta_3 &  &  &  &  &  &  &  &  & -6\gamma_{33} & \le & 0\\
+ &  &  &  & 2\beta_1 &  &  &  &  &  &  &  &  &  &  &  & \le & 5\\
+ &  &  &  &  & 2\beta_2 &  &  &  &  &  &  &  &  &  &  & \le & 6\\
+ &  &  &  &  &  & 2\beta_3 &  &  &  &  &  &  &  &  &  & \le & 7\\
+ &  &  &  &  &  &  & \gamma_{11} &  &  & +\gamma_{21} &  &  & +\gamma_{31} &  &  & \le & 1\\
+ &  &  &  &  &  &  &  & \gamma_{12} &  &  & +\gamma_{22} &  &  & +\gamma_{32} &  & \le & 1\\
+ &  &  &  &  &  &  &  &  & \gamma_{13} &  &  & +\gamma_{23} &  &  & +\gamma_{33} & \le & 1\\
+ & \alpha_1, & \alpha_2, & \alpha_3 &  &  &  &  &  &  &  &  &  &  &  &  & \gtreqless & 0\\
+ &  &  &  & \beta_1, & \beta_2, & \beta_3 &  &  &  &  &  &  &  &  &  & \ge & 0\\
+ &  &  &  &  &  &  & \gamma_{11}, & \gamma_{12}, & \gamma_{13}, & \gamma_{21}, & \gamma_{22}, & \gamma_{23}, & \gamma_{31}, & \gamma_{32}, & \gamma_{33} & \ge & 0
+\end{array}

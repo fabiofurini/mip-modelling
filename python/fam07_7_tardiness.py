@@ -126,6 +126,89 @@ m.addConstrs((T >= tau[j] for j in R(3)), name="max_tardiness")
 m.setObjective(T, GRB.MINIMIZE)
 varianti["7b"] = variante("7b. Minimise the maximum tardiness (min-max: T >= tau_j)", m)
 salva_dati(pd.DataFrame({"variant": list(varianti), "z": list(varianti.values())}), "fam07_7_varianti")
+# ---------- 5bis. THE SANDWICH ON THE VARIANT 7a ----------
+intestazione("7a. The sandwich on the variant: release dates")
+
+
+def modello_7a(t, d, rho):
+    mm_, ss, kk, tt, MM = modello_7(t, d)
+    mm_.addConstrs((kk[j] >= rho[j] + t[j] for j in R(len(t))), name="rilascio")
+    return mm_, ss, kk, tt, MM
+
+
+def duale_7a(t, d, rho):
+    """To the dual of 7.7 one adds eps_j >= 0 for every release constraint
+    kappa_j >= rho_j + t_j: it enters the objective with its right-hand side
+    and the column of kappa_j next to delta_j."""
+    nn = len(t)
+    MM = sum(t)
+    D = nuovo_modello("duale_ritardo_7a")
+    alpha = D.addVars([(j, i) for j in R(nn) for i in R(j + 1, nn)], lb=-GRB.INFINITY, name="alpha")
+    beta = D.addVars([(j, i) for j in R(nn) for i in R(nn) if j != i], name="beta")
+    gamma = D.addVars(nn, name="gamma")
+    delta = D.addVars(nn, name="delta")
+    eps = D.addVars(nn, name="eps")
+    D.setObjective(alpha.sum() + gp.quicksum((t[i] - MM) * beta[j, i] for (j, i) in beta)
+                   - gp.quicksum(d[j] * gamma[j] for j in R(nn))
+                   + gp.quicksum(t[j] * delta[j] for j in R(nn))
+                   + gp.quicksum((rho[j] + t[j]) * eps[j] for j in R(nn)), GRB.MAXIMIZE)
+    D.addConstrs((alpha[j, i] - MM * beta[j, i] <= 0 for (j, i) in alpha), name="rc_s_ji")
+    D.addConstrs((alpha[j, i] - MM * beta[i, j] <= 0 for (j, i) in alpha), name="rc_s_ij")
+    D.addConstrs((-gp.quicksum(beta[j, i] for i in R(nn) if i != j)
+                  + gp.quicksum(beta[i, j] for i in R(nn) if i != j)
+                  - gamma[j] + delta[j] + eps[j] <= 0 for j in R(nn)), name="rc_kappa")
+    D.addConstrs((gamma[j] <= 1 for j in R(nn)), name="rc_tau")
+    return D
+
+
+m7a, s7a, k7a, tau7a, M7a = modello_7a(t7, d7, rho7)
+salva_modello(m7a, "fam07_7a_primale")
+
+# -- feasible heuristic: the same rule, with the release dates --
+print("Constructive heuristic: the jobs in order of due date (EDD), each started as soon as")
+print("the machine is free and the job has been released.")
+istante = 0
+ritardi = {}
+for j in sorted(R(3), key=lambda j: d7[j]):
+    inizio = max(istante, rho7[j])
+    fine = inizio + t7[j]
+    ritardi[j] = max(0, fine - d7[j])
+    print(f"  job {j + 1}: released at {rho7[j]}, starts at {inizio}, ends at {fine}, "
+          f"due date {d7[j]}  ->  tardiness {ritardi[j]}")
+    istante = fine
+ub7a = sum(ritardi.values())
+ordine = sorted(R(3), key=lambda j: d7[j])
+fine_cum, kappa_e7a = 0, {}
+for j in ordine:
+    fine_cum = max(fine_cum, rho7[j]) + t7[j]
+    kappa_e7a[j] = fine_cum
+sol_7a = ({f"kappa[{j}]": kappa_e7a[j] for j in R(3)}
+          | {f"tau[{j}]": ritardi[j] for j in R(3)}
+          | {f"s[{j},{i}]": (1 if ordine.index(j) < ordine.index(i) else 0)
+             for j in R(3) for i in R(3) if j != i})
+assert ammissibile(m7a, sol_7a), "the heuristic solution of the variant must be feasible"
+print(f"  ub = {frazione(ub7a)}")
+
+# -- dual certificate: the release replaces the processing time --
+D7a = duale_7a(t7, d7, rho7)
+salva_modello(D7a, "fam07_7a_duale")
+# one job at a time: gamma_j = 1 and all the weight on eps_j, which is worth rho_j + t_j
+# instead of t_j; the job giving the highest value is kept
+candidato = max(R(3), key=lambda j: rho7[j] + t7[j] - d7[j])
+mano_7a = {f"gamma[{candidato}]": 1, f"eps[{candidato}]": 1}
+lb7a, viol_7a = valuta(D7a, mano_7a)
+assert viol_7a <= 1e-9, viol_7a
+print("Dual solution by hand: a single job is priced. With gamma_j = 1, the constraint")
+print("  of the column of kappa_j gives delta_j + eps_j <= 1, and it pays to put all the")
+print("  weight on eps_j, which in the objective is worth rho_j + t_j instead of t_j. One picks")
+print(f"  the job with the largest rho_j + t_j - d_j: job {candidato + 1}, which gives")
+print(f"  {rho7[candidato]} + {t7[candidato]} - {d7[candidato]} = {frazione(lb7a)}.")
+zlp7a, zlp7ar, _ = due_rilassamenti(m7a, D7a)
+z7a = risolvi(m7a)
+riga_7a = registra_bound("7a release dates", ub7a, lb7a, zlp7a, zlp7ar, z7a)
+salva_dati(pd.DataFrame([riga_7a]), "fam07_7a_bound")
+assert lb7a <= zlp7a <= z7a <= ub7a + 1e-9
+
 
 # ---------- 6. FIGURES ----------
 # tardiness: Gantt of the natural and of the optimal sequence

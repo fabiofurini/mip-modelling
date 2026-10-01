@@ -134,6 +134,86 @@ mod, x, y = modello_1(t1, u1, i1, d1)
 mod.addConstr(x[1] <= x[0], name="2_only_if_1")
 varianti["1b"] = variante("1b. Location 2 opens only if location 1 opens (x_2 <= x_1)", mod)
 salva_dati(pd.DataFrame({"variant": list(varianti), "z": list(varianti.values())}), "fam08_1_varianti")
+# ---------- 5bis. THE SANDWICH ON THE VARIANT 1b ----------
+intestazione("1b. The sandwich on the variant: site 2 opens only if site 1 opens")
+
+
+def modello_1b(t, u, i, d):
+    mod_, xx, yy = modello_1(t, u, i, d)
+    mod_.addConstr(xx[1] - xx[0] <= 0, name="2_solo_se_1")
+    return mod_, xx, yy
+
+
+def duale_1b(t, u, i, d):
+    """To the dual of 8.1 one adds rho <= 0 for the constraint x_2 - x_1 <= 0: it
+    loosens the column of site 1 and tightens that of site 2. The right-hand
+    side is zero, so the objective does not change."""
+    mm, nn = len(u), len(d)
+    dl = nuovo_modello("duale_localizzazione_1b")
+    mu = dl.addVars(mm, name="mu")
+    pi = dl.addVars(nn, lb=-GRB.INFINITY, name="pi")
+    rho = dl.addVar(lb=-GRB.INFINITY, ub=0.0, name="rho")
+    dl.setObjective(gp.quicksum(d[c] * pi[c] for c in R(nn)), GRB.MAXIMIZE)
+    dl.addConstr(u[0] * mu[0] - rho <= i[0], name="rc_x0")
+    dl.addConstr(u[1] * mu[1] + rho <= i[1], name="rc_x1")
+    dl.addConstrs((-mu[l] + pi[c] <= t[l][c] for l in R(mm) for c in R(nn)), name="rc_y")
+    return dl
+
+
+m1b, x1b, y1b = modello_1b(t1, u1, i1, d1)
+salva_modello(m1b, "fam08_1b_primale")
+
+# -- feasible heuristic: the base one, repaired by opening site 1 as well --
+print("Constructive heuristic: start from the solution of the base problem; if it opens site 2")
+print("without site 1, open site 1 too (the demand stays served, only the fixed cost changes).")
+aperte = [l for l in R(m) if xe[l]]
+print(f"  base solution: sites open {[l + 1 for l in aperte]}, cost {frazione(ub1)}")
+aperte_b = sorted(set(aperte) | ({0} if 1 in aperte else set()))
+ub1b = sum(i1[l] for l in aperte_b) + sum(t1[l][c] * ye.get((l, c), 0)
+                                          for l in R(m) for c in R(n))
+sol_1b = {f"x[{l}]": (1 if l in aperte_b else 0) for l in R(m)}
+sol_1b.update({f"y[{l},{c}]": v for (l, c), v in ye.items()})
+assert ammissibile(m1b, sol_1b), "the heuristic solution of the variant must be feasible"
+print(f"  after the repair: sites {[l + 1 for l in aperte_b]}  ->  ub = {frazione(ub1b)}")
+
+# -- dual certificate: rho moves fixed cost from site 2 to site 1 --
+d1b_ = duale_1b(t1, u1, i1, d1)
+salva_modello(d1b_, "fam08_1b_duale")
+
+
+def valore_duale_1b(rho_val):
+    mu_v = {0: (i1[0] + rho_val) / u1[0], 1: (i1[1] - rho_val) / u1[1]}
+    if min(mu_v.values()) < 0:
+        return None, None, None
+    pi_v = {c: min(t1[l][c] + mu_v[l] for l in R(m)) for c in R(n)}
+    return sum(d1[c] * pi_v[c] for c in R(n)), mu_v, pi_v
+
+
+# rho is non-positive: it is tried on the grid of values that make a column
+# tight, that is where the minimum defining pi_c changes site
+candidati_1b = [0.0] + [-(u1[0] * (t1[1][c] + i1[1] / u1[1] - t1[0][c]) - i1[0])
+                        * u1[1] / (u1[0] + u1[1]) for c in R(n)]
+candidati_1b = [r for r in candidati_1b if r <= 0 and valore_duale_1b(r)[0] is not None]
+scelto_1b = max(candidati_1b, key=lambda r: valore_duale_1b(r)[0])
+lb1b, mu_1b, pi_1b = valore_duale_1b(scelto_1b)
+mano_1b = ({f"mu[{l}]": mu_1b[l] for l in R(m)}
+           | {f"pi[{c}]": pi_1b[c] for c in R(n)} | {"rho": scelto_1b})
+lb1b_val, viol_1b = valuta(d1b_, mano_1b)
+assert viol_1b <= 1e-9, viol_1b
+print("Dual solution by hand: rho moves fixed cost from site 2 to site 1, that is")
+print("  mu_1 = (i_1 + rho)/u_1 and mu_2 = (i_2 - rho)/u_2; then pi_c = min_l (t_lc + mu_l)")
+print(f"  as in the base problem. rho is tried among the values that change that minimum:")
+print(f"  rho = {frazione(scelto_1b)}  ->  lb = {frazione(lb1b_val)}")
+if abs(scelto_1b) < 1e-9:
+    print("  Here the best is rho = 0: site 1 already has the lowest cost per litre,")
+    print("  and moving more fixed cost to it would lower mu_2 more than it raises mu_1.")
+    print("  The certificate of the variant coincides with the one of the base problem.")
+zlp1b, zlp1br, _ = due_rilassamenti(m1b, d1b_)
+z1b = risolvi(m1b)
+riga_1b = registra_bound("1b site 2 only with site 1", ub1b, lb1b_val, zlp1b, zlp1br, z1b)
+salva_dati(pd.DataFrame([riga_1b]), "fam08_1b_bound")
+assert lb1b_val <= zlp1b <= z1b <= ub1b + 1e-9
+
 
 # ---------- 6. FIGURES ----------
 

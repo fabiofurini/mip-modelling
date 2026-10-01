@@ -9,6 +9,7 @@ from pathlib import Path
 
 import pandas as pd
 
+TOLL = 1e-6
 DATI = Path(__file__).resolve().parent.parent / "data"
 
 
@@ -263,4 +264,25 @@ for k, (ub, lb, zlp, zlpr, zmilp, senso) in attesi_num2.items():
 vv = pd.read_csv(DATI / "ex15_varieta.csv")
 assert (vv.instruments_wrong_model < 2).any(), vv
 print("numerical models EX 1, 3, 4, 6, 8, 11, 12, 13, 14 — bounds and optima match")
+# ---------------------------------------------------------------------------
+# P0.6 - the variants with heuristic, dual certificate and bound table.
+# The tables of the notes are generated from these CSVs, so here we check that
+# the sandwich holds and that the optimum of the variant matches the one
+# recorded among the additional questions.
+for csv in sorted(DATI.glob("fam0[78]_*[ab]_bound.csv")):
+    r = pd.read_csv(csv).iloc[0]
+    nome = csv.stem.replace("_bound", "")
+    # the direction is not needed: either way the two bounds enclose the optimum,
+    # and the relaxation sits between them, on the optimistic side
+    assert r.lb - TOLL <= r.z_milp <= r.ub + TOLL, (nome, "optimum outside the sandwich")
+    assert min(r.lb, r.ub) - TOLL <= r.z_lp <= max(r.lb, r.ub) + TOLL, (nome, "relaxation outside the sandwich")
+    sigla = nome.split("_")[-1]
+    varianti_csv = DATI / (nome.rsplit("_", 1)[0] + "_varianti.csv")
+    if varianti_csv.exists():
+        v = pd.read_csv(varianti_csv)
+        colonna = "variante" if "variante" in v.columns else "variant"
+        attesi = v.loc[v[colonna] == sigla, "z"]
+        if len(attesi):
+            assert uguale(float(attesi.iloc[0]), r.z_milp), (nome, "optimum differs from the variant")
+print("variants of ch. 7-8 - heuristic, certificate and bound table consistent")
 print("All checks passed.")

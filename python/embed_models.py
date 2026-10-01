@@ -22,6 +22,9 @@ DIR_MODELLI = BASE / "data" / "models"
 DIR_DOCS = BASE / "docs"
 
 APRE = re.compile(r"<!-- modello-esteso: ([a-z0-9_]+) -->")
+APRE_TAB = re.compile(r"<!-- tabella-variante: ([a-z0-9_]+) -->")
+FINE_TAB = "<!-- tabella-variante: fine -->"
+DIR_TABELLE = BASE / "data" / "tables"
 FINE = "<!-- modello-esteso: fine -->"
 
 
@@ -32,6 +35,30 @@ def blocco(nome: str) -> str:
     return "\n".join([f"<!-- modello-esteso: {nome} -->", "",
                       f'<div class="{classe}" markdown>', "", "$$", corpo, "$$", "",
                       "</div>", "", FINE])
+
+
+def blocco_tabella(nome: str) -> str:
+    corpo = (DIR_TABELLE / f"{nome}.md").read_text(encoding="utf-8").rstrip("\n")
+    return "\n".join([f"<!-- tabella-variante: {nome} -->", "", corpo, "", FINE_TAB])
+
+
+def aggiorna_tabelle(testo: str) -> str:
+    """Come `aggiorna`, ma per le tabelle dei bound delle varianti."""
+    fuori, resto = [], testo
+    while True:
+        m = APRE_TAB.search(resto)
+        if not m:
+            fuori.append(resto)
+            break
+        fuori.append(resto[:m.start()])
+        nome = m.group(1)
+        if not (DIR_TABELLE / f"{nome}.md").exists():
+            raise SystemExit(f"tabella non generata: {nome}")
+        coda = resto[m.end():]
+        fine = coda.find(FINE_TAB)
+        resto = coda[fine + len(FINE_TAB):] if fine >= 0 else coda
+        fuori.append(blocco_tabella(nome))
+    return "".join(fuori)
 
 
 def aggiorna(testo: str) -> str:
@@ -58,9 +85,9 @@ def main(verifica: bool = False) -> int:
     diversi = []
     for pagina in sorted(DIR_DOCS.glob("*.md")):
         testo = pagina.read_text(encoding="utf-8")
-        if not APRE.search(testo):
+        if not APRE.search(testo) and not APRE_TAB.search(testo):
             continue
-        nuovo = aggiorna(testo)
+        nuovo = aggiorna_tabelle(aggiorna(testo))
         if nuovo == testo:
             continue
         diversi.append(pagina.name)

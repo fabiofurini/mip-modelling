@@ -122,5 +122,77 @@ m.addConstrs((y[mm] <= max(t4[j][mm] for j in R(3)) * vv[mm] for mm in R(3)), na
 m.setObjective(y.sum() + gp.quicksum(g4[mm] * vv[mm] for mm in R(3)), GRB.MINIMIZE)
 varianti["4b"] = variante("4b. Fixed cost 4 if the machine works (y_m <= M_m v_m)", m)
 salva_dati(pd.DataFrame({"variant": list(varianti), "z": list(varianti.values())}), "fam07_4_varianti")
+# ---------- 5bis. THE SANDWICH ON THE VARIANT 4a ----------
+intestazione("4a. The sandwich on the variant: minimising the maximum of the times")
+
+
+def modello_4a(t, p):
+    mm_, xx, yy = modello_4(t, p)
+    ww = mm_.addVar(name="w")
+    mm_.addConstrs((ww - yy[mz] >= 0 for mz in R(len(p))), name="minmax")
+    mm_.setObjective(ww, GRB.MINIMIZE)
+    return mm_, xx, yy, ww
+
+
+def duale_4a(t, p):
+    """Two things change with respect to the dual of 7.4: y_m no longer has a
+    cost, and nu_m >= 0 arrives for the constraint w - y_m >= 0. The columns
+    become  x_jm: mu_j + pi_m - t_jm lam_jm <= 0;  y_m: sum_j lam_jm - nu_m <= 0;
+    w: sum_m nu_m <= 1."""
+    nn, kk = len(t), len(p)
+    d = nuovo_modello("duale_parallelo_4a")
+    mu = d.addVars(nn, lb=-GRB.INFINITY, name="mu")
+    pi = d.addVars(kk, lb=-GRB.INFINITY, ub=0.0, name="pi")
+    lam = d.addVars(nn, kk, name="lam")
+    nu = d.addVars(kk, name="nu")
+    d.setObjective(mu.sum() + gp.quicksum(p[mz] * pi[mz] for mz in R(kk)), GRB.MAXIMIZE)
+    d.addConstrs((mu[j] + pi[mz] - t[j][mz] * lam[j, mz] <= 0
+                  for j in R(nn) for mz in R(kk)), name="rc_x")
+    d.addConstrs((lam.sum("*", mz) - nu[mz] <= 0 for mz in R(kk)), name="rc_y")
+    d.addConstr(nu.sum() <= 1, name="rc_w")
+    return d
+
+
+m4a, x4a, y4a, w4a = modello_4a(t4, p4)
+salva_modello(m4a, "fam07_4a_primale")
+
+# -- feasible heuristic: the same assignment, read with the new objective --
+print("Constructive heuristic: the assignment of the base problem is feasible here too;")
+print("only its evaluation changes, because now the maximum counts and not the sum.")
+assegnazione = sorted(xe)
+carichi = [max([t4[j][mz] for (j, q) in assegnazione if q == mz] + [0]) for mz in R(3)]
+ub4a = max(carichi)
+sol_4a = ({f"x[{j},{mz}]": 1 for (j, mz) in assegnazione}
+          | {f"y[{mz}]": carichi[mz] for mz in R(3)} | {"w": ub4a})
+assert ammissibile(m4a, sol_4a), "the heuristic solution of the variant must be feasible"
+print(f"  times per machine {carichi}  ->  ub = {frazione(ub4a)}")
+
+# -- dual certificate: all the weight on the longest job --
+d4a = duale_4a(t4, p4)
+salva_modello(d4a, "fam07_4a_duale")
+# with a single job priced, lam_jm = nu_m and mu_j <= min_m t_jm nu_m: the nu that
+# maximises that minimum makes t_jm nu_m constant, that is nu_m proportional to 1/t_jm
+lungo = max(R(3), key=lambda j: min(t4[j]))
+somma_inversi = sum(1 / t4[lungo][mz] for mz in R(3))
+nu_b = {mz: (1 / t4[lungo][mz]) / somma_inversi for mz in R(3)}
+mano_4a = {f"nu[{mz}]": nu_b[mz] for mz in R(3)}
+mano_4a.update({f"lam[{lungo},{mz}]": nu_b[mz] for mz in R(3)})
+mano_4a[f"mu[{lungo}]"] = 1 / somma_inversi
+lb4a, viol_4a = valuta(d4a, mano_4a)
+assert viol_4a <= 1e-9, viol_4a
+print(f"Dual solution by hand: only job {lungo + 1} is priced, the longest one on every")
+print("  machine. With lam_jm = nu_m the column of w gives sum_m nu_m <= 1, and")
+print("  the nu maximising min_m t_jm nu_m makes that product constant: nu_m is")
+print("  proportional to 1/t_jm. The bound is the harmonic mean of the times of that job,")
+print(f"  1 / sum_m (1/t_jm) = {frazione(lb4a)}.")
+zlp4a, zlp4ar, _ = due_rilassamenti(m4a, d4a)
+z4a = risolvi(m4a)
+riga_4a = registra_bound("4a min-max of the times", ub4a, lb4a, zlp4a, zlp4ar, z4a)
+salva_dati(pd.DataFrame([riga_4a]), "fam07_4a_bound")
+assert lb4a <= zlp4a <= z4a <= ub4a + 1e-9
+
+
+print("Fine.")
+
 
 print("Done.")
