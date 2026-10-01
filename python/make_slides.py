@@ -20,6 +20,9 @@ from pathlib import Path
 
 import pandas as pd
 
+TITOLO_ENUNCIATO = "The statement"
+TITOLO_DOMANDA = "What is asked"
+
 BASE = Path(__file__).resolve().parent.parent
 DIR_SLIDE = BASE / "slides" / "capitoli"
 DIR_DATI = BASE / "data"
@@ -73,6 +76,25 @@ def per_beamer(corpo: str) -> str:
     corpo = re.sub(r"[ \t]+$", "", corpo, flags=re.M)
     corpo = re.sub(r"\n{2,}", "\n", corpo)
     return corpo.strip()
+
+
+def domande_degli_esercizi() -> dict[str, str]:
+    """`{titolo del problema: corpo della domanda}`: la domanda segue il suo problema."""
+    import re as _re
+    fuori = {}
+    if not ESERCIZI.exists():
+        return fuori
+    for f in sorted(ESERCIZI.glob("*.tex")):
+        testo = f.read_text(encoding="utf-8")
+        ultimo = None
+        for m in _re.finditer(r"\\begin\{(problema|domanda)\}(?:\[([^\]]*)\])?(.*?)\\end\{\1\}",
+                              testo, _re.S):
+            if m.group(1) == "problema":
+                ultimo = (m.group(2) or "").strip()
+            elif ultimo:
+                fuori[ultimo] = m.group(3).strip()
+                ultimo = None
+    return fuori
 
 
 def bound(nome_csv: str) -> dict | None:
@@ -214,7 +236,7 @@ $}}
     return "\n".join(pezzi)
 
 
-def slide_da_modellare(problemi: dict) -> str:
+def slide_da_modellare(problemi: dict, domande: dict) -> str:
     pezzi = ["\\section{The forty problems to model}\n", APERTURA_MOD]
     for prefisso, titolo_sezione in (("N", "Twenty numerical problems"),
                                      ("S", "Twenty symbolic problems")):
@@ -224,9 +246,13 @@ def slide_da_modellare(problemi: dict) -> str:
             if chiave is None:
                 continue
             nome = chiave.split("---", 1)[1].strip()
+            chiave_d = next((d for d in domande if d.startswith(f"{prefisso}{i} ---")), None)
+            domanda = ("\n\\begin{block}{" + TITOLO_DOMANDA + "}\n\\footnotesize "
+                       + per_beamer(domande[chiave_d]) + "\n\\end{block}") if chiave_d else ""
             pezzi.append(f"""\\begin{{frame}}[allowframebreaks]{{{prefisso}{i} --- {nome}}}
-\\footnotesize
-{per_beamer(problemi[chiave])}
+\\begin{{block}}{{{TITOLO_ENUNCIATO}}}
+\\footnotesize {per_beamer(problemi[chiave])}
+\\end{{block}}{domanda}
 \\end{{frame}}
 """)
     return "\n".join(pezzi)
@@ -240,7 +266,7 @@ def main() -> int:
     attesi = {
         "modelli_numerici.tex": slide_numerici(problemi),
         "problemi_famiglie.tex": slide_famiglie(modelli, problemi),
-        "da_modellare.tex": slide_da_modellare(problemi),
+        "da_modellare.tex": slide_da_modellare(problemi, domande_degli_esercizi()),
     }
     cambiati = []
     for nome, testo in attesi.items():
