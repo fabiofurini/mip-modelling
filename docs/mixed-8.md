@@ -230,7 +230,7 @@ Notebook —
 ??? example "Show the complete script — `python/fam10_8_cds.py` (231 lines)"
 
     ```python
-    """Problem 11.3 -- Songs on several CDs: minimising the difference between the
+    """Problem 10.8 -- Songs on several CDs: minimising the difference between the
     longest and the shortest.
 
     Two auxiliary variables: y for the maximum (technique 3.5) and z for the minimum,
@@ -249,7 +249,7 @@ Notebook —
     R = range
 
     # ---------- 1. MODEL AND INSTANCE ----------
-    intestazione("11.3 Songs on CDs: levelling the longest and the shortest CD")
+    intestazione("10.8 Songs on CDs: levelling the longest and the shortest CD")
     d3 = [5, 6, 7, 3, 4, 10]     # duration of the songs, in minutes
     w3 = [1, 1]                  # minimum number of songs per CD
     n3, m3 = len(d3), len(w3)
@@ -349,7 +349,7 @@ Notebook —
     assert abs(zlp3) <= 1e-9
 
     # ---------- 4. THE PARITY BOUND ----------
-    intestazione("11.3 A parity argument that settles the problem")
+    intestazione("10.8 A parity argument that settles the problem")
     print(f"  The durations are integers and there are {m3} CDs: the two durations add up to")
     print(f"  {D3}, which is {'odd' if D3 % 2 else 'even'}. Two integers adding up to an odd")
     print("  number cannot be equal, and their difference is itself odd: so it is at least 1.")
@@ -410,7 +410,7 @@ Notebook —
     ax.set_yticklabels(["naive", "LPT", "optimum"])
     ax.set_xlim(0, max(carichi_nat) + 9)
     ax.set_xlabel("duration of the CD (minutes)")
-    ax.set_title(f"11.3: the difference drops from {frazione(diff_nat)} to {frazione(z3)}")
+    ax.set_title(f"10.8: the difference drops from {frazione(diff_nat)} to {frazione(z3)}")
     ax.invert_yaxis()
     salva_figura(fig, "cap10_cd_ottimo")
     print("Done.")

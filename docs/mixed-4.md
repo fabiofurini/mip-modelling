@@ -254,7 +254,7 @@ folder). Notebook —
 ??? example "Show the complete script — `python/fam10_4_lights.py` (263 lines)"
 
     ```python
-    """Problem 12.1 -- Christmas trees: configurations and boxes of lights.
+    """Problem 10.4 -- Christmas trees: configurations and boxes of lights.
 
     Two integer decisions tied by an availability constraint: how many lights are
     needed (from the chosen configurations) and how many are bought (from the boxes).
@@ -274,7 +274,7 @@ folder). Notebook —
     R = range
 
     # ---------- 1. MODEL AND INSTANCE ----------
-    intestazione("12.1 Christmas trees: configurations, lights and boxes")
+    intestazione("10.4 Christmas trees: configurations, lights and boxes")
     q1 = 20                          # trees to decorate
     i1 = [7, 6, 8]                   # installation cost of a configuration
     u1 = [[4, 2], [2, 3], [2, 2]]    # lights of colour l required by configuration c
@@ -465,7 +465,7 @@ folder). Notebook —
     ax.set_yticklabels(etichette)
     ax.set_xlim(0, max(inst[k] + scat[k] for k in R(2)) * 1.18)
     ax.set_xlabel("cost (euros)")
-    ax.set_title("12.1: where the cost goes")
+    ax.set_title("10.4: where the cost goes")
     ax.legend(fontsize=8, loc="lower right")
     ax.invert_yaxis()
     salva_figura(fig, "cap10_luci_ottimo")

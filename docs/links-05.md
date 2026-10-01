@@ -55,4 +55,4 @@ m.addConstrs((z >= t[j] * x[j] for j in range(n)), name="maximum")
 ```
 
 Seen again in problems [7.4](scheduling-4.md), [7.7](scheduling-7.md),
-[8.4](location-4.md) and 11.4 (books on shelves).
+[8.4](location-4.md) and 10.9 (books on shelves).

@@ -1,4 +1,4 @@
-"""Problem 11.4 -- Books on shelves: minimising the sum of the heights.
+"""Problem 10.9 -- Books on shelves: minimising the sum of the heights.
 
 Assignment with a capacity (the width of the shelf) and a maximum variable per
 shelf (technique 3.5): the height of a shelf is that of the tallest book on it.
@@ -17,7 +17,7 @@ from esteso import salva_modello
 R = range
 
 # ---------- 1. MODEL AND INSTANCE ----------
-intestazione("11.4 Books on shelves: minimising the sum of the heights")
+intestazione("10.9 Books on shelves: minimising the sum of the heights")
 w4 = [3, 5, 4, 6]      # width of the books
 h4 = [8, 5, 7, 4]      # height of the books
 c4 = 10                # width of every shelf
@@ -119,7 +119,7 @@ print(f"  that book, so the sum of the heights is at least {h4[alto]}.")
 zlp4, zlp4r, _ = due_rilassamenti(m4mod, dl4)
 
 # ---------- 4. A STRONGER COMBINATORIAL BOUND ----------
-intestazione("11.4 The combinatorial bound: at least two shelves are used")
+intestazione("10.9 The combinatorial bound: at least two shelves are used")
 usati = -(-sum(w4) // c4)     # integer division rounding up
 print(f"  The total width is {sum(w4)} and every shelf holds {c4}: at least")
 print(f"  ceil({sum(w4)} / {c4}) = {usati} shelves must be non-empty.")
@@ -183,7 +183,7 @@ ax.set_xlim(0, c4 + 3.6)
 ax.set_yticks([1, 11])
 ax.set_yticklabels(["shelf 1", "shelf 2"])
 ax.set_xlabel("width")
-ax.set_title(f"11.4: sum of the heights {frazione(z4)}")
+ax.set_title(f"10.9: sum of the heights {frazione(z4)}")
 salva_figura(fig, "cap10_scaffali_ottimo")
 print("Done.")
 

@@ -1,4 +1,4 @@
-"""Problem 11.2 -- Antitrust split: two companies as similar as possible.
+"""Problem 10.7 -- Antitrust split: two companies as similar as possible.
 
 The branches must be divided into two groups minimising, over the worst product,
 the revenue difference between the two groups. It is technique 3.6 (min-max)
@@ -23,7 +23,7 @@ from esteso import salva_modello
 R = range
 
 # ---------- 1. MODEL AND INSTANCE ----------
-intestazione("11.2 Antitrust: splitting the branches minimising the worst imbalance")
+intestazione("10.7 Antitrust: splitting the branches minimising the worst imbalance")
 v2 = [[3, 3, 2],      # revenue of branch i on product j (millions)
       [6, 8, 5],
       [3, 4, 4],
@@ -131,7 +131,7 @@ print("  feasible for the relaxation and useless for the real problem: branches 
 assert abs(zlp2) <= 1e-9
 
 # ---------- 4. A COMBINATORIAL BOUND, PRODUCT BY PRODUCT ----------
-intestazione("11.2 The lower bound comes from a combinatorial argument")
+intestazione("10.7 The lower bound comes from a combinatorial argument")
 # for every product, the smallest imbalance obtainable looking at that product alone
 def minimo_squilibrio(colonna, tot):
     s = len(colonna)
@@ -215,7 +215,7 @@ for j in idx:
 ax.set_xticks(idx)
 ax.set_xticklabels([f"product {j + 1}" for j in idx])
 ax.set_ylabel("revenue (millions)")
-ax.set_title(f"11.2: optimal partition, worst imbalance {frazione(z2)}")
+ax.set_title(f"10.7: optimal partition, worst imbalance {frazione(z2)}")
 ax.legend(fontsize=8)
 salva_figura(fig, "cap10_antitrust_ottimo")
 print("Done.")

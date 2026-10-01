@@ -251,7 +251,7 @@ folder). Notebook —
 ??? example "Show the complete script — `python/fam10_6_camps.py` (257 lines)"
 
     ```python
-    """Problem 11.1 -- Summer camps: children of several nationalities in several camps.
+    """Problem 10.6 -- Summer camps: children of several nationalities in several camps.
 
     Counting variables (not binary), a capacity per camp and two composition
     constraints: in every camp the girls must not be fewer than the boys, and
@@ -270,7 +270,7 @@ folder). Notebook —
     R = range
 
     # ---------- 1. MODEL AND INSTANCE ----------
-    intestazione("11.1 Summer camps: accepting the largest number of children")
+    intestazione("10.6 Summer camps: accepting the largest number of children")
     f1 = [8, 10]        # girls available per nationality
     g1 = [4, 12]        # boys available per nationality
     d1 = [15, 8]        # capacity of the camps
@@ -401,7 +401,7 @@ folder). Notebook —
     print("  saturated and the certificate closes the gap. The whole gap was on the heuristic side.")
 
     # ---------- 5. THE REAL LIMIT IS THE MAJORITY NATIONALITY ----------
-    intestazione("11.1 Two combinatorial arguments on the bounds")
+    intestazione("10.6 Two combinatorial arguments on the bounds")
     tot_c = f1[c1] + g1[c1]
     print(f"  In every camp nationality {c1 + 1} is not fewer than all the others together, so in")
     print(f"  every camp it takes at least half of the places. It has {tot_c} children in total:")
@@ -468,7 +468,7 @@ folder). Notebook —
     ax.set_xticklabels(etichette)
     ax.set_ylim(-2, max(d1) + 2)
     ax.set_ylabel("children accepted")
-    ax.set_title(f"11.1: heuristic {frazione(lb1)} against optimum {frazione(z1)}")
+    ax.set_title(f"10.6: heuristic {frazione(lb1)} against optimum {frazione(z1)}")
     ax.legend(fontsize=7, ncol=2)
     salva_figura(fig, "cap10_campi_ottimo")
     print("Done.")

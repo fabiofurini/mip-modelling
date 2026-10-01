@@ -45,5 +45,5 @@ w = m.addVar(vtype=GRB.INTEGER, name="w")
 m.addConstr(gp.quicksum(a[i] * x[i] for i in range(n)) <= K * w, name="capacity")
 ```
 
-Seen again in exercises 12.1 (boxes of lights), 12.2 (shipments) and 9.2
+Seen again in exercises 10.4 (boxes of lights), 10.5 (shipments) and 9.2
 (workforce).

@@ -250,7 +250,7 @@ folder). Notebook —
 ??? example "Show the complete script — `python/fam10_5_shipments.py` (265 lines)"
 
     ```python
-    """Problem 12.2 -- Shipments in boxes: multi-product flow and counting of containers.
+    """Problem 10.5 -- Shipments in boxes: multi-product flow and counting of containers.
 
     The quantities shipped are a multi-product flow between plants and customers; on
     top of them there are the boxes, an integer count tied to the flow by the capacity
@@ -276,7 +276,7 @@ folder). Notebook —
 
 
     # ---------- 1. MODEL AND INSTANCE ----------
-    intestazione("12.2 Shipments in boxes: minimising the number of boxes")
+    intestazione("10.5 Shipments in boxes: minimising the number of boxes")
     d2 = [[5, 0],       # units of product p ordered by customer c
           [2, 4]]
     a2 = [[8, 6],       # units of product p available at plant s
@@ -391,7 +391,7 @@ folder). Notebook —
     zlp2, zlp2r, _ = due_rilassamenti(m2, dl2)
 
     # ---------- 4. A STRONGER INTEGER BOUND ----------
-    intestazione("12.2 Counting the boxes customer by customer")
+    intestazione("10.5 Counting the boxes customer by customer")
     clienti_attivi = [c for c in R(nm) if any(d2[p][c] > 0 for p in R(nk))]
     print("  Every customer with at least one unit ordered receives at least one box, and boxes")
     print(f"  are not shared between customers. The customers with orders are "
@@ -465,7 +465,7 @@ folder). Notebook —
     ax.set_xlim(-0.45, 1.5)
     ax.set_ylim(-0.6, max(nn, nm) - 0.4)
     ax.axis("off")
-    ax.set_title(f"12.2: optimal plan with {frazione(z2)} boxes")
+    ax.set_title(f"10.5: optimal plan with {frazione(z2)} boxes")
     salva_figura(fig, "cap10_spedizioni_ottimo")
     print("Done.")
 

@@ -66,5 +66,5 @@ m.addConstr(d >= u - v, name="abs_plus")
 m.addConstr(d >= v - u, name="abs_minus")
 ```
 
-Seen again in exercises 11.3 (CDs) and 11.2 (antitrust), and in
+Seen again in exercises 10.8 (CDs) and 10.7 (antitrust), and in
 [technique 3.13](links-13.md) in an equivalent form with two deviations.

@@ -49,4 +49,4 @@ m.addConstrs((q[j] >= ell * y[j] for j in range(n)), name="lot")
 m.addConstr(y.sum() >= p, name="at_least_p_types")
 ```
 
-Seen again in exercises 9.3 (vehicles), 10.2 (diet) and 12.1 (trees).
+Seen again in exercises 9.3 (vehicles), 10.3 (diet) and 10.4 (trees).

@@ -167,14 +167,14 @@ seen at work.
 | [3.1 activation](links-01.md) | $x_{ij} \le y_j$ (disagg.) or $\sum_i x_{ij} \le k_j y_j$ (agg.) | which form and why; sign of $f_j$ for the optimality direction | 7.2, 7.3, 7.5, 8.4 |
 | [3.2 fixed cost](links-02.md) | $q_j \le C_j y_j$ | that $C_j$ is the capacity, not a big-M | 8.1, ch. 9 |
 | [3.3 minimum lot](links-03.md) | $\ell y_j \le q_j \le C_j y_j$ | that $\ell \le C_j$; that the relaxation is unaffected | 7.2.2, 9.1, 9.3 |
-| [3.4 integer count](links-04.md) | $\sum_i a_i x_i \le K w$, $w$ integer | that integrality realises the ceiling | 9.2, 12.1, 12.2 |
-| [3.5 maximum auxiliary](links-05.md) | $z \ge t_j x_j$, $z \ge 0$ | that $z$ appears nowhere else; its sign in the objective | 7.4, 7.7, 8.4, 11.4 |
-| [3.6 min-max / max-min](links-06.md) | $T \ge L_k$ and $\min T$; $U \le L_k$ and $\max U$ | which of the three objectives, and that they are not comparable | 7.4.1, 11.2, 11.3 |
-| [3.7 absolute value](links-07.md) | $d \ge \pm(u-v)$ in the objective; disjunction if $\ge k$ | whether it is objective or constraint, and in which direction | 11.2, 11.3 |
+| [3.4 integer count](links-04.md) | $\sum_i a_i x_i \le K w$, $w$ integer | that integrality realises the ceiling | 9.2, 10.4, 10.5 |
+| [3.5 maximum auxiliary](links-05.md) | $z \ge t_j x_j$, $z \ge 0$ | that $z$ appears nowhere else; its sign in the objective | 7.4, 7.7, 8.4, 10.9 |
+| [3.6 min-max / max-min](links-06.md) | $T \ge L_k$ and $\min T$; $U \le L_k$ and $\max U$ | which of the three objectives, and that they are not comparable | 7.4.1, 10.7, 10.8 |
+| [3.7 absolute value](links-07.md) | $d \ge \pm(u-v)$ in the objective; disjunction if $\ge k$ | whether it is objective or constraint, and in which direction | 10.7, 10.8 |
 | [3.8 big-M](links-08.md) | $a'x \le b + M(1-y)$ | the value of $M$ computed from the data | 7.7, 3.9 |
 | [3.9 precedences](links-09.md) | $s_{ij}+s_{ji}=1$, $\kappa_i \ge \kappa_j + t_i - M(1-s_{ij})$ | the horizon and $M = \sum_h t_h$ | 7.7 |
 | [3.10 if and only if](links-10.md) | $y \le x_j$ and $y \ge \sum_j x_j - (p-1)$ | whether the second direction is needed or follows from optimality | 7.6, 9.3 |
-| [3.11 counting types](links-11.md) | $\ell y_j \le q_j \le C_j y_j$, $\sum_j y_j \ge p$ | that without the threshold $\ell$ the count is empty | 9.3, 10.2, 12.1 |
+| [3.11 counting types](links-11.md) | $\ell y_j \le q_j \le C_j y_j$, $\sum_j y_j \ge p$ | that without the threshold $\ell$ the count is empty | 9.3, 10.3, 10.4 |
 | [3.12 alldiff / expansion](links-12.md) | double partitioning; $v = \sum_k 2^k b_k$ | that alldiff has an exact relaxation | EX 9, EX 15 |
 | [3.13 soft constraints](links-13.md) | $a'x + s^- - s^+ = \beta$ with penalties | the two signs of the penalties | 9.1, EX 15 |
 | [3.14 piecewise function](links-14.md) | convex combination $+$ adjacency | whether $g$ is convex; otherwise adjacency is mandatory | 10.1 |
