@@ -1,4 +1,4 @@
-"""Chapter 2 -- Logic and binary variables: from CNF to linear constraints.
+"""Chapter 5 -- Logic and binary variables: from CNF to linear constraints.
 
 Turns the implications of the chapter's five exercises into conjunctive normal
 form and then into linear constraints, and *proves by enumeration* that the

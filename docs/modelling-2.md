@@ -260,7 +260,7 @@ The notebook is
 ??? example "Show the complete script — `python/cap02_logic.py` (218 lines)"
 
     ```python
-    """Chapter 2 -- Logic and binary variables: from CNF to linear constraints.
+    """Chapter 5 -- Logic and binary variables: from CNF to linear constraints.
 
     Turns the implications of the chapter's five exercises into conjunctive normal
     form and then into linear constraints, and *proves by enumeration* that the

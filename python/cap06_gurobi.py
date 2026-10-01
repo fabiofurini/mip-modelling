@@ -1,4 +1,4 @@
-"""Chapter 6 -- From the model to Python/Gurobi: how it is written and read.
+"""Chapter 3 -- From the model to Python/Gurobi: how it is written and read.
 
 The four classes of variables, one addConstrs per family of constraints, and
 above all how to read the results: Status, SolCount, ObjVal, ObjBound, MIPGap,

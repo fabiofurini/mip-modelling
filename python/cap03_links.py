@@ -1,4 +1,4 @@
-"""Chapter 3 -- Links between variables: one checked example per technique.
+"""Chapter 6 -- Links between variables: one checked example per technique.
 
 Fourteen techniques for linking families of variables. For each one: a minimal
 instance, the model, the integer optimum, the LP+ relaxation and --- where two

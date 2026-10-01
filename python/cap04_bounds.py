@@ -1,4 +1,4 @@
-"""Chapter 4 -- Relaxations, duality and bounds: the checked examples.
+"""Chapter 2 -- Relaxations, duality and bounds: the checked examples.
 
 A minimisation and a maximisation problem, written with their duals; a dual
 solution built by hand and the check of weak duality; the comparison between the

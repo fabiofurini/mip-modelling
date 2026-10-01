@@ -1,4 +1,4 @@
-"""Chapter 5 -- Constructive heuristics: the six families, with trace and bound.
+"""Chapter 4 -- Constructive heuristics on the classical problems, with trace and bound.
 
 Every heuristic of the course on a minimal instance: the step-by-step trace (the
 same text that ends up in the notes), the feasibility check of the solution
