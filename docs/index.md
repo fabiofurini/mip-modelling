@@ -11,9 +11,9 @@ A model with binary and integer variables is not just *written*: it is
 *proved*. Every constraint linking two families of variables imposes a logical
 implication, and the student must be able to prove that it really does — in
 both directions, or by explaining why one direction follows from optimality.
-Then the model is *squeezed*: a constructive heuristic yields an upper bound
-and a dual solution of the LP relaxation yields a lower bound, trapping
-the optimal value between the two — the same technique used in practice
+Then the model is *bounded on both sides*: a constructive heuristic yields an
+upper bound and a dual solution of the LP relaxation yields a lower bound, and
+the optimal value is trapped between the two — the same technique used in practice
 whenever a real instance is too large to be solved to proven optimality.
 Finally the model is *solved*, with Gurobi from Python.
 
@@ -23,10 +23,10 @@ Every model can be run **right away in the browser**: each chapter has its own
 !!! tip "The method of the course"
     For every problem: model → proof of the links → instance → heuristic
     (upper bound) → dual of the LP relaxation (lower bound) → solver →
-    **additional modelling questions**, because the base model is read, the
-    variant is written.
+    **additional modelling questions**: the base model is there to be read,
+    the variant is yours to write.
 
-## The three parts of the course
+## The two parts of the course
 
 <div class="grid cards" markdown>
 
@@ -54,8 +54,7 @@ Every model can be run **right away in the browser**: each chapter has its own
 
     ---
 
-    Organization, the exam format, the three volumes of notes in PDF, the
-    notebooks.
+    Organization, the exam format, the volumes of notes in PDF, the notebooks.
 
     [:octicons-arrow-right-24: Organization](organization.md)
 

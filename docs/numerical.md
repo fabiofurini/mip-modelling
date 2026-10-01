@@ -11,7 +11,7 @@ get your bearings, then take on the general problems.
 The format is reduced but always keeps the same five pieces:
 
 1. the statement, with the data of the instance;
-2. the **symbolic model**, with its variables and its constraints;
+2. the **variables**, with their domain and their count;
 3. the **model of the instance**, primal and dual;
 4. a feasible solution built by hand, which gives the primal bound;
 5. a dual solution built by hand, which gives the dual bound, and the comparison

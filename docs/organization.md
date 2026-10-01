@@ -1,12 +1,11 @@
 # Course organization
 
-## The three-part path
+## The two-part path
 
 | | Content | Learning objectives |
 |---|---|---|
 | **Part I** | Modelling | recognise a link between variables (activation, maximum, big-M, if and only if…) and prove that the model really imposes it |
 | **Part II** | The problems | apply the links to three families of real problems and to the mixed problems, from the model to Gurobi code |
-| **Part III** | The course | put what was learned to the test with the additional modelling questions |
 
 ## The format of every exercise (and of the exam)
 
@@ -26,7 +25,7 @@ four-question scheme:
    bound from the other side.
 
 The resulting `lb ≤ z(\mathit{MILP}) ≤ ub` is the thread running through the course: a
-model is not just written down, it is squeezed from both sides before it is
+model is not just written down: it is bounded from both sides before it is
 handed to the solver. A solver stopped halfway does provide a certificate, of
 course — the incumbent `ObjVal` and the bound `ObjBound` enclose the optimum in
 an interval, and `MIPGap` measures its width. The teaching point is a different

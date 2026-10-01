@@ -109,7 +109,7 @@ $$
 $$
 
 **Description.** $\lambda_j$ and $\mu_j$ are the prices of the two constraints
-that squeeze the imbalance of product $j$, one from above and one from below.
+that bound the imbalance of product $j$, one from above and one from below.
 The objective prices the total $T_j$ of each product at those values. The first
 constraint is the column of $z$: the variable appears in every constraint with
 coefficient $1$ and in the primal objective with cost $1$, so the prices of the
