@@ -76,8 +76,11 @@ are the core of the material. What comes after is supplementary.
 
     ---
 
-    The course in forty-three slides: the method, the fourteen links, the
-    sandwich of the bounds, the three families and the mixed problems, the exam format.
+    One hundred and fifty slides: the method and the fourteen links, the
+    sandwich of the bounds, and then **every model and every problem** --- one
+    slide for each of the fifteen numerical models, the statement and the model
+    of each of the twenty-three problems, and the forty problems to model. The
+    models are generated from the same sources as the notes.
 
     [:octicons-download-24: mip-slides.pdf](pdf/mip-slides.pdf)
 
