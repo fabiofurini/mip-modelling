@@ -132,7 +132,8 @@ $\pi_4 + \pi_5 + \pi_6 \le 3$.
 
 $$\mathit{LB} = 3 + 0 + 1 + 0 + 0 + 3 = 7.$$
 
-**A primal upper bound.** The [covering constructive heuristic](modelling-5.md) takes teams $1$,
+**A primal upper bound.** The covering constructive heuristic — at each step one
+picks the element costing least per newly covered requirement — takes teams $1$,
 $2$, $4$, of cost $4+3+3 = 10$: a feasible and **integer** solution, so
 $\mathit{UB} = 10$.
 

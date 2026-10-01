@@ -216,9 +216,9 @@ relative gap is not written and the absolute difference is reported.
 | **set packing** | $\sum_{i \in I} x_i \le 1$ | at most one element of $I$ |
 | **set covering** | $\sum_{i \in I} x_i \ge 1$ | at least one element of $I$ |
 
-Problem [7.1](scheduling-1.md) uses a *partitioning* for every job,
-[7.3](scheduling-3.md) a *packing*, and [chapter 5](modelling-2.md) shows
-*covering* as the direct translation of an OR clause.
+A constraint "every job to exactly one machine" is a *partitioning*; "at most one
+job per time slot" is a *packing*; "every zone covered by at least one station"
+is a *covering*, which is the direct translation of an OR clause.
 
 ## What the solver does with the two bounds
 
@@ -234,7 +234,7 @@ own heuristics and relaxations.
   part of the space that cannot do better is discarded without being explored.
 - The **dual bound** comes from the relaxation, and says how much one may hope
   for at most: the closer it is to the integer optimum — that is, the tighter
-  the formulation, see [chapter 6](links.md) — the less work is left.
+  the formulation — the less work is left.
 
 The gap between the two is what the solver reports as `MIPGap`, and it is also
 the only thing one can claim with certainty when the optimum is not reached.
