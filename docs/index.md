@@ -5,47 +5,37 @@ professor at [DIAG](https://www.diag.uniroma1.it/), Sapienza University of Rome.
 
 **Mixed-integer linear models for Management Engineering.**
 
-> An eight-seat van. Four groups of tourists, of $2$, $3$, $4$ and $5$ people,
-> bidding $30$, $50$, $80$ and $70$ euros, who refuse to be split up. At most
-> two groups can be accepted, and accepting the second forces you to accept the
-> fourth as well. What is the most you can take?
+The course teaches three things, in this order: how to **translate** the text of
+a problem into a model with binary and integer variables, how to **solve** it
+with Gurobi from Python, and how to **certify** the solution when the optimum is
+out of reach.
 
-Three lines of text, and inside them a problem you cannot solve by eye, nor by
-trial and error. This course teaches how to write it as a model, how to solve it
-with Gurobi in ten lines of Python, and — the part usually missing — how to
-**know what the solution in your hands is worth** even when the solver does not
-get to the end.
+The last one is the part usually missing. As soon as the instance grows, the
+solver stops before it has proved optimality, and what is left in hand are two
+numbers. A feasible solution, built by hand with a heuristic, gives the bound on
+one side; a feasible solution of the dual of the linear relaxation gives the
+bound on the other. The optimum lies between them, and the distance between the
+two says how much there still is to gain: if it is small, the solution in hand
+can be used without waiting any longer.
 
-It is $38$ problems worked out in full, $44$ notebooks that run in the browser
-with nothing to install, and every number you read is produced by a script and
-checked by an `assert`: change a datum and the pages change with it.
+**What is inside**
 
-<div class="grid cards" markdown>
+- six modelling chapters: logic and binary variables, the fourteen links between
+  variables with their proofs, relaxations and bounds, constructive heuristics,
+  and the step to Python/Gurobi;
+- fifteen numerical models, one per technique, with the data written out in
+  full;
+- twenty-three problems worked out in full — assignment and scheduling, location
+  and covering, production planning, mixed problems — each with heuristic, dual,
+  optimum and one variant solved;
+- two problems given as they really arrive, with no model already written;
+- forty-four [notebooks](notebooks.md) that run in Colab, with nothing to
+  install.
 
--   :material-text-box-outline: **It starts from a text**
+No result is transcribed by hand: every number you read comes from a script you
+can re-run, and an automatic check verifies that text and code say the same
+thing.
 
-    Four lines of statement, some data, a question.
-
--   :material-function-variant: **The model is written**
-
-    Variables with their domain, objective, constraints — and the link between
-    the variables explained, not just written.
-
--   :material-arrow-collapse-vertical: **The optimum is enclosed**
-
-    $\mathit{LB} \le z(\mathit{MILP}) \le \mathit{UB}$: a heuristic from one
-    side, a dual certificate from the other.
-
--   :material-language-python: **It is solved**
-
-    Gurobi from Python, with the full script on the page and a notebook that
-    opens in Colab.
-
-</div>
-
-Every model can be run **right away in the browser**: every script of the course
-has its own [notebook that opens in Colab](notebooks.md), with nothing to
-install.
 
 !!! tip "The method of the course"
     For every problem: model → links between the variables → instance →
