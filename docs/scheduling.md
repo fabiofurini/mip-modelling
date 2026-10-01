@@ -2,6 +2,7 @@
 
 **Class:** BIP / MILP · **Script:** one script and one notebook per problem
 (`python/fam07_1_assignment.py` … `fam07_7_tardiness.py`).
+{ .scheda }
 
 Seven problems with the same skeleton: some **jobs** must be assigned to some
 **machines** with limited availability. What changes from problem to problem is

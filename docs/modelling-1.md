@@ -1,6 +1,7 @@
 # What is a MIP model
 
 **Class:** LP · ILP · BIP · MILP · **Script:** `python/cap01_models.py`
+{ .scheda }
 
 [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/fabiofurini/mip-modelling/blob/main/notebooks/cap01_models.ipynb)
 

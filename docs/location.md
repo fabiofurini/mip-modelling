@@ -2,6 +2,7 @@
 
 **Class:** BIP / MILP · **Script:** one script and one notebook per problem
 (`python/fam08_1_capacitated.py` … `fam08_4_hub.py`).
+{ .scheda }
 
 Four problems in which we decide **where** to open a facility — a location,
 a hub — and how this constrains the variables that depend on that decision:

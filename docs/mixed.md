@@ -2,6 +2,7 @@
 
 **Class:** BIP / MILP · **Script:** one script and one notebook per problem
 (`python/fam10_1_prizes.py` … `fam10_9_shelves.py`).
+{ .scheda }
 
 The three preceding families have a recognisable structure: one assigns, one
 locates, one plans. The nine problems in this chapter do not have one, and none
@@ -25,7 +26,7 @@ the **LP relaxation is weak**, and in two cases it is exactly zero. The
 reason is always the same: a fractional solution can split every object in half
 and put one half in each container, levelling everything.
 
-!!! note "Where to look for the dual bound when the relaxation is useless"
+!!! note "Where to look for a combinatorial bound when the relaxation is not enough"
     **Parity:** a count that cannot but be even.
     **Number of containers:** how many are needed at the very least, read off
     the capacities.

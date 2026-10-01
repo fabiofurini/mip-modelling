@@ -129,3 +129,18 @@
   background: #0E749055;
   border-radius: 3px;
 }
+
+/* la riga di scheda in cima a una pagina: utile, ma non e' l'apertura */
+.md-typeset .scheda {
+  font-size: .72rem;
+  line-height: 1.6;
+  color: var(--md-default-fg-color--light);
+}
+.md-typeset .scheda strong {
+  color: var(--md-default-fg-color--light);
+  font-weight: 600;
+}
+.md-typeset .scheda code {
+  font-size: .9em;
+  background-color: var(--md-code-bg-color);
+}

@@ -2,6 +2,7 @@
 
 **Class:** MILP · **Links:** maximum variable · **Script:** `python/fam07_4_parallel.py`<br>
 **Difficulty:** ★★☆ · **Time:** 30–45 min
+{ .scheda }
 
 [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/fabiofurini/mip-modelling/blob/main/notebooks/fam07_4_parallel.ipynb)
 

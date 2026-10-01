@@ -2,6 +2,7 @@
 
 **Class:** MILP · **Script:** one script and one notebook per problem
 (`python/fam09_1_lotsizing.py` … `fam09_3_vehicles.py`).
+{ .scheda }
 
 Three problems in which one decides **how much** to produce, not merely
 *whether* to do something. The quantity variables are continuous or integer,

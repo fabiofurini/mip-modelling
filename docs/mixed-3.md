@@ -2,6 +2,7 @@
 
 **Class:** MILP · **Links:** minimum lot (semicontinuous), counting the types · **Script:** `python/fam10_3_diet.py`<br>
 **Difficulty:** ★★☆ · **Time:** 30–45 min
+{ .scheda }
 
 [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/fabiofurini/mip-modelling/blob/main/notebooks/fam10_3_diet.ipynb)
 

@@ -2,6 +2,7 @@
 
 **Class:** MILP · **Links:** availability across two levels, counting with an indicator · **Script:** `python/fam10_4_lights.py`<br>
 **Difficulty:** ★★★ · **Time:** 45–60 min
+{ .scheda }
 
 [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/fabiofurini/mip-modelling/blob/main/notebooks/fam10_4_lights.ipynb)
 

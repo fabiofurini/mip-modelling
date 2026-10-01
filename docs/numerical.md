@@ -2,6 +2,7 @@
 
 **Class:** BIP · ILP · MILP · **Scripts:** one per model,
 `python/ex01_van.py` … `python/ex15_timetable.py`
+{ .scheda }
 
 The fifteen numerical models of the course, from EX 1 to EX 15. Explicit data,
 few variables, one technique per model: they are the easiest ones, and they come

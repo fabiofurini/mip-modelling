@@ -2,6 +2,7 @@
 
 **Class:** ILP · **Links:** integer counts, composition constraints · **Script:** `python/fam10_6_camps.py`<br>
 **Difficulty:** ★★☆ · **Time:** 30–45 min
+{ .scheda }
 
 [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/fabiofurini/mip-modelling/blob/main/notebooks/fam10_6_camps.ipynb)
 

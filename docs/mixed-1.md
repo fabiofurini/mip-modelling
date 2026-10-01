@@ -2,6 +2,7 @@
 
 **Class:** BIP · **Links:** mutual exclusion (set packing), a sum as an indicator · **Script:** `python/fam10_1_prizes.py`<br>
 **Difficulty:** ★★☆ · **Time:** 30–45 min
+{ .scheda }
 
 [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/fabiofurini/mip-modelling/blob/main/notebooks/fam10_1_prizes.ipynb)
 

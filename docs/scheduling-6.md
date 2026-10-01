@@ -2,6 +2,7 @@
 
 **Class:** BIP · **Links:** if and only if (two), CNF · **Script:** `python/fam07_6_classesbonus.py`<br>
 **Difficulty:** ★★★ · **Time:** 45–60 min
+{ .scheda }
 
 [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/fabiofurini/mip-modelling/blob/main/notebooks/fam07_6_classesbonus.ipynb)
 
