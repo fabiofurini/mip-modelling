@@ -55,13 +55,12 @@ if importlib.util.find_spec("gurobipy") is None:
                     "gurobipy", "matplotlib", "pandas", "scipy"], check=True)
 
 for modulo in {MODULI}:                     # plotting style and course utilities
-    if importlib.util.find_spec(modulo) is None:
-        locale = next((p for p in (Path(f"../python/{{modulo}}.py"), Path(f"python/{{modulo}}.py"))
-                       if p.exists()), None)
-        if locale is not None:
-            sys.path.insert(0, str(locale.parent.resolve()))   # notebook opened in the repository
-        else:
-            urllib.request.urlretrieve(f"{RAW}/{{modulo}}.py", f"{{modulo}}.py")   # Colab
+    locale = next((p for p in (Path(f"../python/{{modulo}}.py"), Path(f"python/{{modulo}}.py"))
+                   if p.exists()), None)
+    if locale is not None:
+        sys.path.insert(0, str(locale.parent.resolve()))       # notebook opened in the repository
+    else:                                 # on Colab always re-download: sessions last,
+        urllib.request.urlretrieve(f"{RAW}/{{modulo}}.py", f"{{modulo}}.py")   # modules change
 '''
 
 CHIUSURA = f"""---
