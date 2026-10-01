@@ -23,20 +23,19 @@ Data written out, as in the fifteen numerical models: one reads the statement, r
     same laboratory and cannot both be funded; project $6$ only makes sense if
     project $1$ is funded too. The maximum benefit is wanted.
 
-!!! abstract "N2 — Four couriers, five deliveries"
+!!! abstract "N2 — Three couriers, four deliveries"
 
-    Five deliveries must be given to four couriers. The time courier $i$ takes for
+    Four deliveries must be given to three couriers. The time courier $i$ takes for
     delivery $j$, in minutes, is
 
-    |  | D1 | D2 | D3 | D4 | D5 |
-    |---|---|---|---|---|---|
-    | courier 1 | 20 | 35 | 25 | 40 | 30 |
-    | courier 2 | 25 | 20 | 30 | 35 | 45 |
-    | courier 3 | 30 | 25 | 20 | 30 | 25 |
-    | courier 4 | 40 | 30 | 35 | 20 | 35 |
+    |  | D1 | D2 | D3 | D4 |
+    |---|---|---|---|---|
+    | courier 1 | 20 | 35 | 25 | 40 |
+    | courier 2 | 25 | 20 | 30 | 35 |
+    | courier 3 | 30 | 25 | 20 | 30 |
 
-    Each delivery goes to one courier only; each courier works at most $60$ minutes.
-    The minimum total time is wanted.
+    Every delivery goes to one courier only; every courier works at most $60$
+    minutes. The minimum total time is wanted.
 
 !!! abstract "N3 — Antennas over five districts"
 
@@ -45,11 +44,11 @@ Data written out, as in the fifteen numerical models: one reads the statement, r
     site 4 covers $\{3,5\}$. Every antenna costs the same. All districts must be
     covered with the smallest number of antennas.
 
-!!! abstract "N4 — Seven parcels in ten-kilo boxes"
+!!! abstract "N4 — Four parcels in ten-kilo boxes"
 
-    Seven parcels weigh $6$, $5$, $4$, $4$, $3$, $2$ and $2$ kilos. Each box carries
-    at most $10$ kilos and a parcel is not split. The smallest number of boxes is
-    wanted.
+    Four parcels weigh $6$, $5$, $4$ and $3$ kilos. Every box carries at most $10$
+    kilos and a parcel is not split. Two boxes are available. The minimum number of
+    boxes is wanted.
 
 !!! abstract "N5 — Two products, three departments"
 
@@ -73,35 +72,34 @@ Data written out, as in the fifteen numerical models: one reads the statement, r
     $50$, $120$ and $90$ euros. The first supplier cannot exceed $40$ units, the
     second $70$, the third $60$. The minimum spend is wanted.
 
-!!! abstract "N8 — Five jobs on one machine"
+!!! abstract "N8 — Four jobs on one machine"
 
-    Five jobs run one after the other on a single machine. The durations are $4$,
-    $2$, $6$, $3$ and $5$ hours; the due dates are $8$, $5$, $14$, $10$ and $18$
-    hours from the start. The machine starts at time $0$ and never stops. The worst
-    tardiness — the maximum between zero and completion minus due date — is to be
-    minimised.
+    Four jobs must run one after the other on a single machine. The durations are
+    $4$, $2$, $6$ and $3$ hours; the due dates are $8$, $5$, $14$ and $10$ hours from
+    the start. The machine starts at time $0$ and never stops. One wants to minimise
+    the worst tardiness, that is the maximum between zero and the difference between
+    completion and due date.
 
-!!! abstract "N9 — Four warehouses and six customers"
+!!! abstract "N9 — Three warehouses and three customers"
 
-    Six customers ask for $12$, $8$, $15$, $10$, $6$ and $9$ pallets. Four
-    warehouses may be opened, with capacities $30$, $25$, $20$ and $35$ pallets and
-    opening costs $100$, $90$, $80$ and $120$. The transport cost per pallet from
-    warehouse $l$ to customer $c$ is
+    Three customers ask for $12$, $8$ and $15$ pallets. Three warehouses can be
+    opened, with capacities $20$, $25$ and $18$ pallets and fixed opening costs
+    $100$, $90$ and $80$. The transport cost per pallet from warehouse $l$ to
+    customer $c$ is
 
-    |  | c1 | c2 | c3 | c4 | c5 | c6 |
-    |---|---|---|---|---|---|---|
-    | warehouse 1 | 2 | 4 | 5 | 7 | 6 | 3 |
-    | warehouse 2 | 3 | 2 | 4 | 6 | 5 | 4 |
-    | warehouse 3 | 5 | 3 | 2 | 4 | 3 | 6 |
-    | warehouse 4 | 6 | 5 | 3 | 2 | 2 | 5 |
+    |  | c1 | c2 | c3 |
+    |---|---|---|---|
+    | warehouse 1 | 2 | 4 | 5 |
+    | warehouse 2 | 3 | 2 | 4 |
+    | warehouse 3 | 5 | 3 | 2 |
 
     The minimum total cost is wanted.
 
-!!! abstract "N10 — Six students in three groups"
+!!! abstract "N10 — Four students in two groups"
 
-    Six students have average marks $28$, $24$, $30$, $22$, $26$ and $25$. They must
-    be split into three groups of two. The group with the highest average and the
-    one with the lowest should be as close as possible.
+    Four students have average marks $28$, $24$, $30$ and $23$. They must be split
+    into two groups of two. One wants the group with the highest average and the one
+    with the lowest average to be as close as possible.
 
 !!! abstract "N11 — Five films in two screens"
 
@@ -121,8 +119,8 @@ Data written out, as in the fifteen numerical models: one reads the statement, r
     | iron (mg) | 3 | 2 | 5 | 4 |
 
     At least $120$ grams of protein and $25$ milligrams of iron are needed. A food,
-    if it enters the ration, enters for at least half a kilo. The minimum spend is
-    wanted.
+    if it enters the ration, enters for at least three kilos, and never for more
+    than ten. The minimum spend is wanted.
 
 !!! abstract "N13 — Purchases in brackets"
 
@@ -144,31 +142,31 @@ Data written out, as in the fifteen numerical models: one reads the statement, r
     A line makes one article for three months. The demands are $100$, $140$ and $80$
     pieces. Making a piece costs $5$ euros; starting production in a month costs
     $300$ euros whatever the quantity; holding a piece at the end of a month costs
-    $1$ euro. The line makes at most $150$ pieces a month. Stock starts and ends
+    $1$ euro. The line makes at most $200$ pieces a month. Stock starts and ends
     empty. The minimum cost is wanted.
 
-!!! abstract "N16 — Four containers"
+!!! abstract "N16 — Two containers"
 
-    Four containers carry $20$, $15$, $25$ and $18$ tonnes. Six loads weigh $10$,
-    $8$, $12$, $6$, $9$ and $14$ tonnes. Loads $1$ and $3$ are incompatible and do
-    not travel in the same container; load $6$ needs a refrigerated container, and
-    only $2$ and $4$ are. Every load must be shipped. Using a container costs $100$
-    euros. The minimum cost is wanted.
+    Two containers carry $20$ and $25$ tonnes. Five loads weigh $10$, $8$, $12$, $6$
+    and $9$ tonnes. Loads $1$ and $3$ are incompatible and do not travel in the same
+    container; load $5$ requires a refrigerated container, and only the second one
+    is. Every load must be shipped. Using a container costs $100$ euros. The minimum
+    cost is wanted.
 
-!!! abstract "N17 — Six activities with precedences"
+!!! abstract "N17 — Six activities and two crews"
 
-    Six activities last $3$, $2$, $4$, $1$, $5$ and $2$ days. Activity $3$ starts
-    only after $1$ and $2$; $5$ after $3$; $6$ after $4$ and $5$. Two crews work in
-    parallel, and an activity occupies a crew for its whole duration. Finishing as
-    early as possible is wanted.
+    Six activities last $3$, $2$, $4$, $1$, $5$ and $2$ days. Two crews work in
+    parallel, and an activity occupies a single crew for its whole duration, without
+    interruption. Every crew carries out its activities one after the other. One
+    wants to finish as early as possible.
 
-!!! abstract "N18 — Five emergency crews"
+!!! abstract "N18 — Two emergency crews"
 
-    Five crews must be formed from a pool of ten technicians. Every technician has
-    one of three skills: technicians $1$--$4$ have the first, $5$--$7$ the second,
-    $8$--$10$ the third. Every crew has two technicians and must have two different
-    skills. Every technician is in one crew only. Technicians $3$ and $9$ do not
-    work together. Whether a formation exists is to be decided.
+    Two crews must be formed out of four technicians. Every technician has one of
+    three skills: technicians $1$ and $2$ have the first, technician $3$ the second,
+    technician $4$ the third. Every crew has two technicians and must have two
+    different skills. Every technician is in one crew only. Technicians $1$ and $3$
+    do not work together. One wants to know whether a formation exists.
 
 !!! abstract "N19 — Three periods with backlog"
 
@@ -178,12 +176,11 @@ Data written out, as in the fifteen numerical models: one reads the statement, r
     period of delay. Everything must be delivered by the end of the third period.
     The minimum cost is wanted.
 
-!!! abstract "N20 — Eight pictures on two walls"
+!!! abstract "N20 — Five pictures on two walls"
 
-    Eight pictures are $60$, $45$, $80$, $50$, $70$, $40$, $55$ and $65$ centimetres
-    wide. Two walls are $240$ centimetres long each. Every picture must be hung, and
-    on one wall only. The free space on the two walls should be as equal as
-    possible.
+    Five pictures are $60$, $45$, $80$, $50$ and $70$ centimetres wide. Two walls are
+    $180$ centimetres long each. Every picture must be hung, and on one wall only.
+    One wants the free space on the two walls to be as equal as possible.
 
 
 ## Twenty symbolic problems

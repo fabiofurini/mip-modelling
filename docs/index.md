@@ -133,5 +133,8 @@ are on the [downloads page](downloads.md#regenerating-everything).
 
 ---
 
+By the same author: **[Operations Research Lab](https://fabiofurini.github.io/operations-research-lab/)** —
+the lab module, with the same tools and the same style.
+
 Teaching material by **[Fabio Furini](https://sites.google.com/view/fabiofurini/home-page)** —
 [DIAG](https://www.diag.uniroma1.it/), Sapienza University of Rome.
