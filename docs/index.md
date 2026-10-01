@@ -5,6 +5,9 @@ professor at [DIAG](https://www.diag.uniroma1.it/), Sapienza University of Rome.
 
 **Mixed-integer linear models for Management Engineering.**
 
+[:octicons-download-24: The five volumes in PDF](downloads.md){ .md-button .md-button--primary }
+[:octicons-play-24: The notebooks in Colab](notebooks.md){ .md-button }
+
 ## What you learn to do
 
 - **Read a problem and write its model.** What the decisions are, which

@@ -119,10 +119,3 @@ and put one half in each container, levelling everything.
 
 </div>
 
-## Two problems to model
-
-The chapter closes with two problems given as they really arrive — a text, some
-data, a question — with no model already written: **the depot's week** (10.10)
-and **the technical desk** (10.11). The solutions to their questions, like all
-the others in the course, are in the document reserved for instructors and are
-not published.
