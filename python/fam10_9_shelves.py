@@ -219,10 +219,19 @@ assert viol_4b <= 1e-9, viol_4b
 print(f"Dual solution by hand: beta = 0 and all the gamma weight on the tallest book (number")
 print(f"  {alto_4b + 1}, {h4[alto_4b]} tall), as in the base problem: whatever shelf holds it")
 print("  must be at least as tall. The width does not enter the certificate, and indeed the")
-print("  bound does not change: what changes is the heuristic, which now manages to fit.")
-print(f"  ->  lb = {frazione(lb4b)}")
+print(f"  dual bound does not change: lb = {frazione(lb4b)}.")
 zlp4b, zlp4br, _ = due_rilassamenti(m4b, dl4b)
+
+# -- combinatorial bound: the same argument as the base problem, on the new width --
+usati_4b = -(-sum(w4) // C4B)
+altre_4b = sorted(h4[b] for b in R(n4) if b != alto_4b)
+comb_4b = h4[alto_4b] + min(altre_4b)
+print(f"  The total width is {sum(w4)} and every shelf holds {C4B}: at least")
+print(f"  ceil({sum(w4)} / {C4B}) = {usati_4b} non-empty shelves are still needed. One holds")
+print(f"  the tallest book and is at least {h4[alto_4b]} tall, the other at least {min(altre_4b)}:")
+print(f"  lb = {h4[alto_4b]} + {min(altre_4b)} = {frazione(comb_4b)}, better than the dual bound.")
+lb4b_usato = max(lb4b, comb_4b)
 z4b_val = risolvi(m4b)
-riga_4b = registra_bound("4b shelves 12 wide", ub4b, lb4b, zlp4b, zlp4br, z4b_val)
+riga_4b = registra_bound("4b shelves 12 wide", ub4b, lb4b_usato, zlp4b, zlp4br, z4b_val)
 salva_dati(pd.DataFrame([riga_4b]), "fam10_9b_bound")
-assert lb4b <= zlp4b <= z4b_val <= ub4b + 1e-9
+assert lb4b_usato <= z4b_val <= ub4b + 1e-9

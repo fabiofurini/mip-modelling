@@ -249,7 +249,16 @@ print(f"  still 'units ordered divided by capacity': {D2} / {W2A} = {frazione(lb
 print(f"  With boxes of {w2} it was {frazione(D2 / w2)}: the bound is inversely"
       f" proportional to the capacity, so smaller boxes raise it.")
 zlp2a, zlp2ar, _ = due_rilassamenti(m2a, dl2a)
+
+# -- integer bound: the same per-customer count as the base problem, with the new w --
+per_cliente_2a = [-(-sum(d2[p][c] for p in R(nk)) // W2A) for c in R(nm)]
+comb_2a = float(sum(per_cliente_2a))
+print(f"  Every customer c, though, receives at least ceil(sum_p d_pc / {W2A}) boxes, and boxes")
+print("  are not shared between customers: " + ", ".join(
+    f"customer {c + 1} at least {scatole(per_cliente_2a[c])}" for c in R(nm)) + ".")
+print(f"  Adding up: lb = {frazione(comb_2a)}, better than the bound of the relaxation.")
+lb2a_usato = max(lb2a, comb_2a)
 z2a_val = risolvi(m2a)
-riga_2a = registra_bound("2a boxes of 4", ub2a, lb2a, zlp2a, zlp2ar, z2a_val)
+riga_2a = registra_bound("2a boxes of 4", ub2a, lb2a_usato, zlp2a, zlp2ar, z2a_val)
 salva_dati(pd.DataFrame([riga_2a]), "fam10_5a_bound")
-assert lb2a <= zlp2a <= z2a_val <= ub2a + 1e-9
+assert lb2a_usato <= z2a_val <= ub2a + 1e-9

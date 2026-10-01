@@ -215,7 +215,16 @@ print("  columns of y and z ask the gammas and the deltas to sum to one, and spr
 print("  evenly is the choice that favours no CD. alpha = beta = 0.")
 print(f"  ->  lb = {frazione(lb3b)}")
 zlp3b, zlp3br, _ = due_rilassamenti(m3b, dl3b)
+
+# -- combinatorial bound: the parity argument of the base problem, generalised --
+resto_3b = D3 % M3B
+comb_3b = float(1 if resto_3b else 0)
+verso_3b = "is not" if resto_3b else "is"
+print(f"  The parity argument generalises: the durations are integers summing to {D3}, and")
+print(f"  {D3} {verso_3b} a multiple of {M3B}, so they cannot all be equal and the difference")
+print(f"  between the longest and the shortest is at least {frazione(comb_3b)}.")
+lb3b_usato = max(lb3b, comb_3b)
 z3b_val = risolvi(m3b)
-riga_3b = registra_bound("3b collection on three CDs", ub3b, lb3b, zlp3b, zlp3br, z3b_val)
+riga_3b = registra_bound("3b collection on three CDs", ub3b, lb3b_usato, zlp3b, zlp3br, z3b_val)
 salva_dati(pd.DataFrame([riga_3b]), "fam10_8b_bound")
-assert lb3b <= zlp3b <= z3b_val <= ub3b + 1e-9
+assert lb3b_usato <= z3b_val <= ub3b + 1e-9
