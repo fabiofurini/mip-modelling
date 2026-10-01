@@ -225,6 +225,7 @@ print(f"  {D3} {verso_3b} a multiple of {M3B}, so they cannot all be equal and t
 print(f"  between the longest and the shortest is at least {frazione(comb_3b)}.")
 lb3b_usato = max(lb3b, comb_3b)
 z3b_val = risolvi(m3b)
-riga_3b = registra_bound("3b collection on three CDs", ub3b, lb3b_usato, zlp3b, zlp3br, z3b_val)
+riga_3b = registra_bound("3b collection on three CDs", ub3b, lb3b_usato, zlp3b, zlp3br, z3b_val,
+                         certificato="parity of the durations on three CDs")
 salva_dati(pd.DataFrame([riga_3b]), "fam10_8b_bound")
 assert lb3b_usato <= z3b_val <= ub3b + 1e-9

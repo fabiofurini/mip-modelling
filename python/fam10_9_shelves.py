@@ -232,6 +232,7 @@ print(f"  the tallest book and is at least {h4[alto_4b]} tall, the other at leas
 print(f"  lb = {h4[alto_4b]} + {min(altre_4b)} = {frazione(comb_4b)}, better than the dual bound.")
 lb4b_usato = max(lb4b, comb_4b)
 z4b_val = risolvi(m4b)
-riga_4b = registra_bound("4b shelves 12 wide", ub4b, lb4b_usato, zlp4b, zlp4br, z4b_val)
+riga_4b = registra_bound("4b shelves 12 wide", ub4b, lb4b_usato, zlp4b, zlp4br, z4b_val,
+                         certificato="shelves used and minimum heights")
 salva_dati(pd.DataFrame([riga_4b]), "fam10_9b_bound")
 assert lb4b_usato <= z4b_val <= ub4b + 1e-9

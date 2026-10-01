@@ -1,2 +1,2 @@
-problem,ub,lb,z_lp,z_lp_rafforzato,z_milp,senso
-2a hiring at 3000,24000,13500.0,17490.0,17490.0,19560.0,min
+problem,ub,lb,z_lp,z_lp_rafforzato,z_milp,senso,certificato
+2a hiring at 3000,24000,13500.0,17490.0,17490.0,19560.0,min,

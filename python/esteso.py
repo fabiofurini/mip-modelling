@@ -34,6 +34,10 @@ GRECHE = ("alpha", "beta", "gamma", "delta", "epsilon", "zeta", "eta", "theta",
           "iota", "kappa", "lambda", "mu", "nu", "xi", "rho", "sigma", "tau",
           "phi", "chi", "psi", "omega", "pi")
 
+# i nomi che gurobipy non puo' portare per intero: `lambda` e' una parola
+# riservata di Python, `epsilon` si scrive `\varepsilon` nella dispensa
+ALIAS = {"lam": "lambda", "eps": "varepsilon"}
+
 VERSO = {"<": "\\le", ">": "\\ge", "=": "="}
 
 
@@ -52,7 +56,8 @@ def nome_latex(nome: str) -> str:
     """`x[0,1]` -> `x_{12}`, `alpha[2]` -> `\\alpha_3`, `gamma` -> `\\gamma`."""
     radice, _, coda = nome.partition("[")
     radice = radice.strip()
-    testa = f"\\{radice}" if radice in GRECHE else radice
+    radice = ALIAS.get(radice, radice)
+    testa = f"\\{radice}" if radice in GRECHE or radice == "varepsilon" else radice
     if not coda:
         return testa
     indici = "".join(_indice(p) for p in coda.rstrip("]").split(","))

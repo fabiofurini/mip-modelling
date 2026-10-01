@@ -1,2 +1,2 @@
-problem,ub,lb,z_lp,z_lp_rafforzato,z_milp,senso
-3b collection on three CDs,2,1.0,0.0,0.0,2.0,min
+problem,ub,lb,z_lp,z_lp_rafforzato,z_milp,senso,certificato
+3b collection on three CDs,2,1.0,0.0,0.0,2.0,min,parity of the durations on three CDs

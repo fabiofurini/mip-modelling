@@ -1,2 +1,2 @@
-problem,ub,lb,z_lp,z_lp_rafforzato,z_milp,senso
-2 shipments,2,2.0,1.1,1.1,2.0,min
+problem,ub,lb,z_lp,z_lp_rafforzato,z_milp,senso,certificato
+2 shipments,2,2.0,1.1,1.1,2.0,min,

@@ -1,2 +1,2 @@
-problem,ub,lb,z_lp,z_lp_rafforzato,z_milp,senso
-5 classes setup,100.0,9,32.692307692307686,25.307692307692303,21.0,max
+problem,ub,lb,z_lp,z_lp_rafforzato,z_milp,senso,certificato
+5 classes setup,100.0,9,32.692307692307686,25.307692307692303,21.0,max,

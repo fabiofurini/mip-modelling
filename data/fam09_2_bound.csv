@@ -1,2 +1,2 @@
-problem,ub,lb,z_lp,z_lp_rafforzato,z_milp,senso
-2 workforce,18200,13500.0,15960.0,15960.0,16660.0,min
+problem,ub,lb,z_lp,z_lp_rafforzato,z_milp,senso,certificato
+2 workforce,18200,13500.0,15960.0,15960.0,16660.0,min,

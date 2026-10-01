@@ -1,2 +1,2 @@
-problem,ub,lb,z_lp,z_lp_rafforzato,z_milp,senso
-4b shelves 12 wide,13,12,8.0,8.0,12.0,min
+problem,ub,lb,z_lp,z_lp_rafforzato,z_milp,senso,certificato
+4b shelves 12 wide,13,12,8.0,8.0,12.0,min,shelves used and minimum heights

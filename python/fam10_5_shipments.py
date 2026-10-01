@@ -259,6 +259,7 @@ print("  are not shared between customers: " + ", ".join(
 print(f"  Adding up: lb = {frazione(comb_2a)}, better than the bound of the relaxation.")
 lb2a_usato = max(lb2a, comb_2a)
 z2a_val = risolvi(m2a)
-riga_2a = registra_bound("2a boxes of 4", ub2a, lb2a_usato, zlp2a, zlp2ar, z2a_val)
+riga_2a = registra_bound("2a boxes of 4", ub2a, lb2a_usato, zlp2a, zlp2ar, z2a_val,
+                         certificato="count of the boxes per customer")
 salva_dati(pd.DataFrame([riga_2a]), "fam10_5a_bound")
 assert lb2a_usato <= z2a_val <= ub2a + 1e-9

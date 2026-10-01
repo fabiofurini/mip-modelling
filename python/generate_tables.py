@@ -36,7 +36,12 @@ def numero(x) -> str:
 
 def voci(riga, conf):
     """The rows of the table, in order, with the notes right for the sense."""
-    return conf["voci"][str(riga.get("senso", "min"))] + conf["comuni"]
+    righe = conf["voci"][str(riga.get("senso", "min"))]
+    grezza = riga.get("certificato", "")
+    nota = "" if pd.isna(grezza) else str(grezza).strip()
+    if nota:   # il bound certificato non viene dal duale: lo dice la tabella
+        righe = [(e, c, nota if n0 == "dual certificate built by hand" else n0) for e, c, n0 in righe]
+    return righe + conf["comuni"]
 
 
 def tabella(riga, conf) -> str:

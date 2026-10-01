@@ -301,6 +301,7 @@ for j in R(r2):
 print(f"  Every feasible partition must respect them all: z >= max_j g_j = {frazione(lb2a)}")
 print("  (with the branches free it was " + frazione(lb2) + ": tying two branches raises the bound)")
 z2a_val = risolvi(m2a)
-riga_2a = registra_bound("2a branches 1 and 2 together", ub2a, lb2a, zlp2a, zlp2ar, z2a_val)
+riga_2a = registra_bound("2a branches 1 and 2 together", ub2a, lb2a, zlp2a, zlp2ar, z2a_val,
+                         certificato="smallest imbalance with branches 1 and 2 tied")
 salva_dati(pd.DataFrame([riga_2a]), "fam10_7a_bound")
 assert lb2a <= z2a_val <= ub2a + 1e-9

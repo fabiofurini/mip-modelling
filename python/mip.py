@@ -164,9 +164,9 @@ def due_rilassamenti(m, d):
     return zlp, zlp_r, pi
 
 
-def registra_bound(nome, ub, lb, zlp, zlp_r, zmilp, senso="min"):
+def registra_bound(nome, ub, lb, zlp, zlp_r, zmilp, senso="min", certificato=None):
     """Print the bound row and return the record to save as CSV."""
     print(tabella_bound(ub, lb, zlp, zmilp, senso, zlp_r))
     # the sense is needed by the tables: in a maximum the heuristic gives the lb
     return {"problem": nome, "ub": ub, "lb": lb, "z_lp": zlp, "z_lp_rafforzato": zlp_r,
-            "z_milp": zmilp, "senso": senso}
+            "z_milp": zmilp, "senso": senso, "certificato": certificato or ""}

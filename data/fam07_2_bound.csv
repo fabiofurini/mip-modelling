@@ -1,2 +1,2 @@
-problem,ub,lb,z_lp,z_lp_rafforzato,z_milp,senso
-2 fixed cost,12,6.25,6.25,6.365,12.0,min
+problem,ub,lb,z_lp,z_lp_rafforzato,z_milp,senso,certificato
+2 fixed cost,12,6.25,6.25,6.365,12.0,min,

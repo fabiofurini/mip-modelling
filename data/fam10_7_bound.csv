@@ -1,2 +1,2 @@
-problem,ub,lb,z_lp,z_lp_rafforzato,z_milp,senso
-2 antitrust,6,2,0.0,0.0,4.0,min
+problem,ub,lb,z_lp,z_lp_rafforzato,z_milp,senso,certificato
+2 antitrust,6,2,0.0,0.0,4.0,min,

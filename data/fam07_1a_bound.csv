@@ -1,2 +1,2 @@
-problem,ub,lb,z_lp,z_lp_rafforzato,z_milp,senso
-1a jobs 1 and 3 together,12,12.0,12.0,12.0,12.0,min
+problem,ub,lb,z_lp,z_lp_rafforzato,z_milp,senso,certificato
+1a jobs 1 and 3 together,12,12.0,12.0,12.0,12.0,min,
