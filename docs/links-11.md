@@ -1,4 +1,4 @@
-# 3.11 Counting the different types
+# 6.11 Counting the different types
 
 **Technique:** binaries with continuous and a count · **Script:** `python/cap03_links.py` · [All the techniques](links.md)
 
@@ -41,7 +41,7 @@ threshold $\ell = 3$, at least two types: $z(\mathit{MILP}) = 57$, with
 $q = (3, 0, 9)$. The relaxation is also $57$: here the counting introduces no
 gap at all.
 
-## In gurobipy, and where it is seen again
+## In gurobipy
 
 ```python
 m.addConstrs((q[j] <= C[j] * y[j] for j in range(n)), name="activate")
@@ -49,4 +49,3 @@ m.addConstrs((q[j] >= ell * y[j] for j in range(n)), name="lot")
 m.addConstr(y.sum() >= p, name="at_least_p_types")
 ```
 
-Seen again in exercises 9.3 (vehicles), 10.3 (diet) and 10.4 (trees).

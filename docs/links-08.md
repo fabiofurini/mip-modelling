@@ -1,4 +1,4 @@
-# 3.8 Big-M: conditional constraints and disjunctions
+# 6.8 Big-M: conditional constraints and disjunctions
 
 **Technique:** binary with a constraint · **Script:** `python/cap03_links.py` · [All the techniques](links.md)
 
@@ -48,12 +48,10 @@ Three things must be told apart:
 The degradation is monotone and fast. The operational rule: **compute $M$ from
 the data, always, and write it in the text right after the model**.
 
-## In gurobipy, and where it is seen again
+## In gurobipy
 
 ```python
 M = sum(max(a[j], 0) for j in range(n)) - b       # computed from the data, not guessed
 m.addConstr(gp.quicksum(a[j] * x[j] for j in range(n)) <= b + M * (1 - y), name="cond")
 ```
 
-Seen again in problem [7.7](scheduling-7.md) and in
-[technique 3.9](links-09.md).

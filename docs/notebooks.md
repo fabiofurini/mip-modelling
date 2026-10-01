@@ -14,12 +14,10 @@ being written to a file.
 
 | Chapter | Class | Notebook |
 |---|---|---|
-| [What is a MIP model](modelling-1.md) | LP | [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/fabiofurini/mip-modelling/blob/main/notebooks/cap01_models.ipynb) |
+| [From the model to Python/Gurobi](modelling-6.md) | implementation | [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/fabiofurini/mip-modelling/blob/main/notebooks/cap06_gurobi.ipynb) |
+| [Constructive heuristics](modelling-5.md) | algorithms | [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/fabiofurini/mip-modelling/blob/main/notebooks/cap05_heuristics.ipynb) |
 | [Logic and binary variables](modelling-2.md) | BIP | [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/fabiofurini/mip-modelling/blob/main/notebooks/cap02_logic.ipynb) |
 | [Links between variables](links.md) | modelling techniques | [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/fabiofurini/mip-modelling/blob/main/notebooks/cap03_links.ipynb) |
-| [Relaxations, duality and bounds](modelling-4.md) | LP | [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/fabiofurini/mip-modelling/blob/main/notebooks/cap04_bounds.ipynb) |
-| [Constructive heuristics](modelling-5.md) | algorithms | [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/fabiofurini/mip-modelling/blob/main/notebooks/cap05_heuristics.ipynb) |
-| [From the model to Python/Gurobi](modelling-6.md) | implementation | [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/fabiofurini/mip-modelling/blob/main/notebooks/cap06_gurobi.ipynb) |
 | [Minimum-cost assignment with availability](scheduling-1.md) | BIP | [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/fabiofurini/mip-modelling/blob/main/notebooks/fam07_1_assignment.ipynb) |
 | [Machines with a fixed usage cost](scheduling-2.md) | BIP | [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/fabiofurini/mip-modelling/blob/main/notebooks/fam07_2_fixedcost.ipynb) |
 | [Job selection with revenues and fixed-cost machines](scheduling-3.md) | BIP | [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/fabiofurini/mip-modelling/blob/main/notebooks/fam07_3_selection.ipynb) |

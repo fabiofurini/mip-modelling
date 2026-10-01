@@ -1,4 +1,4 @@
-# 3.4 Integer counts and rounding up
+# 6.4 Integer counts and rounding up
 
 **Technique:** integer with binaries · **Script:** `python/cap03_links.py` · [All the techniques](links.md)
 
@@ -38,12 +38,10 @@ the integer optimum is $z(\mathit{MILP}) = 4$. The gap $4 - 17/5 = 3/5$ comes
 entirely from integrality: no linear cut on the $x$ alone closes it, an
 inequality using $w$ integer is needed.
 
-## In gurobipy, and where it is seen again
+## In gurobipy
 
 ```python
 w = m.addVar(vtype=GRB.INTEGER, name="w")
 m.addConstr(gp.quicksum(a[i] * x[i] for i in range(n)) <= K * w, name="capacity")
 ```
 
-Seen again in exercises 10.4 (boxes of lights), 10.5 (shipments) and 9.2
-(workforce).

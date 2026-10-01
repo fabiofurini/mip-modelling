@@ -13,16 +13,17 @@ dozen links between variables, knowing why they work, are.
     - Build a feasible solution by hand, and say which bound it gives.
     - Take the model into Python/Gurobi and read what the solver answers.
 
-Six chapters, in this order: what a MIP model is, the logic of binary variables,
-the fourteen links between variables, bounds from the relaxation side (the dual)
-and from the feasible-solutions side (constructive heuristics), and the solver.
+Six chapters, in this order: what a MIP model is; the bounds, from the relaxation
+side and from its dual; the solver, with the classical models written in Python;
+the constructive heuristics, which give the bound from the other side; the logic
+of binary variables; and the fourteen links between variables, which are the
+heart of modelling and come when every tool to judge them is already in hand.
 
 Every chapter has a **script** producing all the numbers quoted and a
 **notebook** that opens in Colab. No value appears on these pages unless it
 comes out of a reproducible run.
 
 <div class="grid cards" markdown>
-
 -   :material-shape-outline: **1. What is a MIP model**
 
     ---
@@ -32,8 +33,34 @@ comes out of a reproducible run.
     Branch-and-bound in one page.
 
     [:octicons-arrow-right-24: The chapter](modelling-1.md)
+-   :material-arrow-collapse-vertical: **2. Relaxations, duality and bounds**
 
--   :material-gate-and: **2. Logic and binary variables**
+    ---
+
+    The primal/dual conversion table, three recipes for building a dual solution
+    by hand, valid inequalities and cover cuts, and why the LP duals are not the
+    marginal prices of the MILP.
+
+    [:octicons-arrow-right-24: The chapter](modelling-4.md)
+-   :material-language-python: **3. From the model to Python/Gurobi**
+
+    ---
+
+    The four classes of variables, one `addConstrs` per family, and how to read
+    `Status`, `SolCount`, `ObjVal`, `ObjBound`, `MIPGap`, `NodeCount` and the
+    tolerances. The course protocol, from start to finish.
+
+    [:octicons-arrow-right-24: The chapter](modelling-6.md)
+-   :material-run-fast: **4. Constructive heuristics**
+
+    ---
+
+    Next-fit, first-fit, best-fit, LPT, covering constructive heuristic, knapsack constructive heuristic and lot
+    sizing: pseudocode, trace, feasibility check and bound. A failure of the
+    constructive heuristic does not prove infeasibility.
+
+    [:octicons-arrow-right-24: The chapter](modelling-5.md)
+-   :material-gate-and: **5. Logic and binary variables**
 
     ---
 
@@ -42,8 +69,7 @@ comes out of a reproducible run.
     solved exercises, all checked by enumeration.
 
     [:octicons-arrow-right-24: The chapter](modelling-2.md)
-
--   :material-link-variant: **3. Links between variables**
+-   :material-link-variant: **6. Links between variables**
 
     ---
 
@@ -53,35 +79,5 @@ comes out of a reproducible run.
     functions. Plus the map.
 
     [:octicons-arrow-right-24: The fourteen techniques](links.md)
-
--   :material-arrow-collapse-vertical: **4. Relaxations, duality and bounds**
-
-    ---
-
-    The primal/dual conversion table, three recipes for building a dual solution
-    by hand, valid inequalities and cover cuts, and why the LP duals are not the
-    marginal prices of the MILP.
-
-    [:octicons-arrow-right-24: The chapter](modelling-4.md)
-
--   :material-run-fast: **5. Constructive heuristics**
-
-    ---
-
-    Next-fit, first-fit, best-fit, LPT, covering constructive heuristic, knapsack constructive heuristic and lot
-    sizing: pseudocode, trace, feasibility check and bound. A failure of the
-    constructive heuristic does not prove infeasibility.
-
-    [:octicons-arrow-right-24: The chapter](modelling-5.md)
-
--   :material-language-python: **6. From the model to Python/Gurobi**
-
-    ---
-
-    The four classes of variables, one `addConstrs` per family, and how to read
-    `Status`, `SolCount`, `ObjVal`, `ObjBound`, `MIPGap`, `NodeCount` and the
-    tolerances. The course protocol, from start to finish.
-
-    [:octicons-arrow-right-24: The chapter](modelling-6.md)
 
 </div>

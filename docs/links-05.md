@@ -1,4 +1,4 @@
-# 3.5 The maximum auxiliary variable
+# 6.5 The maximum auxiliary variable
 
 **Technique:** continuous with binaries · **Script:** `python/cap03_links.py` · [All the techniques](links.md)
 
@@ -47,12 +47,10 @@ $x_j = z/t_j$ spreads the choice over all three jobs and lowers the maximum. The
 maximum link gives **weak** relaxations: one of the reasons makespan problems
 are hard.
 
-## In gurobipy, and where it is seen again
+## In gurobipy
 
 ```python
 z = m.addVar(name="z")
 m.addConstrs((z >= t[j] * x[j] for j in range(n)), name="maximum")
 ```
 
-Seen again in problems [7.4](scheduling-4.md), [7.7](scheduling-7.md),
-[8.4](location-4.md) and 10.9 (books on shelves).

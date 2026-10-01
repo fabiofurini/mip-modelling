@@ -1,4 +1,4 @@
-# 3.7 The absolute value
+# 6.7 The absolute value
 
 **Technique:** continuous with continuous (and a binary, when needed) · **Script:** `python/cap03_links.py` · [All the techniques](links.md)
 
@@ -39,7 +39,7 @@ and the case in a constraint behave **radically differently**.
 In the first case the two constraints impose $d \ge |u - v|$ (one of the two
 right-hand sides *is* $|u-v|$); the objective, which minimises $d$ and in which
 $d$ appears nowhere else, drives it to equality by the exchange argument of
-[technique 3.5](links-05.md). In the third case, $b = 1$ switches off the second
+[technique 6.5](links-05.md). In the third case, $b = 1$ switches off the second
 constraint (provided $M \ge k + \max(v-u)$) and leaves the first, and vice
 versa: it is a disjunction, not a conjunction, and without the binary both would
 be imposed — that is, $0 \ge 2k$, infeasible for $k > 0$.
@@ -58,7 +58,7 @@ $z(\mathit{MILP}) = 1$ and relaxation $z(\mathit{LP}^+) = 0$: the continuous
 problem splits $21$ into two equal halves and zeroes the gap. The relaxation of
 an absolute-value objective is typically $0$, that is, useless.
 
-## In gurobipy, and where it is seen again
+## In gurobipy
 
 ```python
 d = m.addVar(name="d")
@@ -66,5 +66,3 @@ m.addConstr(d >= u - v, name="abs_plus")
 m.addConstr(d >= v - u, name="abs_minus")
 ```
 
-Seen again in exercises 10.8 (CDs) and 10.7 (antitrust), and in
-[technique 3.13](links-13.md) in an equivalent form with two deviations.

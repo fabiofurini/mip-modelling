@@ -92,23 +92,26 @@ nav:
   - Modelling:
       - modelling.md
       - 1. What is a MIP model: modelling-1.md
-      - 2. Logic and binary variables: modelling-2.md
-      - 3. Links between variables:
+      - 2. Relaxations, duality and bounds: modelling-4.md
+      - 3. From the model to Python/Gurobi: modelling-6.md
+      - 4. Constructive heuristics: modelling-5.md
+      - 5. Logic and binary variables: modelling-2.md
+      - 6. Links between variables:
           - links.md
-          - 3.1 Activation: links-01.md
-          - 3.2 Fixed cost: links-02.md
-          - 3.3 Minimum lot: links-03.md
-          - 3.4 Integer counts: links-04.md
-          - 3.5 Maximum variable: links-05.md
-          - 3.6 Min-max and max-min: links-06.md
-          - 3.7 Absolute value: links-07.md
-          - 3.8 Big-M: links-08.md
-          - 3.9 Precedences: links-09.md
-          - 3.10 If and only if: links-10.md
-          - 3.11 Counting types: links-11.md
-          - 3.12 Alldiff and expansion: links-12.md
-          - 3.13 Soft constraints: links-13.md
-          - 3.14 Piecewise functions: links-14.md
+          - 6.1 Activation: links-01.md
+          - 6.2 Fixed cost: links-02.md
+          - 6.3 Minimum lot: links-03.md
+          - 6.4 Integer counts: links-04.md
+          - 6.5 Maximum variable: links-05.md
+          - 6.6 Min-max and max-min: links-06.md
+          - 6.7 Absolute value: links-07.md
+          - 6.8 Big-M: links-08.md
+          - 6.9 Precedences: links-09.md
+          - 6.10 If and only if: links-10.md
+          - 6.11 Counting types: links-11.md
+          - 6.12 Alldiff and expansion: links-12.md
+          - 6.13 Soft constraints: links-13.md
+          - 6.14 Piecewise functions: links-14.md
       - 4. Relaxations, duality and bounds: modelling-4.md
       - 5. Constructive heuristics: modelling-5.md
       - 6. From the model to Python/Gurobi: modelling-6.md

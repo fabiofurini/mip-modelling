@@ -1,4 +1,4 @@
-# 3.10 "If and only if"
+# 6.10 "If and only if"
 
 **Technique:** binary with binaries · **Script:** `python/cap03_links.py` · [All the techniques](links.md)
 
@@ -59,11 +59,10 @@ directions imposed the relaxation is exact. The second constraint is weak in the
 relaxation (with $x_j = 1/2$ its right-hand side is negative), but here that
 does not matter.
 
-## In gurobipy, and where it is seen again
+## In gurobipy
 
 ```python
 m.addConstrs((y <= x[j] for j in range(p)), name="iff_up")
 m.addConstr(y >= gp.quicksum(x[j] for j in range(p)) - (p - 1), name="iff_down")
 ```
 
-Seen again in problem [7.6](scheduling-6.md) and in exercise 9.3.

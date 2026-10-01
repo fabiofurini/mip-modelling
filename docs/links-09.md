@@ -1,4 +1,4 @@
-# 3.9 Precedences and sequencing
+# 6.9 Precedences and sequencing
 
 **Technique:** binaries with continuous, big-M · **Script:** `python/cap03_links.py` · [All the techniques](links.md)
 
@@ -46,7 +46,7 @@ precedence constraints are half switched off and the jobs may overlap. It is the
 weakest relaxation in the whole chapter, and it explains why big-M sequencing
 models scale badly.
 
-## In gurobipy, and where it is seen again
+## In gurobipy
 
 ```python
 M = sum(t)                                    # the horizon, declared
@@ -57,5 +57,3 @@ for i in range(n):
         m.addConstr(kappa[j] >= kappa[i] + t[j] - M * (1 - s[j, i]), name=f"prec{j}{i}")
 ```
 
-Seen again in problem [7.7](scheduling-7.md), where release dates allow $M$ to
-be reduced.

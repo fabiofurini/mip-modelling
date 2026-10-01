@@ -1,4 +1,4 @@
-# 3.1 Activation: aggregated and disaggregated form
+# 6.1 Activation: aggregated and disaggregated form
 
 **Technique:** binary with binary · **Script:** `python/cap03_links.py` · [All the techniques](links.md)
 
@@ -64,13 +64,10 @@ tighter relaxation: the typical trade-off of this technique.
 
 ![Activation: the two relaxations](img/cap03_attivazione.png)
 
-## In gurobipy, and where it is seen again
+## In gurobipy
 
 ```python
 m.addConstrs((x[i, j] <= y[j] for i in range(n) for j in range(mm)), name="link")   # disaggregated
 m.addConstrs((x.sum("*", j) <= n * y[j] for j in range(mm)), name="link")           # aggregated
 ```
 
-Seen again in problems [7.2](scheduling-2.md), [7.3](scheduling-3.md),
-[7.5](scheduling-5.md) and [8.4](location-4.md), where comparing the two forms
-is a modelling question.

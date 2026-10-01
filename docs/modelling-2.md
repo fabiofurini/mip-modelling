@@ -231,13 +231,20 @@ for i, formula in enumerate(implications, 1):          # one clause, one constra
 m.optimize()
 ```
 
-## What is left to the next chapter
+## What this chapter has put in your hands
 
-Here the links are between variables that are **all binary**. When one of the
-families is continuous or integer — "if the machine is not on it produces
-nothing", "this variable equals the maximum of those" — CNF is no longer enough:
-the coefficients, the big-Ms and the optimality arguments of
-[chapter 3](links.md) are needed.
+A logical condition between yes/no decisions is always written the same way: one
+binary per elementary fact, the condition brought into conjunctive normal form —
+a conjunction of ORs — and every clause becomes a linear inequality. The AND
+costs nothing, because constraints are already in AND with each other; the OR
+becomes a sum $\ge 1$; the NOT becomes $1 - x$; the implication
+$x \Rightarrow y$ becomes $x \le y$; the "if and only if" asks for both
+inequalities.
+
+Three shapes recur often enough to have a name: the **set covering**
+($\sum_{j \in S} x_j \ge 1$, at least one), the **set packing** ($\le 1$, at most
+one) and the **set partitioning** ($= 1$, exactly one). Recognising them in a
+statement is half of the modelling work.
 
 ## Code
 

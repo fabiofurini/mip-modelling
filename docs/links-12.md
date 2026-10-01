@@ -1,4 +1,4 @@
-# 3.12 Alldiff and binary expansion
+# 6.12 Alldiff and binary expansion
 
 **Technique:** binaries with each other; integer with binaries · **Script:** `python/cap03_links.py` · [All the techniques](links.md)
 
@@ -53,7 +53,7 @@ between $v$ and $(b_0, \dots, b_{p-1})$ is one-to-one.
 $v \in \{0,\dots,7\}$ with $v \ge 5$, $\min v$: the model gives
 $v = 5 = 1 + 4$, that is $(b_0, b_1, b_2) = (1, 0, 1)$.
 
-## In gurobipy, and where it is seen again
+## In gurobipy
 
 ```python
 m.addConstrs((p.sum(i, "*") == 1 for i in range(n)), name="one_value")

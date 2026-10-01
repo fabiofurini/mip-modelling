@@ -77,7 +77,7 @@ The reading order never changes: `Status`, then `SolCount`, then `ObjVal` and
 | `TIME_LIMIT` | 9 | $\ge 1$ | `ObjBound` $\le z(\mathit{MILP}) \le$ `ObjVal` |
 | `SOLUTION_LIMIT` | 10 | $\ge 1$ | as above |
 
-!!! example "The four cases on the instance of problem 7.1"
+!!! example "The four cases on the assignment instance"
     - **Normal solve.** `Status = 2`, `SolCount = 2`, `ObjVal = ObjBound = 11`,
       `MIPGap = 0`, `NodeCount = 0`.
     - **Infeasible.** With availability $(1,1,1)$: `Status = 3`, `SolCount = 0`.
@@ -126,7 +126,7 @@ zlp = r.ObjVal
 duals = {c.ConstrName: c.Pi for c in r.getConstrs()}
 ```
 
-On the instance of problem 7.1, $z(\mathit{LP}^+) = z(\mathit{LP}) = 53/5$ — the
+On that instance, $z(\mathit{LP}^+) = z(\mathit{LP}) = 53/5$ — the
 two relaxations coincide because the assignment constraints already imply
 $x_{jm} \le 1$ — and the nonzero duals are $\tilde\mu = (2,\ 4.8,\ 5)$ and
 $\tilde\pi_2 = -0.2$: machine 2 is the only tight resource.
@@ -152,7 +152,7 @@ row = registra_bound("7.1 assignment", ub, lb, zlp, zlp_str, z)   # (6) the tabl
 salva_dati(pd.DataFrame([row]), "fam07_1_bound")          #     -> data/fam07_1_bound.csv
 ```
 
-On the instance of problem 7.1 the protocol produces $\mathit{LB} = 10$,
+On the assignment instance the protocol produces $\mathit{LB} = 10$,
 $z(\mathit{LP}) = 53/5$, $z(\mathit{MILP}) = 11$, $\mathit{UB} = 11$, and the
 row ends up in `data/fam07_1_bound.csv`. That is where the notes, the website
 page and `check_numbers.py` read it from: **one single place where the number

@@ -1,4 +1,4 @@
-# 3.6 Min-max, max-min and the range
+# 6.6 Min-max, max-min and the range
 
 **Technique:** continuous with continuous · **Script:** `python/cap03_links.py` · [All the techniques](links.md)
 
@@ -43,7 +43,7 @@ The min-max on that instance gives $z(\mathit{LP}^+) = 21/2 = 10.5$ against
 $z(\mathit{MILP}) = 11$: the relaxation splits the weights exactly in half,
 which integrality does not allow.
 
-## In gurobipy, and where it is seen again
+## In gurobipy
 
 ```python
 T = m.addVar(name="T")
@@ -51,5 +51,3 @@ m.addConstrs((T >= load[k] for k in range(K)), name="max")
 m.setObjective(T, GRB.MINIMIZE)
 ```
 
-Seen again in question 7.4.1 (makespan), in exercise 10.7 (antitrust split) and
-in 10.8 (tracks on CDs).

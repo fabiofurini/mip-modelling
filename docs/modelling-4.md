@@ -3,7 +3,6 @@
 **Class:** LP · MILP · **Script:** `python/cap04_bounds.py`
 { .scheda }
 
-[![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/fabiofurini/mip-modelling/blob/main/notebooks/cap04_bounds.ipynb)
 
 This chapter teaches how to produce, **by hand**, a number that certainly lies
 on one side of the integer optimum. It serves three purposes: understanding how
@@ -191,7 +190,7 @@ $x_j \le 1$ bites, because without it the LP takes $9/5$ units of item 1.
 - A **constraint that preserves optimality** cuts off some feasible solutions
   but not all the optimal ones. It is not a valid inequality, and must be
   declared as such (example: $z_j \le M_j y_j$ in
-  [problem 8.4](location-4.md)).
+  an activation binary).
 
 **The cover cut.** A set $S$ is a *cover* if $\sum_{j \in S} w_j > b$; then
 $\sum_{j \in S} x_j \le |S| - 1$ is valid. On the knapsack ($w = (5,4,3,3)$,

@@ -1,4 +1,4 @@
-# 3.2 Fixed cost, capacity and continuous flow
+# 6.2 Fixed cost, capacity and continuous flow
 
 **Technique:** binary with continuous · **Script:** `python/cap03_links.py` · [All the techniques](links.md)
 
@@ -25,7 +25,7 @@ $\Rightarrow$ open". If $y_j = 1$ the constraint gives $q_j \le C_j$: the
 capacity.
 
 The direction "open $\Rightarrow$ produces" is not imposed and follows from
-optimality only if $f_j > 0$, as in [technique 3.1](links-01.md).
+optimality only if $f_j > 0$, as in [technique 6.1](links-01.md).
 
 ## The strength of the relaxation
 
@@ -46,10 +46,9 @@ Same integer set, same optimum, relaxations far apart.
     must be derived from the data. A big-M chosen "large enough" is always valid
     and almost always terrible.
 
-## In gurobipy, and where it is seen again
+## In gurobipy
 
 ```python
 m.addConstrs((q[j] <= C[j] * y[j] for j in range(mm)), name="link")
 ```
 
-Seen again in problem [8.1](location-1.md) and throughout the production family.

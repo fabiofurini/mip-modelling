@@ -3,7 +3,6 @@
 **Class:** LP · ILP · BIP · MILP · **Script:** `python/cap01_models.py`
 { .scheda }
 
-[![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/fabiofurini/mip-modelling/blob/main/notebooks/cap01_models.ipynb)
 
 ## Data, variables, objective, constraints
 
@@ -218,7 +217,7 @@ relative gap is not written and the absolute difference is reported.
 | **set covering** | $\sum_{i \in I} x_i \ge 1$ | at least one element of $I$ |
 
 Problem [7.1](scheduling-1.md) uses a *partitioning* for every job,
-[7.3](scheduling-3.md) a *packing*, and [chapter 2](modelling-2.md) shows
+[7.3](scheduling-3.md) a *packing*, and [chapter 5](modelling-2.md) shows
 *covering* as the direct translation of an OR clause.
 
 ## What the solver does with the two bounds
@@ -235,20 +234,25 @@ own heuristics and relaxations.
   part of the space that cannot do better is discarded without being explored.
 - The **dual bound** comes from the relaxation, and says how much one may hope
   for at most: the closer it is to the integer optimum — that is, the tighter
-  the formulation, see [chapter 3](links.md) — the less work is left.
+  the formulation, see [chapter 6](links.md) — the less work is left.
 
 The gap between the two is what the solver reports as `MIPGap`, and it is also
 the only thing one can claim with certainty when the optimum is not reached.
 
-## What this chapter leaves open
+## What this chapter has put in your hands
 
-| Question | Where it is answered |
-|---|---|
-| How are logical conditions translated into linear constraints? | [Chapter 2](modelling-2.md) |
-| How are different families of variables linked to each other? | [Chapter 3](links.md) |
-| How is an optimistic bound built by hand? | [Chapter 4](modelling-4.md) |
-| How is a feasible solution built quickly? | [Chapter 5](modelling-5.md) |
-| How is all of this written in Python/Gurobi, and how are the results read? | [Chapter 6](modelling-6.md) |
+A MIP model is always written with the same five objects: the **data**, which are
+known and not decided; the **variables**, one per decision, with their domain;
+the **objective function**, which says what is maximised or minimised; the
+**constraints**, one for every sentence of the statement; and the **domain** of
+the variables, which is a constraint too, and the easiest to forget.
+
+On a written model one then distinguishes a **feasible solution**, which
+satisfies every constraint, and the **optimal solution**, which among the
+feasible ones has the best value. Relaxing integrality gives the **linear
+relaxation**, an easier problem whose optimum is a **bound**: pessimistic if it
+comes from a feasible solution, optimistic if it comes from a relaxation. The
+distance between the two is the **gap**.
 
 ## Code
 

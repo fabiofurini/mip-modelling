@@ -1,4 +1,4 @@
-# 3.13 Soft constraints, deviations and penalties
+# 6.13 Soft constraints, deviations and penalties
 
 **Technique:** continuous with continuous · **Script:** `python/cap03_links.py` · [All the techniques](links.md)
 
@@ -36,7 +36,7 @@ the objective by $(\pi^- + \pi^+)\min(\sigma,\tau) > 0$.
 
 So $s^-$ and $s^+$ really are the positive and negative parts of the deviation,
 and $s^- + s^+ = |a'x - \beta|$ in every optimum: the same thing as
-[technique 3.7](links-07.md), written with an equality instead of two
+[technique 6.7](links-07.md), written with an equality instead of two
 inequalities.
 
 !!! warning "With a zero penalty the deviations lose their meaning"
@@ -55,7 +55,7 @@ concentrated in the first period. Nothing in the data says it should be
 concentrated: any split of the total shortfall $3$ has the same cost, and the
 solver returns one of them.
 
-## In gurobipy, and where it is seen again
+## In gurobipy
 
 ```python
 sm = m.addVars(T, name="s_minus");  sp = m.addVars(T, name="s_plus")
@@ -64,4 +64,3 @@ m.setObjective(cost + gp.quicksum(pen_down * sm[t] + pen_up * sp[t] for t in ran
                GRB.MINIMIZE)
 ```
 
-Seen again in the music-school timetable (EX 15) and in exercise 9.1.

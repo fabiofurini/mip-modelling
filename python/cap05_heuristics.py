@@ -10,7 +10,7 @@ import gurobipy as gp
 import pandas as pd
 from gurobipy import GRB
 
-from euristiche import (best_fit, first_fit, euristica_copertura, euristica_lotti, euristica_zaino,
+from euristiche import (vicino_piu_vicino, best_fit, first_fit, euristica_copertura, euristica_lotti, euristica_zaino,
                         lpt, matrice, next_fit)
 from mip import (ammissibile, frazione, nuovo_modello, rilassamento, risolvi,
                  stampa_soluzione, valuta, viola_interezza)
@@ -110,8 +110,45 @@ assert ammissibile(m54, {f"x[{j}]": e54.y[j] for j in R(4)})
 confronta("5.4 constructive heuristic by ratio p/w", "max", e54.valore, z54,
           f"taken {[j + 1 for j in R(4) if e54.y[j]]}, residual {e54.residuo:g}")
 
+# ---------- 5. NEAREST NEIGHBOUR FOR THE TSP ----------
+intestazione("5.5  Nearest neighbour for the TSP: the tour depends on the starting node")
+# five cities, symmetric distances satisfying the triangle inequality
+D55 = [[0, 5, 2, 2, 9],
+       [5, 0, 4, 3, 4],
+       [2, 4, 0, 4, 7],
+       [2, 3, 4, 0, 7],
+       [9, 4, 7, 7, 0]]
+n55 = len(D55)
+e55t = vicino_piu_vicino(D55, partenza=0)
+e55t.traccia.stampa()
+print(f"  Tour from node 1: {' -> '.join(str(v + 1) for v in e55t.tour)}, length {e55t.valore:g}")
+tour_da = {}
+for s in R(n55):
+    e = vicino_piu_vicino(D55, partenza=s)
+    tour_da[s] = (e.tour, e.valore)
+    if s:
+        print(f"  Tour from node {s + 1}: {' -> '.join(str(v + 1) for v in e.tour)}, "
+              f"length {e.valore:g}")
+from itertools import permutations
+ottimo, tour_ottimo = None, None
+for perm in permutations(R(1, n55)):
+    if perm[0] > perm[-1]:
+        continue
+    giro = (0,) + perm + (0,)
+    lung = sum(D55[giro[i]][giro[i + 1]] for i in R(n55))
+    if ottimo is None or lung < ottimo:
+        ottimo, tour_ottimo = lung, giro
+print(f"  Optimum by enumeration: {' -> '.join(str(v + 1) for v in tour_ottimo)}, "
+      f"length {ottimo:g}")
+salva_dati(pd.DataFrame({"start": [s + 1 for s in R(n55)],
+                         "tour": [" - ".join(str(v + 1) for v in tour_da[s][0]) for s in R(n55)],
+                         "length": [tour_da[s][1] for s in R(n55)]}),
+           "cap05_tsp")
+confronta("5.5 nearest neighbour (TSP)", "min", e55t.valore, ottimo,
+          f"tour {' - '.join(str(v + 1) for v in e55t.tour)}")
+
 # ---------- 5. LOT SIZING GREEDY ----------
-intestazione("5.5  Lot sizing: least unit cost period covering")
+intestazione("5.6  Lot sizing: least unit cost period covering")
 d55 = [20, 10, 30, 40, 10]
 setup55, hold55 = 50, 1
 e55 = euristica_lotti(d55, setup55, hold55)
@@ -142,7 +179,7 @@ print("  Wagner-Whitin solves this very model *to optimality* by dynamic program
 print(f"  its value is {frazione(z55)}, not the heuristic one.")
 
 # ---------- 6. A LOCAL SEARCH STEP ----------
-intestazione("5.6  A local-search step on the LPT solution")
+intestazione("5.7  A local-search step on the LPT solution")
 carichi = list(e52.carichi)
 assegn = {j: mm for (j, mm) in e52.x}
 migliorato = True
@@ -170,7 +207,7 @@ print("  A local optimum is not a global optimum, and local search produces no b
 print("  better than that of the solution it returns.")
 
 # ---------- 7. WHEN THE GREEDY FAILS ----------
-intestazione("5.7  A failure of the constructive heuristic does not prove infeasibility")
+intestazione("5.8  A failure of the constructive heuristic does not prove infeasibility")
 t57 = matrice([3, 3, 2], 2)
 a57 = [5, 3]
 e57 = next_fit(t57, a57)
@@ -185,7 +222,7 @@ print("  solution: 'no solution found' is not 'no solution exists'.")
 assert not e57.ok
 
 # ---------- 8. THE OVERVIEW ----------
-intestazione("5.8  The overview")
+intestazione("5.9  The overview")
 tab = pd.DataFrame(CONFRONTO)
 salva_dati(tab, "cap05_euristiche")
 fig, ax = plt.subplots(figsize=(7.6, 3.6))

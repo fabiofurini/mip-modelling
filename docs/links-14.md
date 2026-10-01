@@ -1,4 +1,4 @@
-# 3.14 Piecewise linear functions
+# 6.14 Piecewise linear functions
 
 **Technique:** continuous with piece binaries · **Script:** `python/cap03_links.py` · [All the techniques](links.md)
 
@@ -61,7 +61,7 @@ models have different optima, $29.25$ and $33$), but **not** the strength of the
 relaxation — with $w_t$ fractional the adjacency constraint does not bite and
 the two models share the same $z(\mathit{LP}^+) = 117/4$.
 
-## In gurobipy, and where it is seen again
+## In gurobipy
 
 ```python
 m.addConstr(lam.sum() == 1, name="convex")
@@ -74,5 +74,4 @@ for k in range(K + 1):                       # adjacency: lambda_k only on the p
 
 Gurobi also offers `addGenConstrPWL` and SOS2 types, which do the same job
 internally; here the manual formulation remains the main material, because it is
-the one whose correctness must be provable. Seen again in exercise 10.1 (prizes
-with two modes).
+the one whose correctness must be provable.

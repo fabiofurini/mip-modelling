@@ -325,3 +325,35 @@ def euristica_lotti(domanda, setup, magazzino) -> Esito:
         magazzino * max(0, sum(lanci[s] for s in lanci if s <= t) - sum(domanda[:t + 1]))
         for t in range(T))
     return e
+
+
+def vicino_piu_vicino(d, partenza: int = 0) -> Esito:
+    """Nearest neighbour for the TSP: from the current node one always goes to the
+    nearest among those not yet visited, and at the end returns to the start.
+
+    `d` is the distance matrix, symmetric, with zeros on the diagonal. It is a
+    constructive heuristic: it builds one solution, one node at a time, never
+    backtracking. The tour it produces depends on the starting node.
+    """
+    n = len(d)
+    e = Esito(x={}, y=[0] * n)
+    visitati = [partenza]
+    e.y[partenza] = 1
+    costo = 0
+    while len(visitati) < n:
+        corrente = visitati[-1]
+        candidati = [j for j in range(n) if j not in visitati]
+        prossimo = min(candidati, key=lambda j: (d[corrente][j], j))
+        altri = ", ".join(f"{j + 1}: {d[corrente][j]:g}" for j in sorted(candidati))
+        e.traccia.passo(f"From node {corrente + 1} the distances to unvisited nodes are {altri}; "
+                        f"the smallest is {d[corrente][prossimo]:g}, so node {prossimo + 1}.")
+        costo += d[corrente][prossimo]
+        visitati.append(prossimo)
+        e.y[prossimo] = 1
+    ritorno = d[visitati[-1]][partenza]
+    e.traccia.passo(f"All nodes visited: back from {visitati[-1] + 1} to "
+                    f"{partenza + 1}, which costs {ritorno:g}.")
+    costo += ritorno
+    e.tour = visitati + [partenza]
+    e.valore = costo
+    return e
