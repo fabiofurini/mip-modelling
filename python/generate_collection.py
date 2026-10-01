@@ -25,6 +25,9 @@ ORDINE = [
 
 TITOLO_CAPITOLO = re.compile(r"\\chapter\*?\{([^}]*)\}")
 PROBLEMA = re.compile(r"\\begin\{problema\}(\[[^\]]*\])?(.*?)\\end\{problema\}", re.S)
+# i cinque esercizi di logica booleana del capitolo 2 sono enunciati a tutti gli
+# effetti: entrano nella raccolta come gli altri
+ESERCIZIO = re.compile(r"\\begin\{esercizio\}(\[[^\]]*\])?(.*?)\\end\{esercizio\}", re.S)
 
 
 def sorgenti(nome: str):
@@ -43,9 +46,10 @@ def enunciati(nome: str):
     """(titolo, corpo) di ogni `problema` del capitolo, nell'ordine del testo."""
     for percorso in sorgenti(nome):
         testo = percorso.read_text(encoding="utf-8")
-        for m in PROBLEMA.finditer(testo):
-            titolo = (m.group(1) or "[]")[1:-1]
-            yield titolo, m.group(2).strip()
+        for regola in (PROBLEMA, ESERCIZIO):
+            for m in regola.finditer(testo):
+                titolo = (m.group(1) or "[]")[1:-1]
+                yield titolo, m.group(2).strip()
 
 
 def titolo_capitolo(nome: str) -> str:

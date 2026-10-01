@@ -24,7 +24,7 @@ licence.
     ---
 
     The same problems, in the same order, with the texts only: to practise
-    before reading the solution. Forty-two statements.
+    before reading the solution. Forty-seven statements.
 
     [:octicons-download-24: statements-collection.pdf](pdf/statements-collection.pdf)
 
