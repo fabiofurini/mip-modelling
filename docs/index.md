@@ -3,28 +3,55 @@
 Teaching material designed and developed by **[Fabio Furini](https://sites.google.com/view/fabiofurini/home-page)**, associate
 professor at [DIAG](https://www.diag.uniroma1.it/), Sapienza University of Rome.
 
-**Mixed-integer linear models for Management Engineering** — the course
-lecture notes in online form, with Python/Gurobi code, notebooks and
-reproducible instances.
+**Mixed-integer linear models for Management Engineering.**
 
-A model with binary and integer variables is not just *written*: it is
-*proved*. Every constraint linking two families of variables imposes a logical
-implication, and the student must be able to prove that it really does — in
-both directions, or by explaining why one direction follows from optimality.
-Then the model is *bounded on both sides*: a constructive heuristic yields an
-upper bound and a dual solution of the LP relaxation yields a lower bound, and
-the optimal value is trapped between the two — the same technique used in practice
-whenever a real instance is too large to be solved to proven optimality.
-Finally the model is *solved*, with Gurobi from Python.
+> An eight-seat van. Four groups of tourists, of $2$, $3$, $4$ and $5$ people,
+> bidding $30$, $50$, $80$ and $70$ euros, who refuse to be split up. At most
+> two groups can be accepted, and accepting the second forces you to accept the
+> fourth as well. What is the most you can take?
 
-Every model can be run **right away in the browser**: each chapter has its own
-[notebook that opens in Colab](notebooks.md), with nothing to install.
+Three lines of text, and inside them a problem you cannot solve by eye, nor by
+trial and error. This course teaches how to write it as a model, how to solve it
+with Gurobi in ten lines of Python, and — the part usually missing — how to
+**know what the solution in your hands is worth** even when the solver does not
+get to the end.
+
+It is $38$ problems worked out in full, $44$ notebooks that run in the browser
+with nothing to install, and every number you read is produced by a script and
+checked by an `assert`: change a datum and the pages change with it.
+
+<div class="grid cards" markdown>
+
+-   :material-text-box-outline: **It starts from a text**
+
+    Four lines of statement, some data, a question.
+
+-   :material-function-variant: **The model is written**
+
+    Variables with their domain, objective, constraints — and the link between
+    the variables explained, not just written.
+
+-   :material-arrow-collapse-vertical: **The optimum is enclosed**
+
+    $\mathit{LB} \le z(\mathit{MILP}) \le \mathit{UB}$: a heuristic from one
+    side, a dual certificate from the other.
+
+-   :material-language-python: **It is solved**
+
+    Gurobi from Python, with the full script on the page and a notebook that
+    opens in Colab.
+
+</div>
+
+Every model can be run **right away in the browser**: every script of the course
+has its own [notebook that opens in Colab](notebooks.md), with nothing to
+install.
 
 !!! tip "The method of the course"
-    For every problem: model → proof of the links → instance → heuristic
-    (upper bound) → dual of the LP relaxation (lower bound) → solver →
-    **additional modelling questions**: the base model is there to be read,
-    the variant is yours to write.
+    For every problem: model → links between the variables → instance →
+    heuristic (upper bound) → dual of the LP relaxation (lower bound) → solver →
+    **additional modelling questions**: a datum changes or a constraint is
+    added, and model and bounds are redone.
 
 ## The two parts of the course
 

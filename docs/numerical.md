@@ -3,12 +3,11 @@
 **Class:** BIP · ILP · MILP · **Scripts:** one per model,
 `python/ex01_van.py` … `python/ex15_timetable.py`
 
-The fifteen numerical models of the course, from EX 1 to EX 15. They are the
-easiest examples: explicit data, few variables, one step for each technique.
-They come before the families of problems for exactly this reason — read them to
-get your bearings, then take on the general problems.
+The fifteen numerical models of the course, from EX 1 to EX 15. Explicit data,
+few variables, one technique per model: they are the easiest ones, and they come
+before the three families of problems and the mixed problems.
 
-The format is reduced but always keeps the same five pieces:
+Every numerical model always has the same five parts:
 
 1. the statement, with the data of the instance;
 2. the **variables**, with their domain and their count;

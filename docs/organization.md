@@ -25,8 +25,8 @@ four-question scheme:
    bound from the other side.
 
 The resulting `lb ≤ z(\mathit{MILP}) ≤ ub` is the thread running through the course: a
-model is not just written down: it is bounded from both sides before it is
-handed to the solver. A solver stopped halfway does provide a certificate, of
+model is not just written down: its optimum is enclosed between two numbers
+before it is handed to the solver. A solver stopped halfway does provide a certificate, of
 course — the incumbent `ObjVal` and the bound `ObjBound` enclose the optimum in
 an interval, and `MIPGap` measures its width. The teaching point is a different
 one: **being able to build those two numbers by hand** is what makes it possible

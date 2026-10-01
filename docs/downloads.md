@@ -33,7 +33,7 @@ licence.
 
     ---
 
-    The twenty-three problems of the four families: statement, symbolic model,
+    The twenty-three problems of the three families and the mixed problems: statement, symbolic model,
     instance, heuristic, dual of the relaxation, optimum, additional questions
     and one variant worked out in full.
 
@@ -54,7 +54,7 @@ licence.
     ---
 
     The course in forty-three slides: the method, the fourteen links, the
-    sandwich of the bounds, the four families, the exam format.
+    sandwich of the bounds, the three families and the mixed problems, the exam format.
 
     [:octicons-download-24: mip-slides.pdf](pdf/mip-slides.pdf)
 
