@@ -40,9 +40,9 @@ Data written out, as in the fifteen numerical models: one reads the statement, r
 
 !!! abstract "N3 — Antennas over five districts"
 
-    A city has five districts and four possible antenna sites. Site~1 covers
-    districts $\{1,2\}$, site~2 covers $\{2,3,4\}$, site~3 covers $\{1,4,5\}$ and
-    site~4 covers $\{3,5\}$. Every antenna costs the same. All districts must be
+    A city has five districts and four possible antenna sites. Site 1 covers
+    districts $\{1,2\}$, site 2 covers $\{2,3,4\}$, site 3 covers $\{1,4,5\}$ and
+    site 4 covers $\{3,5\}$. Every antenna costs the same. All districts must be
     covered with the smallest number of antennas.
 
 !!! abstract "N4 — Seven parcels in ten-kilo boxes"
@@ -54,7 +54,7 @@ Data written out, as in the fifteen numerical models: one reads the statement, r
 !!! abstract "N5 — Two products, three departments"
 
     A workshop makes two articles. One piece of the first takes $2$ hours in
-    department~A, $1$ in~B and $3$ in~C; one piece of the second takes $1$, $3$ and
+    department A, $1$ in B and $3$ in C; one piece of the second takes $1$, $3$ and
     $2$. The departments have $20$, $24$ and $30$ hours available. The unit margins
     are $7$ and $6$ euros, and pieces are sold whole only. The maximum margin is
     wanted.

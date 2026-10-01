@@ -61,6 +61,9 @@ def markdown(corpo: str) -> str:
     corpo = re.sub(r"\\emph\{([^}]*)\}", r"*\1*", corpo)
     corpo = re.sub(r"\\textbf\{([^}]*)\}", r"**\1**", corpo)
     corpo = re.sub(r"\\index\{[^}]*\}", "", corpo)
+    # la tilde di LaTeX e' uno spazio insecabile: fuori dalla matematica, uno spazio
+    corpo = "".join(p if k % 2 else p.replace("~", " ")
+                    for k, p in enumerate(re.split(r"(\$[^$]*\$)", corpo)))
     return re.sub(r"\n{3,}", "\n\n", corpo).strip()
 
 
