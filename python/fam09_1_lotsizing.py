@@ -9,8 +9,8 @@ import pandas as pd
 from gurobipy import GRB
 
 from euristiche import euristica_lotti
-from mip import (ammissibile, due_rilassamenti, frazione, nuovo_modello, registra_bound,
-                 risolvi, valuta)
+from mip import (ammissibile, dualita_forte, due_rilassamenti, frazione,
+                 nuovo_modello, registra_bound, rilassamenti, risolvi, valuta)
 from stile import ARANCIO, BLU, ROSSO, TEAL, VERDE, intestazione, plt, salva_dati, salva_figura
 from esteso import salva_modello
 
@@ -67,7 +67,27 @@ m1, x1, s1, y1 = modello_1(d1, p1, q1, h1, r0, rn)
 salva_modello(m1, "fam09_1_primale")
 print(f"  Total demand {sum(d1)}; big-M per day (residual demand): {M1}")
 
-# ---------- 2. CONSTRUCTIVE HEURISTICS (UPPER BOUND) ----------
+# ---------- 2. THE LP RELAXATION ----------
+zlp1, zlp1r, pi1 = rilassamenti(m1)
+
+# ---------- 3. THE DUAL OF THE RELAXATION (LOWER BOUND) ----------
+dl1 = duale_1(d1, p1, q1, h1, r0, rn)
+salva_modello(dl1, "fam09_1_duale")
+# recipe: pi = 0 (the set-ups are given away) and mu_t = cheapest way to have one
+# unit available on day t
+mu = []
+for t in R(n1):
+    mu.append(p1[t] if t == 0 else min(mu[t - 1] + h1[t - 1], p1[t]))
+mano = {f"mu[{t}]": mu[t] for t in R(n1)}
+lb1, viol = valuta(dl1, mano)
+assert viol <= 1e-9, viol
+print("  Hand-built dual: pi = 0 (the set-ups are not charged) and mu_t = the lowest unit")
+print("  cost of having one unit available on day t, that is min(mu_{t-1} + h_{t-1}, p_t):")
+print("    mu = " + ", ".join(frazione(v) for v in mu))
+print(f"  ->  lb = {frazione(lb1)}: the production cost if the set-ups were free.")
+dualita_forte(dl1, zlp1)
+
+# ---------- 4. CONSTRUCTIVE HEURISTIC (UPPER BOUND) ----------
 # (a) lot-for-lot: every day produce exactly the demand, no inventory
 lot_per_lot = sum(p1[t] * d1[t] for t in R(n1)) + sum(q1)
 sol_llf = {f"x[{t}]": d1[t] for t in R(n1)} | {f"y[{t}]": 1 for t in R(n1)} \
@@ -92,24 +112,7 @@ print(f"  (b) least unit cost: runs on days {[t + 1 for t in sorted(e.lanci)]}, 
 ub1 = min(lot_per_lot, luc)
 print(f"  The better of the two: ub = {frazione(ub1)}")
 
-# ---------- 3. LP RELAXATION AND DUAL (LOWER BOUND) ----------
-dl1 = duale_1(d1, p1, q1, h1, r0, rn)
-salva_modello(dl1, "fam09_1_duale")
-# recipe: pi = 0 (the set-ups are given away) and mu_t = cheapest way to have one
-# unit available on day t
-mu = []
-for t in R(n1):
-    mu.append(p1[t] if t == 0 else min(mu[t - 1] + h1[t - 1], p1[t]))
-mano = {f"mu[{t}]": mu[t] for t in R(n1)}
-lb1, viol = valuta(dl1, mano)
-assert viol <= 1e-9, viol
-print("  Hand-built dual: pi = 0 (the set-ups are not charged) and mu_t = the lowest unit")
-print("  cost of having one unit available on day t, that is min(mu_{t-1} + h_{t-1}, p_t):")
-print("    mu = " + ", ".join(frazione(v) for v in mu))
-print(f"  ->  lb = {frazione(lb1)}: the production cost if the set-ups were free.")
-zlp1, zlp1r, pi1 = due_rilassamenti(m1, dl1)
-
-# ---------- 4. OPTIMUM OF THE MILP ----------
+# ---------- 5. OPTIMUM OF THE MILP ----------
 z1 = risolvi(m1)
 lanci_ott = [t + 1 for t in R(n1) if y1[t].X > 0.5]
 print(f"  Optimal solution: runs on days {lanci_ott}; quantities "
@@ -119,7 +122,7 @@ riga = registra_bound("1 lot sizing with setup", ub1, lb1, zlp1, zlp1r, z1)
 salva_dati(pd.DataFrame([riga]), "fam09_1_bound")
 assert lb1 <= zlp1 <= z1 <= ub1 + 1e-9
 
-# ---------- 5. ADDITIONAL MODELLING QUESTIONS ----------
+# ---------- 6. ADDITIONAL MODELLING QUESTIONS ----------
 varianti = {}
 
 
@@ -140,26 +143,7 @@ varianti["1b"] = variante("1b. Minimum lot of 25 litres if producing (x_t >= 25 
 salva_dati(pd.DataFrame({"variant": list(varianti), "z": list(varianti.values())}),
            "fam09_1_varianti")
 
-# ---------- 6. FIGURE ----------
-fig, ax = plt.subplots(figsize=(7.0, 3.4))
-giorni = list(R(1, n1 + 1))
-ax.bar(giorni, [x1[t].X for t in R(n1)], color=TEAL, label="production $x_t$", width=0.55)
-ax.plot(giorni, d1, "o--", color=ROSSO, label="demand $d_t$")
-ax.plot(giorni[:-1], [s1[t].X for t in R(n1 - 1)], "s-", color=ARANCIO,
-        label="inventory at the end of day $s_t$")
-for t in lanci_ott:
-    ax.annotate("run", (t, x1[t - 1].X), textcoords="offset points", xytext=(0, 6),
-                ha="center", fontsize=8, color=BLU)
-ax.set_xticks(giorni)
-ax.set_xlabel("day")
-ax.set_ylabel("litres")
-ax.set_title(f"9.1: optimal plan (z = {frazione(z1)})")
-ax.legend(fontsize=8, ncols=3, loc="upper left")
-salva_figura(fig, "cap09_lotti_ottimo")
-print("Done.")
-
-
-# ---------- 5bis. THE SANDWICH ON THE VARIANT 1a ----------
+# ---------- 7. THE SANDWICH ON THE VARIANT 1a ----------
 intestazione("9.1a The sandwich on the variant: a daily capacity of 35 litres")
 CAP = 35
 
@@ -257,3 +241,21 @@ z1a = risolvi(m1a)
 riga_1a = registra_bound("1a daily capacity", ub1a, lb1a_val, zlp1a, zlp1ar, z1a)
 salva_dati(pd.DataFrame([riga_1a]), "fam09_1a_bound")
 assert lb1a_val <= zlp1a <= z1a <= ub1a + 1e-9
+
+# ---------- 8. FIGURE ----------
+fig, ax = plt.subplots(figsize=(7.0, 3.4))
+giorni = list(R(1, n1 + 1))
+ax.bar(giorni, [x1[t].X for t in R(n1)], color=TEAL, label="production $x_t$", width=0.55)
+ax.plot(giorni, d1, "o--", color=ROSSO, label="demand $d_t$")
+ax.plot(giorni[:-1], [s1[t].X for t in R(n1 - 1)], "s-", color=ARANCIO,
+        label="inventory at the end of day $s_t$")
+for t in lanci_ott:
+    ax.annotate("run", (t, x1[t - 1].X), textcoords="offset points", xytext=(0, 6),
+                ha="center", fontsize=8, color=BLU)
+ax.set_xticks(giorni)
+ax.set_xlabel("day")
+ax.set_ylabel("litres")
+ax.set_title(f"9.1: optimal plan (z = {frazione(z1)})")
+ax.legend(fontsize=8, ncols=3, loc="upper left")
+salva_figura(fig, "cap09_lotti_ottimo")
+print("Done.")

@@ -25,6 +25,7 @@ from fractions import Fraction
 from pathlib import Path
 
 import gurobipy as gp
+from stile import NOTEBOOK
 from gurobipy import GRB
 
 BASE = Path(__file__).resolve().parent.parent
@@ -159,12 +160,15 @@ def array_esteso(m: gp.Model, etichetta_vincoli: str = "subject to") -> str:
     return f"\\begin{{array}}{{{spec}}}\n{corpo}\n\\end{{array}}"
 
 
-def salva_modello(m: gp.Model, nome: str, etichetta_vincoli: str = "subject to") -> str:
-    """Scrive `dati/modelli/<nome>.tex` e restituisce il corpo dell'array."""
+def salva_modello(m: gp.Model, nome: str, etichetta_vincoli: str = "subject to") -> None:
+    """Writes `data/models/<name>.tex`; inside a notebook it shows the model."""
     corpo = array_esteso(m, etichetta_vincoli)
+    if NOTEBOOK:                       # in a notebook the file is pointless: the model is what one wants to see
+        from IPython.display import Math, display
+        display(Math(corpo))
+        return
     DIR_MODELLI.mkdir(parents=True, exist_ok=True)
     percorso = DIR_MODELLI / f"{nome}.tex"
     percorso.write_text(corpo + "\n", encoding="utf-8")
     print(f"  [modello] {percorso.relative_to(BASE)} "
-          f"({len(m.getVars())} variabili, {len(m.getConstrs())} vincoli)")
-    return corpo
+          f"({len(m.getVars())} variables, {len(m.getConstrs())} constraints)")

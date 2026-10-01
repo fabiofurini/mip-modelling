@@ -11,8 +11,9 @@ import pandas as pd
 from gurobipy import GRB
 
 from euristiche import matrice, next_fit
-from mip import (ammissibile, due_rilassamenti, frazione, nuovo_modello, registra_bound,
-                 rilassamento, risolvi, stampa_soluzione, valuta)
+from mip import (ammissibile, dualita_forte, due_rilassamenti, frazione,
+                 nuovo_modello, registra_bound, rilassamenti, rilassamento, risolvi,
+                 stampa_soluzione, valuta)
 from stile import intestazione, plt, salva_dati, salva_figura
 from esteso import salva_modello
 
@@ -61,7 +62,25 @@ def duale_4(c, f, k):
 m4, x4, y4, z4 = modello_4(c4, f4, k4)
 salva_modello(m4, "fam08_4_primale")
 
-# ---------- 2. CONSTRUCTIVE HEURISTIC (UPPER BOUND) ----------
+# ---------- 2. THE LP RELAXATION ----------
+zlp4, zlp4r, _ = rilassamenti(m4)
+
+# ---------- 3. THE DUAL OF THE RELAXATION (LOWER BOUND) ----------
+
+d4 = duale_4(c4, f4, k4)
+salva_modello(d4, "fam08_4_duale")
+beta_mano = [f4[j] / k4 for j in R(m)]     # the largest value allowed by k*beta_j <= f_j
+alpha_mano = min(beta_mano)                # must hold for EVERY hub j, not only the most convenient one
+mano = {f"gamma[{i},{j}]": 0.0 for i in R(n) for j in R(m)}
+mano.update({f"beta[{j}]": beta_mano[j] for j in R(m)})
+mano.update({f"alpha[{i}]": alpha_mano for i in R(n)})
+lb4, viol = valuta(d4, mano)
+assert viol <= 1e-9, viol
+print(f"Hand-built dual solution: gamma = 0, beta_j = f_j/k = {[frazione(b) for b in beta_mano]}, "
+      f"alpha_i = min_j beta_j = {frazione(alpha_mano)}  ->  lb = {frazione(lb4)}")
+dualita_forte(d4, zlp4)
+
+# ---------- 4. CONSTRUCTIVE HEURISTIC (UPPER BOUND) ----------
 
 print("Next-fit heuristic: hubs are filled one at a time up to k terminals,")
 print("then the algorithm moves to the next one (the same generic heuristic as scheduling).")
@@ -78,22 +97,7 @@ for j in R(m):
 ub4 = sum(f4[j] * ye[j] for j in R(m)) + sum(ze)
 print(f"  y = {ye}, z = {ze}  ->  ub = {frazione(ub4)}")
 
-# ---------- 3. LP RELAXATION AND DUAL (LOWER BOUND) ----------
-
-d4 = duale_4(c4, f4, k4)
-salva_modello(d4, "fam08_4_duale")
-beta_mano = [f4[j] / k4 for j in R(m)]     # the largest value allowed by k*beta_j <= f_j
-alpha_mano = min(beta_mano)                # must hold for EVERY hub j, not only the most convenient one
-mano = {f"gamma[{i},{j}]": 0.0 for i in R(n) for j in R(m)}
-mano.update({f"beta[{j}]": beta_mano[j] for j in R(m)})
-mano.update({f"alpha[{i}]": alpha_mano for i in R(n)})
-lb4, viol = valuta(d4, mano)
-assert viol <= 1e-9, viol
-print(f"Hand-built dual solution: gamma = 0, beta_j = f_j/k = {[frazione(b) for b in beta_mano]}, "
-      f"alpha_i = min_j beta_j = {frazione(alpha_mano)}  ->  lb = {frazione(lb4)}")
-zlp4, zlp4r, _ = due_rilassamenti(m4, d4)
-
-# ---------- 4. OPTIMAL SOLUTION OF THE MILP ----------
+# ---------- 5. OPTIMAL SOLUTION OF THE MILP ----------
 
 z4v = risolvi(m4)
 print("Optimal solution of the MILP:")
@@ -101,7 +105,7 @@ stampa_soluzione(m4, solo_non_nulle=True)
 riga = registra_bound("4 hub", ub4, lb4, zlp4, zlp4r, z4v, senso="min")
 salva_dati(pd.DataFrame([riga]), "fam08_4_bound")
 
-# ---------- 5. ADDITIONAL MODELLING QUESTIONS ----------
+# ---------- 6. ADDITIONAL MODELLING QUESTIONS ----------
 
 varianti = {}
 
@@ -147,7 +151,8 @@ mod, x, y, z = modello_4(c4, f4, k4)
 mod.addConstr(x[0, 1] == 0, name="terminal1_not_hub2")
 varianti["4b"] = variante("4b. Terminal 1 cannot connect to hub 2 (x_12 = 0)", mod)
 salva_dati(pd.DataFrame({"variant": list(varianti), "z": list(varianti.values())}), "fam08_4_varianti")
-# ---------- 5bis. THE SANDWICH ON THE VARIANT 4b ----------
+
+# ---------- 7. THE SANDWICH ON THE VARIANT 4b ----------
 intestazione("4b. The sandwich on the variant: terminal 1 cannot use hub 2")
 
 VIETATA = (0, 1)      # (terminale, hub) proibito
@@ -227,8 +232,7 @@ riga_4b = registra_bound("4b forbidden connection", ub4b, lb4b, zlp4b, zlp4br, z
 salva_dati(pd.DataFrame([riga_4b]), "fam08_4b_bound")
 assert lb4b <= zlp4b <= z4b_val <= ub4b + 1e-9
 
-
-# ---------- 6. FIGURES ----------
+# ---------- 8. FIGURES ----------
 
 fig, ax = plt.subplots(figsize=(6.4, 3.2))
 colori = ["#16324A", "#0E7490", "#CA6F1E"]

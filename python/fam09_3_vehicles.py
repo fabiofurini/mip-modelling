@@ -9,8 +9,8 @@ import gurobipy as gp
 import pandas as pd
 from gurobipy import GRB
 
-from mip import (ammissibile, due_rilassamenti, frazione, nuovo_modello, registra_bound,
-                 risolvi, valuta)
+from mip import (ammissibile, dualita_forte, due_rilassamenti, frazione,
+                 nuovo_modello, registra_bound, rilassamenti, risolvi, valuta)
 from stile import ARANCIO, BLU, ROSSO, TEAL, VERDE, intestazione, plt, salva_dati, salva_figura
 from esteso import salva_modello
 
@@ -71,7 +71,41 @@ def duale_3(a, b, p, q, r):
 m3m, x3, y3, z3 = modello_3(a3, b3, p3, q3, r3)
 salva_modello(m3m, "fam09_3_primale")
 
-# ---------- 2. CONSTRUCTIVE HEURISTIC (LOWER BOUND: IT IS A MAXIMISATION) ----------
+# ---------- 2. THE LP RELAXATION ----------
+zlp3, zlp3r, _ = rilassamenti(m3m)
+
+# ---------- 3. THE DUAL OF THE RELAXATION (LOWER BOUND) ----------
+dl3 = duale_3(a3, b3, p3, q3, r3)
+salva_modello(dl3, "fam09_3_duale")
+# recipe: gamma = r/2 (the smallest value allowed by 2 gamma >= r), beta = 0, and
+# lambda_j = gamma / q_j (every activated type "carries" its share of the bonus); then
+# a single resource is priced so that it covers all types, and the better bound is kept
+gamma = r3 / 2
+lam = [gamma / q3[j] for j in R(n3)]
+bound = {}
+for i in R(m3):
+    prezzo = max((p3[j] + lam[j]) / a3[i][j] for j in R(n3))
+    bound[i] = b3[i] * prezzo
+critica = min(bound, key=bound.get)
+prezzo = max((p3[j] + lam[j]) / a3[critica][j] for j in R(n3))
+mano = {"gamma": gamma} | {f"pi[{i}]": 0.0 for i in R(m3)} \
+    | {f"alpha[{j}]": -lam[j] for j in R(n3)} | {f"beta[{j}]": 0.0 for j in R(n3)}
+mano[f"pi[{critica}]"] = prezzo
+ub3, viol = valuta(dl3, mano)
+assert viol <= 1e-9, (viol, mano)
+print(f"  Hand-built dual: gamma = r/2 = {frazione(gamma)} (the smallest value satisfying")
+print(f"  2 gamma >= r), beta = 0 and lambda_j = gamma / q_j = "
+      + ", ".join(frazione(v) for v in lam))
+print("  so every activated type carries its share of the bonus. Then a single resource is")
+print("  priced at max_j (p_j + lambda_j) / a_ij, and the tighter bound is kept:")
+for i in R(m3):
+    print(f"    resource {i + 1}: price "
+          f"{frazione(max((p3[j] + lam[j]) / a3[i][j] for j in R(n3)))}"
+          f"  ->  b_i * price = {frazione(bound[i])}")
+print(f"  The smallest is resource {critica + 1}:  ub = {frazione(ub3)}")
+dualita_forte(dl3, zlp3)
+
+# ---------- 4. CONSTRUCTIVE HEURISTIC (UPPER BOUND) ----------
 # constructive heuristic: two types are activated (to collect the bonus) starting from the highest
 # profit per unit of the scarcest resource, then one fills up with the best type
 def euristica(a, b, p, q, r):
@@ -106,38 +140,7 @@ print(f"  Heuristic: types {[j + 1 for j in attivi]} are activated at their mini
 print(f"  one fills up with the most profitable one; production {x_eur}, resources left {res}")
 print(f"  lb = {sum(p3[j] * x_eur[j] for j in R(n3))} + {r3} of bonus = {frazione(lb3)}")
 
-# ---------- 3. LP RELAXATION AND DUAL (UPPER BOUND) ----------
-dl3 = duale_3(a3, b3, p3, q3, r3)
-salva_modello(dl3, "fam09_3_duale")
-# recipe: gamma = r/2 (the smallest value allowed by 2 gamma >= r), beta = 0, and
-# lambda_j = gamma / q_j (every activated type "carries" its share of the bonus); then
-# a single resource is priced so that it covers all types, and the better bound is kept
-gamma = r3 / 2
-lam = [gamma / q3[j] for j in R(n3)]
-bound = {}
-for i in R(m3):
-    prezzo = max((p3[j] + lam[j]) / a3[i][j] for j in R(n3))
-    bound[i] = b3[i] * prezzo
-critica = min(bound, key=bound.get)
-prezzo = max((p3[j] + lam[j]) / a3[critica][j] for j in R(n3))
-mano = {"gamma": gamma} | {f"pi[{i}]": 0.0 for i in R(m3)} \
-    | {f"alpha[{j}]": -lam[j] for j in R(n3)} | {f"beta[{j}]": 0.0 for j in R(n3)}
-mano[f"pi[{critica}]"] = prezzo
-ub3, viol = valuta(dl3, mano)
-assert viol <= 1e-9, (viol, mano)
-print(f"  Hand-built dual: gamma = r/2 = {frazione(gamma)} (the smallest value satisfying")
-print(f"  2 gamma >= r), beta = 0 and lambda_j = gamma / q_j = "
-      + ", ".join(frazione(v) for v in lam))
-print("  so every activated type carries its share of the bonus. Then a single resource is")
-print("  priced at max_j (p_j + lambda_j) / a_ij, and the tighter bound is kept:")
-for i in R(m3):
-    print(f"    resource {i + 1}: price "
-          f"{frazione(max((p3[j] + lam[j]) / a3[i][j] for j in R(n3)))}"
-          f"  ->  b_i * price = {frazione(bound[i])}")
-print(f"  The smallest is resource {critica + 1}:  ub = {frazione(ub3)}")
-zlp3, zlp3r, _ = due_rilassamenti(m3m, dl3)
-
-# ---------- 4. OPTIMUM OF THE MILP ----------
+# ---------- 5. OPTIMUM OF THE MILP ----------
 z3v = risolvi(m3m)
 print("  Optimal solution: production " + ", ".join(str(round(x3[j].X)) for j in R(n3))
       + f"; active types {[j + 1 for j in R(n3) if y3[j].X > 0.5]}; bonus collected: "
@@ -148,7 +151,7 @@ riga = registra_bound("3 vehicles", ub3, lb3, zlp3, zlp3r, z3v, senso="max")
 salva_dati(pd.DataFrame([riga]), "fam09_3_bound")
 assert lb3 <= z3v <= zlp3 + 1e-6 <= ub3 + 1e-6
 
-# ---------- 5. ADDITIONAL MODELLING QUESTIONS ----------
+# ---------- 6. ADDITIONAL MODELLING QUESTIONS ----------
 varianti = {}
 
 
@@ -175,26 +178,7 @@ varianti["3b"] = zz
 salva_dati(pd.DataFrame({"variant": list(varianti), "z": list(varianti.values())}),
            "fam09_3_varianti")
 
-# ---------- 6. FIGURE ----------
-fig, ax = plt.subplots(figsize=(6.8, 3.0))
-tipi = list(R(1, n3 + 1))
-colori = [TEAL if y3[j].X > 0.5 else "#F4F6F7" for j in R(n3)]
-ax.bar(tipi, [x3[j].X for j in R(n3)], color=colori, edgecolor="#7F8C8D", width=0.55)
-for j in R(n3):
-    ax.plot([j + 0.72, j + 1.28], [q3[j], q3[j]], color=ROSSO, lw=2)
-ax.plot([], [], color=ROSSO, lw=2, label="minimum lot $q_j$")
-for j in R(n3):
-    ax.annotate(str(round(x3[j].X)), (j + 1, x3[j].X), ha="center", va="bottom", fontsize=9)
-ax.set_xticks(tipi)
-ax.set_xticklabels([f"type {j}" for j in tipi])
-ax.set_ylabel("units produced")
-ax.set_title(f"9.3: optimal plan (z = {frazione(z3v)}, bonus collected)")
-ax.legend(fontsize=8)
-salva_figura(fig, "cap09_veicoli_ottimo")
-print("Done.")
-
-
-# ---------- 5bis. THE SANDWICH ON THE VARIANT 3a ----------
+# ---------- 7. THE SANDWICH ON THE VARIANT 3a ----------
 intestazione("9.3a The sandwich on the variant: the bonus requires at least three types")
 SOGLIA = 3
 
@@ -285,3 +269,21 @@ z3a_val = risolvi(m3a)
 riga_3a = registra_bound("3a bonus with three types", ub3a, lb3a, zlp3a, zlp3ar, z3a_val, senso="max")
 salva_dati(pd.DataFrame([riga_3a]), "fam09_3a_bound")
 assert lb3a <= z3a_val <= zlp3a + 1e-9 <= ub3a + 1e-9
+
+# ---------- 8. FIGURE ----------
+fig, ax = plt.subplots(figsize=(6.8, 3.0))
+tipi = list(R(1, n3 + 1))
+colori = [TEAL if y3[j].X > 0.5 else "#F4F6F7" for j in R(n3)]
+ax.bar(tipi, [x3[j].X for j in R(n3)], color=colori, edgecolor="#7F8C8D", width=0.55)
+for j in R(n3):
+    ax.plot([j + 0.72, j + 1.28], [q3[j], q3[j]], color=ROSSO, lw=2)
+ax.plot([], [], color=ROSSO, lw=2, label="minimum lot $q_j$")
+for j in R(n3):
+    ax.annotate(str(round(x3[j].X)), (j + 1, x3[j].X), ha="center", va="bottom", fontsize=9)
+ax.set_xticks(tipi)
+ax.set_xticklabels([f"type {j}" for j in tipi])
+ax.set_ylabel("units produced")
+ax.set_title(f"9.3: optimal plan (z = {frazione(z3v)}, bonus collected)")
+ax.legend(fontsize=8)
+salva_figura(fig, "cap09_veicoli_ottimo")
+print("Done.")

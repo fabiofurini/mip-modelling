@@ -9,8 +9,8 @@ import gurobipy as gp
 import pandas as pd
 from gurobipy import GRB
 
-from mip import (ammissibile, due_rilassamenti, frazione, nuovo_modello, registra_bound,
-                 risolvi, valuta)
+from mip import (ammissibile, dualita_forte, due_rilassamenti, frazione,
+                 nuovo_modello, registra_bound, rilassamenti, risolvi, valuta)
 from stile import ARANCIO, BLU, GRIGIO, TEAL, intestazione, plt, salva_dati, salva_figura
 from esteso import salva_modello
 
@@ -59,7 +59,27 @@ def duale_4(w, h, c, m):
 m4mod, x4, y4 = modello_4(w4, h4, c4, m4)
 salva_modello(m4mod, "fam10_9_primale")
 
-# ---------- 2. TWO ORDERS FOR THE SAME HEURISTIC ----------
+# ---------- 2. THE LP RELAXATION ----------
+zlp4, zlp4r, _ = rilassamenti(m4mod)
+
+# ---------- 3. THE DUAL OF THE RELAXATION (LOWER BOUND) ----------
+dl4 = duale_4(w4, h4, c4, m4)
+salva_modello(dl4, "fam10_9_duale")
+# recipe: beta = 0, and all the gamma "weight" is concentrated on the tallest book
+alto = max(R(n4), key=lambda b: h4[b])
+mano = ({f"gamma[{alto},{s}]": 1.0 for s in R(m4)}
+        | {f"alpha[{alto}]": float(h4[alto])})
+lb_lp, viol = valuta(dl4, mano)
+assert viol <= 1e-9, viol
+print(f"  Hand-built dual: beta = 0, gamma_bs = 1 only for the tallest book (number")
+print(f"  {alto + 1}, height {h4[alto]}) and alpha equal to {h4[alto]} on that book, zero on")
+print(f"  the others. The dual constraints become {h4[alto]} <= {h4[alto]} and 0 <= 0  ->  "
+      f"lb = {frazione(lb_lp)}.")
+print("  It is the obvious remark: the shelf holding the tallest book is at least as tall as")
+print(f"  that book, so the sum of the heights is at least {h4[alto]}.")
+dualita_forte(dl4, zlp4)
+
+# ---------- 4. CONSTRUCTIVE HEURISTIC (UPPER BOUND) ----------
 def first_fit(w, h, c, m, ordine, etichetta):
     """Every book on the first shelf where it fits; if it fits nowhere the heuristic
     fails and returns None."""
@@ -101,24 +121,7 @@ sol_eur = {f"x[{b},{dove_w[b]}]": 1 for b in R(n4)} | {f"y[{s}]": alt_w[s] for s
 assert ammissibile(m4mod, sol_eur), sol_eur
 print(f"  ub = {frazione(ub4)}")
 
-# ---------- 3. LP RELAXATION AND DUAL (LOWER BOUND) ----------
-dl4 = duale_4(w4, h4, c4, m4)
-salva_modello(dl4, "fam10_9_duale")
-# recipe: beta = 0, and all the gamma "weight" is concentrated on the tallest book
-alto = max(R(n4), key=lambda b: h4[b])
-mano = ({f"gamma[{alto},{s}]": 1.0 for s in R(m4)}
-        | {f"alpha[{alto}]": float(h4[alto])})
-lb_lp, viol = valuta(dl4, mano)
-assert viol <= 1e-9, viol
-print(f"  Hand-built dual: beta = 0, gamma_bs = 1 only for the tallest book (number")
-print(f"  {alto + 1}, height {h4[alto]}) and alpha equal to {h4[alto]} on that book, zero on")
-print(f"  the others. The dual constraints become {h4[alto]} <= {h4[alto]} and 0 <= 0  ->  "
-      f"lb = {frazione(lb_lp)}.")
-print("  It is the obvious remark: the shelf holding the tallest book is at least as tall as")
-print(f"  that book, so the sum of the heights is at least {h4[alto]}.")
-zlp4, zlp4r, _ = due_rilassamenti(m4mod, dl4)
-
-# ---------- 4. A STRONGER COMBINATORIAL BOUND ----------
+# ---------- 5. A STRONGER COMBINATORIAL BOUND ----------
 intestazione("10.9 The combinatorial bound: at least two shelves are used")
 usati = -(-sum(w4) // c4)     # integer division rounding up
 print(f"  The total width is {sum(w4)} and every shelf holds {c4}: at least")
@@ -134,7 +137,7 @@ salva_dati(pd.DataFrame([{"argument": "dual of the LP relaxation", "bound": lb_l
                          {"argument": "shelves used and minimum heights", "bound": lb4}]),
            "fam10_9_argomento")
 
-# ---------- 5. OPTIMUM OF THE MILP ----------
+# ---------- 6. OPTIMUM OF THE MILP ----------
 z4 = risolvi(m4mod)
 for s in R(m4):
     libri = [b + 1 for b in R(n4) if x4[b, s].X > 0.5]
@@ -144,7 +147,7 @@ riga = registra_bound("4 shelves", ub4, lb4, zlp4, zlp4r, z4)
 salva_dati(pd.DataFrame([riga]), "fam10_9_bound")
 assert lb4 <= z4 <= ub4 + 1e-9
 
-# ---------- 6. ADDITIONAL MODELLING QUESTIONS ----------
+# ---------- 7. ADDITIONAL MODELLING QUESTIONS ----------
 varianti = {}
 
 
@@ -165,30 +168,7 @@ varianti["4b"] = variante("4b. The shelves are 12 wide instead of 10", m)
 salva_dati(pd.DataFrame({"variant": list(varianti), "z": list(varianti.values())}),
            "fam10_9_varianti")
 
-# ---------- 7. FIGURE ----------
-fig, ax = plt.subplots(figsize=(6.4, 3.2))
-for s in R(m4):
-    sx = 0.0
-    for b in R(n4):
-        if x4[b, s].X > 0.5:
-            ax.bar(sx + w4[b] / 2, h4[b], w4[b] * 0.92, bottom=s * 10, color=TEAL)
-            ax.annotate(str(b + 1), (sx + w4[b] / 2, s * 10 + 1), ha="center", fontsize=8,
-                        color="white")
-            sx += w4[b]
-    ax.plot([0, c4], [s * 10 + y4[s].X, s * 10 + y4[s].X], color=ARANCIO, lw=1.6)
-    ax.annotate(f"height {frazione(y4[s].X)}", (c4 + 0.2, s * 10 + y4[s].X), fontsize=8,
-                va="center", color=ARANCIO)
-    ax.plot([c4, c4], [s * 10, s * 10 + 9], color=GRIGIO, ls="--", lw=1.2)
-ax.set_xlim(0, c4 + 3.6)
-ax.set_yticks([1, 11])
-ax.set_yticklabels(["shelf 1", "shelf 2"])
-ax.set_xlabel("width")
-ax.set_title(f"10.9: sum of the heights {frazione(z4)}")
-salva_figura(fig, "cap10_scaffali_ottimo")
-print("Done.")
-
-
-# ---------- 5bis. THE SANDWICH ON THE VARIANT 4b ----------
+# ---------- 8. THE SANDWICH ON THE VARIANT 4b ----------
 intestazione("10.9b The sandwich on the variant: shelves 12 wide instead of 10")
 C4B = 12
 
@@ -236,3 +216,25 @@ riga_4b = registra_bound("4b shelves 12 wide", ub4b, lb4b_usato, zlp4b, zlp4br, 
                          certificato="shelves used and minimum heights")
 salva_dati(pd.DataFrame([riga_4b]), "fam10_9b_bound")
 assert lb4b_usato <= z4b_val <= ub4b + 1e-9
+
+# ---------- 9. FIGURE ----------
+fig, ax = plt.subplots(figsize=(6.4, 3.2))
+for s in R(m4):
+    sx = 0.0
+    for b in R(n4):
+        if x4[b, s].X > 0.5:
+            ax.bar(sx + w4[b] / 2, h4[b], w4[b] * 0.92, bottom=s * 10, color=TEAL)
+            ax.annotate(str(b + 1), (sx + w4[b] / 2, s * 10 + 1), ha="center", fontsize=8,
+                        color="white")
+            sx += w4[b]
+    ax.plot([0, c4], [s * 10 + y4[s].X, s * 10 + y4[s].X], color=ARANCIO, lw=1.6)
+    ax.annotate(f"height {frazione(y4[s].X)}", (c4 + 0.2, s * 10 + y4[s].X), fontsize=8,
+                va="center", color=ARANCIO)
+    ax.plot([c4, c4], [s * 10, s * 10 + 9], color=GRIGIO, ls="--", lw=1.2)
+ax.set_xlim(0, c4 + 3.6)
+ax.set_yticks([1, 11])
+ax.set_yticklabels(["shelf 1", "shelf 2"])
+ax.set_xlabel("width")
+ax.set_title(f"10.9: sum of the heights {frazione(z4)}")
+salva_figura(fig, "cap10_scaffali_ottimo")
+print("Done.")

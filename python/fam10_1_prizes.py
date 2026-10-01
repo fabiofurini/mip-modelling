@@ -10,8 +10,8 @@ import pandas as pd
 from gurobipy import GRB
 from itertools import product
 
-from mip import (ammissibile, due_rilassamenti, frazione, nuovo_modello, registra_bound,
-                 risolvi, valuta)
+from mip import (ammissibile, dualita_forte, due_rilassamenti, frazione,
+                 nuovo_modello, registra_bound, rilassamenti, risolvi, valuta)
 from stile import ARANCIO, BLU, ROSSO, TEAL, intestazione, plt, salva_dati, salva_figura
 from esteso import salva_modello
 
@@ -62,36 +62,10 @@ def duale_1(a, b, c, d, p, ell):
 m1, x1, y1 = modello_1(a1, b1, c1, d1, p1, ell1)
 salva_modello(m1, "fam10_1_primale")
 
-# ---------- 2. CONSTRUCTIVE HEURISTIC (UPPER BOUND) ----------
-# constructive heuristic: the prizes are scanned by decreasing preference; each one is taken with points
-# only if they suffice, otherwise with the contribution if the reduced points suffice,
-# and we stop as soon as the required preference is reached
-punti, pref = p1, 0
-scelta = {}
-for i in sorted(R(s1), key=lambda i: (-d1[i], i)):
-    if pref >= ell1:
-        break
-    if punti >= a1[i]:
-        scelta[i], punti, pref = "points", punti - a1[i], pref + d1[i]
-        print(f"  Prize {i + 1} (preference {d1[i]}): the points alone are enough ({a1[i]} <= "
-              f"{punti + a1[i]}): it is taken; preference {pref}, points left {punti}")
-    elif punti >= b1[i]:
-        scelta[i], punti, pref = "contribution", punti - b1[i], pref + d1[i]
-        print(f"  Prize {i + 1} (preference {d1[i]}): the points are not enough for mode a "
-              f"({a1[i]} > {punti + b1[i]}), mode b is used: {b1[i]} points and {c1[i]} euros; "
-              f"preference {pref}, points left {punti}")
-    else:
-        print(f"  Prize {i + 1} (preference {d1[i]}): the {punti} points left are not enough "
-              f"for either mode: it is skipped")
-assert pref >= ell1, "the constructive heuristic does not reach the required preference"
-ub1 = sum(c1[i] for i, mod in scelta.items() if mod == "contribution")
-sol_eur = {f"x[{i}]": 1 for i, mod in scelta.items() if mod == "points"} \
-    | {f"y[{i}]": 1 for i, mod in scelta.items() if mod == "contribution"}
-assert ammissibile(m1, sol_eur)
-print(f"  Heuristic solution: preference {pref} >= {ell1}, total contribution "
-      f"ub = {frazione(ub1)}")
+# ---------- 2. THE LP RELAXATION ----------
+zlp1, zlp1r, _ = rilassamenti(m1)
 
-# ---------- 3. LP RELAXATION AND DUAL (LOWER BOUND) ----------
+# ---------- 3. THE DUAL OF THE RELAXATION (LOWER BOUND) ----------
 dl1 = duale_1(a1, b1, c1, d1, p1, ell1)
 salva_modello(dl1, "fam10_1_duale")
 # recipe: one chooses the price pi of a point and the price rho of one unit of
@@ -120,9 +94,38 @@ print("  mode a feasible. What is left to check are the constraints on mode b.")
 print(f"    pi = {frazione(pi_star)} euros per point, rho = {frazione(rho_star)} euros per")
 print(f"    unit of preference, sigma = " + ", ".join(frazione(v) for v in sigma_star))
 print(f"  ->  lb = -sum(sigma) - p pi + l rho = {frazione(lb1)}")
-zlp1, zlp1r, _ = due_rilassamenti(m1, dl1)
+dualita_forte(dl1, zlp1)
 
-# ---------- 4. OPTIMUM OF THE MILP ----------
+# ---------- 4. CONSTRUCTIVE HEURISTIC (UPPER BOUND) ----------
+# constructive heuristic: the prizes are scanned by decreasing preference; each one is taken with points
+# only if they suffice, otherwise with the contribution if the reduced points suffice,
+# and we stop as soon as the required preference is reached
+punti, pref = p1, 0
+scelta = {}
+for i in sorted(R(s1), key=lambda i: (-d1[i], i)):
+    if pref >= ell1:
+        break
+    if punti >= a1[i]:
+        scelta[i], punti, pref = "points", punti - a1[i], pref + d1[i]
+        print(f"  Prize {i + 1} (preference {d1[i]}): the points alone are enough ({a1[i]} <= "
+              f"{punti + a1[i]}): it is taken; preference {pref}, points left {punti}")
+    elif punti >= b1[i]:
+        scelta[i], punti, pref = "contribution", punti - b1[i], pref + d1[i]
+        print(f"  Prize {i + 1} (preference {d1[i]}): the points are not enough for mode a "
+              f"({a1[i]} > {punti + b1[i]}), mode b is used: {b1[i]} points and {c1[i]} euros; "
+              f"preference {pref}, points left {punti}")
+    else:
+        print(f"  Prize {i + 1} (preference {d1[i]}): the {punti} points left are not enough "
+              f"for either mode: it is skipped")
+assert pref >= ell1, "the constructive heuristic does not reach the required preference"
+ub1 = sum(c1[i] for i, mod in scelta.items() if mod == "contribution")
+sol_eur = {f"x[{i}]": 1 for i, mod in scelta.items() if mod == "points"} \
+    | {f"y[{i}]": 1 for i, mod in scelta.items() if mod == "contribution"}
+assert ammissibile(m1, sol_eur)
+print(f"  Heuristic solution: preference {pref} >= {ell1}, total contribution "
+      f"ub = {frazione(ub1)}")
+
+# ---------- 5. OPTIMUM OF THE MILP ----------
 z1 = risolvi(m1)
 soli_punti = [i + 1 for i in R(s1) if x1[i].X > 0.5]
 con_contributo = [i + 1 for i in R(s1) if y1[i].X > 0.5]
@@ -136,7 +139,7 @@ riga = registra_bound("1 prizes", ub1, lb1, zlp1, zlp1r, z1)
 salva_dati(pd.DataFrame([riga]), "fam10_1_bound")
 assert lb1 <= zlp1 <= z1 <= ub1 + 1e-9
 
-# ---------- 5. ADDITIONAL MODELLING QUESTIONS ----------
+# ---------- 6. ADDITIONAL MODELLING QUESTIONS ----------
 varianti = {}
 
 
@@ -157,31 +160,7 @@ varianti["1b"] = variante("1b. At least four prizes are wanted (sum_i (x_i+y_i) 
 salva_dati(pd.DataFrame({"variant": list(varianti), "z": list(varianti.values())}),
            "fam10_1_varianti")
 
-# ---------- 6. FIGURE ----------
-fig, ax = plt.subplots(figsize=(6.8, 3.0))
-premi = list(R(1, s1 + 1))
-larghezza = 0.38
-ax.bar([i - larghezza / 2 for i in premi], a1, larghezza, color=TEAL, label="points (mode a)")
-ax.bar([i + larghezza / 2 for i in premi], b1, larghezza, color=ARANCIO,
-       label="points (mode b, + contribution)")
-for i in R(s1):
-    if x1[i].X > 0.5:
-        ax.annotate("chosen", (i + 1 - larghezza / 2, a1[i]), ha="center", va="bottom",
-                    fontsize=8, color=BLU)
-    if y1[i].X > 0.5:
-        ax.annotate(f"chosen\n{c1[i]} EUR", (i + 1 + larghezza / 2, b1[i]), ha="center",
-                    va="bottom", fontsize=8, color=ROSSO)
-ax.set_xticks(premi)
-ax.set_xticklabels([f"prize {i}\n(pref. {d1[i - 1]})" for i in premi], fontsize=8)
-ax.set_ylabel("points required")
-ax.set_ylim(0, max(a1) + 3)
-ax.set_title(f"10.1: the modes chosen (total contribution {frazione(z1)} EUR)")
-ax.legend(fontsize=8)
-salva_figura(fig, "cap10_premi_ottimo")
-print("Done.")
-
-
-# ---------- 5bis. THE SANDWICH ON THE VARIANT 1b ----------
+# ---------- 7. THE SANDWICH ON THE VARIANT 1b ----------
 intestazione("10.1b The sandwich on the variant: at least four prizes")
 MIN_PREMI = 4
 
@@ -277,3 +256,26 @@ z1b = risolvi(m1b)
 riga_1b = registra_bound("1b at least four prizes", ub1b, lb1b_val, zlp1b, zlp1br, z1b)
 salva_dati(pd.DataFrame([riga_1b]), "fam10_1b_bound")
 assert lb1b_val <= zlp1b <= z1b <= ub1b + 1e-9
+
+# ---------- 8. FIGURE ----------
+fig, ax = plt.subplots(figsize=(6.8, 3.0))
+premi = list(R(1, s1 + 1))
+larghezza = 0.38
+ax.bar([i - larghezza / 2 for i in premi], a1, larghezza, color=TEAL, label="points (mode a)")
+ax.bar([i + larghezza / 2 for i in premi], b1, larghezza, color=ARANCIO,
+       label="points (mode b, + contribution)")
+for i in R(s1):
+    if x1[i].X > 0.5:
+        ax.annotate("chosen", (i + 1 - larghezza / 2, a1[i]), ha="center", va="bottom",
+                    fontsize=8, color=BLU)
+    if y1[i].X > 0.5:
+        ax.annotate(f"chosen\n{c1[i]} EUR", (i + 1 + larghezza / 2, b1[i]), ha="center",
+                    va="bottom", fontsize=8, color=ROSSO)
+ax.set_xticks(premi)
+ax.set_xticklabels([f"prize {i}\n(pref. {d1[i - 1]})" for i in premi], fontsize=8)
+ax.set_ylabel("points required")
+ax.set_ylim(0, max(a1) + 3)
+ax.set_title(f"10.1: the modes chosen (total contribution {frazione(z1)} EUR)")
+ax.legend(fontsize=8)
+salva_figura(fig, "cap10_premi_ottimo")
+print("Done.")

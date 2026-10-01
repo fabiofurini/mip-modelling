@@ -10,8 +10,9 @@ import pandas as pd
 from gurobipy import GRB
 
 from euristiche import best_fit, first_fit, matrice, next_fit
-from mip import (ammissibile, due_rilassamenti, frazione, nuovo_modello,
-                 registra_bound, risolvi, stampa_soluzione, valuta)
+from mip import (ammissibile, dualita_forte, due_rilassamenti, frazione,
+                 nuovo_modello, registra_bound, rilassamenti, risolvi,
+                 stampa_soluzione, valuta)
 from stile import CICLO, ROSSO, intestazione, plt, salva_dati, salva_figura
 from esteso import salva_modello
 
@@ -59,7 +60,21 @@ def valore_3(e, r, c):
 m3, x3, y3 = modello_3(t3, r3, c3, a3)
 salva_modello(m3, "fam07_3_primale")
 
-# ---------- 2. CONSTRUCTIVE HEURISTIC (LOWER BOUND) ----------
+# ---------- 2. THE LP RELAXATION ----------
+zlp3, zlp3r, _ = rilassamenti(m3)
+
+# ---------- 3. THE DUAL OF THE RELAXATION (LOWER BOUND) ----------
+d3 = duale_3(t3, r3, c3, a3)
+salva_modello(d3, "fam07_3_duale")
+mano = {f"pi[{mm}]": c3[mm] / a3[mm] for mm in R(3)}
+mano.update({f"mu[{j}]": max([0] + [r3[j] - t3[j] * c3[mm] / a3[mm] for mm in R(3)]) for j in R(3)})
+ub3, viol = valuta(d3, mano)
+assert viol <= 1e-9
+print("Hand-built dual solution: pi_m = c_m/a_m; mu_j = max{0, r_j - t_j pi_m} = "
+      + ", ".join(frazione(mano[f"mu[{j}]"]) for j in R(3)) + f"  ->  ub = {frazione(ub3)}")
+dualita_forte(d3, zlp3)
+
+# ---------- 4. CONSTRUCTIVE HEURISTIC (UPPER BOUND) ----------
 T3 = matrice(t3, 3)
 eur3 = [("next-fit (skips if it does not fit)", next_fit(T3, a3, salta=True)),
         ("first-fit", first_fit(T3, a3, salta=True)),
@@ -71,25 +86,14 @@ print("Step-by-step run of the best-fit:")
 eur3[2][1].traccia.stampa()
 lb3 = max(valore_3(e, r3, c3) for _, e in eur3)
 
-# ---------- 3. LP RELAXATION AND DUAL (UPPER BOUND) ----------
-d3 = duale_3(t3, r3, c3, a3)
-salva_modello(d3, "fam07_3_duale")
-mano = {f"pi[{mm}]": c3[mm] / a3[mm] for mm in R(3)}
-mano.update({f"mu[{j}]": max([0] + [r3[j] - t3[j] * c3[mm] / a3[mm] for mm in R(3)]) for j in R(3)})
-ub3, viol = valuta(d3, mano)
-assert viol <= 1e-9
-print("Hand-built dual solution: pi_m = c_m/a_m; mu_j = max{0, r_j - t_j pi_m} = "
-      + ", ".join(frazione(mano[f"mu[{j}]"]) for j in R(3)) + f"  ->  ub = {frazione(ub3)}")
-zlp3, zlp3r, _ = due_rilassamenti(m3, d3)
-
-# ---------- 4. OPTIMAL SOLUTION OF THE MILP ----------
+# ---------- 5. OPTIMAL SOLUTION OF THE MILP ----------
 z3 = risolvi(m3)
 print("Optimal solution of the MILP:")
 stampa_soluzione(m3, solo_non_nulle=True)
 riga = registra_bound("3 selection", ub3, lb3, zlp3, zlp3r, z3, senso="max")
 salva_dati(pd.DataFrame([riga]), "fam07_3_bound")
 
-# ---------- 5. ADDITIONAL MODELLING QUESTIONS ----------
+# ---------- 6. ADDITIONAL MODELLING QUESTIONS ----------
 
 
 varianti = {}
@@ -109,7 +113,8 @@ m, x, y = modello_3(t3, r3, c3, a3)
 m.addConstr(x.sum(2, "*") <= x.sum(1, "*"), name="3_only_if_2")
 varianti["3b"] = variante("3b. Job 3 is executed only if job 2 is executed", m)
 salva_dati(pd.DataFrame({"variant": list(varianti), "z": list(varianti.values())}), "fam07_3_varianti")
-# ---------- 5bis. THE SANDWICH ON THE VARIANT 3b ----------
+
+# ---------- 7. THE SANDWICH ON THE VARIANT 3b ----------
 intestazione("3b. The sandwich on the variant: job 3 only if job 2 as well")
 
 

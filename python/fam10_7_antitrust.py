@@ -15,8 +15,8 @@ import gurobipy as gp
 import pandas as pd
 from gurobipy import GRB
 
-from mip import (ammissibile, due_rilassamenti, frazione, nuovo_modello, registra_bound,
-                 risolvi, valuta)
+from mip import (ammissibile, dualita_forte, due_rilassamenti, frazione,
+                 nuovo_modello, registra_bound, rilassamenti, risolvi, valuta)
 from stile import ARANCIO, BLU, TEAL, intestazione, plt, salva_dati, salva_figura
 from esteso import salva_modello
 
@@ -78,7 +78,31 @@ tot2 = [sum(v2[i][j] for i in R(s2)) for j in R(r2)]
 print("  Total revenue per product: "
       + ", ".join(f"product {j + 1} = {tot2[j]}" for j in R(r2)))
 
-# ---------- 2. CONSTRUCTIVE HEURISTIC (UPPER BOUND) ----------
+# ---------- 2. THE LP RELAXATION ----------
+zlp2, zlp2r, _ = rilassamenti(m2)
+
+# ---------- 3. THE DUAL OF THE RELAXATION (LOWER BOUND) ----------
+dl2 = duale_2(v2)
+salva_modello(dl2, "fam10_7_duale")
+mano = {"lam[0]": 0.5, "mu[0]": 0.5}      # lam_1 = mu_1 = 1/2, everything else zero
+lb_lp, viol = valuta(dl2, mano)
+assert viol <= 1e-9, viol
+print(f"  Hand-built dual: lam_1 = mu_1 = 1/2 and everything else zero -> value "
+      f"{frazione(lb_lp)}.")
+print("  Every feasible dual solution here is worth at most zero: the objective contains the")
+print("  difference mu_j - lam_j, and the constraints on the columns x_i force it to be")
+print("  non-positive on every branch.")
+dualita_forte(dl2, zlp2)
+
+meta = {f"x[{i}]": 0.5 for i in R(s2)} | {"z": 0.0}
+val_meta, viol_meta = valuta(m2, meta)
+assert viol_meta <= 1e-9 and abs(val_meta) <= 1e-9
+print(f"  And indeed z(LP) = {frazione(zlp2)}: it is enough to put half of every branch in")
+print("  each company (x_i = 1/2, z = 0) and every product is balanced exactly. It is")
+print("  feasible for the relaxation and useless for the real problem: branches are indivisible.")
+assert abs(zlp2) <= 1e-9
+
+# ---------- 4. CONSTRUCTIVE HEURISTIC (UPPER BOUND) ----------
 # constructive heuristic: the branches in decreasing order of total revenue, each one to the company
 # that currently has the smaller total
 def euristica(v):
@@ -110,27 +134,7 @@ print("  Company A = " + str([i + 1 for i in R(s2) if gruppo[i] == 0])
       + ", company B = " + str([i + 1 for i in R(s2) if gruppo[i] == 1])
       + f"   ub = {frazione(ub2)}")
 
-# ---------- 3. THE LP RELAXATION SAYS NOTHING ----------
-dl2 = duale_2(v2)
-salva_modello(dl2, "fam10_7_duale")
-mano = {"lam[0]": 0.5, "mu[0]": 0.5}      # lam_1 = mu_1 = 1/2, everything else zero
-lb_lp, viol = valuta(dl2, mano)
-assert viol <= 1e-9, viol
-print(f"  Hand-built dual: lam_1 = mu_1 = 1/2 and everything else zero -> value "
-      f"{frazione(lb_lp)}.")
-print("  Every feasible dual solution here is worth at most zero: the objective contains the")
-print("  difference mu_j - lam_j, and the constraints on the columns x_i force it to be")
-print("  non-positive on every branch.")
-zlp2, zlp2r, _ = due_rilassamenti(m2, dl2)
-meta = {f"x[{i}]": 0.5 for i in R(s2)} | {"z": 0.0}
-val_meta, viol_meta = valuta(m2, meta)
-assert viol_meta <= 1e-9 and abs(val_meta) <= 1e-9
-print(f"  And indeed z(LP) = {frazione(zlp2)}: it is enough to put half of every branch in")
-print("  each company (x_i = 1/2, z = 0) and every product is balanced exactly. It is")
-print("  feasible for the relaxation and useless for the real problem: branches are indivisible.")
-assert abs(zlp2) <= 1e-9
-
-# ---------- 4. A COMBINATORIAL BOUND, PRODUCT BY PRODUCT ----------
+# ---------- 5. A COMBINATORIAL BOUND, PRODUCT BY PRODUCT ----------
 intestazione("10.7 The lower bound comes from a combinatorial argument")
 # for every product, the smallest imbalance obtainable looking at that product alone
 def minimo_squilibrio(colonna, tot):
@@ -151,7 +155,7 @@ print("  integrality, not from the constraints.")
 salva_dati(pd.DataFrame({"product": R(1, r2 + 1), "total": tot2, "g_j": gj}),
            "fam10_7_argomento")
 
-# ---------- 5. OPTIMUM OF THE MILP ----------
+# ---------- 6. OPTIMUM OF THE MILP ----------
 z2 = risolvi(m2)
 A = [i + 1 for i in R(s2) if x2[i].X > 0.5]
 B = [i + 1 for i in R(s2) if x2[i].X <= 0.5]
@@ -166,7 +170,7 @@ assert lb2 <= z2 <= ub2 + 1e-9
 print(f"  Sandwich: {frazione(lb2)} <= z(MILP) = {frazione(z2)} <= {frazione(ub2)}. Careful:")
 print(f"  here lb is not the value of the dual ({frazione(lb_lp)}) but the combinatorial bound.")
 
-# ---------- 6. ADDITIONAL MODELLING QUESTIONS ----------
+# ---------- 7. ADDITIONAL MODELLING QUESTIONS ----------
 varianti = {}
 
 
@@ -201,27 +205,7 @@ assert A_somma == A_max, (A_somma, A_max)
 salva_dati(pd.DataFrame({"variant": list(varianti), "z": list(varianti.values())}),
            "fam10_7_varianti")
 
-# ---------- 7. FIGURE ----------
-fig, ax = plt.subplots(figsize=(6.8, 3.0))
-larg = 0.35
-idx = list(R(r2))
-ax.bar([j - larg / 2 for j in idx], [sum(v2[i - 1][j] for i in A) for j in idx], larg,
-       color=TEAL, label="company A")
-ax.bar([j + larg / 2 for j in idx], [sum(v2[i - 1][j] for i in B) for j in idx], larg,
-       color=BLU, label="company B")
-for j in idx:
-    ax.annotate(f"|diff| = {diff_ott[j]}", (j, max(tot2) / 2 + 1), ha="center", fontsize=8,
-                color=ARANCIO)
-ax.set_xticks(idx)
-ax.set_xticklabels([f"product {j + 1}" for j in idx])
-ax.set_ylabel("revenue (millions)")
-ax.set_title(f"10.7: optimal partition, worst imbalance {frazione(z2)}")
-ax.legend(fontsize=8)
-salva_figura(fig, "cap10_antitrust_ottimo")
-print("Done.")
-
-
-# ---------- 5bis. THE SANDWICH ON THE VARIANT 2a ----------
+# ---------- 8. THE SANDWICH ON THE VARIANT 2a ----------
 intestazione("10.7a The sandwich on the variant: branches 1 and 2 stay together")
 
 
@@ -305,3 +289,22 @@ riga_2a = registra_bound("2a branches 1 and 2 together", ub2a, lb2a, zlp2a, zlp2
                          certificato="smallest imbalance with branches 1 and 2 tied")
 salva_dati(pd.DataFrame([riga_2a]), "fam10_7a_bound")
 assert lb2a <= z2a_val <= ub2a + 1e-9
+
+# ---------- 9. FIGURE ----------
+fig, ax = plt.subplots(figsize=(6.8, 3.0))
+larg = 0.35
+idx = list(R(r2))
+ax.bar([j - larg / 2 for j in idx], [sum(v2[i - 1][j] for i in A) for j in idx], larg,
+       color=TEAL, label="company A")
+ax.bar([j + larg / 2 for j in idx], [sum(v2[i - 1][j] for i in B) for j in idx], larg,
+       color=BLU, label="company B")
+for j in idx:
+    ax.annotate(f"|diff| = {diff_ott[j]}", (j, max(tot2) / 2 + 1), ha="center", fontsize=8,
+                color=ARANCIO)
+ax.set_xticks(idx)
+ax.set_xticklabels([f"product {j + 1}" for j in idx])
+ax.set_ylabel("revenue (millions)")
+ax.set_title(f"10.7: optimal partition, worst imbalance {frazione(z2)}")
+ax.legend(fontsize=8)
+salva_figura(fig, "cap10_antitrust_ottimo")
+print("Done.")

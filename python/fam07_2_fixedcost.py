@@ -11,8 +11,9 @@ import pandas as pd
 from gurobipy import GRB
 
 from euristiche import best_fit, first_fit, matrice, next_fit
-from mip import (ammissibile, due_rilassamenti, frazione, nuovo_modello,
-                 registra_bound, rilassamento, risolvi, stampa_soluzione, valuta)
+from mip import (ammissibile, dualita_forte, due_rilassamenti, frazione,
+                 nuovo_modello, registra_bound, rilassamenti, rilassamento, risolvi,
+                 stampa_soluzione, valuta)
 from stile import CICLO, ROSSO, intestazione, plt, salva_dati, salva_figura
 from esteso import salva_modello
 
@@ -59,7 +60,22 @@ def valore_2(e, c):
 m2, x2, y2 = modello_2(t2, c2, a2)
 salva_modello(m2, "fam07_2_primale")
 
-# ---------- 2. CONSTRUCTIVE HEURISTIC (UPPER BOUND) ----------
+# ---------- 2. THE LP RELAXATION ----------
+zlp2, zlp2r, _ = rilassamenti(m2)
+
+# ---------- 3. THE DUAL OF THE RELAXATION (LOWER BOUND) ----------
+d2 = duale_2(t2, c2, a2)
+salva_modello(d2, "fam07_2_duale")
+mano = {f"pi[{mm}]": c2[mm] / a2[mm] for mm in R(3)}
+mano.update({f"mu[{j}]": min(t2[j][mm] * c2[mm] / a2[mm] for mm in R(3)) for j in R(3)})
+lb2, viol = valuta(d2, mano)
+assert viol <= 1e-9
+print("Hand-built dual solution: pi_m = c_m/a_m = " + ", ".join(frazione(c2[mm] / a2[mm]) for mm in R(3))
+      + ";  mu_j = min_m t_jm pi_m = " + ", ".join(frazione(mano[f"mu[{j}]"]) for j in R(3))
+      + f"  ->  lb = {frazione(lb2)}")
+dualita_forte(d2, zlp2)
+
+# ---------- 4. CONSTRUCTIVE HEURISTIC (UPPER BOUND) ----------
 print("Constructive heuristics:")
 eur2 = [("next-fit", next_fit(t2, a2)),
         ("first-fit", first_fit(t2, a2)),
@@ -74,26 +90,14 @@ print("Step-by-step run of the minimum-time best-fit:")
 eur2[2][1].traccia.stampa()
 ub2 = min(valore_2(e, c2) for _, e in eur2)
 
-# ---------- 3. LP RELAXATION AND DUAL (LOWER BOUND) ----------
-d2 = duale_2(t2, c2, a2)
-salva_modello(d2, "fam07_2_duale")
-mano = {f"pi[{mm}]": c2[mm] / a2[mm] for mm in R(3)}
-mano.update({f"mu[{j}]": min(t2[j][mm] * c2[mm] / a2[mm] for mm in R(3)) for j in R(3)})
-lb2, viol = valuta(d2, mano)
-assert viol <= 1e-9
-print("Hand-built dual solution: pi_m = c_m/a_m = " + ", ".join(frazione(c2[mm] / a2[mm]) for mm in R(3))
-      + ";  mu_j = min_m t_jm pi_m = " + ", ".join(frazione(mano[f"mu[{j}]"]) for j in R(3))
-      + f"  ->  lb = {frazione(lb2)}")
-zlp2, zlp2r, _ = due_rilassamenti(m2, d2)
-
-# ---------- 4. OPTIMAL SOLUTION OF THE MILP ----------
+# ---------- 5. OPTIMAL SOLUTION OF THE MILP ----------
 z2 = risolvi(m2)
 print("Optimal solution of the MILP:")
 stampa_soluzione(m2, solo_non_nulle=True)
 riga = registra_bound("2 fixed cost", ub2, lb2, zlp2, zlp2r, z2)
 salva_dati(pd.DataFrame([riga]), "fam07_2_bound")
 
-# ---------- 4bis. RELAXATION WITH THE DISAGGREGATED LINKS ----------
+# ---------- 6. RELAXATION WITH THE DISAGGREGATED LINKS ----------
 # the same instance with the disaggregated link constraints x_jm <= y_m: stronger relaxation
 m2d, x2d, y2d = modello_2(t2, c2, a2)
 m2d.addConstrs((x2d[j, mm] <= y2d[mm] for j in R(3) for mm in R(3)), name="disaggregated")
@@ -101,7 +105,7 @@ zlp2d, _, _ = rilassamento(m2d, rafforzato=True)
 print(f"Relaxation with the bounds with the disaggregated links x_jm <= y_m: z(LP+) = {frazione(zlp2d)} "
       f"(with the aggregated link only: {frazione(zlp2r)}) — the disaggregated formulation is stronger")
 
-# ---------- 5. ADDITIONAL MODELLING QUESTIONS ----------
+# ---------- 7. ADDITIONAL MODELLING QUESTIONS ----------
 
 
 varianti = {}
@@ -121,7 +125,8 @@ m, x, y = modello_2(t2, c2, a2)
 m.addConstr(y[0] <= y[2], name="1_implies_3")
 varianti["2b"] = variante("2b. If machine 1 is used so is machine 3 (y_1 <= y_3)", m)
 salva_dati(pd.DataFrame({"variant": list(varianti), "z": list(varianti.values())}), "fam07_2_varianti")
-# ---------- 5bis. THE SANDWICH ON THE VARIANT 2b ----------
+
+# ---------- 8. THE SANDWICH ON THE VARIANT 2b ----------
 intestazione("2b. The sandwich on the variant: if machine 1 is used then machine 3 is used too")
 
 
@@ -185,8 +190,7 @@ print("The certificate does not move from the base problem: a link between activ
 print("does not touch the relaxation, because the relaxation can switch on half a machine.")
 print("What grows is the integer optimum, and therefore the gap.")
 
-
-# ---------- 6. FIGURES ----------
+# ---------- 9. FIGURES ----------
 
 
 def barre_macchine(assegn, t, a, titolo, nome):

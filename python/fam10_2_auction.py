@@ -10,8 +10,9 @@ import gurobipy as gp
 import pandas as pd
 from gurobipy import GRB
 
-from mip import (ammissibile, due_rilassamenti, frazione, nuovo_modello, registra_bound,
-                 risolvi, stampa_lp, valuta)
+from mip import (ammissibile, dualita_forte, due_rilassamenti, frazione,
+                 nuovo_modello, registra_bound, rilassamenti, risolvi, stampa_lp,
+                 valuta)
 from stile import ARANCIO, GRIGIO, TEAL, intestazione, plt, salva_dati, salva_figura
 from esteso import salva_modello
 
@@ -58,7 +59,33 @@ salva_modello(m3, "fam10_2_primale")
 print("  The model of the instance:")
 stampa_lp(m3)
 
-# ---------- 2. CONSTRUCTIVE HEURISTIC (LOWER BOUND) ----------
+# ---------- 2. THE LP RELAXATION ----------
+zlp3, zlp3r, _ = rilassamenti(m3)
+
+# ---------- 3. THE DUAL OF THE RELAXATION (LOWER BOUND) ----------
+dl3, lam3 = duale_3(n3, B3, p3)
+salva_modello(dl3, "fam10_2_duale")
+# Hand recipe: spread every bid over its items and take the maximum,
+# lam_i = max_{j : i in B_j} p_j / |B_j|. It is always feasible because for every
+# bid j we have sum_{i in B_j} lam_i >= |B_j| * p_j / |B_j| = p_j.
+mano = {f"lam[{i}]": max(p3[j] / len(B3[j]) for j in R(r3) if i in B3[j]) for i in R(n3)}
+ub3, viol = valuta(dl3, mano)
+assert viol <= 1e-9, viol
+print("  Hand-built dual: lam_i = max_{j : i in B_j} p_j / |B_j| (the profit of every bid")
+print("  spread over its items; the sum over B_j is then at least p_j):")
+for i in R(n3):
+    quote = ", ".join(f"{p3[j]}/{len(B3[j])}" for j in R(r3) if i in B3[j])
+    print(f"    item {i + 1}: max({quote}) = {frazione(mano[f'lam[{i}]'])}")
+print(f"  ub = sum of the prices = {frazione(ub3)}")
+# for comparison: the recipe of the source notes, lam_i = max p_j over the bids
+grezza = {f"lam[{i}]": max(p3[j] for j in R(r3) if i in B3[j]) for i in R(n3)}
+ub_grezzo, viol_g = valuta(dl3, grezza)
+assert viol_g <= 1e-9
+print(f"  (with the cruder recipe lam_i = max_j p_j one would only get "
+      f"{frazione(ub_grezzo)})")
+dualita_forte(dl3, zlp3)
+
+# ---------- 4. CONSTRUCTIVE HEURISTIC (UPPER BOUND) ----------
 # constructive heuristic on the profit per item: the most profitable bids are accepted among those
 # whose items are still free. Cost O(r log r + r n).
 def euristica(n, B, p):
@@ -90,30 +117,7 @@ assert ammissibile(m3, sol_eur), sol_eur
 accettate = [j + 1 for j in R(r3) if x_eur[j]]
 print(f"  Heuristic solution: bids {accettate}   lb = {frazione(lb3)}")
 
-# ---------- 3. LP RELAXATION AND DUAL (UPPER BOUND) ----------
-dl3, lam3 = duale_3(n3, B3, p3)
-salva_modello(dl3, "fam10_2_duale")
-# Hand recipe: spread every bid over its items and take the maximum,
-# lam_i = max_{j : i in B_j} p_j / |B_j|. It is always feasible because for every
-# bid j we have sum_{i in B_j} lam_i >= |B_j| * p_j / |B_j| = p_j.
-mano = {f"lam[{i}]": max(p3[j] / len(B3[j]) for j in R(r3) if i in B3[j]) for i in R(n3)}
-ub3, viol = valuta(dl3, mano)
-assert viol <= 1e-9, viol
-print("  Hand-built dual: lam_i = max_{j : i in B_j} p_j / |B_j| (the profit of every bid")
-print("  spread over its items; the sum over B_j is then at least p_j):")
-for i in R(n3):
-    quote = ", ".join(f"{p3[j]}/{len(B3[j])}" for j in R(r3) if i in B3[j])
-    print(f"    item {i + 1}: max({quote}) = {frazione(mano[f'lam[{i}]'])}")
-print(f"  ub = sum of the prices = {frazione(ub3)}")
-# for comparison: the recipe of the source notes, lam_i = max p_j over the bids
-grezza = {f"lam[{i}]": max(p3[j] for j in R(r3) if i in B3[j]) for i in R(n3)}
-ub_grezzo, viol_g = valuta(dl3, grezza)
-assert viol_g <= 1e-9
-print(f"  (with the cruder recipe lam_i = max_j p_j one would only get "
-      f"{frazione(ub_grezzo)})")
-zlp3, zlp3r, _ = due_rilassamenti(m3, dl3)
-
-# ---------- 4. OPTIMUM OF THE MILP ----------
+# ---------- 5. OPTIMUM OF THE MILP ----------
 z3 = risolvi(m3)
 ottime = [j + 1 for j in R(r3) if x3[j].X > 0.5]
 venduti = sorted({i + 1 for j in R(r3) if x3[j].X > 0.5 for i in B3[j]})
@@ -126,7 +130,7 @@ riga = registra_bound("3 auction", ub3, lb3, zlp3, zlp3r, z3, senso="max")
 salva_dati(pd.DataFrame([riga]), "fam10_2_bound")
 assert lb3 <= z3 <= zlp3r <= zlp3 <= ub3 + 1e-9
 
-# ---------- 5. THE TWO RELAXATIONS AND INTEGRALITY ----------
+# ---------- 6. THE TWO RELAXATIONS AND INTEGRALITY ----------
 intestazione("10.2 The two relaxations and the integrality of the relaxation")
 print(f"  z(LP) = {frazione(zlp3)} and z(LP+) = {frazione(zlp3r)} coincide: the constraints")
 print("  sum_{j : i in B_j} x_j <= 1 already imply x_j <= 1 for every bid with a non-empty")
@@ -147,7 +151,7 @@ salva_dati(pd.DataFrame([{"instance": "auction 10.2", "z_lp": zlp3, "z_milp": z3
                          {"instance": "triangle", "z_lp": zlp_tri, "z_milp": z_tri}]),
            "fam10_2_triangolo")
 
-# ---------- 6. ADDITIONAL MODELLING QUESTIONS ----------
+# ---------- 7. ADDITIONAL MODELLING QUESTIONS ----------
 varianti = {}
 
 
@@ -168,29 +172,7 @@ varianti["2b"] = variante("2b. At most two items are delivered (sum_j |B_j| x_j 
 salva_dati(pd.DataFrame({"variant": list(varianti), "z": list(varianti.values())}),
            "fam10_2_varianti")
 
-# ---------- 7. FIGURE ----------
-fig, ax = plt.subplots(figsize=(6.8, 3.2))
-idx = list(R(r3))
-colori = [TEAL if x3[j].X > 0.5 else GRIGIO for j in idx]
-ax.bar(idx, p3, 0.55, color=colori)
-for j in idx:
-    if x_eur[j]:
-        ax.plot(j, p3[j] + 0.6, marker="v", color=ARANCIO, ms=8)
-ax.plot([], [], marker="v", ls="", color=ARANCIO, label="chosen by the heuristic")
-ax.bar([], [], color=TEAL, label="accepted at the optimum")
-ax.bar([], [], color=GRIGIO, label="rejected at the optimum")
-ax.set_xticks(idx)
-ax.set_xticklabels(["{" + ",".join(str(i + 1) for i in B3[j]) + "}" for j in idx])
-ax.set_xlabel("items asked by the bid")
-ax.set_ylabel("profit")
-ax.set_title(f"10.2: heuristic {frazione(lb3)} <= optimum {frazione(z3)} <= dual "
-             f"{frazione(ub3)}")
-ax.legend(fontsize=8, loc="upper left")
-salva_figura(fig, "cap10_asta_offerte")
-print("Done.")
-
-
-# ---------- 5bis. THE SANDWICH ON THE VARIANT 3b ----------
+# ---------- 8. THE SANDWICH ON THE VARIANT 3b ----------
 intestazione("10.2b The sandwich on the variant: at most two items delivered")
 MAX_OGG = 2
 
@@ -270,3 +252,24 @@ z3b = risolvi(m3b)
 riga_3b = registra_bound("2b at most two items", ub3b_val, lb3b, zlp3b, zlp3br, z3b, senso="max")
 salva_dati(pd.DataFrame([riga_3b]), "fam10_2b_bound")
 assert lb3b <= z3b <= zlp3b + 1e-9 <= ub3b_val + 1e-9
+
+# ---------- 9. FIGURE ----------
+fig, ax = plt.subplots(figsize=(6.8, 3.2))
+idx = list(R(r3))
+colori = [TEAL if x3[j].X > 0.5 else GRIGIO for j in idx]
+ax.bar(idx, p3, 0.55, color=colori)
+for j in idx:
+    if x_eur[j]:
+        ax.plot(j, p3[j] + 0.6, marker="v", color=ARANCIO, ms=8)
+ax.plot([], [], marker="v", ls="", color=ARANCIO, label="chosen by the heuristic")
+ax.bar([], [], color=TEAL, label="accepted at the optimum")
+ax.bar([], [], color=GRIGIO, label="rejected at the optimum")
+ax.set_xticks(idx)
+ax.set_xticklabels(["{" + ",".join(str(i + 1) for i in B3[j]) + "}" for j in idx])
+ax.set_xlabel("items asked by the bid")
+ax.set_ylabel("profit")
+ax.set_title(f"10.2: heuristic {frazione(lb3)} <= optimum {frazione(z3)} <= dual "
+             f"{frazione(ub3)}")
+ax.legend(fontsize=8, loc="upper left")
+salva_figura(fig, "cap10_asta_offerte")
+print("Done.")

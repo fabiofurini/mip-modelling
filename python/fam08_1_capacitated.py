@@ -9,8 +9,9 @@ import gurobipy as gp
 import pandas as pd
 from gurobipy import GRB
 
-from mip import (ammissibile, due_rilassamenti, frazione, nuovo_modello,
-                 registra_bound, risolvi, stampa_soluzione, valuta)
+from mip import (ammissibile, dualita_forte, due_rilassamenti, frazione,
+                 nuovo_modello, registra_bound, rilassamenti, risolvi,
+                 stampa_soluzione, valuta)
 from stile import CICLO, intestazione, plt, salva_dati, salva_figura
 from esteso import salva_modello
 
@@ -58,7 +59,23 @@ def duale_1(t, u, i, d):
 m1, x1, y1 = modello_1(t1, u1, i1, d1)
 salva_modello(m1, "fam08_1_primale")
 
-# ---------- 2. CONSTRUCTIVE HEURISTIC (UPPER BOUND) ----------
+# ---------- 2. THE LP RELAXATION ----------
+zlp1, zlp1r, _ = rilassamenti(m1)
+
+# ---------- 3. THE DUAL OF THE RELAXATION (LOWER BOUND) ----------
+
+d1_ = duale_1(t1, u1, i1, d1)
+salva_modello(d1_, "fam08_1_duale")
+mano = {f"mu[{l}]": i1[l] / u1[l] for l in R(m)}
+mano.update({f"pi[{c}]": min(t1[l][c] + mano[f"mu[{l}]"] for l in R(m)) for c in R(n)})
+lb1, viol = valuta(d1_, mano)
+assert viol <= 1e-9, viol
+print("Hand-built dual solution: mu_l = i_l/u_l = " + ", ".join(frazione(i1[l] / u1[l]) for l in R(m))
+      + ";  pi_c = min_l (t_lc + mu_l) = " + ", ".join(frazione(mano[f"pi[{c}]"]) for c in R(n))
+      + f"  ->  lb = {frazione(lb1)}")
+dualita_forte(d1_, zlp1)
+
+# ---------- 4. CONSTRUCTIVE HEURISTIC (UPPER BOUND) ----------
 
 print("Heuristic: locations are scanned in order, filling each client's residual demand")
 print("with each location's residual capacity, without exceeding either one.")
@@ -93,20 +110,7 @@ sol_eur.update({f"y[{l},{c}]": v for (l, c), v in ye.items()})
 assert ammissibile(m1, sol_eur)
 print(f"  ub = {ub1}")
 
-# ---------- 3. LP RELAXATION AND DUAL (LOWER BOUND) ----------
-
-d1_ = duale_1(t1, u1, i1, d1)
-salva_modello(d1_, "fam08_1_duale")
-mano = {f"mu[{l}]": i1[l] / u1[l] for l in R(m)}
-mano.update({f"pi[{c}]": min(t1[l][c] + mano[f"mu[{l}]"] for l in R(m)) for c in R(n)})
-lb1, viol = valuta(d1_, mano)
-assert viol <= 1e-9, viol
-print("Hand-built dual solution: mu_l = i_l/u_l = " + ", ".join(frazione(i1[l] / u1[l]) for l in R(m))
-      + ";  pi_c = min_l (t_lc + mu_l) = " + ", ".join(frazione(mano[f"pi[{c}]"]) for c in R(n))
-      + f"  ->  lb = {frazione(lb1)}")
-zlp1, zlp1r, _ = due_rilassamenti(m1, d1_)
-
-# ---------- 4. OPTIMAL SOLUTION OF THE MILP ----------
+# ---------- 5. OPTIMAL SOLUTION OF THE MILP ----------
 
 z1 = risolvi(m1)
 print("Optimal solution of the MILP:")
@@ -114,7 +118,7 @@ stampa_soluzione(m1, solo_non_nulle=True)
 riga = registra_bound("1 capacitated location", ub1, lb1, zlp1, zlp1r, z1)
 salva_dati(pd.DataFrame([riga]), "fam08_1_bound")
 
-# ---------- 5. ADDITIONAL MODELLING QUESTIONS ----------
+# ---------- 6. ADDITIONAL MODELLING QUESTIONS ----------
 
 varianti = {}
 
@@ -134,7 +138,8 @@ mod, x, y = modello_1(t1, u1, i1, d1)
 mod.addConstr(x[1] <= x[0], name="2_only_if_1")
 varianti["1b"] = variante("1b. Location 2 opens only if location 1 opens (x_2 <= x_1)", mod)
 salva_dati(pd.DataFrame({"variant": list(varianti), "z": list(varianti.values())}), "fam08_1_varianti")
-# ---------- 5bis. THE SANDWICH ON THE VARIANT 1b ----------
+
+# ---------- 7. THE SANDWICH ON THE VARIANT 1b ----------
 intestazione("1b. The sandwich on the variant: site 2 opens only if site 1 opens")
 
 
@@ -214,8 +219,7 @@ riga_1b = registra_bound("1b site 2 only with site 1", ub1b, lb1b_val, zlp1b, zl
 salva_dati(pd.DataFrame([riga_1b]), "fam08_1b_bound")
 assert lb1b_val <= zlp1b <= z1b <= ub1b + 1e-9
 
-
-# ---------- 6. FIGURES ----------
+# ---------- 8. FIGURES ----------
 
 
 def barre_flusso(y, m, n, titolo, nome):

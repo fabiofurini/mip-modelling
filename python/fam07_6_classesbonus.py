@@ -9,8 +9,9 @@ import pandas as pd
 from gurobipy import GRB
 
 from euristiche import best_fit, first_fit, matrice, next_fit
-from mip import (ammissibile, due_rilassamenti, frazione, nuovo_modello,
-                 registra_bound, risolvi, stampa_soluzione, valuta)
+from mip import (ammissibile, dualita_forte, due_rilassamenti, frazione,
+                 nuovo_modello, registra_bound, rilassamenti, risolvi,
+                 stampa_soluzione, valuta)
 from stile import CICLO, ROSSO, intestazione, plt, salva_dati, salva_figura
 from esteso import salva_modello
 
@@ -94,15 +95,10 @@ def euristica_6(r, t, J, v, a, u):
 m6, x6, y6, z6 = modello_6(r6, t6, J6, v6, a6, u6)
 salva_modello(m6, "fam07_6_primale")
 
-# ---------- 2. CONSTRUCTIVE HEURISTIC (LOWER BOUND) ----------
-xe, ye, ze, passi = euristica_6(r6, t6, J6, v6, a6, u6)
-print("Class-by-class heuristic:")
-for i, s in enumerate(passi, 1):
-    print(f"  Step {i}. {s}")
-lb6 = sum(r6[j] * xe[j] for j in R(6)) + sum(v6[c] * ye[c] for c in R(3))
-print(f"  lb = {lb6}  (x = {xe}, y = {ye}, z = {ze})")
+# ---------- 2. THE LP RELAXATION ----------
+zlp6, zlp6r, _ = rilassamenti(m6)
 
-# ---------- 3. LP RELAXATION AND DUAL (UPPER BOUND) ----------
+# ---------- 3. THE DUAL OF THE RELAXATION (LOWER BOUND) ----------
 d6 = duale_6(r6, t6, J6, v6, a6, u6)
 salva_modello(d6, "fam07_6_duale")
 pi_mano = {f"pi[{J6[c][0]}]": -v6[c] for c in R(3)}      # the first job of every class carries the bonus
@@ -112,16 +108,24 @@ ub6, viol = valuta(d6, mano)
 assert viol <= 1e-9
 print(f"Hand-built dual solution: pi_1 = -5, pi_3 = -4, pi_5 = -10, lam = 0, "
       f"mu = max_j (r_j - pi_j)/t_j = {frazione(mu_mano)}  ->  ub = {frazione(ub6)}")
-zlp6, zlp6r, _ = due_rilassamenti(m6, d6)
+dualita_forte(d6, zlp6)
 
-# ---------- 4. OPTIMAL SOLUTION OF THE MILP ----------
+# ---------- 4. CONSTRUCTIVE HEURISTIC (UPPER BOUND) ----------
+xe, ye, ze, passi = euristica_6(r6, t6, J6, v6, a6, u6)
+print("Class-by-class heuristic:")
+for i, s in enumerate(passi, 1):
+    print(f"  Step {i}. {s}")
+lb6 = sum(r6[j] * xe[j] for j in R(6)) + sum(v6[c] * ye[c] for c in R(3))
+print(f"  lb = {lb6}  (x = {xe}, y = {ye}, z = {ze})")
+
+# ---------- 5. OPTIMAL SOLUTION OF THE MILP ----------
 z6v = risolvi(m6)
 print("Optimal solution of the MILP:")
 stampa_soluzione(m6, solo_non_nulle=True)
 riga = registra_bound("6 classes bonus", ub6, lb6, zlp6, zlp6r, z6v, senso="max")
 salva_dati(pd.DataFrame([riga]), "fam07_6_bound")
 
-# ---------- 5. ADDITIONAL MODELLING QUESTIONS ----------
+# ---------- 6. ADDITIONAL MODELLING QUESTIONS ----------
 
 
 varianti = {}
@@ -145,7 +149,8 @@ m.update()
 m.setObjective(m.getObjective() - w6 * gp.quicksum(st[c] - y[c] for c in R(3)), GRB.MAXIMIZE)
 varianti["6b"] = variante("6b. Penalty 3 per class started and not completed (s_c >= x_j)", m)
 salva_dati(pd.DataFrame({"variant": list(varianti), "z": list(varianti.values())}), "fam07_6_varianti")
-# ---------- 5bis. THE SANDWICH ON THE VARIANT 6a ----------
+
+# ---------- 7. THE SANDWICH ON THE VARIANT 6a ----------
 intestazione("6a. The sandwich on the variant: at least one job per class")
 
 

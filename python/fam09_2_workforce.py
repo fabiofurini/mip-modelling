@@ -10,8 +10,9 @@ import gurobipy as gp
 import pandas as pd
 from gurobipy import GRB
 
-from mip import (ammissibile, due_rilassamenti, frazione, nuovo_modello, registra_bound,
-                 rilassamento, risolvi, valuta)
+from mip import (ammissibile, dualita_forte, due_rilassamenti, frazione, nuovo_modello,
+                 rilassamenti,
+                 registra_bound, rilassamenti, rilassamento, risolvi, valuta)
 from stile import ARANCIO, BLU, ROSSO, TEAL, intestazione, plt, salva_dati, salva_figura
 from esteso import salva_modello
 
@@ -102,21 +103,29 @@ print("  Plan A: production " + ", ".join(frazione(xA[t].X) for t in R(n2))
 print("  Plan B: production " + ", ".join(frazione(xB[t].X) for t in R(n2))
       + "; workforce " + ", ".join(frazione(yB[t].X) for t in R(n2)))
 
-# ---------- 2. THE EQUIVALENCE, VERIFIED ----------
-intestazione("9.2 The equivalence between the two formulations, verified")
-print("  The correspondence is y_t = m0 + sum_{j <= t} z_j, that is z_t = y_t - y_{t-1}")
-print("  (with y_0 = m0). On the optimal plans:")
-yA = [m2 + sum(round(zA[j].X) for j in R(t + 1)) for t in R(n2)]
-print("    from A: implied workforce = " + ", ".join(str(v) for v in yA))
-print("    from B: workforce         = " + ", ".join(str(round(yB[t].X)) for t in R(n2)))
-zB_implicite = [round(yB[0].X) - m2] + [round(yB[t].X) - round(yB[t - 1].X) for t in R(1, n2)]
-print("    from B: implied hirings   = " + ", ".join(str(v) for v in zB_implicite))
-assert sum(v * (u2 + w2 * (n2 - t)) for t, v in enumerate(zB_implicite)) + costante_A \
-    == sum(round(zA[t].X) * (u2 + w2 * (n2 - t)) for t in R(n2)) + costante_A
-print("  The staff cost is the same: A charges every hiring once for all the months that")
-print("  remain, B charges the workforce month by month. Same total, counted two ways.")
+# ---------- 2. THE LP RELAXATION ----------
+zlp2, zlp2r, _ = rilassamenti(mA)
 
-# ---------- 3. CONSTRUCTIVE HEURISTIC (UPPER BOUND) ----------
+# ---------- 3. THE DUAL OF THE RELAXATION (LOWER BOUND) ----------
+dl2 = duale_A(d2, p2, h2, w2, r2, g2, u2, m2, r0)
+salva_modello(dl2, "fam09_2_duale")
+# recipe: nu = 0 (the hours are not charged) and mu_t = cheapest way to have a pair
+# available in month t
+mu = []
+for t in R(n2):
+    mu.append(p2[t] if t == 0 else min(mu[t - 1] + h2[t - 1], p2[t]))
+mano = {f"mu[{t}]": mu[t] for t in R(n2)}
+lb2_var, viol = valuta(dl2, mano)
+assert viol <= 1e-9, viol
+lb2 = lb2_var + costante_A
+print("  Hand-built dual: nu = 0 (working hours are not charged) and")
+print("  mu_t = min(mu_{t-1} + h, p_t)")
+print(f"    mu = " + ", ".join(frazione(v) for v in mu)
+      + f"  ->  lb = {frazione(lb2_var)} + {costante_A} = {frazione(lb2)}")
+dualita_forte(dl2, zlp2)
+zlp2, zlp2r = zlp2 + costante_A, zlp2r + costante_A
+
+# ---------- 4. CONSTRUCTIVE HEURISTIC (UPPER BOUND) ----------
 intestazione("9.2 Heuristic, dual and bounds")
 # constructive heuristic: produce the demand of the month, and hire only when the hours are not enough
 organico, assunzioni, prod = m2, [0] * n2, []
@@ -135,30 +144,25 @@ sol_eur = {f"x[{t}]": prod[t] for t in R(n2)} | {f"z[{t}]": assunzioni[t] for t 
     | {f"s[{t}]": 0 for t in R(n2 - 1)}
 assert ammissibile(mA, sol_eur)
 print(f"  Cost of the heuristic: ub = {frazione(ub2)}")
-
-# ---------- 4. DUAL AND LOWER BOUND ----------
-dl2 = duale_A(d2, p2, h2, w2, r2, g2, u2, m2, r0)
-salva_modello(dl2, "fam09_2_duale")
-# recipe: nu = 0 (the hours are not charged) and mu_t = cheapest way to have a pair
-# available in month t
-mu = []
-for t in R(n2):
-    mu.append(p2[t] if t == 0 else min(mu[t - 1] + h2[t - 1], p2[t]))
-mano = {f"mu[{t}]": mu[t] for t in R(n2)}
-lb2_var, viol = valuta(dl2, mano)
-assert viol <= 1e-9, viol
-lb2 = lb2_var + costante_A
-print("  Hand-built dual: nu = 0 (working hours are not charged) and")
-print("  mu_t = min(mu_{t-1} + h, p_t)")
-print(f"    mu = " + ", ".join(frazione(v) for v in mu)
-      + f"  ->  lb = {frazione(lb2_var)} + {costante_A} = {frazione(lb2)}")
-zlp2, zlp2r, _ = due_rilassamenti(mA, dl2)
-zlp2, zlp2r = zlp2 + costante_A, zlp2r + costante_A
 riga = registra_bound("2 workforce", ub2, lb2, zlp2, zlp2r, zA_val)
 salva_dati(pd.DataFrame([riga]), "fam09_2_bound")
 assert lb2 <= zlp2 <= zA_val <= ub2 + 1e-9
 
-# ---------- 5. COMPARING THE RELAXATIONS OF THE TWO FORMULATIONS ----------
+# ---------- 5. THE EQUIVALENCE, VERIFIED ----------
+intestazione("9.2 The equivalence between the two formulations, verified")
+print("  The correspondence is y_t = m0 + sum_{j <= t} z_j, that is z_t = y_t - y_{t-1}")
+print("  (with y_0 = m0). On the optimal plans:")
+yA = [m2 + sum(round(zA[j].X) for j in R(t + 1)) for t in R(n2)]
+print("    from A: implied workforce = " + ", ".join(str(v) for v in yA))
+print("    from B: workforce         = " + ", ".join(str(round(yB[t].X)) for t in R(n2)))
+zB_implicite = [round(yB[0].X) - m2] + [round(yB[t].X) - round(yB[t - 1].X) for t in R(1, n2)]
+print("    from B: implied hirings   = " + ", ".join(str(v) for v in zB_implicite))
+assert sum(v * (u2 + w2 * (n2 - t)) for t, v in enumerate(zB_implicite)) + costante_A \
+    == sum(round(zA[t].X) * (u2 + w2 * (n2 - t)) for t in R(n2)) + costante_A
+print("  The staff cost is the same: A charges every hiring once for all the months that")
+print("  remain, B charges the workforce month by month. Same total, counted two ways.")
+
+# ---------- 6. COMPARING THE RELAXATIONS OF THE TWO FORMULATIONS ----------
 zlpA, _, _ = rilassamento(mA, rafforzato=True)
 zlpB, _, _ = rilassamento(mB, rafforzato=True)
 print(f"  Relaxations: A -> {frazione(zlpA + costante_A)}   B -> {frazione(zlpB)}   "
@@ -168,7 +172,7 @@ salva_dati(pd.DataFrame([{"formulation": "A (hirings)", "z_lp": zlpA + costante_
                          {"formulation": "B (workforce)", "z_lp": zlpB, "z_milp": zB_val}]),
            "fam09_2_formulazioni")
 
-# ---------- 6. ADDITIONAL MODELLING QUESTIONS ----------
+# ---------- 7. ADDITIONAL MODELLING QUESTIONS ----------
 varianti = {}
 
 
@@ -197,27 +201,7 @@ print("     overtime used: " + ", ".join(frazione(o[t].X) for t in R(n2))
 salva_dati(pd.DataFrame({"variant": list(varianti), "z": list(varianti.values())}),
            "fam09_2_varianti")
 
-# ---------- 7. FIGURE ----------
-fig, ax = plt.subplots(figsize=(7.0, 3.2))
-mesi = list(R(1, n2 + 1))
-ax.bar(mesi, [xB[t].X for t in R(n2)], color=TEAL, width=0.55, label="production $x_t$")
-ax.plot(mesi, d2, "o--", color=ROSSO, label="demand $d_t$")
-ax2 = ax.twinx()
-ax2.step(mesi, [yB[t].X for t in R(n2)], where="mid", color=BLU, lw=2, label="workforce $y_t$")
-ax2.set_ylabel("workers", color=BLU)
-ax2.set_ylim(0, max(yB[t].X for t in R(n2)) + 1.5)
-ax2.grid(False)
-ax.set_xticks(mesi)
-ax.set_xlabel("month")
-ax.set_ylabel("pairs")
-ax.set_title(f"9.2: optimal plan (z = {frazione(zB_val)})")
-ax.legend(fontsize=8, loc="upper left")
-ax2.legend(fontsize=8, loc="lower right")
-salva_figura(fig, "cap09_manodopera_ottimo")
-print("Done.")
-
-
-# ---------- 5bis. THE SANDWICH ON THE VARIANT 2a ----------
+# ---------- 8. THE SANDWICH ON THE VARIANT 2a ----------
 intestazione("9.2a The sandwich on the variant: hiring costs 3000 euros")
 U2A = 3000
 
@@ -270,3 +254,22 @@ z2a_val = risolvi(m2a) + costante_A
 riga_2a = registra_bound("2a hiring at 3000", ub2a, lb2a, zlp2a, zlp2ar, z2a_val)
 salva_dati(pd.DataFrame([riga_2a]), "fam09_2a_bound")
 assert lb2a <= zlp2a <= z2a_val <= ub2a + 1e-9
+
+# ---------- 9. FIGURE ----------
+fig, ax = plt.subplots(figsize=(7.0, 3.2))
+mesi = list(R(1, n2 + 1))
+ax.bar(mesi, [xB[t].X for t in R(n2)], color=TEAL, width=0.55, label="production $x_t$")
+ax.plot(mesi, d2, "o--", color=ROSSO, label="demand $d_t$")
+ax2 = ax.twinx()
+ax2.step(mesi, [yB[t].X for t in R(n2)], where="mid", color=BLU, lw=2, label="workforce $y_t$")
+ax2.set_ylabel("workers", color=BLU)
+ax2.set_ylim(0, max(yB[t].X for t in R(n2)) + 1.5)
+ax2.grid(False)
+ax.set_xticks(mesi)
+ax.set_xlabel("month")
+ax.set_ylabel("pairs")
+ax.set_title(f"9.2: optimal plan (z = {frazione(zB_val)})")
+ax.legend(fontsize=8, loc="upper left")
+ax2.legend(fontsize=8, loc="lower right")
+salva_figura(fig, "cap09_manodopera_ottimo")
+print("Done.")

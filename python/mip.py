@@ -148,6 +148,26 @@ def stampa_lp(m: gp.Model) -> None:
         print(open(percorso).read())
 
 
+def rilassamenti(m):
+    """The two relaxations read from the primal alone: z(LP) without the bounds and z(LP+) with them.
+
+    It keeps the three steps of the method apart: first the relaxation, then the
+    dual written by hand, then the heuristic.
+    """
+    zlp, _, pi = rilassamento(m, rafforzato=False)
+    zlp_r, _, _ = rilassamento(m, rafforzato=True)
+    print(f"Relaxation without the bounds: z(LP) = {frazione(zlp)};  "
+          f"with the bounds (x <= 1): z(LP+) = {frazione(zlp_r)}")
+    return zlp, zlp_r, pi
+
+
+def dualita_forte(d, zlp):
+    """The optimum of the hand-written dual equals z(LP): checked and printed."""
+    zd = risolvi(d)
+    assert abs(zlp - zd) <= 1e-6, (zlp, zd)
+    print(f"Dual optimum = z(LP) (strong duality): {frazione(zd)}")
+    return zd
+
 def due_rilassamenti(m, d):
     """Pure z(LP) (= optimum of the hand-written dual) and the solver's strengthened z(LP+).
 
