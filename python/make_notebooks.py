@@ -24,7 +24,7 @@ DIR_DOCS = BASE / "docs"
 REPO = "fabiofurini/mip-modelling"
 SITO = "https://fabiofurini.github.io/mip-modelling"
 RAW = f"https://raw.githubusercontent.com/{REPO}/main/python"
-MODULI = ("stile", "mip", "euristiche", "esteso")   # the shared modules every notebook downloads if missing
+MODULI = ("stile", "mip", "euristiche", "esteso", "booleane")   # the shared modules every notebook downloads if missing
 BADGE = "https://colab.research.google.com/assets/colab-badge.svg"
 
 RIGA = re.compile(r"^# [-=]{10,}$")

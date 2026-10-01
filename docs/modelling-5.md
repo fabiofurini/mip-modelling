@@ -31,7 +31,11 @@ solution that really exists; when it fails, there is no primal bound.
     bound: $\mathit{LB} \le z(\mathit{MILP})$. Calling $UB$ the result
     of a constructive heuristic on a maximisation is the commonest sign error in the course.
 
-## The three bin-packing heuristics
+## Bin packing: the insertion rules
+
+The classical problem is **bin packing**, whose model is in the solver chapter:
+items must be put into identical bins of limited capacity, using as few of them
+as possible. Here it is not solved: it is *built*, one choice at a time.
 
 ```text
 Build(n, k, t, a, gamma):
@@ -62,7 +66,14 @@ The best-fit on cost finds the optimum; but no bound certifies it — that takes
 the solver, or a dual bound reaching $11$, and there the hand-built
 dual stops at $10$.
 
-## LPT: balancing over identical machines
+## $P||C_{\max}$: the least loaded rule
+
+The second classic is **scheduling on identical machines**, written
+$P||C_{\max}$: $n$ jobs of duration $t_j$ over $k$ identical machines, minimising
+the instant the last one finishes. The natural rule is **list scheduling** — the
+current job goes to the least loaded machine — and the order in which the jobs
+are looked at decides the result. The best order is by decreasing duration, and
+the rule it gives is called **LPT**.
 
 ```text
 LPT(n, k, t):
@@ -102,7 +113,7 @@ impossible to place.
     [chapter 2](modelling-4.md) is for when the obvious ones are not enough, not
     instead of them.
 
-## Constructive covering heuristic
+## Set covering: the cheapest completion rule
 
 ```text
 CoveringConstructive heuristic(c, S):
@@ -122,7 +133,12 @@ $4/3$, $1$, $5/3$, $1$ → element 2 (covers zones 1, 2, 5); step 2 ratios $2$,
 $5/2$, $3/2$ → element 4 (zones 4 and 6); step 3 ratios $4$ and $5$ → element 1.
 Solution $\{1,2,4\}$, cost $\mathit{UB} = 10$, which here is the optimum.
 
-## Knapsack constructive heuristic: a lower bound
+## Knapsack: the best ratio rule
+
+The **knapsack** is the model the solver chapter opens with: the items have a
+value as well as a weight, and there is a single resource. The constructive rule
+looks at the ratio between the two, and what it produces is a feasible solution,
+hence a primal bound.
 
 ```text
 KnapsackConstructive heuristic(p, w, C):
@@ -137,6 +153,58 @@ items 1 and 3 are taken (weight $8$), value $16$. Since the problem is a
 **maximisation**, $\mathit{LB} = 16 \le z(\mathit{MILP}) = 17$, gap $5.9\%$: the
 optimum takes items 1 and 2, filling the knapsack exactly. The constructive heuristic goes wrong
 because item 3 leaves an unusable residual.
+
+## TSP: the nearest neighbour
+
+The fourth classic is the **travelling salesman problem** (TSP): given $n$
+cities and the distances $d_{ij}$ between every pair, find the shortest tour that
+visits them all once and returns to the start. It is the problem where
+step-by-step construction shows best, because the solution *is* a sequence: the
+order is the solution.
+
+The classical constructive rule is the **nearest neighbour**: start from a city
+and each time go to the nearest among those not yet visited; when none are left,
+return to the start. It is feasible by construction and fast, because at each
+step it looks only at the distances from the current city.
+
+!!! example "Five cities, five starting points"
+    The distances, symmetric:
+
+    |  | 1 | 2 | 3 | 4 | 5 |
+    |---|---:|---:|---:|---:|---:|
+    | 1 | — | 5 | 2 | 2 | 9 |
+    | 2 | 5 | — | 4 | 3 | 4 |
+    | 3 | 2 | 4 | — | 4 | 7 |
+    | 4 | 2 | 3 | 4 | — | 7 |
+    | 5 | 9 | 4 | 7 | 7 | — |
+
+    Starting from city 1: the nearest is 3 (distance 2); from there 2 (4); then
+    4 (3); 5 is left (7); and the return to 1 costs 9. The tour
+    $1 \to 3 \to 2 \to 4 \to 5 \to 1$ has length 25.
+
+    The last arc is the one that is paid for: the rule chooses well while it has a
+    choice, and at the last step it has none. Changing the starting city changes
+    the tour:
+
+    | start | tour | length |
+    |---|---|---:|
+    | 1 | $1 \to 3 \to 2 \to 4 \to 5 \to 1$ | 25 |
+    | 2 | $2 \to 4 \to 1 \to 3 \to 5 \to 2$ | 18 |
+    | 3 | $3 \to 1 \to 4 \to 2 \to 5 \to 3$ | 18 |
+    | 4 | $4 \to 1 \to 3 \to 2 \to 5 \to 4$ | 19 |
+    | 5 | $5 \to 2 \to 4 \to 1 \to 3 \to 5$ | 18 |
+
+    With five cities the distinct tours are $(5-1)!/2 = 12$ and they can all be
+    enumerated: the optimum is $1 \to 3 \to 5 \to 2 \to 4 \to 1$, of length 18.
+    Three starting points out of five find it, one stops at 19 and the one we
+    started from at 25, that is 38.9 % above the optimum.
+
+    Two things to take away. The heuristic gives *one* feasible solution, hence an
+    upper bound — here $z(\mathit{MILP}) \le 25$ — and nothing else; that 18 is
+    the optimum is known by enumeration. And running the same rule from every
+    start, keeping the best tour, costs $n$ times as much and gives a better
+    bound: it is the simplest form of *multi-start*, and it is still a bound from
+    one side only.
 
 ## Lot sizing: least unit cost period covering
 
