@@ -1,6 +1,6 @@
 # Problems to model
 
-**Forty problems** given as they really arrive — a text, some data, a question —
+**Forty problems** presented as they would arise in practice — a text, some data, a question —
 with no model already written: twenty with explicit numerical data and twenty in
 symbolic form. They can also be downloaded
 [as a PDF](pdf/exercises.pdf).

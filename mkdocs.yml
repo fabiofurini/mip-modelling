@@ -163,7 +163,7 @@ nav:
           - 10.8 Songs across CDs: mixed-8.md
           - 10.9 Books across shelves: mixed-9.md
       - Problems to model: to-model.md
-  - The notes in PDF: downloads.md
+  - Downloads: downloads.md
   - The course:
-      - organization.md
+      - How to work with the course: organization.md
       - Notebooks in Colab: notebooks.md

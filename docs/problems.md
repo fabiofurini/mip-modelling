@@ -8,7 +8,7 @@ links between the variables, instance, constructive heuristic, dual of the LP
 relaxation, solution with Gurobi and additional modelling questions.
 
 !!! tip "Forty problems to model"
-    Given as they really arrive — a text, some data, a question — with no model
+    Presented as they would arise in practice — a text, some data, a question — with no model
     already written: twenty with explicit numerical data and twenty in symbolic
     form. The solutions are reserved for instructors.
 
@@ -71,7 +71,7 @@ relaxation, solution with Gurobi and additional modelling questions.
 
     ---
 
-    Forty problems given as they really arrive, with no model already written:
+    Forty problems presented as they would arise in practice, with no model already written:
     twenty with explicit numerical data and twenty in symbolic form. The
     solutions are reserved for instructors.
 

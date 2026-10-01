@@ -1,4 +1,10 @@
-# Course organization
+# How to work with the course
+
+The course runs in two parts: first you learn the modelling tools, then you
+apply them to complete problems. One thread holds them together — a model is not
+just written down: its optimum is enclosed between two numbers,
+$\mathit{LB} \le z(\mathit{MILP}) \le \mathit{UB}$, before it is ever handed
+to the solver.
 
 ## The two-part path
 
@@ -76,8 +82,6 @@ formulated, and to produce a bound even when the solver returns nothing useful.
 
 ## Reproducibility
 
-```bash
-python3 -m pip install gurobipy matplotlib pandas
-python3 python/run_all.py             # regenerates data, results, figures and notebooks
-python3 python/check_numbers.py       # checks every number quoted in the notes
-```
+No number on these pages is written by hand: they all come out of a script you
+can re-run, and an automatic check verifies that text and code say the same
+thing. The commands are on the [downloads page](downloads.md#regenerating-everything).

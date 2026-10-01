@@ -36,7 +36,7 @@ professor at [DIAG](https://www.diag.uniroma1.it/), Sapienza University of Rome.
 
 </div>
 
-[:octicons-download-24: The three sets of notes in PDF](downloads.md){ .md-button .md-button--primary }
+[:octicons-download-24: Download the course material](downloads.md){ .md-button .md-button--primary }
 
 ## What you learn to do
 
@@ -70,7 +70,7 @@ professor at [DIAG](https://www.diag.uniroma1.it/), Sapienza University of Rome.
 - **Two or three additional questions on every problem**: a datum changes or a
   constraint is added, and model and bounds are redone. For each exercise one
   variant is worked out in full, as a model answer.
-- **Forty problems to model**, given as they really arrive and with no model
+- **Forty problems to model**, presented as they would arise in practice and with no model
   already written: twenty with explicit numerical data and twenty in symbolic
   form.
 - **Forty-four [notebooks](notebooks.md)** that run in Colab with nothing to

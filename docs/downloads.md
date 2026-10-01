@@ -9,6 +9,9 @@ licence.
 
 ## The three sets of notes
 
+If you want the whole course to read offline, start from these three PDFs: they
+are the core of the material. What comes after is supplementary.
+
 <div class="grid cards" markdown>
 
 -   :material-book-open-variant: **Modelling**
@@ -47,7 +50,7 @@ licence.
 
 <div class="grid cards" markdown>
 
--   :material-school-outline: **Organisation of the course**
+-   :material-school-outline: **How to work with the course**
 
     ---
 
@@ -61,9 +64,11 @@ licence.
 
     ---
 
-    Forty problems given as they really arrive, with no model already written:
-    twenty with explicit numerical data and twenty in symbolic form. The
-    solutions are reserved for instructors.
+    *For practice — solutions reserved for instructors.*
+
+    Forty problems presented as they would arise in practice, with no model
+    written in advance: twenty with explicit numerical data and twenty in
+    symbolic form.
 
     [:octicons-download-24: exercises.pdf](pdf/exercises.pdf)
 
