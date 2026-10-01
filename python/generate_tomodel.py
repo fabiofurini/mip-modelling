@@ -26,7 +26,7 @@ TESTA = """# Problems to model
 
 **Forty problems** given as they really arrive — a text, some data, a question —
 with no model already written: twenty with explicit numerical data and twenty in
-symbolic form. They are one of the five sets of notes, and can also be downloaded
+symbolic form. They can also be downloaded
 [as a PDF](pdf/notes-5-tomodel.pdf).
 
 The solutions are reserved for instructors. The method for answering is the one

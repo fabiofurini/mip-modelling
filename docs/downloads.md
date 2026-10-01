@@ -7,6 +7,8 @@ scripts under the
 [MIT](https://github.com/fabiofurini/mip-modelling/blob/main/LICENSE-CODE)
 licence.
 
+## The three sets of notes
+
 <div class="grid cards" markdown>
 
 -   :material-book-open-variant: **Modelling**
@@ -38,6 +40,12 @@ licence.
     and one variant worked out in full.
 
     [:octicons-download-24: notes-3-symbolic.pdf](pdf/notes-3-symbolic.pdf)
+
+</div>
+
+## The other documents
+
+<div class="grid cards" markdown>
 
 -   :material-school-outline: **Organisation of the course**
 
