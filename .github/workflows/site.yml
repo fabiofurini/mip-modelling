@@ -29,6 +29,9 @@ jobs:
       - run: python3 python/check_models.py
       - run: python3 python/generate_tomodel.py --check
       - run: mkdocs build --strict
+      # math annidata: un `$$` dentro una lista produce span dentro span,
+      # MathJax si ferma e in pagina restano i dollari
+      - run: '! grep -rq ''arithmatex">\\(<span class="arithmatex"'' site'
       - uses: actions/upload-pages-artifact@v3
         with:
           path: site

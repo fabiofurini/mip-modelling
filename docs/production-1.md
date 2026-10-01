@@ -102,8 +102,18 @@ $n = 5$ days, $r_0 = r_n = 0$, total demand $110$ units.
 setup every day. Cost $270 + 250 = 520$.
 
 **(b) Least unit cost.** One starts from the first uncovered period and covers
-with a single setup the number of periods that minimises the average cost per
-unit, then starts again. Cost $O(n^2)$.
+with a single set-up the number of periods that minimises the average cost per
+unit,
+
+$$\frac{q + \sum_{i=1}^{k-1} h \cdot (\text{units kept } i \text{ periods})}
+       {\sum_{i=0}^{k-1} d_{t+i}} ,$$
+
+then starts again. Cost $O(n^2)$. The numerator holds only the set-up and the
+inventory: the production cost $p$ does not appear, because the alternatives
+being compared all start in the same period and cover the same demands anyway,
+so they pay the same $p$ per unit and it does not change the comparison. The
+numbers below are therefore *incremental* costs of set-up plus inventory, not the
+full cost of one unit.
 
 - period 1: covers up to 2, quantity $30$, average cost $2$;
 - period 3: covers up to 4, quantity $70$, average cost $\approx 1.286$;

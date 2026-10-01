@@ -58,11 +58,8 @@ threshold.
     - it does not say "prize $i$ must be taken": the configuration $(0,0)$ is
       legitimate and means that prize is given up;
     - it does not say "if I do not take it with points then I take it with a
-      contribution": the converse
-
-      $$x_i = 0 \quad\Longrightarrow\quad y_i = 1$$
-
-      is false, and the counterexample is exactly $(0,0)$;
+      contribution": the converse $x_i = 0 \Rightarrow y_i = 1$ is false, and the
+      counterexample is exactly $(0,0)$;
     - if one wanted every prize to be taken, the constraint would have to be an
       equality, $x_i + y_i = 1$: that is a set *partitioning* instead of a set
       *packing*, and the problem changes.

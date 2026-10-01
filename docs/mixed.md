@@ -61,8 +61,8 @@ and put one half in each container, levelling everything.
 
     ---
 
-    Integer quantities and semicontinuous variables: a food is bought at zero
-    or else above its threshold.
+    Continuous quantities with a minimum lot: a food is bought at zero or else
+    between its threshold and its cap.
 
     [:octicons-arrow-right-24: MILP · minimum lot](mixed-3.md)
 
