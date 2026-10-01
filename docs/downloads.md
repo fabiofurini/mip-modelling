@@ -103,3 +103,21 @@ python3 -m mkdocs build --strict     # the site
 
 The licence shipped with the `gurobipy` pip package (2000 variables, 2000
 constraints) is enough for every instance of the course.
+
+## The Gurobi licence
+
+```bash
+python3 -m pip install gurobipy
+```
+
+The pip package ships a **demo licence** (up to 2000 variables and 2000
+constraints): enough for every instance of this course. On startup the line
+`Restricted license - for non-production use only` appears: that is normal.
+
+**Full academic licence, free of charge:**
+
+1. register at <https://portal.gurobi.com> with an institutional email;
+2. request a *Named-User Academic License*;
+3. run the `grbgetkey XXXXXXXX-...` command shown by the portal (it needs the
+   university network or the VPN);
+4. the licence lands in `~/gurobi.lic` and from then on there is no size limit.
