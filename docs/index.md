@@ -7,21 +7,22 @@ professor at [DIAG](https://www.diag.uniroma1.it/), Sapienza University of Rome.
 
 ## What you learn to do
 
-- **Translate** the text of a problem into a MIP model: recognise the decisions,
-  choose the variables and their domain, write objective and constraints, and
-  say how many constraints there are as a function of the data.
-- **Justify** every constraint linking two families of variables: which
-  implication it imposes, and whether it is the constraint or optimality that
-  imposes it.
-- **Build a feasible solution by hand** with a heuristic, and say which bound it
-  gives.
-- **Write the dual of the linear relaxation** and build a feasible solution of
-  it by hand, for the bound on the other side.
-- **Certify** a solution when the optimum is out of reach: as soon as the
-  instance grows the solver stops before it has proved optimality, and the two
-  bounds are what is left. The optimum lies between them, and their distance
-  says how much there still is to gain.
-- **Solve** the model with Gurobi from Python, and read what the solver answers.
+- **Read a problem and write its model.** What the decisions are, which
+  variables are needed and with which domain, and how each sentence of the
+  statement becomes a constraint.
+- **Show that the model does what it should.** A constraint linking two
+  variables imposes an implication: you prove that it really does, in both
+  directions.
+- **Find a good solution by hand**, with a heuristic built in a few steps and
+  justified.
+- **Build the dual of the relaxation** and read off how much, at most, there
+  still is to gain.
+- **Say what the solution in your hands is worth.** On a large instance the
+  solver stops short of the optimum: what is left is a solution and two numbers
+  enclosing it. If they are close, that solution is good enough — and you can
+  prove it.
+- **Write and solve the model with Gurobi**, and understand what the solver
+  answers.
 
 ## How the course gets there
 
