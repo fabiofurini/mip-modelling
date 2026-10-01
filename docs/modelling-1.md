@@ -227,7 +227,9 @@ A MILP with a bounded feasible set is solved with dedicated algorithms. How they
 work — how the solution space is explored, how cuts are separated, what to
 branch on — is not a topic of this course: solution techniques are the subject
 of a separate course. Only one thing matters here: the two bounds this course
-teaches how to build by hand are exactly the ones the solver works with.
+teaches how to build by hand are the two sides of the same sandwich the solver
+tries to close. They are not handed to it: the solver builds its own, with its
+own heuristics and relaxations.
 
 - The **primal bound** is a feasible solution, and it gives a value to beat: any
   part of the space that cannot do better is discarded without being explored.
