@@ -32,18 +32,22 @@ if the bonus is collected. The datum
 $M_j = \min_i \lfloor b_i / a_{ij} \rfloor$ is the maximum producible of type
 $j$ alone.
 
+<!-- model: 9.3 -->
+
 $$
 \begin{aligned}
-\max ~~ \sum_{j=1}^{s} \bar p_j\, x_j + \bar r\, z &\\
-\text{subject to} \quad \sum_{j=1}^{s} a_{ij}\, x_j &\le b_i, & \forall i \in \{1, 2, \dots, k\},\\
-x_j - \bar q_j\, y_j &\ge 0, & \forall j \in \{1, 2, \dots, s\},\\
-x_j - M_j\, y_j &\le 0, & \forall j \in \{1, 2, \dots, s\},\\
--\sum_{j=1}^{s} y_j + 2\, z &\le 0,\\
-x_j &\in \mathbb{Z}_{\ge 0}, & \forall j \in \{1, 2, \dots, s\},\\
-y_j &\in \{0,1\}, & \forall j \in \{1, 2, \dots, s\},\\
-z &\in \{0,1\}.
+\max ~~ \sum_{j=1}^{s} \bar p_j\, x_j + \bar r\, z & & \\
+\text{subject to} \quad \sum_{j=1}^{s} a_{ij}\, x_j &\le b_i, & \forall i \in \{1, 2, \dots, k\}, \\
+x_j - \bar q_j\, y_j &\ge 0, & \forall j \in \{1, 2, \dots, s\}, \\
+x_j - M_j\, y_j &\le 0, & \forall j \in \{1, 2, \dots, s\}, \\
+-\sum_{j=1}^{s} y_j + 2\, z &\le 0, & \\
+x_j &\in \Z_{\ge 0}, & \forall j \in \{1, 2, \dots, s\}, \\
+y_j &\in \{0,1\}, & \forall j \in \{1, 2, \dots, s\}, \\
+z &\in \{0,1\}. &
 \end{aligned}
 $$
+
+<!-- model: end -->
 
 **Description.** The objective adds up the profits of the vehicles produced and
 the bonus for variety. The **resource** constraints, one per resource, are the
@@ -132,15 +136,22 @@ conversion table, one associates $\pi_i \ge 0$ with the resources,
 $\ell_j \ge 0$ with the minimum lot (written as $-\lambda_j$), $\beta_j \ge 0$
 with the activation and $\gamma \ge 0$ with the bonus.
 
+<!-- model: 9.3-dual -->
+
 $$
 \begin{aligned}
-\min ~~ \sum_{i=1}^{k} b_i\, \pi_i &\\
-\text{subject to} \quad \sum_{i=1}^{k} a_{ij}\, \pi_i - \ell_j + \beta_j &\ge \bar p_j, & \forall j \in \{1, 2, \dots, s\},\\
-\bar q_j\, \ell_j - M_j\, \beta_j - \gamma &\ge 0, & \forall j \in \{1, 2, \dots, s\},\\
-2\, \gamma &\ge \bar r,\\
-\pi_i &\ge 0, \quad \ell_j \ge 0, \quad \beta_j \ge 0, \quad \gamma \ge 0.
+\min ~~ \sum_{i=1}^{k} b_i\, \pi_i & & \\
+\text{subject to} \quad \sum_{i=1}^{k} a_{ij}\, \pi_i - \ell_j + \beta_j &\ge \bar p_j, & \forall j \in \{1, 2, \dots, s\}, \\
+\bar q_j\, \ell_j - M_j\, \beta_j - \gamma &\ge 0, & \forall j \in \{1, 2, \dots, s\}, \\
+2\, \gamma &\ge \bar r, & \\
+\pi_i &\ge 0, & \forall i \in \{1, 2, \dots, k\}, \\
+\ell_j &\ge 0, & \forall j \in \{1, 2, \dots, s\}, \\
+\beta_j &\ge 0, & \forall j \in \{1, 2, \dots, s\}, \\
+\gamma &\ge 0. &
 \end{aligned}
 $$
+
+<!-- model: end -->
 
 **Description.** $\pi_i$ is the price of one unit of resource $i$; $\ell_j$ and
 $\beta_j$ are the prices of the two semicontinuity constraints of type $j$, and

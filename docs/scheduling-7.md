@@ -26,16 +26,22 @@ big-M.
 $2n$ continuous: completions $\kappa_j$ and tardiness $\tau_j$;
 $M = \sum_j t_j$.
 
+<!-- model: 7.7 -->
+
 $$
 \begin{aligned}
-\min ~~ \sum_{j=1}^{n} \tau_j & &\\
-\text{subject to} \quad s_{ji} + s_{ij} &= 1, & \forall j < i,\\
--M\, s_{ji} - \kappa_j + \kappa_i &\ge t_i - M, & \forall j \ne i,\\
--\kappa_j + \tau_j &\ge -d_j, & \forall j,\\
-\kappa_j &\ge t_j, & \forall j,\\
-s_{ji} \in \{0, 1\},\quad \kappa_j \ge 0,\quad \tau_j &\ge 0. &
+\min ~~ \sum_{j=1}^{n} \tau_j & & \\
+\text{subject to} \quad s_{ji} + s_{ij} &= 1, & \forall j, i \in \{1, 2, \dots, n\},\ j < i, \\
+-M\, s_{ji} - \kappa_j + \kappa_i &\ge t_i - M, & \forall j, i \in \{1, 2, \dots, n\},\ j \ne i, \\
+-\kappa_j + \tau_j &\ge -d_j, & \forall j \in \{1, 2, \dots, n\}, \\
+\kappa_j &\ge t_j, & \forall j \in \{1, 2, \dots, n\}, \\
+s_{ji} &\in \{0, 1\}, & \forall j, i \in \{1, 2, \dots, n\},\ j \ne i, \\
+\kappa_j &\ge 0, & \forall j \in \{1, 2, \dots, n\}, \\
+\tau_j &\ge 0, & \forall j \in \{1, 2, \dots, n\}.
 \end{aligned}
 $$
+
+<!-- model: end -->
 
 - the objective minimises the total tardiness;
 - the **order** constraints: either $j$ precedes $i$ or vice versa
@@ -106,14 +112,24 @@ Value $12$: $z(\mathit{MILP}) \le 12$.
 With $\alpha_{ji}$ free (order), $\beta_{ji} \ge 0$ (precedence),
 $\gamma_j \ge 0$ (tardiness), $\delta_j \ge 0$ (start):
 
+<!-- model: 7.7-dual -->
+
 $$
 \begin{aligned}
-\max ~~ \sum_{j<i} \alpha_{ji} + \sum_{j \ne i} (t_i - M)\, \beta_{ji} - \sum_j d_j\, \gamma_j + \sum_j t_j\, \delta_j & &\\
-\text{subject to} \quad \alpha_{ji} - M\, \beta_{ji} \le 0,\quad \alpha_{ji} - M\, \beta_{ij} &\le 0, & \forall j < i,\\
--\sum_{i \ne j} \beta_{ji} + \sum_{i \ne j} \beta_{ij} - \gamma_j + \delta_j &\le 0, & \forall j,\\
-\gamma_j &\le 1, & \forall j.
+\max ~~ \sum_{j<i} \alpha_{ji} + \sum_{j \ne i} (t_i - M)\, \beta_{ji} & & \\
+\qquad\qquad - \sum_{j=1}^{n} d_j\, \gamma_j + \sum_{j=1}^{n} t_j\, \delta_j & & \\
+\text{subject to} \quad \alpha_{ji} - M\, \beta_{ji} &\le 0, & \forall i, j \in \{1, 2, \dots, n\},\ j < i, \\
+\alpha_{ji} - M\, \beta_{ij} &\le 0, & \forall i, j \in \{1, 2, \dots, n\},\ j < i, \\
+-\sum_{i \ne j} \beta_{ji} + \sum_{i \ne j} \beta_{ij} - \gamma_j + \delta_j &\le 0, & \forall j \in \{1, 2, \dots, n\}, \\
+\gamma_j &\le 1, & \forall j \in \{1, 2, \dots, n\}, \\
+\alpha_{ji} &\gtreqless 0, & \forall i, j \in \{1, 2, \dots, n\},\ j < i, \\
+\beta_{ji} &\ge 0, & \forall i, j \in \{1, 2, \dots, n\},\ j \ne i, \\
+\gamma_j &\ge 0, & \forall j \in \{1, 2, \dots, n\}, \\
+\delta_j &\ge 0, & \forall j \in \{1, 2, \dots, n\}.
 \end{aligned}
 $$
+
+<!-- model: end -->
 
 **A hand-built dual solution.** The $\beta$ have negative coefficient: at
 zero, then $\alpha = 0$; left are $\delta_j \le \gamma_j \le 1$ and every job

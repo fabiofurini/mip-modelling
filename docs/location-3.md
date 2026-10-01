@@ -30,15 +30,20 @@ every client $c$: $\mathscr{L}_c = \{l : s_{lc} \ge b\}$.
 **Decision variables.** $m$ binaries $x_l$ (location installed), $n$
 binaries $y_c$ (client covered).
 
+<!-- model: 8.3 -->
+
 $$
 \begin{aligned}
-\max ~~ \sum_{c=1}^{n} p_c\, y_c & &\\
-\text{subject to} \quad -\sum_{l=1}^{m} s_{lc}\, x_l + t\, y_c &\le 0, & \forall c,\\
-\sum_{l \in \mathscr{L}_c} x_l + (m-1)\, y_c &\le m, & \forall c,\\
-\sum_{l=1}^{m} x_l &\le k, &\\
-x_l, y_c &\in \{0, 1\}. & &
+\max ~~ \sum_{c=1}^{n} p_c\, y_c & & \\
+\text{subject to} \quad -\sum_{l=1}^{m} s_{lc}\, x_l + t\, y_c &\le 0, & \forall c \in \{1, 2, \dots, n\}, \\
+\sum_{l \in \mathscr{L}_c} x_l + (m-1)\, y_c &\le m, & \forall c \in \{1, 2, \dots, n\}, \\
+\sum_{l=1}^{m} x_l &\le k, & & \\
+x_l &\in \{0, 1\}, & \forall l \in \{1, 2, \dots, m\}, \\
+y_c &\in \{0, 1\}, & \forall c \in \{1, 2, \dots, n\}.
 \end{aligned}
 $$
+
+<!-- model: end -->
 
 - the objective maximizes total profit;
 - the first constraint links coverage and received signal ($n$ constraints);
@@ -93,6 +98,23 @@ locations: **covered**. Client 3: signal $7\ge5$, 1 strong location:
 $20+5=25$: $z(\mathit{MILP}) \ge \mathit{LB} = 25$.
 
 ## LP relaxation and dual: the dual bound
+
+The dual of the linear relaxation, one variable per constraint of the primal:
+
+<!-- model: 8.3-dual -->
+
+$$
+\begin{aligned}
+\min ~~ m \sum_{c=1}^{n} \lambda_c + k\, \mu & & \\
+\text{subject to} \quad -\sum_{c=1}^{n} s_{lc}\, \pi_c + \sum_{c\, :\, l \in \mathscr{L}_c} \lambda_c + \mu &\ge 0, & \forall l \in \{1, 2, \dots, m\}, \\
+t\, \pi_c + (m-1)\, \lambda_c &\ge p_c, & \forall c \in \{1, 2, \dots, n\}, \\
+\pi_c &\ge 0, & \forall c \in \{1, 2, \dots, n\}, \\
+\lambda_c &\ge 0, & \forall c \in \{1, 2, \dots, n\}, \\
+\mu &\ge 0. & &
+\end{aligned}
+$$
+
+<!-- model: end -->
 
 With $\bar\pi_c=0$, $\bar\mu=0$ and $\bar\lambda_c = p_c/(m-1) = p_c/2$:
 

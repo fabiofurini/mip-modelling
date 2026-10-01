@@ -43,14 +43,18 @@ $$
 
 Using these variables, a BIP model for the problem reads as follows:
 
+<!-- model: 7.1 -->
+
 $$
 \begin{aligned}
-\min ~~ \sum_{j=1}^{n} \sum_{m=1}^{k} c_{jm}\, x_{jm} & &\\
-\text{subject to} \quad \sum_{m=1}^{k} x_{jm} &= 1, & \forall j \in \{1, 2, \dots, n\},\\
-\sum_{j=1}^{n} t_{jm}\, x_{jm} &\le a_m, & \forall m \in \{1, 2, \dots, k\},\\
+\min ~~ \sum_{j=1}^{n} \sum_{m=1}^{k} c_{jm}\, x_{jm} & & \\
+\text{subject to} \quad \sum_{m=1}^{k} x_{jm} &= 1, & \forall j \in \{1, 2, \dots, n\}, \\
+\sum_{j=1}^{n} t_{jm}\, x_{jm} &\le a_m, & \forall m \in \{1, 2, \dots, k\}, \\
 x_{jm} &\in \{0, 1\}, & \forall j \in \{1, 2, \dots, n\},\ \forall m \in \{1, 2, \dots, k\}.
 \end{aligned}
 $$
+
+<!-- model: end -->
 
 Description of the objective function and constraints:
 
@@ -160,14 +164,18 @@ constraint $x_{jm} \le 1$ is implied by the assignment constraints). With a
 free dual variable $\mu_j$ for each assignment constraint and a non-positive
 $\pi_m$ for each availability constraint ($\le$ in a minimisation), the dual is:
 
+<!-- model: 7.1-dual -->
+
 $$
 \begin{aligned}
-\max ~~ \sum_{j=1}^{n} \mu_j + \sum_{m=1}^{k} a_m\, \pi_m & &\\
-\text{subject to} \quad \mu_j + t_{jm}\, \pi_m &\le c_{jm}, & \forall j \in \{1, 2, \dots, n\},\ \forall m \in \{1, 2, \dots, k\},\\
-\mu_j &\gtreqless 0, & \forall j \in \{1, 2, \dots, n\},\\
+\max ~~ \sum_{j=1}^{n} \mu_j + \sum_{m=1}^{k} a_m\, \pi_m & & \\
+\text{subject to} \quad \mu_j + t_{jm}\, \pi_m &\le c_{jm}, & \forall j \in \{1, 2, \dots, n\},\ \forall m \in \{1, 2, \dots, k\}, \\
+\mu_j &\gtreqless 0, & \forall j \in \{1, 2, \dots, n\}, \\
 \pi_m &\le 0, & \forall m \in \{1, 2, \dots, k\}.
 \end{aligned}
 $$
+
+<!-- model: end -->
 
 **A hand-built dual solution.** With $\bar\pi_m = 0$, the constraints become
 $\mu_j \le c_{jm}$ for every $m$: the largest feasible value is

@@ -24,13 +24,17 @@ item. A bid is all-or-nothing: no part of it is accepted.
 **Variables.** A single family of $r$ binaries: $x_j \in \{0,1\}$ equals $1$ if
 bid $j$ is accepted.
 
+<!-- model: 10.2 -->
+
 $$
 \begin{aligned}
-\max ~~ \sum_{j=1}^{r} p_j\, x_j &\\
-\text{subject to} \quad \sum_{j :\, i \in B_j} x_j &\le 1, & \forall i \in S,\\
+\max ~~ \sum_{j=1}^{r} p_j\, x_j & & \\
+\text{subject to} \quad \sum_{j :\, i \in B_j} x_j &\le 1, & \forall i \in S, \\
 x_j &\in \{0,1\}, & \forall j \in \{1, 2, \dots, r\}.
 \end{aligned}
 $$
+
+<!-- model: end -->
 
 **Description.** The objective adds up the profits of the accepted bids. It is a
 pure **set packing**: one constraint per item ($n$ linear constraints) and one
@@ -106,13 +110,17 @@ Bids $1, 2, 3$ are accepted: $z(\mathit{MILP}) \ge \mathit{LB} = 21$.
 
 Associate a non-negative dual variable $\lambda_i$ with each item constraint.
 
+<!-- model: 10.2-dual -->
+
 $$
 \begin{aligned}
-\min ~~ \sum_{i \in S} \lambda_i &\\
-\text{subject to} \quad \sum_{i \in B_j} \lambda_i &\ge p_j, & \forall j \in \{1, 2, \dots, r\},\\
+\min ~~ \sum_{i \in S} \lambda_i & & \\
+\text{subject to} \quad \sum_{i \in B_j} \lambda_i &\ge p_j, & \forall j \in \{1, 2, \dots, r\}, \\
 \lambda_i &\ge 0, & \forall i \in S.
 \end{aligned}
 $$
+
+<!-- model: end -->
 
 **Description.** $\lambda_i$ is the price the auctioneer puts on item $i$. The
 objective is the total value of the lots at those prices. The constraints are

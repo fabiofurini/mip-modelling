@@ -33,15 +33,20 @@ constraints per machine.
 **Variables.** $n\,k$ binary $x_{jm}$ (job $j$ on machine $m$) and $k$
 continuous non-negative $y_m$ = processing time of machine $m$.
 
+<!-- model: 7.4 -->
+
 $$
 \begin{aligned}
-\min ~~ \sum_{m=1}^{k} y_m & &\\
-\text{subject to} \quad \sum_{m=1}^{k} x_{jm} &= 1, & \forall j,\\
-\sum_{j=1}^{n} x_{jm} &\le p_m, & \forall m,\\
--t_{jm}\, x_{jm} + y_m &\ge 0, & \forall j,\ \forall m,\\
-x_{jm} \in \{0, 1\},\quad y_m &\ge 0. &
+\min ~~ \sum_{m=1}^{k} y_m & & \\
+\text{subject to} \quad \sum_{m=1}^{k} x_{jm} &= 1, & \forall j \in \{1, 2, \dots, n\}, \\
+\sum_{j=1}^{n} x_{jm} &\le p_m, & \forall m \in \{1, 2, \dots, k\}, \\
+-t_{jm}\, x_{jm} + y_m &\ge 0, & \forall j \in \{1, 2, \dots, n\},\ \forall m \in \{1, 2, \dots, k\}, \\
+x_{jm} &\in \{0, 1\}, & \forall j \in \{1, 2, \dots, n\},\ \forall m \in \{1, 2, \dots, k\}, \\
+y_m &\ge 0, & \forall m \in \{1, 2, \dots, k\}.
 \end{aligned}
 $$
+
+<!-- model: end -->
 
 - the objective minimises the sum of the processing times;
 - the **assignment** ($n$) and **cardinality** ($k$) constraints;
@@ -106,14 +111,20 @@ $\bar y = (6, 13, 0)$, value $19$: $z(\mathit{MILP}) \le 19$.
 With $\mu_j$ free (assignment), $\pi_m \le 0$ (cardinality) and
 $\lambda_{jm} \ge 0$ (maximum):
 
+<!-- model: 7.4-dual -->
+
 $$
 \begin{aligned}
-\max ~~ \sum_{j=1}^{n} \mu_j + \sum_{m=1}^{k} p_m\, \pi_m & &\\
-\text{subject to} \quad \mu_j + \pi_m - t_{jm}\, \lambda_{jm} &\le 0, & \forall j,\ \forall m,\\
-\sum_{j=1}^{n} \lambda_{jm} &\le 1, & \forall m,\\
-\mu_j \gtreqless 0,\quad \pi_m \le 0,\quad \lambda_{jm} &\ge 0. &
+\max ~~ \sum_{j=1}^{n} \mu_j + \sum_{m=1}^{k} p_m\, \pi_m & & \\
+\text{subject to} \quad \mu_j + \pi_m - t_{jm}\, \lambda_{jm} &\le 0, & \forall j \in \{1, 2, \dots, n\},\ \forall m \in \{1, 2, \dots, k\}, \\
+\sum_{j=1}^{n} \lambda_{jm} &\le 1, & \forall m \in \{1, 2, \dots, k\}, \\
+\mu_j &\gtreqless 0, & \forall j \in \{1, 2, \dots, n\}, \\
+\pi_m &\le 0, & \forall m \in \{1, 2, \dots, k\}, \\
+\lambda_{jm} &\ge 0, & \forall j \in \{1, 2, \dots, n\},\ \forall m \in \{1, 2, \dots, k\}.
 \end{aligned}
 $$
+
+<!-- model: end -->
 
 The second constraint is the reduced cost of $y_m$: the coefficient $1$ in
 the primal objective limits the sum of the $\lambda_{jm}$.

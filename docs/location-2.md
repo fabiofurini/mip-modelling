@@ -34,15 +34,20 @@ problem.
 **Decision variables.** $m$ binaries $x_l$ (location open) and $m\,n$
 binaries $y_{lc}$ (client $c$ served by $l$).
 
+<!-- model: 8.2 -->
+
 $$
 \begin{aligned}
-\min ~~ \sum_{l=1}^{m}\sum_{c=1}^{n} d_{lc}\, y_{lc} & &\\
-\text{subject to} \quad \sum_{l=1}^{m} y_{lc} &= 1, & \forall c,\\
-\sum_{l=1}^{m} x_l &\le k, &\\
-x_l - y_{lc} &\ge 0, & \forall l, c,\\
-x_l, y_{lc} &\in \{0, 1\}. & &
+\min ~~ \sum_{l=1}^{m}\sum_{c=1}^{n} d_{lc}\, y_{lc} & & \\
+\text{subject to} \quad \sum_{l=1}^{m} y_{lc} &= 1, & \forall c \in \{1, 2, \dots, n\}, \\
+\sum_{l=1}^{m} x_l &\le k, & & \\
+x_l - y_{lc} &\ge 0, & \forall l \in \{1, 2, \dots, m\},\ \forall c \in \{1, 2, \dots, n\}, \\
+x_l &\in \{0, 1\}, & \forall l \in \{1, 2, \dots, m\}, \\
+y_{lc} &\in \{0, 1\}, & \forall l \in \{1, 2, \dots, m\},\ \forall c \in \{1, 2, \dots, n\}.
 \end{aligned}
 $$
+
+<!-- model: end -->
 
 - the objective minimizes the sum of client-location distances;
 - the first constraint assigns every client to one location ($n$ constraints);
@@ -86,6 +91,23 @@ client 2 → location 1 (dist. 6), client 3 → location 2 (dist. 9). Value
 $3+6+9=18$: $z(\mathit{MILP}) \le \mathit{UB} = 18$.
 
 ## LP relaxation and dual: the dual bound
+
+The dual of the linear relaxation, one variable per constraint of the primal:
+
+<!-- model: 8.2-dual -->
+
+$$
+\begin{aligned}
+\max ~~ \sum_{c=1}^{n} \mu_c + k\, \varrho & & \\
+\text{subject to} \quad \varrho + \sum_{c=1}^{n} \pi_{lc} &\le 0, & \forall l \in \{1, 2, \dots, m\}, \\
+\mu_c - \pi_{lc} &\le d_{lc}, & \forall l \in \{1, 2, \dots, m\},\ \forall c \in \{1, 2, \dots, n\}, \\
+\mu_c &\gtreqless 0, & \forall c \in \{1, 2, \dots, n\}, \\
+\varrho &\le 0, & & \\
+\pi_{lc} &\ge 0, & \forall l \in \{1, 2, \dots, m\},\ \forall c \in \{1, 2, \dots, n\}.
+\end{aligned}
+$$
+
+<!-- model: end -->
 
 With $\bar\varrho=0$, $\bar\pi_{lc}=0$ and $\bar\mu_c = \min_l d_{lc}$
 (the distance to the nearest location overall):

@@ -39,15 +39,19 @@ where the jobs are no longer compulsory and have a revenue: a
 **Decision variables.** $n\,k + k$ binary variables: $x_{jm} = 1$ if job $j$
 is executed by machine $m$; $y_m = 1$ if machine $m$ is used.
 
+<!-- model: 7.3 -->
+
 $$
 \begin{aligned}
-\max ~~ \sum_{j=1}^{n} \sum_{m=1}^{k} r_j\, x_{jm} - \sum_{m=1}^{k} c_m\, y_m & &\\
-\text{subject to} \quad \sum_{m=1}^{k} x_{jm} &\le 1, & \forall j \in \{1, 2, \dots, n\},\\
-\sum_{j=1}^{n} t_j\, x_{jm} - a_m\, y_m &\le 0, & \forall m \in \{1, 2, \dots, k\},\\
-x_{jm} &\in \{0, 1\}, & \forall j,\ \forall m,\\
+\max ~~ \sum_{j=1}^{n} \sum_{m=1}^{k} r_j\, x_{jm} - \sum_{m=1}^{k} c_m\, y_m & & \\
+\text{subject to} \quad \sum_{m=1}^{k} x_{jm} &\le 1, & \forall j \in \{1, 2, \dots, n\}, \\
+\sum_{j=1}^{n} t_j\, x_{jm} - a_m\, y_m &\le 0, & \forall m \in \{1, 2, \dots, k\}, \\
+x_{jm} &\in \{0, 1\}, & \forall j \in \{1, 2, \dots, n\},\ \forall m \in \{1, 2, \dots, k\}, \\
 y_m &\in \{0, 1\}, & \forall m \in \{1, 2, \dots, k\}.
 \end{aligned}
 $$
+
+<!-- model: end -->
 
 - the objective maximises the profit, revenues of the executed jobs minus
   costs of the machines used;
@@ -110,14 +114,19 @@ first-fit fill machine 1 first and reach $5$.
 
 With $\mu_j \ge 0$ (at most one) and $\pi_m \ge 0$ (link):
 
+<!-- model: 7.3-dual -->
+
 $$
 \begin{aligned}
-\min ~~ \sum_{j=1}^{n} \mu_j & &\\
-\text{subject to} \quad \mu_j + t_j\, \pi_m &\ge r_j, & \forall j,\ \forall m,\\
--a_m\, \pi_m &\ge -c_m, & \forall m,\\
-\mu_j \ge 0,\quad \pi_m &\ge 0. &
+\min ~~ \sum_{j=1}^{n} \mu_j & & \\
+\text{subject to} \quad \mu_j + t_j\, \pi_m &\ge r_j, & \forall j \in \{1, 2, \dots, n\},\ \forall m \in \{1, 2, \dots, k\}, \\
+-a_m\, \pi_m &\ge -c_m, & \forall m \in \{1, 2, \dots, k\}, \\
+\mu_j &\ge 0, & \forall j \in \{1, 2, \dots, n\}, \\
+\pi_m &\ge 0, & \forall m \in \{1, 2, \dots, k\}.
 \end{aligned}
 $$
+
+<!-- model: end -->
 
 **A hand-built dual solution.** $\bar\pi_m = c_m/a_m$: $\tfrac{4}{21}, \tfrac{3}{11}, \tfrac{3}{20}$;
 then $\bar\mu_j = \max\{0, \max_m (r_j - t_j \bar\pi_m)\}$:

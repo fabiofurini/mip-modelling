@@ -24,15 +24,21 @@ objective imposes the other.
 **Variables.** $n + q + 1$ binary: $x_j$ (job executed), $y_c$ (class
 complete), $z$ (jobs of at least two classes).
 
+<!-- model: 7.6 -->
+
 $$
 \begin{aligned}
-\max ~~ \sum_{j=1}^{n} r_j\, x_j + \sum_{c=1}^{q} v_c\, y_c & &\\
-\text{subject to} \quad x_j - y_c &\ge 0, & \forall c,\ \forall j \in \mathscr{J}_c,\\
-x_j + x_i - z &\le 1, & \forall c < g,\ \forall j \in \mathscr{J}_c,\ \forall i \in \mathscr{J}_g,\\
-\sum_{j=1}^{n} t_j\, x_j + u\, z &\le a, &\\
-x_j,\ y_c,\ z &\in \{0, 1\}. &
+\max ~~ \sum_{j=1}^{n} r_j\, x_j + \sum_{c=1}^{q} v_c\, y_c & & \\
+\text{subject to} \quad x_j - y_c &\ge 0, & \forall c \in \{1, 2, \dots, q\},\ \forall j \in \mathscr{J}_c, \\
+x_j + x_i - z &\le 1, & \forall c, g \in \{1, 2, \dots, q\},\ c < g,\ \forall j \in \mathscr{J}_c,\ \forall i \in \mathscr{J}_g, \\
+\sum_{j=1}^{n} t_j\, x_j + u\, z &\le a, & \\
+x_j &\in \{0, 1\}, & \forall j \in \{1, 2, \dots, n\}, \\
+y_c &\in \{0, 1\}, & \forall c \in \{1, 2, \dots, q\}, \\
+z &\in \{0, 1\}. &
 \end{aligned}
 $$
+
+<!-- model: end -->
 
 - the objective maximises revenues of the jobs plus bonuses of the complete
   classes;
@@ -107,14 +113,21 @@ Revenue $10 + 5 + 12 + 5 = 32$: $z(\mathit{MILP}) \ge 32$.
 With $\pi_j \le 0$ (all), $\lambda_{ji} \ge 0$ (mixed), $\mu \ge 0$
 (availability):
 
+<!-- model: 7.6-dual -->
+
 $$
 \begin{aligned}
-\min ~~ \sum_{\text{mixed pairs}} \lambda_{ji} + a\, \mu & &\\
-\text{subject to} \quad \pi_j + \sum_{i \notin \mathscr{J}_c} \lambda_{ji} + t_j\, \mu &\ge r_j, & \forall c,\ \forall j \in \mathscr{J}_c,\\
--\sum_{j \in \mathscr{J}_c} \pi_j &\ge v_c, & \forall c,\\
--\sum_{\text{mixed pairs}} \lambda_{ji} + u\, \mu &\ge 0. &
+\min ~~ \sum_{c<g}\ \sum_{j \in \mathscr{J}_c}\ \sum_{i \in \mathscr{J}_g} \lambda_{ji} + a\, \mu & & \\
+\text{subject to} \quad \pi_j + \sum_{i \notin \mathscr{J}_c} \lambda_{ji} + t_j\, \mu &\ge r_j, & \forall c \in \{1, 2, \dots, q\},\ \forall j \in \mathscr{J}_c, \\
+-\sum_{j \in \mathscr{J}_c} \pi_j &\ge v_c, & \forall c \in \{1, 2, \dots, q\}, \\
+-\sum_{c<g}\ \sum_{j \in \mathscr{J}_c}\ \sum_{i \in \mathscr{J}_g} \lambda_{ji} + u\, \mu &\ge 0, & \\
+\pi_j &\le 0, & \forall j \in \{1, 2, \dots, n\}, \\
+\lambda_{ji} &\ge 0, & \forall c, g \in \{1, 2, \dots, q\},\ c < g,\ \forall j \in \mathscr{J}_c,\ \forall i \in \mathscr{J}_g, \\
+\mu &\ge 0. &
 \end{aligned}
 $$
+
+<!-- model: end -->
 
 **A hand-built dual solution.** The bonus of every class loaded on one job:
 $\bar\pi_1 = -5$, $\bar\pi_3 = -4$, $\bar\pi_5 = -10$; $\bar\lambda = 0$;

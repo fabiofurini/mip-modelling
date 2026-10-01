@@ -26,6 +26,8 @@ jobs:
       - run: python3 python/embed_code.py --check
       - run: python3 python/generate_tables.py --check
       - run: python3 python/embed_models.py --check
+      - run: python3 python/embed_symbolic.py --check
+      - run: python3 python/check_models.py
       - run: python3 python/generate_tomodel.py --check
       - run: mkdocs build --strict
       - uses: actions/upload-pages-artifact@v3

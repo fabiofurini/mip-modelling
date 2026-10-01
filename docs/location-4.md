@@ -25,15 +25,21 @@ active one serves at most $k$.
 **Decision variables.** $n\,m$ binaries $x_{ij}$, $m$ binaries $y_j$ (hub
 activated), $m$ non-negative continuous $z_j$ (maximum cost of hub $j$).
 
+<!-- model: 8.4 -->
+
 $$
 \begin{aligned}
-\min ~~ \sum_{j=1}^{m} f_j\, y_j + \sum_{j=1}^{m} z_j & &\\
-\text{subject to} \quad \sum_{j=1}^{m} x_{ij} &= 1, & \forall i,\\
--\sum_{i=1}^{n} x_{ij} + k\, y_j &\ge 0, & \forall j,\\
--c_{ij}\, x_{ij} + z_j &\ge 0, & \forall i, j,\\
-x_{ij}, y_j &\in \{0, 1\},\ z_j \ge 0. & &
+\min ~~ \sum_{j=1}^{m} f_j\, y_j + \sum_{j=1}^{m} z_j & & \\
+\text{subject to} \quad \sum_{j=1}^{m} x_{ij} &= 1, & \forall i \in \{1, 2, \dots, n\}, \\
+-\sum_{i=1}^{n} x_{ij} + k\, y_j &\ge 0, & \forall j \in \{1, 2, \dots, m\}, \\
+-c_{ij}\, x_{ij} + z_j &\ge 0, & \forall i \in \{1, 2, \dots, n\},\ \forall j \in \{1, 2, \dots, m\}, \\
+x_{ij} &\in \{0, 1\}, & \forall i \in \{1, 2, \dots, n\},\ \forall j \in \{1, 2, \dots, m\}, \\
+y_j &\in \{0, 1\}, & \forall j \in \{1, 2, \dots, m\}, \\
+z_j &\ge 0, & \forall j \in \{1, 2, \dots, m\}.
 \end{aligned}
 $$
+
+<!-- model: end -->
 
 - the objective minimizes activation costs plus the maximum cost per hub;
 - the first constraint assigns every terminal to one hub ($n$ constraints);
@@ -96,6 +102,24 @@ Maximum costs: $z_1=\max(5,5)=5$, $z_2=4$. Value $5+6+5+4=20$:
 $z(\mathit{MILP}) \le \mathit{UB} = 20$.
 
 ## LP relaxation and dual: the dual bound
+
+The dual of the linear relaxation, one variable per constraint of the primal:
+
+<!-- model: 8.4-dual -->
+
+$$
+\begin{aligned}
+\max ~~ \sum_{i=1}^{n} \alpha_i & & \\
+\text{subject to} \quad \alpha_i - \beta_j - c_{ij}\, \gamma_{ij} &\le 0, & \forall i \in \{1, 2, \dots, n\},\ \forall j \in \{1, 2, \dots, m\}, \\
+k\, \beta_j &\le f_j, & \forall j \in \{1, 2, \dots, m\}, \\
+\sum_{i=1}^{n} \gamma_{ij} &\le 1, & \forall j \in \{1, 2, \dots, m\}, \\
+\alpha_i &\gtreqless 0, & \forall i \in \{1, 2, \dots, n\}, \\
+\beta_j &\ge 0, & \forall j \in \{1, 2, \dots, m\}, \\
+\gamma_{ij} &\ge 0, & \forall i \in \{1, 2, \dots, n\},\ \forall j \in \{1, 2, \dots, m\}.
+\end{aligned}
+$$
+
+<!-- model: end -->
 
 With $\bar\gamma_{ij}=0$ and $\bar\beta_j = f_j/k$ (the largest value
 allowed), the constraint on $\alpha_i$ holds for **every** hub $j$, not

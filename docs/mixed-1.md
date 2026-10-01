@@ -30,15 +30,19 @@ $x_i \in \{0,1\}$ equals $1$ if prize $i$ is taken with points only;
 $y_i \in \{0,1\}$ equals $1$ if it is taken with points and a contribution. In
 all $2s$ binary variables.
 
+<!-- model: 10.1 -->
+
 $$
 \begin{aligned}
-\min ~~ \sum_{i=1}^{s} c_i\, y_i &\\
-\text{subject to} \quad x_i + y_i &\le 1, & \forall i \in \{1, 2, \dots, s\},\\
-\sum_{i=1}^{s} \bigl(a_i\, x_i + b_i\, y_i\bigr) &\le p,\\
-\sum_{i=1}^{s} d_i\,(x_i + y_i) &\ge \ell,\\
+\min ~~ \sum_{i=1}^{s} c_i\, y_i & & \\
+\text{subject to} \quad x_i + y_i &\le 1, & \forall i \in \{1, 2, \dots, s\}, \\
+\sum_{i=1}^{s} \bigl(a_i\, x_i + b_i\, y_i\bigr) &\le p, & \\
+\sum_{i=1}^{s} d_i\,(x_i + y_i) &\ge \ell, & \\
 x_i,\ y_i &\in \{0, 1\}, & \forall i \in \{1, 2, \dots, s\}.
 \end{aligned}
 $$
+
+<!-- model: end -->
 
 **Description.** The objective counts money only: the points-only option does
 not appear, because it costs no euros. The **mutual exclusion** constraints, one
@@ -124,14 +128,20 @@ Associate $\sigma_i \ge 0$ with the mutual-exclusion constraints, $\pi \ge 0$
 with the point budget and $\rho \ge 0$ with the preference threshold. The primal
 is a minimisation, so $\le$ constraints give duals of negative sign.
 
+<!-- model: 10.1-dual -->
+
 $$
 \begin{aligned}
-\max ~~ -\sum_{i=1}^{s} \sigma_i - p\, \pi + \ell\, \rho &\\
-\text{subject to} \quad -\sigma_i - a_i\, \pi + d_i\, \rho &\le 0, & \forall i \in \{1, 2, \dots, s\},\\
--\sigma_i - b_i\, \pi + d_i\, \rho &\le c_i, & \forall i \in \{1, 2, \dots, s\},\\
-\sigma_i &\ge 0, \quad \pi \ge 0, \quad \rho \ge 0.
+\max ~~ -\sum_{i=1}^{s} \sigma_i - p\, \pi + \ell\, \rho & & \\
+\text{subject to} \quad -\sigma_i - a_i\, \pi + d_i\, \rho &\le 0, & \forall i \in \{1, 2, \dots, s\}, \\
+-\sigma_i - b_i\, \pi + d_i\, \rho &\le c_i, & \forall i \in \{1, 2, \dots, s\}, \\
+\sigma_i &\ge 0, & \forall i \in \{1, 2, \dots, s\}, \\
+\pi &\ge 0, & \\
+\rho &\ge 0. &
 \end{aligned}
 $$
+
+<!-- model: end -->
 
 **Description.** $\pi$ is the price of one point, $\rho$ the value of one unit of
 preference and $\sigma_i$ the price of the mutual exclusion of prize $i$. The

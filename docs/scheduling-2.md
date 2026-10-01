@@ -46,15 +46,19 @@ y_m = 1 \text{ if machine } m \text{ is used},\ 0 \text{ otherwise},
 \qquad \forall j \in \{1, 2, \dots, n\},\ \forall m \in \{1, 2, \dots, k\}.
 $$
 
+<!-- model: 7.2 -->
+
 $$
 \begin{aligned}
-\min ~~ \sum_{m=1}^{k} c_m\, y_m & &\\
-\text{subject to} \quad \sum_{m=1}^{k} x_{jm} &= 1, & \forall j \in \{1, 2, \dots, n\},\\
--\sum_{j=1}^{n} t_{jm}\, x_{jm} + a_m\, y_m &\ge 0, & \forall m \in \{1, 2, \dots, k\},\\
-x_{jm} &\in \{0, 1\}, & \forall j \in \{1, 2, \dots, n\},\ \forall m \in \{1, 2, \dots, k\},\\
+\min ~~ \sum_{m=1}^{k} c_m\, y_m & & \\
+\text{subject to} \quad \sum_{m=1}^{k} x_{jm} &= 1, & \forall j \in \{1, 2, \dots, n\}, \\
+-\sum_{j=1}^{n} t_{jm}\, x_{jm} + a_m\, y_m &\ge 0, & \forall m \in \{1, 2, \dots, k\}, \\
+x_{jm} &\in \{0, 1\}, & \forall j \in \{1, 2, \dots, n\},\ \forall m \in \{1, 2, \dots, k\}, \\
 y_m &\in \{0, 1\}, & \forall m \in \{1, 2, \dots, k\}.
 \end{aligned}
 $$
+
+<!-- model: end -->
 
 - the objective minimises the total cost of the machines used;
 - the **assignment** constraints ensure that each job is assigned to exactly
@@ -142,14 +146,19 @@ variants use machines 1 and 2 (value $15$).
 With $\mu_j$ free (assignment) and $\pi_m \ge 0$ (link, $\ge$ in a
 minimisation):
 
+<!-- model: 7.2-dual -->
+
 $$
 \begin{aligned}
-\max ~~ \sum_{j=1}^{n} \mu_j & &\\
-\text{subject to} \quad \mu_j - t_{jm}\, \pi_m &\le 0, & \forall j,\ \forall m,\\
-a_m\, \pi_m &\le c_m, & \forall m \in \{1, 2, \dots, k\},\\
-\mu_j \gtreqless 0,\quad \pi_m &\ge 0. &
+\max ~~ \sum_{j=1}^{n} \mu_j & & \\
+\text{subject to} \quad \mu_j - t_{jm}\, \pi_m &\le 0, & \forall j \in \{1, 2, \dots, n\},\ \forall m \in \{1, 2, \dots, k\}, \\
+a_m\, \pi_m &\le c_m, & \forall m \in \{1, 2, \dots, k\}, \\
+\mu_j &\gtreqless 0, & \forall j \in \{1, 2, \dots, n\}, \\
+\pi_m &\ge 0, & \forall m \in \{1, 2, \dots, k\}.
 \end{aligned}
 $$
+
+<!-- model: end -->
 
 **A hand-built dual solution.** $\bar\pi_m = c_m / a_m$ (the cost per minute
 of each machine): $\tfrac{8}{25}, \tfrac{7}{20}, \tfrac{5}{12}$; then

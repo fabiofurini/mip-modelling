@@ -30,18 +30,22 @@ exceeded; and in every camp the two composition rules hold.
 integer variables. $x_{ij}$ are the girls of nationality $i$ in camp $j$,
 $y_{ij}$ the boys.
 
+<!-- model: 10.6 -->
+
 $$
 \begin{aligned}
-\max ~~ \sum_{i=1}^{s} \sum_{j=1}^{r} \bigl(x_{ij} + y_{ij}\bigr) &\\
-\text{subject to} \quad \sum_{j=1}^{r} x_{ij} &\le f_i, & \forall i \in \{1, 2, \dots, s\},\\
-\sum_{j=1}^{r} y_{ij} &\le g_i, & \forall i \in \{1, 2, \dots, s\},\\
-\sum_{i=1}^{s} \bigl(x_{ij} + y_{ij}\bigr) &\le d_j, & \forall j \in \{1, 2, \dots, r\},\\
-\sum_{i=1}^{s} \bigl(x_{ij} - y_{ij}\bigr) &\ge 0, & \forall j \in \{1, 2, \dots, r\},\\
-x_{cj} + y_{cj} - \sum_{i \ne c} \bigl(x_{ij} + y_{ij}\bigr) &\ge 0, & \forall j \in \{1, 2, \dots, r\},\\
-x_{ij} &\in \mathbb{Z}_{\ge 0}, & \forall i \in \{1, 2, \dots, s\},\ \forall j \in \{1, 2, \dots, r\},\\
-y_{ij} &\in \mathbb{Z}_{\ge 0}, & \forall i \in \{1, 2, \dots, s\},\ \forall j \in \{1, 2, \dots, r\}.
+\max ~~ \sum_{i=1}^{s} \sum_{j=1}^{r} \bigl(x_{ij} + y_{ij}\bigr) & & \\
+\text{subject to} \quad \sum_{j=1}^{r} x_{ij} &\le f_i, & \forall i \in \{1, 2, \dots, s\}, \\
+\sum_{j=1}^{r} y_{ij} &\le g_i, & \forall i \in \{1, 2, \dots, s\}, \\
+\sum_{i=1}^{s} \bigl(x_{ij} + y_{ij}\bigr) &\le d_j, & \forall j \in \{1, 2, \dots, r\}, \\
+\sum_{i=1}^{s} \bigl(x_{ij} - y_{ij}\bigr) &\ge 0, & \forall j \in \{1, 2, \dots, r\}, \\
+x_{cj} + y_{cj} - \sum_{i \ne c} \bigl(x_{ij} + y_{ij}\bigr) &\ge 0, & \forall j \in \{1, 2, \dots, r\}, \\
+x_{ij} &\in \Z_{\ge 0}, & \forall i \in \{1, 2, \dots, s\},\ \forall j \in \{1, 2, \dots, r\}, \\
+y_{ij} &\in \Z_{\ge 0}, & \forall i \in \{1, 2, \dots, s\},\ \forall j \in \{1, 2, \dots, r\}.
 \end{aligned}
 $$
+
+<!-- model: end -->
 
 **Description.** The objective counts the children accepted. The two groups of
 **availability** constraints, one per nationality each, do not allow accepting
@@ -120,15 +124,23 @@ Associate $\alpha_i, \beta_i, \gamma_j \ge 0$ with the three groups of $\le$
 constraints and $\delta_j, \varepsilon_j \ge 0$ with the two composition groups,
 with $\sigma_i = -1$ for $i = c$ and $\sigma_i = +1$ otherwise.
 
+<!-- model: 10.6-dual -->
+
 $$
 \begin{aligned}
 \min ~~ \sum_{i=1}^{s} f_i\, \alpha_i + \sum_{i=1}^{s} g_i\, \beta_i
-      + \sum_{j=1}^{r} d_j\, \gamma_j &\\
-\text{subject to} \quad \alpha_i + \gamma_j - \delta_j + \sigma_i\, \varepsilon_j &\ge 1, & \forall i \in \{1, 2, \dots, s\},\ \forall j \in \{1, 2, \dots, r\},\\
-\beta_i + \gamma_j + \delta_j + \sigma_i\, \varepsilon_j &\ge 1, & \forall i \in \{1, 2, \dots, s\},\ \forall j \in \{1, 2, \dots, r\},\\
-\alpha_i &\ge 0, \quad \beta_i \ge 0, \quad \gamma_j \ge 0, \quad \delta_j \ge 0, \quad \varepsilon_j \ge 0.
+      + \sum_{j=1}^{r} d_j\, \gamma_j & & \\
+\text{subject to} \quad \alpha_i + \gamma_j - \delta_j + \sigma_i\, \varepsilon_j &\ge 1, & \forall i \in \{1, 2, \dots, s\},\ \forall j \in \{1, 2, \dots, r\}, \\
+\beta_i + \gamma_j + \delta_j + \sigma_i\, \varepsilon_j &\ge 1, & \forall i \in \{1, 2, \dots, s\},\ \forall j \in \{1, 2, \dots, r\}, \\
+\alpha_i &\ge 0, & \forall i \in \{1, 2, \dots, s\}, \\
+\beta_i &\ge 0, & \forall i \in \{1, 2, \dots, s\}, \\
+\gamma_j &\ge 0, & \forall j \in \{1, 2, \dots, r\}, \\
+\delta_j &\ge 0, & \forall j \in \{1, 2, \dots, r\}, \\
+\varepsilon_j &\ge 0, & \forall j \in \{1, 2, \dots, r\},
 \end{aligned}
 $$
+
+<!-- model: end -->
 
 **Description.** $\alpha_i$ and $\beta_i$ are the prices of a place for the
 girls and for the boys of nationality $i$; $\gamma_j$ is the price of a place in

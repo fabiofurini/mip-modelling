@@ -26,16 +26,22 @@ cost. This is the **lot sizing** problem with setup.
 **Variables.** $x_t \ge 0$ units produced, $s_t \ge 0$ stock at the end of
 period $t$ ($t \le n-1$), $y_t \in \{0,1\}$ production setup.
 
+<!-- model: 9.1 -->
+
 $$
 \begin{aligned}
-\min ~~ \sum_{t=1}^{n} p_t\, x_t + \sum_{t=1}^{n} q_t\, y_t + \sum_{t=1}^{n-1} h_t\, s_t &\\
-\text{subject to} \quad x_1 - s_1 &= d_1 - r_0,\\
-x_t + s_{t-1} - s_t &= d_t, && t = 2, \dots, n-1,\\
-x_n + s_{n-1} &= d_n + r_n,\\
--x_t + M_t\, y_t &\ge 0, && t = 1, \dots, n,\\
-x_t,\ s_t &\ge 0, \qquad y_t \in \{0,1\}.
+\min ~~ \sum_{t=1}^{n} p_t\, x_t + \sum_{t=1}^{n} q_t\, y_t + \sum_{t=1}^{n-1} h_t\, s_t & & \\
+\text{subject to} \quad x_1 - s_1 &= d_1 - r_0, & \\
+x_t + s_{t-1} - s_t &= d_t, & \forall t \in \{2, 3, \dots, n-1\}, \\
+x_n + s_{n-1} &= d_n + r_n, & \\
+-x_t + M_t\, y_t &\ge 0, & \forall t \in \{1, 2, \dots, n\}, \\
+x_t &\ge 0, & \forall t \in \{1, 2, \dots, n\}, \\
+s_t &\ge 0, & \forall t \in \{1, 2, \dots, n-1\}, \\
+y_t &\in \{0, 1\}, & \forall t \in \{1, 2, \dots, n\}.
 \end{aligned}
 $$
+
+<!-- model: end -->
 
 **The link.** The constraint $x_t \le M_t\, y_t$ says: if $y_t = 0$ then
 $x_t = 0$ (no production without a setup); if $y_t = 1$ the constraint is not
@@ -103,13 +109,20 @@ $z(\mathit{MILP}) \le \mathit{UB} = 420$.
 With $\mu_t$ **free** on every balance and $\pi_t \ge 0$ on every setup
 constraint:
 
+<!-- model: 9.1-dual -->
+
 $$
 \begin{aligned}
-\max ~~ \sum_t b_t\, \mu_t &\\
-\text{subject to} \quad \mu_t - \pi_t &\le p_t, \qquad M_t\, \pi_t \le q_t, \qquad
--\mu_t + \mu_{t+1} \le h_t .
+\max ~~ \sum_{t=1}^{n} b_t\, \mu_t & & \\
+\text{subject to} \quad \mu_t - \pi_t &\le p_t, & \forall t \in \{1, 2, \dots, n\}, \\
+M_t\, \pi_t &\le q_t, & \forall t \in \{1, 2, \dots, n\}, \\
+-\mu_t + \mu_{t+1} &\le h_t, & \forall t \in \{1, 2, \dots, n-1\}, \\
+\mu_t &\gtreqless 0, & \forall t \in \{1, 2, \dots, n\}, \\
+\pi_t &\ge 0, & \forall t \in \{1, 2, \dots, n\}.
 \end{aligned}
 $$
+
+<!-- model: end -->
 
 **The recipe.** $\bar\pi_t = 0$: the setups are given away. What is left is
 $\mu_t \le p_t$ and $\mu_{t+1} \le \mu_t + h_t$, and the largest feasible value

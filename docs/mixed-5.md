@@ -32,16 +32,20 @@ the set of plants and $C = \{1, 2, \dots, m\}$ the set of customers.
 **Variables.** $x_{psc} \in \mathbb{Z}_{\ge 0}$ units of product $p$ shipped
 from $s$ to $c$; $y_{sc} \in \mathbb{Z}_{\ge 0}$ boxes shipped from $s$ to $c$.
 
+<!-- model: 10.5 -->
+
 $$
 \begin{aligned}
-\min ~~ \sum_{s=1}^{n} \sum_{c=1}^{m} y_{sc} &\\
-\text{subject to} \quad \sum_{s=1}^{n} x_{psc} &= d_{pc}, & \forall p \in P,\ \forall c \in C,\\
-\sum_{c=1}^{m} x_{psc} &\le a_{ps}, & \forall p \in P,\ \forall s \in S,\\
--\sum_{p=1}^{k} x_{psc} + w\, y_{sc} &\ge 0, & \forall s \in S,\ \forall c \in C,\\
-x_{psc} &\in \mathbb{Z}_{\ge 0}, & \forall p \in P,\ \forall s \in S,\ \forall c \in C,\\
-y_{sc} &\in \mathbb{Z}_{\ge 0}, & \forall s \in S,\ \forall c \in C.
+\min ~~ \sum_{s=1}^{n} \sum_{c=1}^{m} y_{sc} & & \\
+\text{subject to} \quad \sum_{s=1}^{n} x_{psc} &= d_{pc}, & \forall p \in P,\ \forall c \in C, \\
+\sum_{c=1}^{m} x_{psc} &\le a_{ps}, & \forall p \in P,\ \forall s \in S, \\
+-\sum_{p=1}^{k} x_{psc} + w\, y_{sc} &\ge 0, & \forall s \in S,\ \forall c \in C, \\
+x_{psc} &\in \Z_{\ge 0}, & \forall p \in P,\ \forall s \in S,\ \forall c \in C, \\
+y_{sc} &\in \Z_{\ge 0}, & \forall s \in S,\ \forall c \in C.
 \end{aligned}
 $$
+
+<!-- model: end -->
 
 **Description.** The objective counts the boxes used on all the legs. The
 **demand** constraints, one per product–customer pair, say that every order is
@@ -122,14 +126,20 @@ $$z(\mathit{MILP}) \le \mathit{UB} = 2 .$$
 Associate $\alpha_{pc}$ free with demand, $\beta_{ps} \le 0$ with availability
 and $\gamma_{sc} \ge 0$ with capacity.
 
+<!-- model: 10.5-dual -->
+
 $$
 \begin{aligned}
-\max ~~ \sum_{p=1}^{k}\sum_{c=1}^{m} d_{pc}\, \alpha_{pc} + \sum_{p=1}^{k}\sum_{s=1}^{n} a_{ps}\, \beta_{ps} &\\
-\text{subject to} \quad \alpha_{pc} + \beta_{ps} - \gamma_{sc} &\le 0, & \forall p \in P,\ \forall s \in S,\ \forall c \in C,\\
-w\, \gamma_{sc} &\le 1, & \forall s \in S,\ \forall c \in C,\\
-\alpha_{pc} \gtreqless 0, \quad \beta_{ps} &\le 0, \quad \gamma_{sc} \ge 0.
+\max ~~ \sum_{p=1}^{k}\sum_{c=1}^{m} d_{pc}\, \alpha_{pc} + \sum_{p=1}^{k}\sum_{s=1}^{n} a_{ps}\, \beta_{ps} & & \\
+\text{subject to} \quad \alpha_{pc} + \beta_{ps} - \gamma_{sc} &\le 0, & \forall p \in P,\ \forall s \in S,\ \forall c \in C, \\
+w\, \gamma_{sc} &\le 1, & \forall s \in S,\ \forall c \in C, \\
+\alpha_{pc} &\gtreqless 0, & \forall p \in P,\ \forall c \in C, \\
+\beta_{ps} &\le 0, & \forall p \in P,\ \forall s \in S, \\
+\gamma_{sc} &\ge 0, & \forall s \in S,\ \forall c \in C.
 \end{aligned}
 $$
+
+<!-- model: end -->
 
 **Description.** $\alpha_{pc}$ is the value of one unit of product $p$ delivered
 to customer $c$, $\beta_{ps}$ the (non-positive) price of availability, and
