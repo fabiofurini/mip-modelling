@@ -200,14 +200,20 @@ optimal value.
     The boxes hold $4$ units instead of $10$. What is the new optimum?
 
     !!! tip "Solution"
-        The solution is in the solutions document, reserved for teachers.
+        The solutions of the additional questions are reserved for instructors.
+        The method for answering is the one of every problem of the course:
+        model, instance, a heuristic for one bound, the dual of the
+        relaxation for the other.
 
 ??? question "10.5.2 — Products kept apart"
     Different products cannot travel in the same box. How does the model change?
     What is the new optimum?
 
     !!! tip "Solution"
-        The solution is in the solutions document, reserved for teachers.
+        The solutions of the additional questions are reserved for instructors.
+        The method for answering is the one of every problem of the course:
+        model, instance, a heuristic for one bound, the dual of the
+        relaxation for the other.
 
 ## Code
 

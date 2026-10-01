@@ -175,13 +175,19 @@ certified gap, before solving the MILP, is $(15-12)/15 = 20\%$.
     optimum?
 
     !!! tip "Solution"
-        The solution is in the solutions document, reserved for teachers.
+        The solutions of the additional questions are reserved for instructors.
+        The method for answering is the one of every problem of the course:
+        model, instance, a heuristic for one bound, the dual of the
+        relaxation for the other.
 
 ??? question "10.9.2 — Wider shelves"
     The shelves are $12$ wide instead of $10$. What is the new optimum?
 
     !!! tip "Solution"
-        The solution is in the solutions document, reserved for teachers.
+        The solutions of the additional questions are reserved for instructors.
+        The method for answering is the one of every problem of the course:
+        model, instance, a heuristic for one bound, the dual of the
+        relaxation for the other.
 
 ## Code
 

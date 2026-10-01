@@ -149,13 +149,17 @@ of client 2 and all of client 3. Heuristic gap $20.3\%$.
     change? What is the new optimum?
 
     !!! tip "Solution"
-        The solution is in the solutions document, reserved for instructors.
+        The solutions of the additional questions are reserved for instructors.
+        Below, though, one variant of this problem is worked out in full:
+        model, feasible heuristic, dual certificate and bound table.
 ??? question "8.1.2 — Conditional opening"
     Location 2 can only be installed if location 1 is also installed. How
     is this modelled? What is the new optimum?
 
     !!! tip "Solution"
-        The solution is in the solutions document, reserved for instructors.
+        The solutions of the additional questions are reserved for instructors.
+        Below, though, one variant of this problem is worked out in full:
+        model, feasible heuristic, dual certificate and bound table.
 ## The sandwich on variant 1b
 
 $\rho \le 0$ moves fixed cost between the two sites. It is tried among the values

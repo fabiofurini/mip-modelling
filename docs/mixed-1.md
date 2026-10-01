@@ -209,14 +209,20 @@ which costs only $5$ euros of contribution.
     is the new optimum?
 
     !!! tip "Solution"
-        The solution is in the solutions document, reserved for teachers.
+        The solutions of the additional questions are reserved for instructors.
+        The method for answering is the one of every problem of the course:
+        model, instance, a heuristic for one bound, the dual of the
+        relaxation for the other.
 
 ??? question "10.1.2 — At least four prizes"
     Besides the preference threshold, the customer wants at least four different
     prizes. How does the model change? What is the new optimum?
 
     !!! tip "Solution"
-        The solution is in the solutions document, reserved for teachers.
+        The solutions of the additional questions are reserved for instructors.
+        The method for answering is the one of every problem of the course:
+        model, instance, a heuristic for one bound, the dual of the
+        relaxation for the other.
 
 ## Code
 

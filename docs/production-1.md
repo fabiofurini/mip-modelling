@@ -158,13 +158,19 @@ optimistic.
     change? What is the new optimum?
 
     !!! tip "Solution"
-        The solution is in the solutions document, reserved for instructors.
+        The solutions of the additional questions are reserved for instructors.
+        The method for answering is the one of every problem of the course:
+        model, instance, a heuristic for one bound, the dual of the
+        relaxation for the other.
 ??? question "9.1.2 — Minimum lot"
     If production takes place on a day, at least $25$ units must be produced. How
     does the model change? What is the new optimum?
 
     !!! tip "Solution"
-        The solution is in the solutions document, reserved for instructors.
+        The solutions of the additional questions are reserved for instructors.
+        The method for answering is the one of every problem of the course:
+        model, instance, a heuristic for one bound, the dual of the
+        relaxation for the other.
 ## Code
 
 Complete script —

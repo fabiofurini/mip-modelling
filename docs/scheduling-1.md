@@ -214,14 +214,18 @@ $\lceil 53/5 \rceil = 11$ closes the gap).
     How does the model change? What is the new optimum for the instance?
 
     !!! tip "Solution"
-        The solution is in the solutions document, reserved for instructors.
+        The solutions of the additional questions are reserved for instructors.
+        Below, though, one variant of this problem is worked out in full:
+        model, feasible heuristic, dual certificate and bound table.
 ??? question "7.1.2 — Fixed cost per used machine"
     Every machine that processes at least one job costs an extra $g_m = 3$
     euros to switch on. Model the fixed cost and find the new optimum. Which
     link comes into play?
 
     !!! tip "Solution"
-        The solution is in the solutions document, reserved for instructors.
+        The solutions of the additional questions are reserved for instructors.
+        Below, though, one variant of this problem is worked out in full:
+        model, feasible heuristic, dual certificate and bound table.
 ## The sandwich on variant 1a
 
 The constraint "jobs 1 and 3 on the same machine" adds one free variable

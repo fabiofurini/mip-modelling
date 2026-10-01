@@ -142,13 +142,17 @@ it), terminals 2 and 3 on hub 1. Heuristic gap $5.3\%$.
     adding them, one *replaces* the aggregated constraint by them?
 
     !!! tip "Solution"
-        The solution is in the solutions document, reserved for instructors.
+        The solutions of the additional questions are reserved for instructors.
+        Below, though, one variant of this problem is worked out in full:
+        model, feasible heuristic, dual certificate and bound table.
 ??? question "8.4.2 — Forbidden connection"
     Terminal 1 cannot connect to hub 2. How is this modelled? What is the
     new optimum?
 
     !!! tip "Solution"
-        The solution is in the solutions document, reserved for instructors.
+        The solutions of the additional questions are reserved for instructors.
+        Below, though, one variant of this problem is worked out in full:
+        model, feasible heuristic, dual certificate and bound table.
 ## The sandwich on variant 4b
 
 Forbidding a connection removes a column from the primal, hence **removes** a

@@ -128,13 +128,17 @@ what the heuristic found. Heuristic gap $44.4\%$.
     is the new optimum?
 
     !!! tip "Solution"
-        The solution is in the solutions document, reserved for instructors.
+        The solutions of the additional questions are reserved for instructors.
+        Below, though, one variant of this problem is worked out in full:
+        model, feasible heuristic, dual certificate and bound table.
 ??? question "8.3.2 — Conditional installation"
     Location 1 can only be installed if location 3 is also installed. How
     is this modelled? What is the new optimum?
 
     !!! tip "Solution"
-        The solution is in the solutions document, reserved for instructors.
+        The solutions of the additional questions are reserved for instructors.
+        Below, though, one variant of this problem is worked out in full:
+        model, feasible heuristic, dual certificate and bound table.
 ## The sandwich on variant 3a
 
 $\omega \le 0$ is best left at zero: lowering it forces every $\lambda_c$ up by

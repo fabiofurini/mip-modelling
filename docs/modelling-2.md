@@ -144,7 +144,10 @@ In all of them, $x_p = 1$ if project $p$ is chosen.
     or 3 is chosen then 10 is not chosen.
 
     !!! tip "Solution"
-        The solution is in the solutions document, reserved for instructors.
+        The solutions of the additional questions are reserved for instructors.
+        The method for answering is the one of every problem of the course:
+        model, instance, a heuristic for one bound, the dual of the
+        relaxation for the other.
 ??? question "2.2 — Negated antecedents and consequents (ten projects)"
     (1) $\lnot x_3 \Rightarrow x_2$; (2) $\lnot x_4 \Rightarrow \lnot x_2$;
     (3) $x_7 \Rightarrow x_1 \land x_6$; (4) $x_8 \Rightarrow x_1 \lor x_6$;
@@ -152,7 +155,10 @@ In all of them, $x_p = 1$ if project $p$ is chosen.
     (6) $\lnot x_{10} \Rightarrow x_2 \lor x_3$.
 
     !!! tip "Solution"
-        The solution is in the solutions document, reserved for instructors.
+        The solutions of the additional questions are reserved for instructors.
+        The method for answering is the one of every problem of the course:
+        model, instance, a heuristic for one bound, the dual of the
+        relaxation for the other.
 ??? question "2.3 — Compound antecedents and consequents (eight projects)"
     (1) $x_7 \lor x_3 \Rightarrow x_1 \land x_2$;
     (2) $x_1 \land x_6 \land x_7 \Rightarrow x_8$;
@@ -162,7 +168,10 @@ In all of them, $x_p = 1$ if project $p$ is chosen.
     (6) $(x_1 \lor x_4) \land (x_2 \lor x_5) \land \lnot x_8 \Rightarrow x_3 \land (\lnot x_6 \lor x_7)$.
 
     !!! tip "Solution"
-        The solution is in the solutions document, reserved for instructors.
+        The solutions of the additional questions are reserved for instructors.
+        The method for answering is the one of every problem of the course:
+        model, instance, a heuristic for one bound, the dual of the
+        relaxation for the other.
 ??? question "2.4 — "At least two of" (nine projects)"
     (1) $x_4 \Rightarrow$ at least two of 1, 2, 3; (2) at least two of 6, 7, 8
     $\Rightarrow x_5$; (3) $\lnot x_4 \Rightarrow$ at least two of 1, 2, 3, 9;
@@ -171,7 +180,10 @@ In all of them, $x_p = 1$ if project $p$ is chosen.
     (6) $(x_1 \land x_2) \lor (x_3 \land x_4) \Rightarrow x_5$.
 
     !!! tip "Solution"
-        The solution is in the solutions document, reserved for instructors.
+        The solutions of the additional questions are reserved for instructors.
+        The method for answering is the one of every problem of the course:
+        model, instance, a heuristic for one bound, the dual of the
+        relaxation for the other.
     !!! warning "«At least two» can also be written by counting"
         As the consequent of the implication governed by $x_4$, the condition is
         also $x_1 + x_2 + x_3 \ge 2 x_4$: one constraint instead of three, with
@@ -188,7 +200,10 @@ In all of them, $x_p = 1$ if project $p$ is chosen.
     (6) $\lnot x_8 \lor \lnot x_9 \Rightarrow x_{10}$.
 
     !!! tip "Solution"
-        The solution is in the solutions document, reserved for instructors.
+        The solutions of the additional questions are reserved for instructors.
+        The method for answering is the one of every problem of the course:
+        model, instance, a heuristic for one bound, the dual of the
+        relaxation for the other.
 ## Logical constraints inside an optimisation model
 
 With the ten projects of exercise 2.1, revenues and costs

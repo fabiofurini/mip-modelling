@@ -194,7 +194,10 @@ that is why the column is called "certified bound".
     does the model change? What is the new optimum?
 
     !!! tip "Solution"
-        The solution is in the solutions document, reserved for teachers.
+        The solutions of the additional questions are reserved for instructors.
+        The method for answering is the one of every problem of the course:
+        model, instance, a heuristic for one bound, the dual of the
+        relaxation for the other.
 
 ??? question "10.7.2 — Min-sum instead of min-max"
     One wants to minimise the *sum* of the differences over all products instead
@@ -202,7 +205,10 @@ that is why the column is called "certified bound".
     the same?
 
     !!! tip "Solution"
-        The solution is in the solutions document, reserved for teachers.
+        The solutions of the additional questions are reserved for instructors.
+        The method for answering is the one of every problem of the course:
+        model, instance, a heuristic for one bound, the dual of the
+        relaxation for the other.
 
 ## Code
 

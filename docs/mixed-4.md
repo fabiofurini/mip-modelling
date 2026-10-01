@@ -205,7 +205,10 @@ bounds is exact.
     the new optimum?
 
     !!! tip "Solution"
-        The solution is in the solutions document, reserved for teachers.
+        The solutions of the additional questions are reserved for instructors.
+        The method for answering is the one of every problem of the course:
+        model, instance, a heuristic for one bound, the dual of the
+        relaxation for the other.
 
 ??? question "10.4.2 — A minimum lot per configuration"
     Every configuration used must decorate at least three trees (below that
@@ -213,7 +216,10 @@ bounds is exact.
     What is the new optimum?
 
     !!! tip "Solution"
-        The solution is in the solutions document, reserved for teachers.
+        The solutions of the additional questions are reserved for instructors.
+        The method for answering is the one of every problem of the course:
+        model, instance, a heuristic for one bound, the dual of the
+        relaxation for the other.
 
 ## Code
 

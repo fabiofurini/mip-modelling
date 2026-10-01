@@ -259,14 +259,20 @@ costs $60$ euros against the $1600$ of a hiring in the third month.
     How does the optimal plan change?
 
     !!! tip "Solution"
-        The solution is in the solutions document, reserved for teachers.
+        The solutions of the additional questions are reserved for instructors.
+        The method for answering is the one of every problem of the course:
+        model, instance, a heuristic for one bound, the dual of the
+        relaxation for the other.
 
 ??? question "9.2.2 — Overtime"
     Every worker may do up to $40$ hours of overtime a month, paid $25$ euros an
     hour. How does the model change? Is it worth using them?
 
     !!! tip "Solution"
-        The solution is in the solutions document, reserved for teachers.
+        The solutions of the additional questions are reserved for instructors.
+        The method for answering is the one of every problem of the course:
+        model, instance, a heuristic for one bound, the dual of the
+        relaxation for the other.
 
 ## Code
 

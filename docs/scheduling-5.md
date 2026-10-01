@@ -146,12 +146,16 @@ The heuristic stays at $9$ (gap $57\%$): the scanning order matters.
     At most one class can be activated.
 
     !!! tip "Solution"
-        The solution is in the solutions document, reserved for instructors.
+        The solutions of the additional questions are reserved for instructors.
+        Below, though, one variant of this problem is worked out in full:
+        model, feasible heuristic, dual certificate and bound table.
 ??? question "7.5.2 — A class subordinate to another"
     Class 3 can be activated only if class 1 is activated too.
 
     !!! tip "Solution"
-        The solution is in the solutions document, reserved for instructors.
+        The solutions of the additional questions are reserved for instructors.
+        Below, though, one variant of this problem is worked out in full:
+        model, feasible heuristic, dual certificate and bound table.
 ## The sandwich on variant 5a
 
 "At most one class" adds $\theta \ge 0$ with right-hand side $1$. Once the price
