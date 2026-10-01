@@ -160,7 +160,7 @@ is, still $8$ in total.
 | shelf 1 | 1, 2 | 8 of 10 | 8 |
 | shelf 2 | 3, 4 | 10 of 10 | 7 |
 
-| $LB$ (combinatorial) | $z(\mathit{LP})$ | $z(\mathit{LP}^+)$ | $z(\mathit{MILP})$ | $UB$ (heuristic) | gap |
+| $LB$ (combinatorial) | $z(\mathit{LP})$ | $z(\mathit{LP}^+)$ | $z(\mathit{MILP})$ | $UB$ (heuristic) | heuristic gap |
 |---:|---:|---:|---:|---:|---:|
 | 12 | 8 | 8 | 15 | 15 | $0\%$ |
 

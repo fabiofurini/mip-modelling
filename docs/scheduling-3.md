@@ -257,7 +257,7 @@ notebook: [`notebooks/fam07_3_selection.ipynb`](https://github.com/fabiofurini/m
     # ---------- 2. THE LP RELAXATION ----------
     zlp3, zlp3r, _ = rilassamenti(m3)
 
-    # ---------- 3. THE DUAL OF THE RELAXATION (LOWER BOUND) ----------
+    # ---------- 3. THE DUAL OF THE RELAXATION (UPPER BOUND: IT IS A MAXIMUM) ----------
     d3 = duale_3(t3, r3, c3, a3)
     salva_modello(d3, "fam07_3_duale")
     mano = {f"pi[{mm}]": c3[mm] / a3[mm] for mm in R(3)}
@@ -268,7 +268,7 @@ notebook: [`notebooks/fam07_3_selection.ipynb`](https://github.com/fabiofurini/m
           + ", ".join(frazione(mano[f"mu[{j}]"]) for j in R(3)) + f"  ->  ub = {frazione(ub3)}")
     dualita_forte(d3, zlp3)
 
-    # ---------- 4. CONSTRUCTIVE HEURISTIC (UPPER BOUND) ----------
+    # ---------- 4. CONSTRUCTIVE HEURISTIC (LOWER BOUND: IT IS A MAXIMUM) ----------
     T3 = matrice(t3, 3)
     eur3 = [("next-fit (skips if it does not fit)", next_fit(T3, a3, salta=True)),
             ("first-fit", first_fit(T3, a3, salta=True)),

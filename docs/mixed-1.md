@@ -173,9 +173,17 @@ This solution is **optimal** for the relaxation without the bounds: indeed
 $z(\mathit{LP}) = z(\mathit{LP}^+) = 3$.
 
 !!! warning "An honest bound can be very far away"
-    Here $\mathit{LB} = 3$ and $z(\mathit{MILP}) = 5$: the gap between the dual
-    bound and the integer optimum is $40\%$, and the certified gap between
-    heuristic and dual is $100\%$. Nothing is wrong: the LP relaxation may take
+    Here $\mathit{LB} = 3$, $\mathit{UB} = 8$ and $z(\mathit{MILP}) = 5$. It
+    pays to look at the distances before the percentages:
+    $\mathit{UB} - \mathit{LB} = 5$ is what is known without solving, and
+    $z(\mathit{MILP}) - \mathit{LB} = 2$ is how far the dual bound really is.
+    As percentages, the certified gap in the solver's convention is
+    $(\mathit{UB} - \mathit{LB}) / \mathit{UB} = 5/8 = 62.5\%$ --- what Gurobi
+    would call `MIPGap` if it stopped here --- while the heuristic gap in the
+    table below is
+    $(\mathit{UB} - z(\mathit{MILP})) / z(\mathit{MILP}) = 3/5 = 60\%$: two
+    close numbers measuring different things, and it is the denominator that
+    says so. Nothing is wrong: the LP relaxation may take
     "half a prize" at half preference, and that freedom is worth a lot. It is
     the most extreme case in the course, and it serves as a reminder that a
     valid bound is not automatically a useful bound.
@@ -191,7 +199,7 @@ Prizes $3$ and $5$ are taken with points only ($10 + 7 = 17$) and prize $4$ with
 the contribution ($2$ points and $5$ euros): $19$ of the $20$ points are used,
 the preference is $7 + 6 + 3 = 16$, exactly the threshold.
 
-| $UB$ | $LB$ (dual) | $z(\mathit{LP})$ | $z(\mathit{LP}^+)$ | $z(\mathit{MILP})$ | gap |
+| $UB$ | $LB$ (dual) | $z(\mathit{LP})$ | $z(\mathit{LP}^+)$ | $z(\mathit{MILP})$ | heuristic gap |
 |---:|---:|---:|---:|---:|---:|
 | 8 | 3 | 3 | 3 | 5 | $60.0\%$ |
 

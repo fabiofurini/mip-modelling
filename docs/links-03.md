@@ -7,7 +7,9 @@
 "If you produce, produce at least $\ell$": the quantity $q_j$ is either zero or
 lies between a threshold $\ell$ and the capacity $c_j$. It is not an interval:
 it is the union of a point and an interval. A variable with this domain is
-called **semicontinuous**.
+called **semicontinuous**; when the quantity is integer on top of that ---
+pieces, units, people --- it is called **semi-integer**, and the two constraints
+are the same.
 
 ## The constraints
 

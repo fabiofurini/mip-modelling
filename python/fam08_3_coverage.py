@@ -69,7 +69,7 @@ salva_modello(m3, "fam08_3_primale")
 # ---------- 2. THE LP RELAXATION ----------
 zlp3, zlp3r, _ = rilassamenti(m3)
 
-# ---------- 3. THE DUAL OF THE RELAXATION (LOWER BOUND) ----------
+# ---------- 3. THE DUAL OF THE RELAXATION (UPPER BOUND: IT IS A MAXIMUM) ----------
 
 d3 = duale_3(s3, p3, t3, b3, k3)
 salva_modello(d3, "fam08_3_duale")
@@ -82,7 +82,7 @@ print("Hand-built dual solution: pi = 0, mu = 0, lam_c = p_c/2 = "
       + ", ".join(frazione(p3[c] / 2) for c in R(n)) + f"  ->  ub = {frazione(ub3)}")
 dualita_forte(d3, zlp3)
 
-# ---------- 4. CONSTRUCTIVE HEURISTIC (UPPER BOUND) ----------
+# ---------- 4. CONSTRUCTIVE HEURISTIC (LOWER BOUND: IT IS A MAXIMUM) ----------
 
 print("Heuristic: the first k locations are opened; a client is covered if the total")
 print("signal reaches the threshold and at most one strong location reaches it.")

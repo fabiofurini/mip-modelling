@@ -172,7 +172,7 @@ The optimal diet is rice $1.4$ kg, bread $1.4$ kg, potatoes $1$ kg: three
 different foods, as required, with $60$ grams of iron (exactly the minimum) and
 $40$ of calcium (again exactly the minimum).
 
-| $LB$ (dual) | $z(\mathit{LP})$ | $z(\mathit{LP}^+)$ | $z(\mathit{MILP})$ | $UB$ (heuristic) | gap |
+| $LB$ (dual) | $z(\mathit{LP})$ | $z(\mathit{LP}^+)$ | $z(\mathit{MILP})$ | $UB$ (heuristic) | heuristic gap |
 |---:|---:|---:|---:|---:|---:|
 | 9 | $46/5$ | $48/5$ | $48/5$ | $39/4$ | $1.6\%$ |
 
@@ -459,7 +459,7 @@ Notebook —
     print(f"  a single positive alpha, on {NUTRIENTI[scelto_2b]}. Variety is not priced: tau")
     print("  enters the objective with its right-hand side t, but the column of the y_i imposes")
     print("  tau <= c_i lam_i - d_i mu_i, and with lam = mu = 0 it stays tau = 0. Asking for one")
-    print("  more food does not move the relaxation, it moves the integer optimum.")
+    print("  more food does not move the hand-built dual bound, but it does move the optimum.")
     print(f"  ->  lb = {frazione(lb2b)}")
     zlp2b, zlp2br, _ = due_rilassamenti(m2b, dl2b)
     z2b = risolvi(m2b)

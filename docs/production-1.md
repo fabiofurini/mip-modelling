@@ -47,7 +47,9 @@ $$
 $x_t = 0$ (no production without a setup); if $y_t = 1$ the constraint is not
 restrictive. The opposite direction — if $x_t = 0$ then $y_t = 0$ — is imposed
 by no constraint but follows from **optimality**, because setting $y_t = 0$
-stays feasible and saves $q_t \ge 0$.
+stays feasible and saves $q_t$. If $q_t > 0$ every optimal solution has
+$y_t = 0$; if $q_t = 0$ the saving is nil and one can only say that an optimal
+solution with $y_t = 0$ *exists*.
 
 !!! warning "The big-M is read off the data"
     A valid $M_t$ must be at least the largest quantity it is worth producing in
@@ -55,6 +57,12 @@ stays feasible and saves $q_t \ge 0$.
     that is left to cover:
 
     $$M_t = \sum_{\tau = t}^{n} d_\tau + r_n .$$
+
+    In the first period the initial inventory, which is a datum, can be
+    subtracted: $M_1 = \sum_{\tau = 1}^{n} d_\tau + r_n - r_0$. From the
+    second period on the incoming inventory is not known in advance, and the
+    bound stays the one above. On the instance $r_0 = 0$, so the two values
+    coincide.
 
     Any larger value is still valid but **weakens** the LP relaxation; any
     smaller value may cut off optimal solutions. On the instance
@@ -149,7 +157,7 @@ optimistic.
 | production $x_t$ | 30 | 0 | 80 | 0 | 0 |
 | stock $s_t$ | 10 | 0 | 50 | 10 | — |
 
-| $UB$ | $LB$ (dual) | $z(\mathit{LP})$ | $z(\mathit{LP}^+)$ | $z(\mathit{MILP})$ | gap |
+| $UB$ | $LB$ (dual) | $z(\mathit{LP})$ | $z(\mathit{LP}^+)$ | $z(\mathit{MILP})$ | heuristic gap |
 |---:|---:|---:|---:|---:|---:|
 | 420 | 270 | $3890/11$ | $3890/11$ | 390 | $7.7\%$ |
 

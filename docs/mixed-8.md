@@ -162,7 +162,7 @@ the job the LP relaxation cannot do.
 | CD 1 | 1, 2, 3 | 18 |
 | CD 2 | 4, 5, 6 | 17 |
 
-| $LB$ (parity) | $z(\mathit{LP})$ | $z(\mathit{LP}^+)$ | $z(\mathit{MILP})$ | $UB$ (heuristic) | gap |
+| $LB$ (parity) | $z(\mathit{LP})$ | $z(\mathit{LP}^+)$ | $z(\mathit{MILP})$ | $UB$ (heuristic) | heuristic gap |
 |---:|---:|---:|---:|---:|---:|
 | 1 | 0 | 0 | 1 | 1 | $0\%$ |
 

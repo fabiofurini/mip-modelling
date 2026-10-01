@@ -248,7 +248,7 @@ on duty: the extra workforce is given away.
 | hirings $z_t$ | 0 | 1 | 0 |
 | stock $s_t$ | 0 | 20 | — |
 
-| $UB$ | $LB$ (dual) | $z(\mathit{LP})$ | $z(\mathit{LP}^+)$ | $z(\mathit{MILP})$ | gap |
+| $UB$ | $LB$ (dual) | $z(\mathit{LP})$ | $z(\mathit{LP}^+)$ | $z(\mathit{MILP})$ | heuristic gap |
 |---:|---:|---:|---:|---:|---:|
 | 18200 | 13500 | 15960 | 15960 | 16660 | $9.2\%$ |
 
@@ -261,13 +261,19 @@ costs $60$ euros against the $1600$ of a hiring in the third month.
 ## Additional considerations
 
 - The monotonicity constraint is what makes the problem non-trivial: if one
-  could lay off at no cost, formulation $B$ would split into $n$ independent
-  problems, one per month.
+  could lay off at no cost, every month would pick on its own the smallest staff
+  able to produce $x_t$, and that family would disappear. The problem would not
+  split into $n$ independent problems, though: the stocks $s_t$ still tie each
+  month to the next.
 - The variables $x_t$ and $s_t$ are declared integer because pairs of shoes do
-  not split. Here they could be left continuous without changing the optimum
-  (the data are integer and the balance matrix is totally unimodular), but the
-  declaration that is correct from the modelling point of view is the integer
-  one.
+  not split. Here they could be left continuous without changing the optimum ---
+  but not because the matrix is totally unimodular: it is not, as the relaxation
+  shows, worth $15\,960$ against an integer optimum of $16\,660$. The reason is
+  more local: once the staff $y$ is fixed at integer values, what is left in
+  $(x, s)$ is a balance problem with an interval matrix, totally unimodular, and
+  integer right-hand sides (the demands, and the capacities
+  $r\, y_t / g = 40\, y_t$); an optimal vertex of it is therefore integer. It is
+  an argument about the subproblem, not about the whole model.
 - The constant term $m_0\, w\, n$ must be remembered in every comparison:
   forgetting it makes formulation $A$ look far cheaper than $B$.
 

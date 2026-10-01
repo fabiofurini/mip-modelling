@@ -1,6 +1,6 @@
 """Problem 9.3 -- Vehicles: minimum lot and a bonus for variety.
 
-Three techniques together: the semicontinuous variable of the minimum lot (3.3),
+Three techniques together: the semi-integer variable of the minimum lot (3.3),
 the count of the active types (3.11) and a bonus paid "if and only if" at least
 two types are produced (3.10). The bonus is collected only if the count reaches
 two: the missing direction follows from optimality, because the bonus is positive.
@@ -74,7 +74,7 @@ salva_modello(m3m, "fam09_3_primale")
 # ---------- 2. THE LP RELAXATION ----------
 zlp3, zlp3r, _ = rilassamenti(m3m)
 
-# ---------- 3. THE DUAL OF THE RELAXATION (LOWER BOUND) ----------
+# ---------- 3. THE DUAL OF THE RELAXATION (UPPER BOUND: IT IS A MAXIMUM) ----------
 dl3 = duale_3(a3, b3, p3, q3, r3)
 salva_modello(dl3, "fam09_3_duale")
 # recipe: gamma = r/2 (the smallest value allowed by 2 gamma >= r), beta = 0, and
@@ -105,7 +105,7 @@ for i in R(m3):
 print(f"  The smallest is resource {critica + 1}:  ub = {frazione(ub3)}")
 dualita_forte(dl3, zlp3)
 
-# ---------- 4. CONSTRUCTIVE HEURISTIC (UPPER BOUND) ----------
+# ---------- 4. CONSTRUCTIVE HEURISTIC (LOWER BOUND: IT IS A MAXIMUM) ----------
 # constructive heuristic: two types are activated (to collect the bonus) starting from the highest
 # profit per unit of the scarcest resource, then one fills up with the best type
 def euristica(a, b, p, q, r):

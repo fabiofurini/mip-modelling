@@ -1,7 +1,8 @@
 """Problem 8.4 -- Hub location with maximum connection cost.
 
 Two links: activation (aggregated, as in scheduling 7.2) and a maximum
-variable z_j = max_i {c_ij : x_ij = 1} (same pattern as tardiness 7.7). The
+variable z_j = max_i {c_ij : x_ij = 1} (same pattern as the processing time 7.4).
+The
 next-fit heuristic is the generic one from euristiche.py: hubs are the
 "machines" (capacity k) and terminals the "jobs" (unit time, independent of
 the machine).

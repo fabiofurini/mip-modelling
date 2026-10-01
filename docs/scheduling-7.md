@@ -59,9 +59,15 @@ $$
     contrapositive $\kappa_i < \kappa_j + t_i \Rightarrow s_{ji} = 0$. The
     constraint $\kappa_i \ge \kappa_j + t_i - M(1 - s_{ji})$: with $s_{ji} = 1$
     imposes the precedence; with $s_{ji} = 0$ becomes
-    $\kappa_i \ge \kappa_j + t_i - M$, always true because the right-hand side
-    is $\le t_i \le \kappa_i$ when completions stay within $M$. The big-M
-    "switches off" the constraint.
+    $\kappa_i \ge \kappa_j + t_i - M$. The model does not impose
+    $\kappa_j \le M$, so the constraint is not true at *every* feasible point;
+    it is true at the ones that matter. With $M = \sum_j t_j$ there is always an
+    optimal solution with no idle time --- if the machine stops, the later jobs
+    are pulled forward and no completion, hence no tardiness, gets worse --- and
+    in such a solution every $\kappa_j \le \sum_j t_j = M$. Then
+    $\kappa_j + t_i - M \le t_i \le \kappa_i$ and the constraint holds: the
+    big-M "switches off" the constraint on all the solutions among which the
+    optimum is sought.
 
     **Tardiness (maximum).** $\tau_j \ge \max\{0, \kappa_j - d_j\}$ is imposed
     directly by the two constraints (no implication: the link *is* the

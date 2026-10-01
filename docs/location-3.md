@@ -86,14 +86,14 @@ $m=3$, $n=5$, $t=5$, $b=4$, $k=2$:
 |---|---:|---:|---:|---:|---:|
 | $p_c$ | 10 | 20 | 5 | 15 | 25 |
 
-With $b=4$: $\mathscr{L}_1=\{1,2\}$, $\mathscr{L}_2=\{3\}$,
+With $b=4$: $\mathscr{L}_1=\{1,2\}$, $\mathscr{L}_2=\{2,3\}$,
 $\mathscr{L}_3=\{1,3\}$, $\mathscr{L}_4=\{3\}$, $\mathscr{L}_5=\emptyset$.
 
 ## Constructive heuristic: the primal bound
 
 The first $k$ locations open. Client 1: signal $10\ge5$ but 2 strong
-locations ($>1$): **not covered**. Client 2: signal $5\ge5$, 0 strong
-locations: **covered**. Client 3: signal $7\ge5$, 1 strong location:
+locations ($>1$): **not covered**. Client 2: signal $5\ge5$, 1 strong
+location: **covered**. Client 3: signal $7\ge5$, 1 strong location:
 **covered**. Clients 4 and 5: insufficient signal: **not covered**. Value
 $20+5=25$: $z(\mathit{MILP}) \ge \mathit{LB} = 25$.
 
@@ -132,7 +132,7 @@ $z(\mathit{LP}^+) = 125/2 = 62.5$. $z(\mathit{MILP}) = 45$, with locations
 1 and 3 installed and clients 1, 2, 4 covered (not 3 or 5): different from
 what the heuristic found. Heuristic gap $44.4\%$.
 
-| $LB$ | $UB$ (dual) | $z(\mathit{LP})$ | $z(\mathit{LP}^+)$ | $z(\mathit{MILP})$ | gap |
+| $LB$ | $UB$ (dual) | $z(\mathit{LP})$ | $z(\mathit{LP}^+)$ | $z(\mathit{MILP})$ | heuristic gap |
 |---:|---:|---:|---:|---:|---:|
 | 25 | $225/2$ | $41925/646$ | $125/2$ | 45 | $44.4\%$ |
 
@@ -142,7 +142,7 @@ what the heuristic found. Heuristic gap $44.4\%$.
 
 - Client 5 can never be covered: maximum signal $1+0+2=3<5$ even opening
   all locations.
-- For clients with $|\mathscr{L}_c|\le1$ (2, 4, 5) the interference
+- For clients with $|\mathscr{L}_c|\le1$ (4 and 5) the interference
   constraint is redundant.
 
 ## Additional modelling questions
@@ -258,7 +258,7 @@ Full script —
     # ---------- 2. THE LP RELAXATION ----------
     zlp3, zlp3r, _ = rilassamenti(m3)
 
-    # ---------- 3. THE DUAL OF THE RELAXATION (LOWER BOUND) ----------
+    # ---------- 3. THE DUAL OF THE RELAXATION (UPPER BOUND: IT IS A MAXIMUM) ----------
 
     d3 = duale_3(s3, p3, t3, b3, k3)
     salva_modello(d3, "fam08_3_duale")
@@ -271,7 +271,7 @@ Full script —
           + ", ".join(frazione(p3[c] / 2) for c in R(n)) + f"  ->  ub = {frazione(ub3)}")
     dualita_forte(d3, zlp3)
 
-    # ---------- 4. CONSTRUCTIVE HEURISTIC (UPPER BOUND) ----------
+    # ---------- 4. CONSTRUCTIVE HEURISTIC (LOWER BOUND: IT IS A MAXIMUM) ----------
 
     print("Heuristic: the first k locations are opened; a client is covered if the total")
     print("signal reaches the threshold and at most one strong location reaches it.")

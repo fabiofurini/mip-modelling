@@ -1,16 +1,16 @@
 \begin{array}{r@{}r@{}r@{}r@{}r@{}r@{}r@{}r@{}r@{}r@{}r c l}
 \min & 8\alpha_1 & +10\alpha_2 & +4\beta_1 & +12\beta_2 & +20\gamma_1 & +8\gamma_2 &  &  &  &  &  & \\
-\text{subject to} & \alpha_1 &  &  &  & +\gamma_1 &  & -\delta_1 &  & -\varepsilon_1 &  & \ge & 1\\
- &  &  & \beta_1 &  & +\gamma_1 &  & +\delta_1 &  & -\varepsilon_1 &  & \ge & 1\\
- & \alpha_1 &  &  &  &  & +\gamma_2 &  & -\delta_2 &  & -\varepsilon_2 & \ge & 1\\
- &  &  & \beta_1 &  &  & +\gamma_2 &  & +\delta_2 &  & -\varepsilon_2 & \ge & 1\\
- &  & \alpha_2 &  &  & +\gamma_1 &  & -\delta_1 &  & +\varepsilon_1 &  & \ge & 1\\
- &  &  &  & \beta_2 & +\gamma_1 &  & +\delta_1 &  & +\varepsilon_1 &  & \ge & 1\\
- &  & \alpha_2 &  &  &  & +\gamma_2 &  & -\delta_2 &  & +\varepsilon_2 & \ge & 1\\
- &  &  &  & \beta_2 &  & +\gamma_2 &  & +\delta_2 &  & +\varepsilon_2 & \ge & 1\\
+\text{subject to} & \alpha_1 &  &  &  & +\gamma_1 &  & -\delta_1 &  & -\varepsilon_{21} &  & \ge & 1\\
+ &  &  & \beta_1 &  & +\gamma_1 &  & +\delta_1 &  & -\varepsilon_{21} &  & \ge & 1\\
+ & \alpha_1 &  &  &  &  & +\gamma_2 &  & -\delta_2 &  & -\varepsilon_{22} & \ge & 1\\
+ &  &  & \beta_1 &  &  & +\gamma_2 &  & +\delta_2 &  & -\varepsilon_{22} & \ge & 1\\
+ &  & \alpha_2 &  &  & +\gamma_1 &  & -\delta_1 &  & +\varepsilon_{21} &  & \ge & 1\\
+ &  &  &  & \beta_2 & +\gamma_1 &  & +\delta_1 &  & +\varepsilon_{21} &  & \ge & 1\\
+ &  & \alpha_2 &  &  &  & +\gamma_2 &  & -\delta_2 &  & +\varepsilon_{22} & \ge & 1\\
+ &  &  &  & \beta_2 &  & +\gamma_2 &  & +\delta_2 &  & +\varepsilon_{22} & \ge & 1\\
  & \alpha_1, & \alpha_2 &  &  &  &  &  &  &  &  & \ge & 0\\
  &  &  & \beta_1, & \beta_2 &  &  &  &  &  &  & \ge & 0\\
  &  &  &  &  & \gamma_1, & \gamma_2 &  &  &  &  & \ge & 0\\
  &  &  &  &  &  &  & \delta_1, & \delta_2 &  &  & \ge & 0\\
- &  &  &  &  &  &  &  &  & \varepsilon_1, & \varepsilon_2 & \ge & 0
+ &  &  &  &  &  &  &  &  & \varepsilon_{21}, & \varepsilon_{22} & \ge & 0
 \end{array}

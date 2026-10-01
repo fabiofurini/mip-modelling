@@ -28,6 +28,13 @@ branch to one company only.
 $1$ if branch $i$ goes to company $A$ and $0$ if it goes to $B$; plus one free
 variable $z$ for the min-max.
 
+One could also declare $z \ge 0$: the two constraints keep it above an absolute
+value, hence non-negative, and the solution would not change. It is left free
+because that is the choice one sees in the dual --- the column of a free variable
+gives an *equality* constraint, and that is where the condition
+$\sum_j (\lambda_j + \mu_j) = 1$ comes from --- and because this way
+non-negativity stays a consequence of the model, not an assumption added by hand.
+
 With $T_j = \sum_{i=1}^{s} v_{ij}$ the total turnover on product $j$, the
 turnover of $A$ is $\sum_i v_{ij}\, x_i$ and that of $B$ is
 $T_j - \sum_i v_{ij}\, x_i$: their difference is $2 \sum_i v_{ij}\, x_i - T_j$.
@@ -176,7 +183,7 @@ because it comes from integrality and not from the constraints.
 The optimal partition is $A = \{2, 3\}$ and $B = \{1, 4\}$, with differences
 $4$, $2$ and $2$ on the three products.
 
-| $LB$ (combinatorial) | $z(\mathit{LP})$ | $z(\mathit{LP}^+)$ | $z(\mathit{MILP})$ | $UB$ (heuristic) | gap |
+| $LB$ (combinatorial) | $z(\mathit{LP})$ | $z(\mathit{LP}^+)$ | $z(\mathit{MILP})$ | $UB$ (heuristic) | heuristic gap |
 |---:|---:|---:|---:|---:|---:|
 | 2 | 0 | 0 | 4 | 6 | $50.0\%$ |
 

@@ -193,7 +193,7 @@ $19$ trees are decorated with configuration 1 and one with 3, and $20$ boxes of
 type 1 are bought. Of the lights, $78$ of colour 1 are needed ($200$ are bought:
 many are left over) and $40$ of colour 2 (exactly $40$ are bought).
 
-| $LB$ (dual) | $z(\mathit{LP})$ | $z(\mathit{LP}^+)$ | $z(\mathit{MILP})$ | $UB$ (heuristic) | gap |
+| $LB$ (dual) | $z(\mathit{LP})$ | $z(\mathit{LP}^+)$ | $z(\mathit{MILP})$ | $UB$ (heuristic) | heuristic gap |
 |---:|---:|---:|---:|---:|---:|
 | 2140 | 2140 | 2141 | 2141 | 3121 | $45.8\%$ |
 

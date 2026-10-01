@@ -183,7 +183,7 @@ Plant 2 serves both customers: customer 1 with one box holding $5$ units of
 product 1 and $2$ of product 2, customer 2 with one box holding $4$ units of
 product 2.
 
-| $LB$ (combinatorial) | $z(\mathit{LP})$ | $z(\mathit{LP}^+)$ | $z(\mathit{MILP})$ | $UB$ (heuristic) | gap |
+| $LB$ (combinatorial) | $z(\mathit{LP})$ | $z(\mathit{LP}^+)$ | $z(\mathit{MILP})$ | $UB$ (heuristic) | heuristic gap |
 |---:|---:|---:|---:|---:|---:|
 | 2 | $11/10$ | $11/10$ | 2 | 2 | $0\%$ |
 

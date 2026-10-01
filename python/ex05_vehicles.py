@@ -2,7 +2,7 @@
 
 Two resources (steel and labour hours) and five vehicle types, each with a minimum
 quantity if it is produced. It is the same structure as problem 9.3 without the
-variety bonus: minimum lot (3.3) plus activation (3.1), that is semicontinuous
+variety bonus: minimum lot (3.3) plus activation (3.1), that is semi-integer
 variables.
 """
 import gurobipy as gp

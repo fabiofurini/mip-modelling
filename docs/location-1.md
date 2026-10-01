@@ -151,7 +151,7 @@ $z(\mathit{LP}^+) = 317$. $z(\mathit{MILP}) = 365$, with both locations
 open: location 1 serves client 1 and part of client 2, location 2 the rest
 of client 2 and all of client 3. Heuristic gap $20.3\%$.
 
-| $UB$ | $LB$ (dual) | $z(\mathit{LP})$ | $z(\mathit{LP}^+)$ | $z(\mathit{MILP})$ | gap |
+| $UB$ | $LB$ (dual) | $z(\mathit{LP})$ | $z(\mathit{LP}^+)$ | $z(\mathit{MILP})$ | heuristic gap |
 |---:|---:|---:|---:|---:|---:|
 | 439 | $1581/5$ | $1581/5$ | 317 | 365 | $20.3\%$ |
 

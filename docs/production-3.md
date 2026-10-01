@@ -1,6 +1,6 @@
 # Vehicles: minimum lot and a bonus for variety
 
-**Class:** MILP · **Links:** minimum lot (semicontinuous), counting the types, if and only if · **Script:** `python/fam09_3_vehicles.py`<br>
+**Class:** MILP · **Links:** minimum lot (semi-integer), counting the types, if and only if · **Script:** `python/fam09_3_vehicles.py`<br>
 **Difficulty:** ★★★ · **Time:** 45–60 min
 { .scheda }
 
@@ -29,8 +29,9 @@ least $\bar q_j$.
 **Variables.** $x_j \in \mathbb{Z}_{\ge 0}$ units produced of type $j$;
 $y_j \in \{0,1\}$ equals $1$ if type $j$ is produced; $z \in \{0,1\}$ equals $1$
 if the bonus is collected. The datum
-$M_j = \min_i \lfloor b_i / a_{ij} \rfloor$ is the maximum producible of type
-$j$ alone.
+$M_j = \min \{ \lfloor b_i / a_{ij} \rfloor : a_{ij} > 0 \}$ is the maximum
+producible of type $j$ alone: the minimum runs over the resources the type
+actually consumes, because a resource with $a_{ij} = 0$ does not limit it.
 
 <!-- model: 9.3 -->
 
@@ -52,11 +53,11 @@ $$
 **Description.** The objective adds up the profits of the vehicles produced and
 the bonus for variety. The **resource** constraints, one per resource, are the
 availabilities. The **minimum lot** and **activation** constraints, one per type
-each, make $x_j$ semicontinuous: either zero, or at least $\bar q_j$ and at most
+each, make $x_j$ semi-integer: either zero, or at least $\bar q_j$ and at most
 $M_j$. The **bonus** constraint, a single one, says that the bonus is collected
 only if at least two types are active.
 
-!!! note "The link between the variables: semicontinuity"
+!!! note "The link between the variables: semi-integrality"
     The two constraints together say
 
     $$\bar q_j\, y_j \;\le\; x_j \;\le\; M_j\, y_j .$$
@@ -73,7 +74,7 @@ only if at least two types are active.
 
 !!! note "The bonus is collected only with at least two types"
     The constraint reads $2 z \le \sum_{j=1}^{s} y_j$. If $z = 1$ then
-    $\sum_j y_j \ge 2$: at least two types are activated and, by semicontinuity,
+    $\sum_j y_j \ge 2$: at least two types are activated and, by semi-integrality,
     actually produced. The converse — if two types are active then $z = 1$ — is
     imposed by no constraint, but follows from **optimality**: setting $z = 1$
     stays feasible and increases the objective by $\bar r > 0$. With
@@ -154,10 +155,10 @@ $$
 <!-- model: end -->
 
 **Description.** $\pi_i$ is the price of one unit of resource $i$; $\ell_j$ and
-$\beta_j$ are the prices of the two semicontinuity constraints of type $j$, and
+$\beta_j$ are the prices of the two semi-integrality constraints of type $j$, and
 $\gamma$ that of the bonus. The objective prices all the available resources.
 The first group are the columns of the $x_j$: the resources one unit of type $j$
-consumes, corrected by the two semicontinuity constraints, must cover the profit
+consumes, corrected by the two semi-integrality constraints, must cover the profit
 $\bar p_j$. The second are the columns of the $y_j$: switching on type $j$
 forces at least $\bar q_j$ units and allows at most $M_j$, and the balance must
 cover the bonus $\gamma$. The last is the column of $z$: the bonus is collected
@@ -193,7 +194,7 @@ The optimal production is $(26, 16, 0)$: types $1$ and $2$ are activated, the
 bonus is collected, all $100$ tonnes of steel and $1180$ of the $1200$ available
 hours are used.
 
-| $LB$ (heuristic) | $z(\mathit{MILP})$ | $z(\mathit{LP}^+)$ | $z(\mathit{LP})$ | $UB$ (dual) | gap |
+| $LB$ (heuristic) | $z(\mathit{MILP})$ | $z(\mathit{LP}^+)$ | $z(\mathit{LP})$ | $UB$ (dual) | heuristic gap |
 |---:|---:|---:|---:|---:|---:|
 | 9200 | 9700 | 9750 | $20625/2$ | 11250 | $5.2\%$ |
 
@@ -265,7 +266,7 @@ folder). Notebook —
     ```python
     """Problem 9.3 -- Vehicles: minimum lot and a bonus for variety.
 
-    Three techniques together: the semicontinuous variable of the minimum lot (3.3),
+    Three techniques together: the semi-integer variable of the minimum lot (3.3),
     the count of the active types (3.11) and a bonus paid "if and only if" at least
     two types are produced (3.10). The bonus is collected only if the count reaches
     two: the missing direction follows from optimality, because the bonus is positive.
@@ -339,7 +340,7 @@ folder). Notebook —
     # ---------- 2. THE LP RELAXATION ----------
     zlp3, zlp3r, _ = rilassamenti(m3m)
 
-    # ---------- 3. THE DUAL OF THE RELAXATION (LOWER BOUND) ----------
+    # ---------- 3. THE DUAL OF THE RELAXATION (UPPER BOUND: IT IS A MAXIMUM) ----------
     dl3 = duale_3(a3, b3, p3, q3, r3)
     salva_modello(dl3, "fam09_3_duale")
     # recipe: gamma = r/2 (the smallest value allowed by 2 gamma >= r), beta = 0, and
@@ -370,7 +371,7 @@ folder). Notebook —
     print(f"  The smallest is resource {critica + 1}:  ub = {frazione(ub3)}")
     dualita_forte(dl3, zlp3)
 
-    # ---------- 4. CONSTRUCTIVE HEURISTIC (UPPER BOUND) ----------
+    # ---------- 4. CONSTRUCTIVE HEURISTIC (LOWER BOUND: IT IS A MAXIMUM) ----------
     # constructive heuristic: two types are activated (to collect the bonus) starting from the highest
     # profit per unit of the scarcest resource, then one fills up with the best type
     def euristica(a, b, p, q, r):

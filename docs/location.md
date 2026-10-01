@@ -21,7 +21,7 @@ depend on it, and how the budget on openings enters the model.
     interference), the other following from the objective. **Aggregated
     activation and a maximum variable** (8.4): the same activation as 8.1
     together with the maximum link $z_j \ge c_{ij} x_{ij}$ already seen in
-    problem 7.7.
+    problem 7.4.
 
 ## Family notation
 
@@ -75,7 +75,7 @@ depend on it, and how the budget on openings enters the model.
     ---
 
     Hub activation plus the highest connection cost per hub: the same
-    maximum variable as problem 7.7, heuristic reused from bin packing.
+    maximum variable as problem 7.4, heuristic reused from bin packing.
 
     [:octicons-arrow-right-24: MILP · activation, maximum](location-4.md)
 

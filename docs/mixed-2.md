@@ -152,7 +152,7 @@ $z(\mathit{MILP}) \le \mathit{UB} = 23$.
 At the optimum bids $4$ ($\{1,3\}$, profit $12$) and $5$ ($\{2,4\}$, profit
 $10$) are accepted: all four items are sold.
 
-| $LB$ (heuristic) | $z(\mathit{MILP})$ | $z(\mathit{LP})$ | $z(\mathit{LP}^+)$ | $UB$ (dual) | gap |
+| $LB$ (heuristic) | $z(\mathit{MILP})$ | $z(\mathit{LP})$ | $z(\mathit{LP}^+)$ | $UB$ (dual) | heuristic gap |
 |---:|---:|---:|---:|---:|---:|
 | 21 | 22 | 22 | 22 | 23 | $4.5\%$ |
 
@@ -285,7 +285,7 @@ folder). Notebook —
     # ---------- 2. THE LP RELAXATION ----------
     zlp3, zlp3r, _ = rilassamenti(m3)
 
-    # ---------- 3. THE DUAL OF THE RELAXATION (LOWER BOUND) ----------
+    # ---------- 3. THE DUAL OF THE RELAXATION (UPPER BOUND: IT IS A MAXIMUM) ----------
     dl3, lam3 = duale_3(n3, B3, p3)
     salva_modello(dl3, "fam10_2_duale")
     # Hand recipe: spread every bid over its items and take the maximum,
@@ -308,7 +308,7 @@ folder). Notebook —
           f"{frazione(ub_grezzo)})")
     dualita_forte(dl3, zlp3)
 
-    # ---------- 4. CONSTRUCTIVE HEURISTIC (UPPER BOUND) ----------
+    # ---------- 4. CONSTRUCTIVE HEURISTIC (LOWER BOUND: IT IS A MAXIMUM) ----------
     # constructive heuristic on the profit per item: the most profitable bids are accepted among those
     # whose items are still free. Cost O(r log r + r n).
     def euristica(n, B, p):

@@ -86,7 +86,7 @@ salva_modello(m5, "fam07_5_primale")
 # ---------- 2. THE LP RELAXATION ----------
 zlp5, zlp5r, _ = rilassamenti(m5)
 
-# ---------- 3. THE DUAL OF THE RELAXATION (LOWER BOUND) ----------
+# ---------- 3. THE DUAL OF THE RELAXATION (UPPER BOUND: IT IS A MAXIMUM) ----------
 d5 = duale_5(r5, t5, J5, f5, s5, a5)
 salva_modello(d5, "fam07_5_duale")
 pi_mano = max(r5[j] / t5[j] for j in R(7))
@@ -95,7 +95,7 @@ assert viol <= 1e-9
 print(f"Hand-built dual solution: lam = 0, pi = max_j r_j/t_j = {frazione(pi_mano)}  ->  ub = {frazione(ub5)}")
 dualita_forte(d5, zlp5)
 
-# ---------- 4. CONSTRUCTIVE HEURISTIC (UPPER BOUND) ----------
+# ---------- 4. CONSTRUCTIVE HEURISTIC (LOWER BOUND: IT IS A MAXIMUM) ----------
 xe, ye, passi = euristica_5(r5, t5, J5, f5, s5, a5)
 print("Class-by-class heuristic:")
 for i, s in enumerate(passi, 1):

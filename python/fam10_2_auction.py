@@ -62,7 +62,7 @@ stampa_lp(m3)
 # ---------- 2. THE LP RELAXATION ----------
 zlp3, zlp3r, _ = rilassamenti(m3)
 
-# ---------- 3. THE DUAL OF THE RELAXATION (LOWER BOUND) ----------
+# ---------- 3. THE DUAL OF THE RELAXATION (UPPER BOUND: IT IS A MAXIMUM) ----------
 dl3, lam3 = duale_3(n3, B3, p3)
 salva_modello(dl3, "fam10_2_duale")
 # Hand recipe: spread every bid over its items and take the maximum,
@@ -85,7 +85,7 @@ print(f"  (with the cruder recipe lam_i = max_j p_j one would only get "
       f"{frazione(ub_grezzo)})")
 dualita_forte(dl3, zlp3)
 
-# ---------- 4. CONSTRUCTIVE HEURISTIC (UPPER BOUND) ----------
+# ---------- 4. CONSTRUCTIVE HEURISTIC (LOWER BOUND: IT IS A MAXIMUM) ----------
 # constructive heuristic on the profit per item: the most profitable bids are accepted among those
 # whose items are still free. Cost O(r log r + r n).
 def euristica(n, B, p):

@@ -52,7 +52,7 @@ smallest index, so the run is reproducible.
 
 On the instance of [problem 7.1](scheduling-1.md) (a **minimisation**):
 
-| Heuristic | $UB$ | $z(\mathit{MILP})$ | gap |
+| Heuristic | $UB$ | $z(\mathit{MILP})$ | heuristic gap |
 |---|---:|---:|---:|
 | next-fit | 14 | 11 | $27.3\%$ |
 | first-fit | 14 | 11 | $27.3\%$ |
@@ -196,7 +196,7 @@ between two machines is needed.
 
 ## The overview of the heuristics
 
-| Heuristic | Direction | value | $z(\mathit{MILP})$ | gap |
+| Heuristic | Direction | value | $z(\mathit{MILP})$ | heuristic gap |
 |---|---|---:|---:|---:|
 | next-fit / first-fit (assignment) | min ($UB$) | 14 | 11 | $27.3\%$ |
 | best-fit on cost (assignment) | min ($UB$) | 11 | 11 | $0.0\%$ |

@@ -12,8 +12,9 @@ modelling work consists precisely in recognising which.
 - **Selection with alternative modes** (10.1 and 10.2): a subset is chosen, but
   each object has more than one way of being chosen, and the ways exclude one
   another.
-- **Counts with a minimum lot** (10.3): the variables are not binary but
-  integer quantities, and a quantity may be zero or else above a threshold.
+- **Quantities with a minimum lot** (10.3): next to the binaries there are
+  continuous quantities, and a quantity may be zero or else between a threshold
+  and a cap.
 - **Covering with containers** (10.4 and 10.5): a requirement must be covered
   by buying packs of fixed composition, and the excess is either paid for or
   wasted.

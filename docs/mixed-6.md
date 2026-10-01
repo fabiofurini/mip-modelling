@@ -39,7 +39,7 @@ $$
 \sum_{j=1}^{r} y_{ij} &\le g_i, & \forall i \in \{1, 2, \dots, s\}, \\
 \sum_{i=1}^{s} \bigl(x_{ij} + y_{ij}\bigr) &\le d_j, & \forall j \in \{1, 2, \dots, r\}, \\
 \sum_{i=1}^{s} \bigl(x_{ij} - y_{ij}\bigr) &\ge 0, & \forall j \in \{1, 2, \dots, r\}, \\
-x_{cj} + y_{cj} - \sum_{i \ne c} \bigl(x_{ij} + y_{ij}\bigr) &\ge 0, & \forall j \in \{1, 2, \dots, r\}, \\
+x_{cj} + y_{cj} - x_{ij} - y_{ij} &\ge 0, & \forall i \in \{1, 2, \dots, s\},\ i \ne c,\ \forall j \in \{1, 2, \dots, r\}, \\
 x_{ij} &\in \Z_{\ge 0}, & \forall i \in \{1, 2, \dots, s\},\ \forall j \in \{1, 2, \dots, r\}, \\
 y_{ij} &\in \Z_{\ge 0}, & \forall i \in \{1, 2, \dots, s\},\ \forall j \in \{1, 2, \dots, r\}.
 \end{aligned}
@@ -52,23 +52,30 @@ $$
 more girls or boys than have applied ($2s$ constraints). The **capacity**
 constraints, one per camp, are the available places. The **balance**
 constraints, one per camp, impose "girls $\ge$ boys". The **majority**
-constraints, again one per camp, impose that nationality $c$ is not in the
-minority.
+constraints, one per nationality-camp pair, impose that nationality $c$ is no
+fewer than each of the others ($(s-1)\,r$ constraints).
 
 !!! note "The majority constraint with more than two nationalities"
-    With $s = 2$ nationalities the constraint "nationality $c$ is no fewer than
-    every other" is written once: there is only one "other" nationality. With
-    $s > 2$ the statement of the problem asks for
+    The majority constraint translates the statement literally: nationality $c$
+    is no fewer than *each* of the others, one inequality per pair, $(s-1)\,r$
+    in all. There is however a second, shorter writing that is easy to mistake
+    for this one:
 
-    $$x_{cj} + y_{cj} \;\ge\; x_{ij} + y_{ij}
-    \qquad \forall i \in \{1, 2, \dots, s\},\ i \ne c,\ \forall j \in \{1, 2, \dots, r\} ,$$
+    $$x_{cj} + y_{cj} \;\ge\; \sum_{i \ne c} \bigl(x_{ij} + y_{ij}\bigr)
+    \qquad \forall j \in \{1, 2, \dots, r\} ,$$
 
-    that is $(s-1)\,r$ inequalities. The aggregated form written above is
-    *stronger*: it imposes that nationality $c$ is no fewer than *all the others
+    that is $r$ inequalities instead of $(s-1)\,r$. It says something else, and
+    it is *stronger*: that nationality $c$ is no fewer than *all the others
     together*, that is, that it takes at least half the places of every camp.
-    The two readings coincide for $s = 2$ and diverge for $s > 2$; the choice
-    must be made explicitly, by reading the statement, not out of writing
-    convenience.
+    The two readings coincide for $s = 2$ --- with a single "other" nationality
+    the sum has one term --- and diverge for $s > 2$, where the aggregated form
+    cuts off solutions the statement allows. The choice is made by reading the
+    text, not for convenience of writing: fewer constraints does not mean a
+    better model if they are not the constraints of the problem.
+
+    On this instance $s = 2$, so the two forms give the same numbers; and it is
+    precisely because $s = 2$ that the combinatorial argument below can read the
+    majority as "half the places".
 
 ## The model in gurobipy
 
@@ -84,8 +91,8 @@ m.addConstrs((gp.quicksum(x[i, j] + y[i, j] for i in range(s)) <= d[j]
               for j in range(r)), name="capacity")
 m.addConstrs((gp.quicksum(x[i, j] - y[i, j] for i in range(s)) >= 0
               for j in range(r)), name="balance")
-m.addConstrs((x[c, j] + y[c, j] - gp.quicksum(x[i, j] + y[i, j]
-              for i in range(s) if i != c) >= 0 for j in range(r)), name="majority")
+m.addConstrs((x[c, j] + y[c, j] - x[i, j] - y[i, j] >= 0
+              for i in range(s) if i != c for j in range(r)), name="majority")
 ```
 
 ## The instance
@@ -121,8 +128,8 @@ $$z(\mathit{MILP}) \ge \mathit{LB} = 15 .$$
 ## LP relaxation and dual: the dual bound
 
 Associate $\alpha_i, \beta_i, \gamma_j \ge 0$ with the three groups of $\le$
-constraints and $\delta_j, \varepsilon_j \ge 0$ with the two composition groups,
-with $\sigma_i = -1$ for $i = c$ and $\sigma_i = +1$ otherwise.
+constraints, $\delta_j \ge 0$ with the balance and $\varepsilon_{ij} \ge 0$ with
+the majority, one per pair (nationality $i \ne c$, camp $j$).
 
 <!-- model: 10.6-dual -->
 
@@ -130,13 +137,15 @@ $$
 \begin{aligned}
 \min ~~ \sum_{i=1}^{s} f_i\, \alpha_i + \sum_{i=1}^{s} g_i\, \beta_i
       + \sum_{j=1}^{r} d_j\, \gamma_j & & \\
-\text{subject to} \quad \alpha_i + \gamma_j - \delta_j + \sigma_i\, \varepsilon_j &\ge 1, & \forall i \in \{1, 2, \dots, s\},\ \forall j \in \{1, 2, \dots, r\}, \\
-\beta_i + \gamma_j + \delta_j + \sigma_i\, \varepsilon_j &\ge 1, & \forall i \in \{1, 2, \dots, s\},\ \forall j \in \{1, 2, \dots, r\}, \\
+\text{subject to} \quad \alpha_c + \gamma_j - \delta_j - \sum_{k \ne c} \varepsilon_{kj} &\ge 1, & \forall j \in \{1, 2, \dots, r\}, \\
+\beta_c + \gamma_j + \delta_j - \sum_{k \ne c} \varepsilon_{kj} &\ge 1, & \forall j \in \{1, 2, \dots, r\}, \\
+\alpha_i + \gamma_j - \delta_j + \varepsilon_{ij} &\ge 1, & \forall i \ne c,\ \forall j \in \{1, 2, \dots, r\}, \\
+\beta_i + \gamma_j + \delta_j + \varepsilon_{ij} &\ge 1, & \forall i \ne c,\ \forall j \in \{1, 2, \dots, r\}, \\
 \alpha_i &\ge 0, & \forall i \in \{1, 2, \dots, s\}, \\
 \beta_i &\ge 0, & \forall i \in \{1, 2, \dots, s\}, \\
 \gamma_j &\ge 0, & \forall j \in \{1, 2, \dots, r\}, \\
 \delta_j &\ge 0, & \forall j \in \{1, 2, \dots, r\}, \\
-\varepsilon_j &\ge 0, & \forall j \in \{1, 2, \dots, r\},
+\varepsilon_{ij} &\ge 0, & \forall i \ne c,\ \forall j \in \{1, 2, \dots, r\},
 \end{aligned}
 $$
 
@@ -144,14 +153,19 @@ $$
 
 **Description.** $\alpha_i$ and $\beta_i$ are the prices of a place for the
 girls and for the boys of nationality $i$; $\gamma_j$ is the price of a place in
-camp $j$, $\delta_j$ that of the balance constraint and $\varepsilon_j$ that of
-the majority constraint. The objective prices the availabilities and the
-capacities. The first group of constraints are the columns of the $x_{ij}$:
-accepting one girl of nationality $i$ in camp $j$ uses one place of her
-nationality and one of the camp, raises the balance by one unit and moves the
-majority by $\sigma_i$; the total value must cover the unit that girl
-contributes to the primal objective. The second says the same for the boys, with
-the sign of the balance reversed.
+camp $j$, $\delta_j$ that of the balance constraint and $\varepsilon_{ij}$ that
+of the comparison between nationality $i$ and the majority one in camp $j$. The
+objective prices the availabilities and the capacities.
+
+The dual constraints are the columns of the primal, and they split into two
+blocks because nationality $c$ appears in the comparisons differently from the
+others. The first is the column of the $x_{cj}$: accepting one girl of the
+majority nationality uses one place of her nationality and one of the camp,
+raises the balance by one unit and *loosens* every comparison of that camp, one
+per other nationality --- hence the sum with the minus sign. The third is the
+column of the $x_{ij}$ with $i \ne c$: that girl tightens one comparison only,
+her own. The second and the fourth say the same for the boys, with the sign of
+the balance reversed.
 
 **Recipe.** The simplest one prices capacity only:
 $\alpha = \beta = \delta = \varepsilon = 0$ and $\gamma_j = 1$ for every camp.
@@ -165,9 +179,9 @@ bounds $z(\mathit{LP}) = 23$.
 
 ## Two more combinatorial arguments
 
-The bound $23$ is not the only one that can be read off the data. The majority
-constraint says that in every camp nationality $c$ takes at least half the
-places; since there are $f_c + g_c = 12$ children of that nationality in all, at
+The bound $23$ is not the only one that can be read off the data. With $s = 2$
+the majority constraint says that in every camp nationality $c$ takes at least
+half the places; since there are $f_c + g_c = 12$ children of that nationality in all, at
 most $2 \cdot 12 = 24$ can be accepted. Likewise the balance constraint says
 that in every camp the girls are at least half, and there are $18$ girls: at
 most $2 \cdot 18 = 36$ can be accepted.
@@ -191,7 +205,7 @@ camp 1 and hands command to the majority nationality.
 
 Both camps are full.
 
-| $LB$ (heuristic) | $z(\mathit{MILP})$ | $z(\mathit{LP})$ | $UB$ (dual) | gap |
+| $LB$ (heuristic) | $z(\mathit{MILP})$ | $z(\mathit{LP})$ | $UB$ (dual) | heuristic gap |
 |---:|---:|---:|---:|---:|
 | 15 | 23 | 23 | 23 | $34.8\%$ |
 
@@ -253,7 +267,7 @@ folder). Notebook —
 
 <!-- embedded-script: begin (regenerated by python/embed_code.py) -->
 
-??? example "Show the complete script — `python/fam10_6_camps.py` (259 lines)"
+??? example "Show the complete script — `python/fam10_6_camps.py` (263 lines)"
 
     ```python
     """Problem 10.6 -- Summer camps: children of several nationalities in several camps.
@@ -298,8 +312,10 @@ folder). Notebook —
                      name="capacity")
         m.addConstrs((gp.quicksum(x[i, j] - y[i, j] for i in R(s)) >= 0 for j in R(r)),
                      name="balance")
-        m.addConstrs((x[c, j] + y[c, j]
-                      - gp.quicksum(x[i, j] + y[i, j] for i in R(s) if i != c) >= 0 for j in R(r)),
+        # the statement asks that nationality c be no fewer than *each* other one:
+        # one inequality per pair (i, j), not a single aggregated sum
+        m.addConstrs((x[c, j] + y[c, j] - x[i, j] - y[i, j] >= 0
+                      for i in R(s) if i != c for j in R(r)),
                      name="majority")
         return m, x, y
 
@@ -307,10 +323,11 @@ folder). Notebook —
     def duale_1(f, g, d, c):
         """min sum_i f_i alpha_i + sum_i g_i beta_i + sum_j d_j gamma_j
 
-        with alpha, beta, gamma >= 0 for the three <= constraints, and delta_j, eps_j >= 0
-        for the two composition constraints (written as >= 0, so they enter the dual
-        constraints with a minus sign). The sign multiplying eps_j depends on i: it is -1
-        for the majority nationality c and +1 for all the others.
+        with alpha, beta, gamma >= 0 for the three <= constraints, delta_j >= 0 for the
+        balance and eps_{ij} >= 0, one per pair (nationality i != c, camp j), for the
+        majority. In the dual constraint of a variable of nationality c all the
+        eps_{kj} appear with a minus sign; in that of a nationality i != c only
+        eps_{ij} appears, with a plus sign.
         """
         s, r = len(f), len(d)
         dl = nuovo_modello("dual_camps")
@@ -318,16 +335,17 @@ folder). Notebook —
         beta = dl.addVars(s, name="beta")
         gamma = dl.addVars(r, name="gamma")
         delta = dl.addVars(r, name="delta")
-        eps = dl.addVars(r, name="eps")
+        eps = dl.addVars([(i, j) for i in R(s) if i != c for j in R(r)], name="eps")
         dl.setObjective(gp.quicksum(f[i] * alpha[i] for i in R(s))
                         + gp.quicksum(g[i] * beta[i] for i in R(s))
                         + gp.quicksum(d[j] * gamma[j] for j in R(r)), GRB.MINIMIZE)
         for i in R(s):
-            segno = -1 if i == c else 1
             for j in R(r):
-                dl.addConstr(alpha[i] + gamma[j] - delta[j] + segno * eps[j] >= 1,
+                magg = (-gp.quicksum(eps[k, j] for k in R(s) if k != c) if i == c
+                        else eps[i, j])
+                dl.addConstr(alpha[i] + gamma[j] - delta[j] + magg >= 1,
                              name=f"rcx[{i},{j}]")
-                dl.addConstr(beta[i] + gamma[j] + delta[j] + segno * eps[j] >= 1,
+                dl.addConstr(beta[i] + gamma[j] + delta[j] + magg >= 1,
                              name=f"rcy[{i},{j}]")
         return dl
 
