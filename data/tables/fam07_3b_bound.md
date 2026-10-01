@@ -1,7 +1,7 @@
 |  | value | what it is |
 |---|---:|---|
-| $\ub$ | $34$ | heuristic solution |
-| $\lb$ | $20$ | dual certificate built by hand |
-| $\zlp$ | $34$ | relaxation without the bounds |
-| $\zlpp$ | $\frac{680}{21}$ | relaxation with the bounds |
-| $\zmilp$ | $20$ | optimum of the MILP |
+| $\mathit{UB}$ | $34$ | heuristic solution |
+| $\mathit{LB}$ | $20$ | dual certificate built by hand |
+| $z(\mathit{LP})$ | $34$ | relaxation without the bounds |
+| $z(\mathit{LP}^+)$ | $\frac{680}{21}$ | relaxation with the bounds |
+| $z(\mathit{MILP})$ | $20$ | optimum of the MILP |

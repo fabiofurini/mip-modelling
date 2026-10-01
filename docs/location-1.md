@@ -166,11 +166,11 @@ site 1 already has the lowest cost per litre.
 
 |  | value | what it is |
 |---|---:|---|
-| $\ub$ | $439$ | heuristic solution |
-| $\lb$ | $\frac{1581}{5}$ | dual certificate built by hand |
-| $\zlp$ | $325$ | relaxation without the bounds |
-| $\zlpp$ | $325$ | relaxation with the bounds |
-| $\zmilp$ | $365$ | optimum of the MILP |
+| $\mathit{UB}$ | $439$ | heuristic solution |
+| $\mathit{LB}$ | $\frac{1581}{5}$ | dual certificate built by hand |
+| $z(\mathit{LP})$ | $325$ | relaxation without the bounds |
+| $z(\mathit{LP}^+)$ | $325$ | relaxation with the bounds |
+| $z(\mathit{MILP})$ | $365$ | optimum of the MILP |
 
 <!-- tabella-variante: fine -->
 

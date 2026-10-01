@@ -40,12 +40,18 @@ def tabella(riga, conf) -> str:
             "\\bottomrule\n\\end{tabular}\n\\end{center}\n")
 
 
+# sul sito le macro della dispensa non esistono: si scrive la notazione per esteso
+SITO = {"$\\ub$": "$\\mathit{UB}$", "$\\lb$": "$\\mathit{LB}$",
+        "$\\zlp$": "$z(\\mathit{LP})$", "$\\zlpp$": "$z(\\mathit{LP}^+)$",
+        "$\\zmilp$": "$z(\\mathit{MILP})$"}
+
+
 def tabella_md(riga, conf) -> str:
     """The same table, in markdown, for the site pages."""
     testa = conf["testa"]
     righe = [f"| {testa[0]} | {testa[1]} | {testa[2]} |", "|---|---:|---|"]
     for etichetta, colonna, nota in conf["voci"]:
-        righe.append(f"| ${etichetta.strip('$')}$ | ${numero(riga[colonna])}$ | {nota} |")
+        righe.append(f"| {SITO[etichetta]} | ${numero(riga[colonna])}$ | {nota} |")
     return "\n".join(righe) + "\n"
 
 

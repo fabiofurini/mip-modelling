@@ -161,11 +161,11 @@ $\varepsilon_j$, that is, the release replaces the processing time.
 
 |  | value | what it is |
 |---|---:|---|
-| $\ub$ | $12$ | heuristic solution |
-| $\lb$ | $2$ | dual certificate built by hand |
-| $\zlp$ | $4$ | relaxation without the bounds |
-| $\zlpp$ | $4$ | relaxation with the bounds |
-| $\zmilp$ | $12$ | optimum of the MILP |
+| $\mathit{UB}$ | $12$ | heuristic solution |
+| $\mathit{LB}$ | $2$ | dual certificate built by hand |
+| $z(\mathit{LP})$ | $4$ | relaxation without the bounds |
+| $z(\mathit{LP}^+)$ | $4$ | relaxation with the bounds |
+| $z(\mathit{MILP})$ | $12$ | optimum of the MILP |
 
 <!-- tabella-variante: fine -->
 
