@@ -110,6 +110,11 @@ def documento() -> str:
 
 
 def main(verifica: bool = False) -> int:
+    # the sources of the notes are private and not in the repository: in CI the
+    # check has nothing to read, and that is not an error
+    if not DIR_CAPITOLI.is_dir():
+        print("sources of the notes absent: check of the collection skipped")
+        return 0
     nuovo = documento()
     vecchio = USCITA.read_text(encoding="utf-8") if USCITA.exists() else ""
     if verifica:
