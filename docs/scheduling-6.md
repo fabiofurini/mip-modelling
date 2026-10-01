@@ -143,17 +143,9 @@ $10 + 22 + 10$. Heuristic gap $24\%$.
 ??? question "7.6.1 — At least one job per class"
     Execute at least one job of every class. What happens to $z$?
 
-    !!! tip "Solution"
-        The solutions of the additional questions are reserved for instructors.
-        Below, though, one variant of this problem is worked out in full:
-        model, feasible heuristic, dual certificate and bound table.
 ??? question "7.6.2 — Penalty for a class started and not finished"
     Starting a class without completing it costs $w = 3$.
 
-    !!! tip "Solution"
-        The solutions of the additional questions are reserved for instructors.
-        Below, though, one variant of this problem is worked out in full:
-        model, feasible heuristic, dual certificate and bound table.
 ## The sandwich on variant 6a
 
 "At least one job per class" adds a family $\omega_c \le 0$ that enters the

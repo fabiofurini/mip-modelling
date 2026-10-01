@@ -210,19 +210,9 @@ hours are used.
     The bonus is collected only if at least *three* different types are
     produced. How does the model change? What is the new optimum?
 
-    !!! tip "Solution"
-        The solutions of the additional questions are reserved for instructors.
-        Below, though, one variant of this problem is worked out in full:
-        model, feasible heuristic, dual certificate and bound table.
-
 ??? question "9.3.2 — Zero bonus"
     The diversification grant is abolished, that is $\bar r = 0$. What happens to
     the variable $z$?
-
-    !!! tip "Solution"
-        The solutions of the additional questions are reserved for instructors.
-        Below, though, one variant of this problem is worked out in full:
-        model, feasible heuristic, dual certificate and bound table.
 
 ## The sandwich on variant 3a
 

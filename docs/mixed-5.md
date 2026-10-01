@@ -199,19 +199,9 @@ optimal value.
 ??? question "10.5.1 — Smaller boxes"
     The boxes hold $4$ units instead of $10$. What is the new optimum?
 
-    !!! tip "Solution"
-        The solutions of the additional questions are reserved for instructors.
-        Below, though, one variant of this problem is worked out in full:
-        model, feasible heuristic, dual certificate and bound table.
-
 ??? question "10.5.2 — Products kept apart"
     Different products cannot travel in the same box. How does the model change?
     What is the new optimum?
-
-    !!! tip "Solution"
-        The solutions of the additional questions are reserved for instructors.
-        Below, though, one variant of this problem is worked out in full:
-        model, feasible heuristic, dual certificate and bound table.
 
 ## The sandwich on variant 5a
 

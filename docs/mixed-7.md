@@ -193,20 +193,10 @@ that is why the column is called "certified bound".
     Branches $1$ and $2$ share premises and must stay in the same company. How
     does the model change? What is the new optimum?
 
-    !!! tip "Solution"
-        The solutions of the additional questions are reserved for instructors.
-        Below, though, one variant of this problem is worked out in full:
-        model, feasible heuristic, dual certificate and bound table.
-
 ??? question "10.7.2 — Min-sum instead of min-max"
     One wants to minimise the *sum* of the differences over all products instead
     of the worst difference. How does the model change? Is the optimal partition
     the same?
-
-    !!! tip "Solution"
-        The solutions of the additional questions are reserved for instructors.
-        Below, though, one variant of this problem is worked out in full:
-        model, feasible heuristic, dual certificate and bound table.
 
 ## The sandwich on variant 7a
 

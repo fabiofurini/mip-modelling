@@ -204,20 +204,10 @@ bounds is exact.
     All three configurations are to appear. How does the model change? What is
     the new optimum?
 
-    !!! tip "Solution"
-        The solutions of the additional questions are reserved for instructors.
-        Below, though, one variant of this problem is worked out in full:
-        model, feasible heuristic, dual certificate and bound table.
-
 ??? question "10.4.2 — A minimum lot per configuration"
     Every configuration used must decorate at least three trees (below that
     threshold it is not worth equipping the crew). How does the model change?
     What is the new optimum?
-
-    !!! tip "Solution"
-        The solutions of the additional questions are reserved for instructors.
-        Below, though, one variant of this problem is worked out in full:
-        model, feasible heuristic, dual certificate and bound table.
 
 ## The sandwich on variant 4a
 

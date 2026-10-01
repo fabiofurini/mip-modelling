@@ -193,18 +193,10 @@ machines 2 and 3 on, $\tilde x_{12} = \tilde x_{23} = \tilde x_{33} = 1$.
     Every machine used must work at least $\ell = 8$ minutes. Model and find
     the new optimum.
 
-    !!! tip "Solution"
-        The solutions of the additional questions are reserved for instructors.
-        Below, though, one variant of this problem is worked out in full:
-        model, feasible heuristic, dual certificate and bound table.
 ??? question "7.2.2 — Link between two activations"
     If machine 1 is used, machine 3 must be used too. Write the constraint
     and discuss what it imposes and what it does not.
 
-    !!! tip "Solution"
-        The solutions of the additional questions are reserved for instructors.
-        Below, though, one variant of this problem is worked out in full:
-        model, feasible heuristic, dual certificate and bound table.
 ## The sandwich on variant 2b
 
 The link between activations adds $\rho \le 0$, but here it does not pay to move

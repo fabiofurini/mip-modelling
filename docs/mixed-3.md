@@ -188,19 +188,9 @@ indicators greater than one.
     The minimum lot rises from $1$ to $2$ kilos for every chosen food. How does
     the model change? What is the new optimum?
 
-    !!! tip "Solution"
-        The solutions of the additional questions are reserved for instructors.
-        Below, though, one variant of this problem is worked out in full:
-        model, feasible heuristic, dual certificate and bound table.
-
 ??? question "10.3.2 — More variety"
     At least four different foods are wanted instead of three. How does the
     model change? What is the new optimum?
-
-    !!! tip "Solution"
-        The solutions of the additional questions are reserved for instructors.
-        Below, though, one variant of this problem is worked out in full:
-        model, feasible heuristic, dual certificate and bound table.
 
 ## The sandwich on variant 3b
 

@@ -143,17 +143,9 @@ $\tilde\tau = (6, 0, 5)$.
 ??? question "7.7.1 — Release dates"
     Job 2 cannot start before time $\rho_2 = 2$.
 
-    !!! tip "Solution"
-        The solutions of the additional questions are reserved for instructors.
-        Below, though, one variant of this problem is worked out in full:
-        model, feasible heuristic, dual certificate and bound table.
 ??? question "7.7.2 — Minimising the maximum tardiness"
     Minimise the tardiness of the latest job.
 
-    !!! tip "Solution"
-        The solutions of the additional questions are reserved for instructors.
-        Below, though, one variant of this problem is worked out in full:
-        model, feasible heuristic, dual certificate and bound table.
 ## The sandwich on variant 7a
 
 The release dates add $\varepsilon_j \ge 0$ with right-hand side $\rho_j + t_j$.

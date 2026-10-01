@@ -208,19 +208,9 @@ which costs only $5$ euros of contribution.
     one of them may be taken, in either option. How does the model change? What
     is the new optimum?
 
-    !!! tip "Solution"
-        The solutions of the additional questions are reserved for instructors.
-        Below, though, one variant of this problem is worked out in full:
-        model, feasible heuristic, dual certificate and bound table.
-
 ??? question "10.1.2 — At least four prizes"
     Besides the preference threshold, the customer wants at least four different
     prizes. How does the model change? What is the new optimum?
-
-    !!! tip "Solution"
-        The solutions of the additional questions are reserved for instructors.
-        Below, though, one variant of this problem is worked out in full:
-        model, feasible heuristic, dual certificate and bound table.
 
 ## The sandwich on variant 1b
 

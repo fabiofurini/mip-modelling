@@ -119,18 +119,10 @@ gap $20.0\%$.
     Exactly $k$ locations must be open. How does the model change? What
     is the new optimum?
 
-    !!! tip "Solution"
-        The solutions of the additional questions are reserved for instructors.
-        Below, though, one variant of this problem is worked out in full:
-        model, feasible heuristic, dual certificate and bound table.
 ??? question "8.2.2 — Proximity coverage for one client"
     Client 1 must be served within distance $4$. How is this modelled?
     What is the new optimum?
 
-    !!! tip "Solution"
-        The solutions of the additional questions are reserved for instructors.
-        Below, though, one variant of this problem is worked out in full:
-        model, feasible heuristic, dual certificate and bound table.
 ## The sandwich on variant 2a
 
 The algebra settles it in one line: the column of the $x_l$ imposes

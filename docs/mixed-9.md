@@ -174,18 +174,8 @@ certified gap, before solving the MILP, is $(15-12)/15 = 20\%$.
     The library buys a third shelf, as wide as the others. What is the new
     optimum?
 
-    !!! tip "Solution"
-        The solutions of the additional questions are reserved for instructors.
-        Below, though, one variant of this problem is worked out in full:
-        model, feasible heuristic, dual certificate and bound table.
-
 ??? question "10.9.2 — Wider shelves"
     The shelves are $12$ wide instead of $10$. What is the new optimum?
-
-    !!! tip "Solution"
-        The solutions of the additional questions are reserved for instructors.
-        Below, though, one variant of this problem is worked out in full:
-        model, feasible heuristic, dual certificate and bound table.
 
 ## The sandwich on variant 9b
 

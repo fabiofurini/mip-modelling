@@ -258,19 +258,9 @@ costs $60$ euros against the $1600$ of a hiring in the third month.
     The hiring cost rises from $100$ to $3000$ euros (selection and training).
     How does the optimal plan change?
 
-    !!! tip "Solution"
-        The solutions of the additional questions are reserved for instructors.
-        Below, though, one variant of this problem is worked out in full:
-        model, feasible heuristic, dual certificate and bound table.
-
 ??? question "9.2.2 — Overtime"
     Every worker may do up to $40$ hours of overtime a month, paid $25$ euros an
     hour. How does the model change? Is it worth using them?
-
-    !!! tip "Solution"
-        The solutions of the additional questions are reserved for instructors.
-        Below, though, one variant of this problem is worked out in full:
-        model, feasible heuristic, dual certificate and bound table.
 
 ## The sandwich on variant 2a
 

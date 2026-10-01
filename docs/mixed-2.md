@@ -173,19 +173,9 @@ items on the shelf.
     Bids $4$ and $5$ come from the same participant, who may win at most one of
     them. How does the model change? What is the new optimum?
 
-    !!! tip "Solution"
-        The solutions of the additional questions are reserved for instructors.
-        Below, though, one variant of this problem is worked out in full:
-        model, feasible heuristic, dual certificate and bound table.
-
 ??? question "10.2.2 — Limited deliveries"
     In this round the auctioneer can deliver at most two items in total. How
     does the model change? What is the new optimum?
-
-    !!! tip "Solution"
-        The solutions of the additional questions are reserved for instructors.
-        Below, though, one variant of this problem is worked out in full:
-        model, feasible heuristic, dual certificate and bound table.
 
 ## The sandwich on variant 2b
 

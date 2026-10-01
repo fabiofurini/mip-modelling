@@ -204,19 +204,9 @@ the majority.
 ??? question "10.6.1 — A larger camp"
     Camp 1 is enlarged and reaches $20$ places. What is the new optimum?
 
-    !!! tip "Solution"
-        The solutions of the additional questions are reserved for instructors.
-        Below, though, one variant of this problem is worked out in full:
-        model, feasible heuristic, dual certificate and bound table.
-
 ??? question "10.6.2 — An indivisible nationality"
     For organisational reasons the children of nationality 1 must all stay in
     the same camp. How does the model change? What is the new optimum?
-
-    !!! tip "Solution"
-        The solutions of the additional questions are reserved for instructors.
-        Below, though, one variant of this problem is worked out in full:
-        model, feasible heuristic, dual certificate and bound table.
 
 ## The sandwich on variant 6a
 

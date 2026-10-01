@@ -142,18 +142,10 @@ best.
 ??? question "7.4.1 — Minimising the time of the slowest machine"
     Minimise the maximum of the processing times (makespan), not the sum.
 
-    !!! tip "Solution"
-        The solutions of the additional questions are reserved for instructors.
-        Below, though, one variant of this problem is worked out in full:
-        model, feasible heuristic, dual certificate and bound table.
 ??? question "7.4.2 — Fixed cost if the machine works"
     Switching a machine on costs $g_m = 4$ euros, one minute costs $1$ euro.
     Which link is needed and what is the smallest big-M?
 
-    !!! tip "Solution"
-        The solutions of the additional questions are reserved for instructors.
-        Below, though, one variant of this problem is worked out in full:
-        model, feasible heuristic, dual certificate and bound table.
 ## The sandwich on variant 4a
 
 The min-max removes the cost from the $y_m$ and adds $\nu_m \ge 0$ with

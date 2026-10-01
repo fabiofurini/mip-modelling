@@ -149,18 +149,10 @@ second machine ($c_1 = 20 > r_2 = 15$). Heuristic gap: $20\%$.
     All jobs must be executed. How does the model change and how much does
     the obligation cost?
 
-    !!! tip "Solution"
-        The solutions of the additional questions are reserved for instructors.
-        Below, though, one variant of this problem is worked out in full:
-        model, feasible heuristic, dual certificate and bound table.
 ??? question "7.3.2 — A job conditional on another"
     Job 3 can be executed only if job 2 is executed too. Write the constraint
     and find the new optimum.
 
-    !!! tip "Solution"
-        The solutions of the additional questions are reserved for instructors.
-        Below, though, one variant of this problem is worked out in full:
-        model, feasible heuristic, dual certificate and bound table.
 ## The sandwich on variant 3b
 
 The new multiplier $\lambda \ge 0$ discounts the columns of job 3 and loads those

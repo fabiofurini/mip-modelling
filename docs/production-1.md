@@ -157,18 +157,10 @@ optimistic.
     The plant cannot produce more than $35$ units a day. How does the model
     change? What is the new optimum?
 
-    !!! tip "Solution"
-        The solutions of the additional questions are reserved for instructors.
-        Below, though, one variant of this problem is worked out in full:
-        model, feasible heuristic, dual certificate and bound table.
 ??? question "9.1.2 — Minimum lot"
     If production takes place on a day, at least $25$ units must be produced. How
     does the model change? What is the new optimum?
 
-    !!! tip "Solution"
-        The solutions of the additional questions are reserved for instructors.
-        Below, though, one variant of this problem is worked out in full:
-        model, feasible heuristic, dual certificate and bound table.
 ## The sandwich on variant 1a
 
 The cap $x_t \le 35$ adds to the dual a family $\nu_t \ge 0$ with right-hand
