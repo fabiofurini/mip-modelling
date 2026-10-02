@@ -3,6 +3,8 @@
 **Class:** implementation · **Script:** `python/cap06_gurobi.py`
 { .scheda }
 
+[![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/fabiofurini/mip-modelling/blob/main/notebooks/cap06_gurobi.ipynb)
+
 "Integer" means "integer within a tolerance", and `relax()` builds the
 relaxation of the model one has just written.
 

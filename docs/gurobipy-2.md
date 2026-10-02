@@ -3,6 +3,8 @@
 **Class:** implementation · **Script:** `python/cap06_gurobi.py`
 { .scheda }
 
+[![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/fabiofurini/mip-modelling/blob/main/notebooks/cap06_gurobi.ipynb)
+
 `Status`, `SolCount`, `ObjVal`, `ObjBound`, `MIPGap`, `NodeCount`: what they
 mean and which ones may be read, including the case where the solver has not
 finished.

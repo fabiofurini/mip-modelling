@@ -45,10 +45,10 @@ for k, z in attese3.items():
     assert uguale(tec.loc[k].z_milp, z), (k, tec.loc[k].z_milp, z)
 assert uguale(tec.loc["3.1"].z_lp_1, F("38/3")) and uguale(tec.loc["3.1"].z_lp_2, 15)
 assert uguale(tec.loc["3.14"].z_lp_1, F("117/4"))
-tre = pd.read_csv(DATI / "cap06_tre_problemi.csv").set_index("problem")
-assert uguale(tre.loc["bin packing"].z_milp, 3)      # = ceil(21/8), the count is tight
-assert uguale(tre.loc["makespan"].z_milp, 9)         # = 27/3, the machines share the load
-assert uguale(tre.loc["TSP"].z_milp, 22)             # the tour the heuristics chase
+for nome, atteso, nota in (("cap06_bpp", 3, "= ceil(15/7), the count is tight"),
+                           ("cap06_cmax", 9, "= 18/2, the machines share the load"),
+                           ("cap06_tsp", 22, "the tour nearest neighbour chases")):
+    assert uguale(pd.read_csv(DATI / f"{nome}.csv").iloc[0].z_milp, atteso), (nome, nota)
 print("ch. 3: the fourteen techniques — optima and relaxations compared")
 
 cop = pd.read_csv(DATI / "cap04_copertura.csv").iloc[0]

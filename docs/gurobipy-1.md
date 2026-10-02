@@ -3,6 +3,8 @@
 **Class:** implementation · **Script:** `python/cap06_gurobi.py`
 { .scheda }
 
+[![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/fabiofurini/mip-modelling/blob/main/notebooks/cap06_gurobi.ipynb)
+
 The few instructions that are enough to write a model, the four classes of
 variables and the rule of the course: one family of constraints per block, with
 the names of the mathematical model.
