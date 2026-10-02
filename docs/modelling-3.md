@@ -332,28 +332,24 @@ def modello_cmax(d, k):
 
 #### The instance
 
-On the instance of seven jobs of duration $d = (5, 5, 4, 4, 3, 3, 3)$ on
-$k = 3$ machines:
+On the instance of four jobs of duration $d = (3, 4, 5, 6)$ on $k = 2$ machines
+— the very one the heuristics chapter runs LPT on:
 
 <!-- modello-esteso: cap06_cmax -->
 
 <div class="modello-esteso largo" markdown>
 
 $$
-\begin{array}{rrrrrrrrrrrrrrrrrrrrrrr c l}
-\min &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & z &  & \\
-\text{subject to} & x_{11} & +x_{12} & +x_{13} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & = & 1\\
- &  &  &  & x_{21} & +x_{22} & +x_{23} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & = & 1\\
- &  &  &  &  &  &  & x_{31} & +x_{32} & +x_{33} &  &  &  &  &  &  &  &  &  &  &  &  &  & = & 1\\
- &  &  &  &  &  &  &  &  &  & x_{41} & +x_{42} & +x_{43} &  &  &  &  &  &  &  &  &  &  & = & 1\\
- &  &  &  &  &  &  &  &  &  &  &  &  & x_{51} & +x_{52} & +x_{53} &  &  &  &  &  &  &  & = & 1\\
- &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & x_{61} & +x_{62} & +x_{63} &  &  &  &  & = & 1\\
- &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & x_{71} & +x_{72} & +x_{73} &  & = & 1\\
- & 5x_{11} &  &  & +5x_{21} &  &  & +4x_{31} &  &  & +4x_{41} &  &  & +3x_{51} &  &  & +3x_{61} &  &  & +3x_{71} &  &  & -z & \le & 0\\
- &  & 5x_{12} &  &  & +5x_{22} &  &  & +4x_{32} &  &  & +4x_{42} &  &  & +3x_{52} &  &  & +3x_{62} &  &  & +3x_{72} &  & -z & \le & 0\\
- &  &  & 5x_{13} &  &  & +5x_{23} &  &  & +4x_{33} &  &  & +4x_{43} &  &  & +3x_{53} &  &  & +3x_{63} &  &  & +3x_{73} & -z & \le & 0\\
- & x_{11}, & x_{12}, & x_{13}, & x_{21}, & x_{22}, & x_{23}, & x_{31}, & x_{32}, & x_{33}, & x_{41}, & x_{42}, & x_{43}, & x_{51}, & x_{52}, & x_{53}, & x_{61}, & x_{62}, & x_{63}, & x_{71}, & x_{72}, & x_{73} &  & \in & \{0, 1\}\\
- &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & z & \ge & 0
+\begin{array}{rrrrrrrrrr c l}
+\min &  &  &  &  &  &  &  &  & z &  & \\
+\text{subject to} & x_{11} & +x_{12} &  &  &  &  &  &  &  & = & 1\\
+ &  &  & x_{21} & +x_{22} &  &  &  &  &  & = & 1\\
+ &  &  &  &  & x_{31} & +x_{32} &  &  &  & = & 1\\
+ &  &  &  &  &  &  & x_{41} & +x_{42} &  & = & 1\\
+ & 3x_{11} &  & +4x_{21} &  & +5x_{31} &  & +6x_{41} &  & -z & \le & 0\\
+ &  & 3x_{12} &  & +4x_{22} &  & +5x_{32} &  & +6x_{42} & -z & \le & 0\\
+ & x_{11}, & x_{12}, & x_{21}, & x_{22}, & x_{31}, & x_{32}, & x_{41}, & x_{42} &  & \in & \{0, 1\}\\
+ &  &  &  &  &  &  &  &  & z & \ge & 0
 \end{array}
 $$
 
@@ -361,9 +357,9 @@ $$
 
 <!-- modello-esteso: fine -->
 
-The total load is $27$ and the machines are three: no solution can go below
-$27/3 = 9$, and the optimum is exactly $9$ — the jobs split into three groups of
-$9$. Here the count settles the problem on its own.
+The total load is $18$ and the machines are two: no solution can go below
+$18/2 = 9$, and the optimum is exactly $9$ — the jobs split into $6+3$ and
+$5+4$. Here the count settles the problem on its own.
 
 ### Travelling salesman: the MTZ formulation
 
@@ -746,8 +742,8 @@ the notebook is
     assert z_bpp == minimo_teorico
 
     # --- P||Cmax: the makespan on identical machines ---
-    d_cmax = [5, 5, 4, 4, 3, 3, 3]   # job durations
-    k_cmax = 3                       # identical machines
+    d_cmax = [3, 4, 5, 6]             # job durations
+    k_cmax = 2                       # identical machines
 
 
     def modello_cmax(d, k):
