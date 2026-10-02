@@ -3,13 +3,14 @@
 **Class:** implementation · **Script:** `python/cap06_gurobi.py`
 { .scheda }
 
-The eight instructions that are enough to write a model, the four classes of
+The few instructions that are enough to write a model, the four classes of
 variables and the rule of the course: one family of constraints per block, with
 the names of the mathematical model.
 
-## The eight instructions that are enough
+## The basic gurobipy instructions
 
-A model is written in gurobipy with eight instructions, always the same ones, and
+A model is written in gurobipy with a handful of instructions, always the same
+ones, and
 from here on the line of code that writes it appears next to every model. It pays
 to see them once on a small, complete model: the **binary knapsack**, where out
 of $n$ items of value $p_j$ and weight $w_j$ one chooses a subset of weight at
@@ -39,7 +40,7 @@ m.addConstr(gp.quicksum(w[j] * x[j] for j in range(n)) <= c, name="capacity")
 m.optimize()
 ```
 
-Eight instructions, one per line of the model:
+The instructions, one per line of the model:
 
 - `Model` creates the model; everything else hangs off it.
 - `addVars` adds a whole indexed family: `addVars(n)` gives
@@ -57,7 +58,7 @@ Eight instructions, one per line of the model:
   line in the written model.
 - `optimize` solves.
 
-With the same eight instructions one writes the other classical problems that
+With the same instructions one writes the other classical problems that
 come back in these pages. **Bin packing** — $n$ items of size $w_j$ into bins of
 capacity $c$, using as few as possible — wants two families of binaries,
 $x_{ji}$ and $y_i$, and two families of constraints:

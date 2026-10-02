@@ -11,8 +11,8 @@ mathematical model — how the results are **read**, including the case where th
 solver has not finished, and three **complete models** that the
 [heuristics chapter](modelling-4.md) takes up again.
 
-The whole chapter runs on a single script, `python/cap06_gurobi.py`, and reads in
-five sections.
+Every number on these pages comes from a single script,
+`python/cap06_gurobi.py`, and the chapter is organised into five sections.
 
 <div class="grid cards" markdown>
 
@@ -20,7 +20,7 @@ five sections.
 
     ---
 
-    The eight instructions that are enough, the four classes of variables and the
+    The basic gurobipy instructions, the four classes of variables and the
     rule of the course: one family of constraints per block.
 
     [:octicons-arrow-right-24: The section](gurobipy-1.md)
