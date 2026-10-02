@@ -1,4 +1,5 @@
 site_name: MIP Modelling · Fabio Furini
+site_url: https://fabiofurini.github.io/mip-modelling/
 site_description: >-
   Mixed-integer linear models for making optimal decisions:
   build them, prove them, squeeze them with bounds and solve them with Gurobi.
