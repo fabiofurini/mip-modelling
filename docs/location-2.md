@@ -1,7 +1,7 @@
 # p-median: at most $k$ locations
 
 **Class:** BIP · **Links:** disaggregated activation · **Script:** `python/fam08_2_pmedian.py`<br>
-**Difficulty:** ★★☆ · **Time:** 30–45 min
+**Difficulty:** ★★☆☆☆ · **Time:** 30–45 min
 { .scheda }
 
 [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/fabiofurini/mip-modelling/blob/main/notebooks/fam08_2_pmedian.ipynb)

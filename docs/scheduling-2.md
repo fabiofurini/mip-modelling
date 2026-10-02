@@ -1,7 +1,7 @@
 # Machines with a fixed usage cost
 
 **Class:** BIP · **Links:** activation (aggregated) · **Script:** `python/fam07_2_fixedcost.py`<br>
-**Difficulty:** ★★☆ · **Time:** 30–45 min
+**Difficulty:** ★★☆☆☆ · **Time:** 30–45 min
 { .scheda }
 
 [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/fabiofurini/mip-modelling/blob/main/notebooks/fam07_2_fixedcost.ipynb)

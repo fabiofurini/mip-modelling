@@ -1,7 +1,7 @@
 # Shipments in boxes
 
 **Class:** MILP · **Links:** capacity with rounding up · **Script:** `python/fam10_5_shipments.py`<br>
-**Difficulty:** ★★★ · **Time:** 45–60 min
+**Difficulty:** ★★★★☆ · **Time:** 45–60 min
 { .scheda }
 
 [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/fabiofurini/mip-modelling/blob/main/notebooks/fam10_5_shipments.ipynb)

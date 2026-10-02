@@ -7,6 +7,16 @@ The thirty-eight solved problems all follow the same scheme: model, proof of the
 links between the variables, instance, constructive heuristic, dual of the LP
 relaxation, solution with Gurobi and additional modelling questions.
 
+
+!!! note "The difficulty stars"
+    Every problem carries a difficulty from ★☆☆☆☆ to ★★★★★. It measures how hard
+    it is to **build the model**: how many families of variables are needed,
+    which links must be recognised, whether there is a time structure, a big-M, a
+    disjunction, a min-max, brackets, an "if and only if". It does not measure
+    the size of the instance, the solver time or the length of the page: a
+    problem with an elementary model stays at one star even when its dual is
+    laborious.
+
 !!! tip "Forty problems to model"
     Presented as they would arise in practice — a text, some data, a question — with no model
     already written: twenty with explicit numerical data and twenty in symbolic

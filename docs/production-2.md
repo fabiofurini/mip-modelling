@@ -1,7 +1,7 @@
 # Production and workforce: two equivalent formulations
 
 **Class:** MILP · **Links:** integer counts, workforce balance · **Script:** `python/fam09_2_workforce.py`<br>
-**Difficulty:** ★★★ · **Time:** 45–60 min
+**Difficulty:** ★★★★★ · **Time:** 45–60 min
 { .scheda }
 
 [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/fabiofurini/mip-modelling/blob/main/notebooks/fam09_2_workforce.ipynb)

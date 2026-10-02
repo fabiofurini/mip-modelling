@@ -17,6 +17,8 @@ Data written out, as in the fifteen numerical models: one reads the statement, r
 
 !!! abstract "N1 — Six projects and a budget"
 
+    **Difficulty:** ★☆☆☆☆
+
     A department chooses which projects to fund out of six. The costs are $40$,
     $25$, $30$, $15$, $50$ and $20$ thousand euros; the expected benefits are $9$,
     $5$, $7$, $3$, $11$ and $4$. The budget is $100$. Projects $2$ and $5$ use the
@@ -24,6 +26,8 @@ Data written out, as in the fifteen numerical models: one reads the statement, r
     project $1$ is funded too. The maximum benefit is wanted.
 
 !!! abstract "N2 — Three couriers, four deliveries"
+
+    **Difficulty:** ★★☆☆☆
 
     Four deliveries must be given to three couriers. The table gives, for every
     courier and every delivery, the time needed in minutes:
@@ -39,6 +43,8 @@ Data written out, as in the fifteen numerical models: one reads the statement, r
 
 !!! abstract "N3 — Antennas over five districts"
 
+    **Difficulty:** ★☆☆☆☆
+
     A city has five districts and four possible antenna sites. Site 1 covers
     districts $\{1,2\}$, site 2 covers $\{2,3,4\}$, site 3 covers $\{1,4,5\}$ and
     site 4 covers $\{3,5\}$. Every antenna costs the same. All districts must be
@@ -46,11 +52,15 @@ Data written out, as in the fifteen numerical models: one reads the statement, r
 
 !!! abstract "N4 — Four parcels in ten-kilo boxes"
 
+    **Difficulty:** ★☆☆☆☆
+
     Four parcels weigh $6$, $5$, $4$ and $3$ kilos. Every box carries at most $10$
     kilos and a parcel is not split. Three boxes are available. The minimum number
     of boxes is wanted.
 
 !!! abstract "N5 — Two products, three departments"
+
+    **Difficulty:** ★☆☆☆☆
 
     A workshop makes two articles. One piece of the first takes $2$ hours in
     department A, $1$ in B and $3$ in C; one piece of the second takes $1$, $3$ and
@@ -60,12 +70,16 @@ Data written out, as in the fifteen numerical models: one reads the statement, r
 
 !!! abstract "N6 — The shifts of the week"
 
+    **Difficulty:** ★★★☆☆
+
     A counter is open seven days. The clerks needed are, from Monday to Sunday, $4$,
     $3$, $4$, $5$, $6$, $5$ and $3$. Every clerk hired works five consecutive days
     and then rests two; the cycle may start on any day of the week. The smallest
     number of clerks is wanted.
 
 !!! abstract "N7 — Three suppliers with a set-up charge"
+
+    **Difficulty:** ★★☆☆☆
 
     $100$ units of a component are needed. Three suppliers sell it at $9$, $7$ and
     $8$ euros a unit, but a supplier that receives an order also charges a fixed
@@ -74,6 +88,8 @@ Data written out, as in the fifteen numerical models: one reads the statement, r
 
 !!! abstract "N8 — Four jobs on one machine"
 
+    **Difficulty:** ★★★★☆
+
     Four jobs must run one after the other on a single machine. The durations are
     $4$, $2$, $6$ and $3$ hours; the due dates are $8$, $5$, $14$ and $10$ hours from
     the start. The machine starts at time $0$ and never stops. One wants to minimise
@@ -81,6 +97,8 @@ Data written out, as in the fifteen numerical models: one reads the statement, r
     completion and due date.
 
 !!! abstract "N9 — Three warehouses and three customers"
+
+    **Difficulty:** ★★★☆☆
 
     Three customers ask for $12$, $8$ and $15$ pallets. Three warehouses can be
     opened, with capacities $20$, $25$ and $18$ pallets and fixed opening costs
@@ -97,11 +115,15 @@ Data written out, as in the fifteen numerical models: one reads the statement, r
 
 !!! abstract "N10 — Four students in two groups"
 
+    **Difficulty:** ★★★☆☆
+
     Four students have average marks $28$, $24$, $30$ and $23$. They must be split
     into two groups of two. One wants the group with the highest average and the one
     with the lowest average to be as close as possible.
 
 !!! abstract "N11 — Five films in two screens"
+
+    **Difficulty:** ★★★☆☆
 
     Five films last $90$, $120$, $100$, $140$ and $110$ minutes. Two screens are
     free for $240$ minutes each. Every film is shown at most once, and in one screen
@@ -110,6 +132,8 @@ Data written out, as in the fifteen numerical models: one reads the statement, r
     screen. The maximum takings are wanted.
 
 !!! abstract "N12 — Diet with four foods"
+
+    **Difficulty:** ★★★☆☆
 
     Four foods cost $2$, $3$, $1$ and $4$ euros a kilo. One kilo of each provides
 
@@ -124,6 +148,8 @@ Data written out, as in the fifteen numerical models: one reads the statement, r
 
 !!! abstract "N13 — Purchases in brackets"
 
+    **Difficulty:** ★★★★☆
+
     A firm buys up to $200$ units of a material. The price is $10$ euros a unit for
     the first $50$, $8$ for those between $51$ and $120$, $7$ beyond $120$. The
     discount applies only to the units in the bracket, not to all of them. At least
@@ -132,12 +158,16 @@ Data written out, as in the fifteen numerical models: one reads the statement, r
 
 !!! abstract "N14 — Six junctions to watch"
 
+    **Difficulty:** ★☆☆☆☆
+
     A road network joins six junctions with the stretches $\{1,2\}$, $\{1,3\}$,
     $\{2,3\}$, $\{2,4\}$, $\{3,5\}$, $\{4,5\}$, $\{4,6\}$ and $\{5,6\}$. A camera at
     a junction watches every stretch meeting there. All stretches must be watched
     with the smallest number of cameras.
 
 !!! abstract "N15 — Three months of production"
+
+    **Difficulty:** ★★★★☆
 
     A line makes one article for three months. The demands are $100$, $140$ and $80$
     pieces. Making a piece costs $5$ euros; starting production in a month costs
@@ -146,6 +176,8 @@ Data written out, as in the fifteen numerical models: one reads the statement, r
     empty. The minimum cost is wanted.
 
 !!! abstract "N16 — Three containers to choose from"
+
+    **Difficulty:** ★★☆☆☆
 
     Three containers are available: the first carries $20$ tonnes and costs $100$
     euros, the second $25$ tonnes and costs $120$ euros, the third $15$ tonnes and
@@ -157,12 +189,16 @@ Data written out, as in the fifteen numerical models: one reads the statement, r
 
 !!! abstract "N17 — Six activities and two crews"
 
+    **Difficulty:** ★★★☆☆
+
     Six activities last $3$, $2$, $4$, $1$, $5$ and $2$ days. Two crews work in
     parallel, and an activity occupies a single crew for its whole duration, without
     interruption. Every crew carries out its activities one after the other. One
     wants to finish as early as possible.
 
 !!! abstract "N18 — Two emergency crews"
+
+    **Difficulty:** ★★★☆☆
 
     Two crews must be formed out of four technicians. Every technician has one of
     three skills: technicians $1$ and $2$ have the first, technician $3$ the second,
@@ -172,6 +208,8 @@ Data written out, as in the fifteen numerical models: one reads the statement, r
 
 !!! abstract "N19 — Three periods with backlog"
 
+    **Difficulty:** ★★★★★
+
     The demands of three periods are $50$, $70$ and $40$ units. Production costs $4$
     euros a unit and does not exceed $60$ units per period. Holding a unit at the
     end of a period costs $1$ euro; delivering a unit late costs $3$ euros per
@@ -179,6 +217,8 @@ Data written out, as in the fifteen numerical models: one reads the statement, r
     The minimum cost is wanted.
 
 !!! abstract "N20 — Five pictures on two walls"
+
+    **Difficulty:** ★★★☆☆
 
     Five pictures are $60$, $45$, $80$, $50$ and $70$ centimetres wide. Two walls are
     $180$ centimetres long each. Every picture must be hung, and on one wall only.
@@ -190,6 +230,8 @@ Data written out, as in the fifteen numerical models: one reads the statement, r
 Data declared with their type and unit, as in the problems of the families. Every problem brings two or three links between variables into play, and the model has to be written in general, with the quantifiers.
 
 !!! abstract "S1 — Projects with a budget, exclusions and a portfolio bonus"
+
+    **Difficulty:** ★★★☆☆
 
     A body must choose which projects to fund among $n \in \mathbb{Z}_{\ge 1}$ candidates.
     For every project $j \in \{1, 2, \dots, n\}$, the value $c_j \in \mathbb{Q}_{>0}$ is the
@@ -203,6 +245,8 @@ Data declared with their type and unit, as in the problems of the families. Ever
     which projects to fund, at maximum total return.
 
 !!! abstract "S2 — Tasks and resources to activate"
+
+    **Difficulty:** ★★★★☆
 
     A department must give $n \in \mathbb{Z}_{\ge 1}$ tasks to $m \in \mathbb{Z}_{\ge 1}$ resources.
     For every resource $i \in \{1, 2, \dots, m\}$ and every task
@@ -218,6 +262,8 @@ Data declared with their type and unit, as in the problems of the families. Ever
 
 !!! abstract "S3 — Posts with a service radius and a backup"
 
+    **Difficulty:** ★★★★☆
+
     An administration must cover $m \in \mathbb{Z}_{\ge 1}$ users by opening posts in some
     of $n \in \mathbb{Z}_{\ge 1}$ candidate sites. For every site
     $j \in \{1, 2, \dots, n\}$, the value $f_j \in \mathbb{Q}_{>0}$ is the opening cost, in
@@ -232,6 +278,8 @@ Data declared with their type and unit, as in the problems of the families. Ever
 
 !!! abstract "S4 — Containers of several types with incompatible goods"
 
+    **Difficulty:** ★★★★☆
+
     A warehouse must store $n \in \mathbb{Z}_{\ge 1}$ objects in containers of
     $k \in \mathbb{Z}_{\ge 1}$ types. For every object $j \in \{1, 2, \dots, n\}$, the value
     $w_j \in \mathbb{Q}_{>0}$ is the weight, in kilos, and $g_j \in \{1, 2, \dots, q\}$ is
@@ -244,6 +292,8 @@ Data declared with their type and unit, as in the problems of the families. Ever
     fill them, at minimum total cost.
 
 !!! abstract "S5 — Lots with set-up, capacity and a limited store"
+
+    **Difficulty:** ★★★★☆
 
     A firm plans the production of one article over $n \in \mathbb{Z}_{\ge 1}$ periods. For
     every period $t \in \{1, 2, \dots, n\}$, the value $d_t \in \mathbb{Q}_{\ge 0}$ is the
@@ -261,6 +311,8 @@ Data declared with their type and unit, as in the problems of the families. Ever
 
 !!! abstract "S6 — $p$ sites, capacity and the worst distance"
 
+    **Difficulty:** ★★★★☆
+
     A firm must serve $m \in \mathbb{Z}_{\ge 1}$ customers by opening exactly
     $p \in \mathbb{Z}_{\ge 1}$ sites among $n \in \mathbb{Z}_{\ge 1}$ candidates, with $p \le n$.
     For every customer $c \in \{1, 2, \dots, m\}$, the value $d_c \in \mathbb{Q}_{>0}$ is
@@ -275,6 +327,8 @@ Data declared with their type and unit, as in the problems of the families. Ever
 
 !!! abstract "S7 — Qualified machines and release dates"
 
+    **Difficulty:** ★★★★★
+
     A workshop must run $n \in \mathbb{Z}_{\ge 1}$ jobs on $k \in \mathbb{Z}_{\ge 1}$ machines. For
     every job $j \in \{1, 2, \dots, n\}$, the value $t_j \in \mathbb{Q}_{>0}$ is the
     processing time, in hours, the same on every machine; $r_j \in \mathbb{Q}_{\ge 0}$ is
@@ -288,6 +342,8 @@ Data declared with their type and unit, as in the problems of the families. Ever
 
 !!! abstract "S8 — Shelves with classes and a maximum weight"
 
+    **Difficulty:** ★★★★☆
+
     A depot must distribute $n \in \mathbb{Z}_{\ge 1}$ objects over $m \in \mathbb{Z}_{\ge 1}$
     shelves. The objects belong to $q \in \mathbb{Z}_{\ge 1}$ goods classes: for every
     object $j \in \{1, 2, \dots, n\}$, the value $g_j \in \{1, 2, \dots, q\}$ is the
@@ -298,6 +354,8 @@ Data declared with their type and unit, as in the problems of the families. Ever
     distribution, minimising the weight of the heaviest shelf.
 
 !!! abstract "S9 — Cutting with several bar formats"
+
+    **Difficulty:** ★★★★★
 
     A workshop must obtain pieces of $k \in \mathbb{Z}_{\ge 1}$ different lengths from bars
     of $h \in \mathbb{Z}_{\ge 1}$ formats. For every format $f \in \{1, 2, \dots, h\}$, the
@@ -312,6 +370,8 @@ Data declared with their type and unit, as in the problems of the families. Ever
 
 !!! abstract "S10 — Network with a fixed charge per arc and a limit on arcs"
 
+    **Difficulty:** ★★★★☆
+
     A logistics operator must send $Q \in \mathbb{Q}_{>0}$ units of goods from an origin
     node $s$ to a destination node $u$ over a directed network of nodes $V$ and arcs
     $A \subseteq V \times V$; the nodes other than $s$ and $u$ are transit nodes.
@@ -323,6 +383,8 @@ Data declared with their type and unit, as in the problems of the families. Ever
     activate and how much to send on them, at minimum total cost.
 
 !!! abstract "S11 — Cyclic shifts with rest and skills"
+
+    **Difficulty:** ★★★★★
 
     A service runs over $n \in \mathbb{Z}_{\ge 1}$ days, on a weekly cycle. The staff is
     divided into $q \in \mathbb{Z}_{\ge 1}$ skills. For every day
@@ -337,6 +399,8 @@ Data declared with their type and unit, as in the problems of the families. Ever
 
 !!! abstract "S12 — Portfolio in lots with sectors"
 
+    **Difficulty:** ★★★☆☆
+
     An investor has a capital of $K \in \mathbb{Q}_{>0}$ euros and chooses among
     $n \in \mathbb{Z}_{\ge 1}$ funds, divided into $k \in \mathbb{Z}_{\ge 1}$ sectors. For every
     fund $j \in \{1, 2, \dots, n\}$, the value $s_j \in \{1, 2, \dots, k\}$ is the
@@ -349,6 +413,8 @@ Data declared with their type and unit, as in the problems of the families. Ever
     total return.
 
 !!! abstract "S13 — A ration over several days"
+
+    **Difficulty:** ★★★★★
 
     A canteen prepares the ration of $n \in \mathbb{Z}_{\ge 1}$ days using
     $s \in \mathbb{Z}_{\ge 1}$ foods and respecting $r \in \mathbb{Z}_{\ge 1}$ nutritional
@@ -366,6 +432,8 @@ Data declared with their type and unit, as in the problems of the families. Ever
 
 !!! abstract "S14 — Sequences with sequence-dependent set-ups and due dates"
 
+    **Difficulty:** ★★★★★
+
     On a single machine $n \in \mathbb{Z}_{\ge 1}$ jobs must run. For every job
     $j \in \{1, 2, \dots, n\}$, the value $t_j \in \mathbb{Q}_{>0}$ is the processing time,
     in hours, and $d_j \in \mathbb{Q}_{>0}$ is the due date, that is the instant by which
@@ -377,6 +445,8 @@ Data declared with their type and unit, as in the problems of the families. Ever
     minimising the total cost of the delays.
 
 !!! abstract "S15 — Crews over several periods"
+
+    **Difficulty:** ★★★★☆
 
     A service company must cover $m \in \mathbb{Z}_{\ge 1}$ zones for $n \in \mathbb{Z}_{\ge 1}$
     periods, with $k \in \mathbb{Z}_{\ge 1}$ crews. For every crew
@@ -390,6 +460,8 @@ Data declared with their type and unit, as in the problems of the families. Ever
     crews to employ and in which periods, at minimum total cost.
 
 !!! abstract "S16 — Students and supervisors with balanced loads"
+
+    **Difficulty:** ★★★★☆
 
     A degree programme must assign $n \in \mathbb{Z}_{\ge 1}$ students to
     $m \in \mathbb{Z}_{\ge 1}$ supervisors. For every student $i \in \{1, 2, \dots, n\}$ and
@@ -405,6 +477,8 @@ Data declared with their type and unit, as in the problems of the families. Ever
 
 !!! abstract "S17 — Maintenance with windows and lost production"
 
+    **Difficulty:** ★★★★★
+
     A plant has $n \in \mathbb{Z}_{\ge 1}$ machines and plans the maintenance over
     $T \in \mathbb{Z}_{\ge 1}$ periods. For every machine $j \in \{1, 2, \dots, n\}$, the
     values $a_j \in \{1, 2, \dots, T\}$ and $b_j \in \{1, 2, \dots, T\}$, with
@@ -419,6 +493,8 @@ Data declared with their type and unit, as in the problems of the families. Ever
 
 !!! abstract "S18 — Balanced partition of a graph"
 
+    **Difficulty:** ★★★★☆
+
     An organisation must split into two teams the $n \in \mathbb{Z}_{\ge 1}$ nodes of an
     undirected graph with edge set $E$. For every node $i \in \{1, 2, \dots, n\}$,
     the value $w_i \in \mathbb{Q}_{>0}$ is the workload it carries; for every edge
@@ -430,6 +506,8 @@ Data declared with their type and unit, as in the problems of the families. Ever
     total intensity of the exchanges between the two teams.
 
 !!! abstract "S19 — Loading with heterogeneous vehicles"
+
+    **Difficulty:** ★★★★☆
 
     A carrier must ship $n \in \mathbb{Z}_{\ge 1}$ loads with $m \in \mathbb{Z}_{\ge 1}$ vehicles.
     For every load $j \in \{1, 2, \dots, n\}$, the value $w_j \in \mathbb{Q}_{>0}$ is the
@@ -443,6 +521,8 @@ Data declared with their type and unit, as in the problems of the families. Ever
     and how to split the loads, at minimum total cost.
 
 !!! abstract "S20 — Capacity to install with bracketed costs"
+
+    **Difficulty:** ★★★★★
 
     An operator must install a total capacity of at least $Q \in \mathbb{Q}_{>0}$ megawatts
     choosing among $n \in \mathbb{Z}_{\ge 1}$ technologies. For every technology

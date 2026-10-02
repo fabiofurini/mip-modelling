@@ -1,7 +1,7 @@
 # Books across shelves
 
 **Class:** MILP · **Links:** maximum variable (disaggregated form) · **Script:** `python/fam10_9_shelves.py`<br>
-**Difficulty:** ★★★ · **Time:** 45–60 min
+**Difficulty:** ★★★★☆ · **Time:** 45–60 min
 { .scheda }
 
 [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/fabiofurini/mip-modelling/blob/main/notebooks/fam10_9_shelves.ipynb)

@@ -1,7 +1,7 @@
 # Job selection with revenues and fixed-cost machines
 
 **Class:** BIP · **Links:** activation (aggregated), maximisation problem · **Script:** `python/fam07_3_selection.py`<br>
-**Difficulty:** ★★☆ · **Time:** 30–45 min
+**Difficulty:** ★★☆☆☆ · **Time:** 30–45 min
 { .scheda }
 
 [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/fabiofurini/mip-modelling/blob/main/notebooks/fam07_3_selection.ipynb)
