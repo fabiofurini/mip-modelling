@@ -148,10 +148,10 @@ The same dual, written on the data of the instance:
 
 $$
 \begin{array}{rrrrrrrrrrrrrr c l}
-\max & \mu_1 & +\mu_2 & +\mu_3 & +2varrho &  &  &  &  &  &  &  &  &  &  & \\
-\text{subject to} &  &  &  & varrho & +\pi_{11} & +\pi_{12} & +\pi_{13} &  &  &  &  &  &  & \le & 0\\
- &  &  &  & varrho &  &  &  & +\pi_{21} & +\pi_{22} & +\pi_{23} &  &  &  & \le & 0\\
- &  &  &  & varrho &  &  &  &  &  &  & +\pi_{31} & +\pi_{32} & +\pi_{33} & \le & 0\\
+\max & \mu_1 & +\mu_2 & +\mu_3 & +2\varrho &  &  &  &  &  &  &  &  &  &  & \\
+\text{subject to} &  &  &  & \varrho & +\pi_{11} & +\pi_{12} & +\pi_{13} &  &  &  &  &  &  & \le & 0\\
+ &  &  &  & \varrho &  &  &  & +\pi_{21} & +\pi_{22} & +\pi_{23} &  &  &  & \le & 0\\
+ &  &  &  & \varrho &  &  &  &  &  &  & +\pi_{31} & +\pi_{32} & +\pi_{33} & \le & 0\\
  & \mu_1 &  &  &  & -\pi_{11} &  &  &  &  &  &  &  &  & \le & 5\\
  &  & \mu_2 &  &  &  & -\pi_{12} &  &  &  &  &  &  &  & \le & 6\\
  &  &  & \mu_3 &  &  &  & -\pi_{13} &  &  &  &  &  &  & \le & 10\\
@@ -162,7 +162,7 @@ $$
  &  & \mu_2 &  &  &  &  &  &  &  &  &  & -\pi_{32} &  & \le & 9\\
  &  &  & \mu_3 &  &  &  &  &  &  &  &  &  & -\pi_{33} & \le & 4\\
  & \mu_1, & \mu_2, & \mu_3 &  &  &  &  &  &  &  &  &  &  & \gtreqless & 0\\
- &  &  &  & varrho &  &  &  &  &  &  &  &  &  & \le & 0\\
+ &  &  &  & \varrho &  &  &  &  &  &  &  &  &  & \le & 0\\
  &  &  &  &  & \pi_{11}, & \pi_{12}, & \pi_{13}, & \pi_{21}, & \pi_{22}, & \pi_{23}, & \pi_{31}, & \pi_{32}, & \pi_{33} & \ge & 0
 \end{array}
 $$

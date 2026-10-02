@@ -23,6 +23,7 @@ BASE = Path(__file__).resolve().parent.parent
 DOCS = BASE / "docs"
 PREAMBLE = BASE / "notes_1" / "preambolo.tex"
 MATHJAX = DOCS / "javascripts" / "mathjax.js"
+MODELLI = BASE / "data" / "models"
 
 # The shorthands defined by the notes preamble. The list lives here, and is not
 # read from the `.tex`, because the notes are private and absent in CI; when the
@@ -117,9 +118,33 @@ def missing_models() -> list[str]:
     return fuori
 
 
+def greek_without_backslash() -> list[str]:
+    """A Greek name written without its backslash comes out in roman type.
+
+    It happened with "pi1" and with "varrho": the generator did not recognise
+    them and the model showed Latin letters. The generated models are checked
+    here, because that is where the mistake is born.
+    """
+    greche = ("alpha", "beta", "gamma", "delta", "epsilon", "zeta", "eta", "theta",
+              "iota", "kappa", "lambda", "mu", "nu", "xi", "rho", "sigma", "tau",
+              "phi", "chi", "psi", "omega", "pi", "varepsilon", "vartheta",
+              "varpi", "varrho", "varsigma", "varphi")
+    fuori = []
+    for p in sorted(MODELLI.glob("*.tex")):
+        testo = p.read_text(encoding="utf-8")
+        for g in greche:
+            if re.search(rf"(?<![\\A-Za-z]){g}(?![A-Za-z])", testo):
+                fuori.append(f"{p.name}: \"{g}\" without its backslash, comes out in roman")
+                break
+    return fuori
+
+
 def main() -> int:
     trovati = 0
     for trouble in undefined_macros():
+        print(trouble)
+        trovati += 1
+    for trouble in greek_without_backslash():
         print(trouble)
         trovati += 1
     for trouble in missing_models():

@@ -34,7 +34,9 @@ DIR_MODELLI = BASE / "data" / "models"
 
 GRECHE = ("alpha", "beta", "gamma", "delta", "epsilon", "zeta", "eta", "theta",
           "iota", "kappa", "lambda", "mu", "nu", "xi", "rho", "sigma", "tau",
-          "phi", "chi", "psi", "omega", "pi")
+          "phi", "chi", "psi", "omega", "pi",
+          # le varianti: senza, il nome esce in tondo invece che in greco
+          "varepsilon", "vartheta", "varpi", "varrho", "varsigma", "varphi")
 
 # i nomi che gurobipy non puo' portare per intero: `lambda` e' una parola
 # riservata di Python, `epsilon` si scrive `\varepsilon` nella dispensa
@@ -60,10 +62,10 @@ def nome_latex(nome: str) -> str:
     radice = radice.strip()
     if not coda:
         m = re.fullmatch(r"([A-Za-z]+?)(\d+)", radice)
-        if m and (m.group(1) in GRECHE or m.group(1) == "varepsilon"):
+        if m and m.group(1) in GRECHE:
             return f"\\{m.group(1)}_{m.group(2)}"
     radice = ALIAS.get(radice, radice)
-    testa = f"\\{radice}" if radice in GRECHE or radice == "varepsilon" else radice
+    testa = f"\\{radice}" if radice in GRECHE else radice
     if not coda:
         return testa
     indici = "".join(_indice(p) for p in coda.rstrip("]").split(","))
