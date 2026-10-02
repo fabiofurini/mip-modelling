@@ -12,6 +12,7 @@ from gurobipy import GRB
 from euristiche import best_fit
 from mip import (ammissibile, due_rilassamenti, frazione, nuovo_modello, registra_bound,
                  rilassamento, risolvi, stampa_lp, stampa_soluzione, valuta, viola_interezza)
+from esteso import salva_modello
 from stile import (ARANCIO, BLU, CICLO, GRIGIO, ROSSO, TEAL, VERDE, intestazione,
                    plt, salva_dati, salva_figura)
 
@@ -175,6 +176,111 @@ salva_dati(pd.DataFrame([riga]), "cap06_protocollo")
 assert lb <= zlp <= z <= ub + 1e-9
 print("  (7) the table row is the one above, and it is saved to CSV: that is where")
 print("      the notes, the website and check_numbers.py read it from.")
+
+# ---------- 8. THREE PROBLEMS THE COURSE REUSES ----------
+# Bin packing, makespan on identical machines and the travelling salesman: the
+# three problems on which the heuristics chapter builds next-fit, first-fit,
+# best-fit, LPT and nearest neighbour. Here the models are written, so that
+# chapter has something to compare its solutions with.
+intestazione("8. Bin packing, makespan and TSP: the models the heuristics will use")
+
+# --- bin packing: how many containers are enough ---
+w_bpp = [5, 4, 4, 3, 3, 2]       # weight of the items
+c_bpp = 8                        # capacity of one container
+n_bpp = len(w_bpp)
+k_bpp = n_bpp                    # at most one container per item
+
+
+def modello_bpp(w, c, k):
+    n = len(w)
+    m = nuovo_modello("bin_packing")
+    x = m.addVars(n, k, vtype=GRB.BINARY, name="x")
+    y = m.addVars(k, vtype=GRB.BINARY, name="y")
+    m.setObjective(y.sum(), GRB.MINIMIZE)
+    m.addConstrs((x.sum(j, "*") == 1 for j in R(n)), name="item")
+    m.addConstrs((gp.quicksum(w[j] * x[j, b] for j in R(n)) <= c * y[b] for b in R(k)),
+                 name="capacity")
+    return m, x, y
+
+
+m_bpp, x_bpp, y_bpp = modello_bpp(w_bpp, c_bpp, k_bpp)
+z_bpp = risolvi(m_bpp)
+minimo_teorico = -(-sum(w_bpp) // c_bpp)        # rounding up
+print(f"  Bin packing: weights {w_bpp}, capacity {c_bpp}.")
+print(f"  The total weight is {sum(w_bpp)}: no solution uses fewer than "
+      f"{sum(w_bpp)}/{c_bpp} = {minimo_teorico} containers, and the optimum uses {int(z_bpp)}.")
+m_bpp3, x_bpp3, y_bpp3 = modello_bpp(w_bpp, c_bpp, int(z_bpp))
+risolvi(m_bpp3)
+salva_modello(m_bpp3, "cap06_bpp")
+assert z_bpp == minimo_teorico
+
+# --- P||Cmax: the makespan on identical machines ---
+d_cmax = [5, 5, 4, 4, 3, 3, 3]   # job durations
+k_cmax = 3                       # identical machines
+
+
+def modello_cmax(d, k):
+    n = len(d)
+    m = nuovo_modello("makespan")
+    x = m.addVars(n, k, vtype=GRB.BINARY, name="x")
+    cmax = m.addVar(name="cmax")
+    m.setObjective(cmax, GRB.MINIMIZE)
+    m.addConstrs((x.sum(j, "*") == 1 for j in R(n)), name="job")
+    m.addConstrs((gp.quicksum(d[j] * x[j, mm] for j in R(n)) <= cmax for mm in R(k)),
+                 name="load")
+    return m, x, cmax
+
+
+m_cmax, x_cmax, v_cmax = modello_cmax(d_cmax, k_cmax)
+z_cmax = risolvi(m_cmax)
+salva_modello(m_cmax, "cap06_cmax")
+print(f"  Makespan: durations {d_cmax} on {k_cmax} identical machines.")
+print(f"  The total load is {sum(d_cmax)}: divided by {k_cmax} it gives "
+      f"{frazione(sum(d_cmax) / k_cmax)}, and the optimum is {frazione(z_cmax)}.")
+
+# --- TSP with the MTZ formulation ---
+D_tsp = [[0, 5, 2, 2, 9],
+         [5, 0, 4, 3, 4],
+         [2, 4, 0, 4, 7],
+         [2, 3, 4, 0, 7],
+         [9, 4, 7, 7, 0]]
+n_tsp = len(D_tsp)
+
+
+def modello_tsp(D):
+    """TSP with the Miller-Tucker-Zemlin constraints.
+
+    The u variables order the cities along the tour: the constraint
+    u_i - u_j + n x_ij <= n - 1 is true when x_ij = 0 and forces u_j >= u_i + 1
+    when x_ij = 1. Subtours that miss city 1 are thereby excluded, because they
+    would need a chain of ever-growing u that closes on itself.
+    """
+    n = len(D)
+    m = nuovo_modello("tsp")
+    x = m.addVars(((i, j) for i in R(n) for j in R(n) if i != j), vtype=GRB.BINARY, name="x")
+    u = m.addVars(R(1, n), lb=1, ub=n - 1, name="u")
+    m.setObjective(gp.quicksum(D[i][j] * x[i, j] for i, j in x), GRB.MINIMIZE)
+    m.addConstrs((gp.quicksum(x[i, j] for j in R(n) if j != i) == 1 for i in R(n)), name="out")
+    m.addConstrs((gp.quicksum(x[i, j] for i in R(n) if i != j) == 1 for j in R(n)), name="in")
+    m.addConstrs((u[i] - u[j] + n * x[i, j] <= n - 1
+                  for i in R(1, n) for j in R(1, n) if i != j), name="mtz")
+    return m, x, u
+
+
+m_tsp, x_tsp, u_tsp = modello_tsp(D_tsp)
+salva_modello(m_tsp, "cap06_tsp")
+z_tsp = risolvi(m_tsp)
+seguente = {i: j for (i, j) in x_tsp if x_tsp[i, j].X > 0.5}
+giro, citta = [0], 0
+while seguente[citta] != 0:
+    citta = seguente[citta]
+    giro.append(citta)
+print(f"  TSP on {n_tsp} cities: optimal tour "
+      + " -> ".join(str(c + 1) for c in giro + [0])
+      + f", length {frazione(z_tsp)}.")
+salva_dati(pd.DataFrame([{"problem": "bin packing", "z_milp": z_bpp},
+                         {"problem": "makespan", "z_milp": z_cmax},
+                         {"problem": "TSP", "z_milp": z_tsp}]), "cap06_tre_problemi")
 
 # ---------- 8. FIGURE: THE FOUR NUMBERS OF THE PROTOCOL ----------
 fig, ax = plt.subplots(figsize=(7.6, 3.0))

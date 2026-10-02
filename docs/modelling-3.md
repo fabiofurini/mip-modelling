@@ -5,10 +5,12 @@
 
 [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/fabiofurini/mip-modelling/blob/main/notebooks/cap06_gurobi.ipynb)
 
-The course uses **one solver only**, Gurobi from Python. This page shows how a
-model is written — one family of constraints per block, with the names of the
-mathematical model — and above all how the results are **read**, including the
-case where the solver has not finished.
+The course uses **one solver only**, Gurobi from Python. The page has three
+parts: how a model is **written** — one family of constraints per block, with the
+names of the mathematical model; how the results are **read**, including the case
+where the solver has not finished; and three **complete models** — bin packing,
+makespan and travelling salesman — written from the statement to the instance,
+which the [heuristics chapter](modelling-4.md) then takes up again.
 
 ## The eight instructions that are enough
 
@@ -201,6 +203,260 @@ two relaxations coincide because the assignment constraints already imply
 $x_{jm} \le 1$ — and the nonzero duals are $\tilde\mu = (2,\ 4.8,\ 5)$ and
 $\tilde\pi_2 = -0.2$: machine 2 is the only tight resource.
 
+## Three problems the course reuses
+
+So far the example model has always been the knapsack. The three problems below
+come back in the [heuristics chapter](modelling-4.md), where the solutions of
+next-fit, first-fit, best-fit, LPT and nearest neighbour are built by hand: here
+their models are written, so that those heuristics have an optimum to compare
+themselves with.
+
+### Bin packing: how many containers are enough
+
+!!! abstract "Bin packing"
+    There are $n$ items, item $j$ weighs $w_j$. The containers are all alike, of
+    capacity $C$. Use the smallest number of containers.
+
+Two families of binary variables are needed: $x_{jb} = 1$ if item $j$ goes into
+container $b$, and $y_b = 1$ if container $b$ is used.
+
+$$
+\begin{aligned}
+\min ~~ \sum_{b=1}^{k} y_b & &\\
+\text{subject to} \quad \sum_{b=1}^{k} x_{jb} &= 1, & \forall j \in \{1, 2, \dots, n\},\\
+\sum_{j=1}^{n} w_j\, x_{jb} - c\, y_b &\le 0, & \forall b \in \{1, 2, \dots, k\},\\
+x_{jb} &\in \{0, 1\}, & \forall j \in \{1, 2, \dots, n\},\ \forall b \in \{1, 2, \dots, k\},\\
+y_b &\in \{0, 1\}, & \forall b \in \{1, 2, \dots, k\}.
+\end{aligned}
+$$
+
+The first family says that every item ends up in exactly one container. The
+second is the capacity written as an **activation**: while $y_b = 0$ container
+$b$ can receive nothing, and as soon as $y_b = 1$ it takes up to $c$. The
+objective counts the containers switched on.
+
+```python
+def modello_bpp(w, c, k):
+    n = len(w)
+    m = nuovo_modello("bin_packing")
+    x = m.addVars(n, k, vtype=GRB.BINARY, name="x")
+    y = m.addVars(k, vtype=GRB.BINARY, name="y")
+    m.setObjective(y.sum(), GRB.MINIMIZE)
+    m.addConstrs((x.sum(j, "*") == 1 for j in R(n)), name="item")
+    m.addConstrs((gp.quicksum(w[j] * x[j, b] for j in R(n)) <= c * y[b]
+                  for b in R(k)), name="capacity")
+    return m, x, y
+```
+
+On the instance of six items of weight $w = (5, 4, 4, 3, 3, 2)$ and capacity
+$C = 8$:
+
+<!-- modello-esteso: cap06_bpp -->
+
+<div class="modello-esteso largo" markdown>
+
+$$
+\begin{array}{rrrrrrrrrrrrrrrrrrrrrr c l}
+\min &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & y_1 & +y_2 & +y_3 &  & \\
+\text{subject to} & x_{11} & +x_{12} & +x_{13} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & = & 1\\
+ &  &  &  & x_{21} & +x_{22} & +x_{23} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & = & 1\\
+ &  &  &  &  &  &  & x_{31} & +x_{32} & +x_{33} &  &  &  &  &  &  &  &  &  &  &  &  & = & 1\\
+ &  &  &  &  &  &  &  &  &  & x_{41} & +x_{42} & +x_{43} &  &  &  &  &  &  &  &  &  & = & 1\\
+ &  &  &  &  &  &  &  &  &  &  &  &  & x_{51} & +x_{52} & +x_{53} &  &  &  &  &  &  & = & 1\\
+ &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & x_{61} & +x_{62} & +x_{63} &  &  &  & = & 1\\
+ & 5x_{11} &  &  & +4x_{21} &  &  & +4x_{31} &  &  & +3x_{41} &  &  & +3x_{51} &  &  & +2x_{61} &  &  & -8y_1 &  &  & \le & 0\\
+ &  & 5x_{12} &  &  & +4x_{22} &  &  & +4x_{32} &  &  & +3x_{42} &  &  & +3x_{52} &  &  & +2x_{62} &  &  & -8y_2 &  & \le & 0\\
+ &  &  & 5x_{13} &  &  & +4x_{23} &  &  & +4x_{33} &  &  & +3x_{43} &  &  & +3x_{53} &  &  & +2x_{63} &  &  & -8y_3 & \le & 0\\
+ & x_{11}, & x_{12}, & x_{13}, & x_{21}, & x_{22}, & x_{23}, & x_{31}, & x_{32}, & x_{33}, & x_{41}, & x_{42}, & x_{43}, & x_{51}, & x_{52}, & x_{53}, & x_{61}, & x_{62}, & x_{63} &  &  &  & \in & \{0, 1\}\\
+ &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & y_1, & y_2, & y_3 & \in & \{0, 1\}
+\end{array}
+$$
+
+</div>
+
+<!-- modello-esteso: fine -->
+
+The total weight is $21$, so no solution can use fewer than
+$\lceil 21/8 \rceil = 3$ containers; the optimum uses exactly $3$, and the count
+is therefore tight.
+
+!!! warning "The relaxation of bin packing is very weak"
+    Relaxing $y_b$ to $y_b \ge 0$ the model buys fractions of a container, and the
+    LP optimum drops to $\sum_j w_j / c = 21/8 = 2.625$: the relaxation does not
+    know that a container opens whole. This is why on this problem the dual bound
+    is of little use and the heuristics matter more.
+
+### $P||C_{\max}$: the makespan on identical machines
+
+!!! abstract "Makespan on identical machines"
+    There are $n$ jobs, of duration $d_j$, and $k$ identical machines. Every job
+    goes on a single machine and is not interrupted. Minimise the instant at
+    which the last machine finishes.
+
+With $x_{jm} = 1$ if job $j$ goes on machine $m$, and $C_{\max} \ge 0$ the
+finishing instant:
+
+$$
+\begin{aligned}
+\min ~~ C_{\max} & &\\
+\text{subject to} \quad \sum_{m=1}^{k} x_{jm} &= 1, & \forall j \in \{1, 2, \dots, n\},\\
+\sum_{j=1}^{n} d_j\, x_{jm} - C_{\max} &\le 0, & \forall m \in \{1, 2, \dots, k\},\\
+x_{jm} &\in \{0, 1\}, & \forall j \in \{1, 2, \dots, n\},\ \forall m \in \{1, 2, \dots, k\},\\
+C_{\max} &\ge 0. &
+\end{aligned}
+$$
+
+The objective is $C_{\max}$ alone: no datum appears in it. It is the $k$ load
+rows that give it meaning, saying that no machine works longer than $C_{\max}$;
+the minimisation then presses it down onto the load of the busiest machine. It is
+the [min-max](links-06.md) technique.
+
+```python
+def modello_cmax(d, k):
+    n = len(d)
+    m = nuovo_modello("makespan")
+    x = m.addVars(n, k, vtype=GRB.BINARY, name="x")
+    cmax = m.addVar(name="cmax")
+    m.setObjective(cmax, GRB.MINIMIZE)
+    m.addConstrs((x.sum(j, "*") == 1 for j in R(n)), name="job")
+    m.addConstrs((gp.quicksum(d[j] * x[j, mm] for j in R(n)) <= cmax
+                  for mm in R(k)), name="load")
+    return m, x, cmax
+```
+
+On the instance of seven jobs of duration $d = (5, 5, 4, 4, 3, 3, 3)$ on
+$k = 3$ machines:
+
+<!-- modello-esteso: cap06_cmax -->
+
+<div class="modello-esteso largo" markdown>
+
+$$
+\begin{array}{rrrrrrrrrrrrrrrrrrrrrrr c l}
+\min &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & cmax &  & \\
+\text{subject to} & x_{11} & +x_{12} & +x_{13} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & = & 1\\
+ &  &  &  & x_{21} & +x_{22} & +x_{23} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & = & 1\\
+ &  &  &  &  &  &  & x_{31} & +x_{32} & +x_{33} &  &  &  &  &  &  &  &  &  &  &  &  &  & = & 1\\
+ &  &  &  &  &  &  &  &  &  & x_{41} & +x_{42} & +x_{43} &  &  &  &  &  &  &  &  &  &  & = & 1\\
+ &  &  &  &  &  &  &  &  &  &  &  &  & x_{51} & +x_{52} & +x_{53} &  &  &  &  &  &  &  & = & 1\\
+ &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & x_{61} & +x_{62} & +x_{63} &  &  &  &  & = & 1\\
+ &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & x_{71} & +x_{72} & +x_{73} &  & = & 1\\
+ & 5x_{11} &  &  & +5x_{21} &  &  & +4x_{31} &  &  & +4x_{41} &  &  & +3x_{51} &  &  & +3x_{61} &  &  & +3x_{71} &  &  & -cmax & \le & 0\\
+ &  & 5x_{12} &  &  & +5x_{22} &  &  & +4x_{32} &  &  & +4x_{42} &  &  & +3x_{52} &  &  & +3x_{62} &  &  & +3x_{72} &  & -cmax & \le & 0\\
+ &  &  & 5x_{13} &  &  & +5x_{23} &  &  & +4x_{33} &  &  & +4x_{43} &  &  & +3x_{53} &  &  & +3x_{63} &  &  & +3x_{73} & -cmax & \le & 0\\
+ & x_{11}, & x_{12}, & x_{13}, & x_{21}, & x_{22}, & x_{23}, & x_{31}, & x_{32}, & x_{33}, & x_{41}, & x_{42}, & x_{43}, & x_{51}, & x_{52}, & x_{53}, & x_{61}, & x_{62}, & x_{63}, & x_{71}, & x_{72}, & x_{73} &  & \in & \{0, 1\}\\
+ &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & cmax & \ge & 0
+\end{array}
+$$
+
+</div>
+
+<!-- modello-esteso: fine -->
+
+The total load is $27$ and the machines are three: no solution can go below
+$27/3 = 9$, and the optimum is exactly $9$ — the jobs split into three groups of
+$9$. Here the count settles the problem on its own.
+
+### Travelling salesman: the MTZ formulation
+
+!!! abstract "Travelling salesman"
+    There are $n$ cities and a distance $d_{ij}$ between every pair. Find the
+    shortest tour that visits every city exactly once and returns to the starting
+    point.
+
+With $x_{ij} = 1$ if the tour goes from $i$ to $j$, the two families "one
+leaves once" and "one enters once" are not enough: they also admit solutions made
+of separate **subtours**. The Miller–Tucker–Zemlin formulation adds a variable
+$u_i$ for every city other than the first, recording its position along the
+tour.
+
+$$
+\begin{aligned}
+\min ~~ \sum_{i=1}^{n} \sum_{j \ne i} d_{ij}\, x_{ij} & &\\
+\text{subject to} \quad \sum_{j \ne i} x_{ij} &= 1, & \forall i \in \{1, 2, \dots, n\},\\
+\sum_{i \ne j} x_{ij} &= 1, & \forall j \in \{1, 2, \dots, n\},\\
+u_i - u_j + n\, x_{ij} &\le n - 1, & \forall i, j \in \{2, 3, \dots, n\},\ i \ne j,\\
+x_{ij} &\in \{0, 1\}, & \forall i, j \in \{1, 2, \dots, n\},\ i \ne j,\\
+u_i &\in [1,\, n-1], & \forall i \in \{2, 3, \dots, n\}.
+\end{aligned}
+$$
+
+The third group is the heart of the formulation. If $x_{ij} = 0$ the row becomes
+$u_i - u_j \le n - 1$, always true because the $u$ lie between $1$ and $n-1$: it
+forbids nothing. If instead $x_{ij} = 1$ it becomes $u_j \ge u_i + 1$, that is
+"if I go from $i$ to $j$, the position of $j$ is the next one". A subtour missing
+city $1$ would need a chain of ever-growing positions closing on itself, which is
+impossible; city $1$ has no $u$ of its own precisely because it is where the tour
+closes.
+
+```python
+def modello_tsp(D):
+    n = len(D)
+    m = nuovo_modello("tsp")
+    x = m.addVars(((i, j) for i in R(n) for j in R(n) if i != j),
+                  vtype=GRB.BINARY, name="x")
+    u = m.addVars(R(1, n), lb=1, ub=n - 1, name="u")
+    m.setObjective(gp.quicksum(D[i][j] * x[i, j] for i, j in x), GRB.MINIMIZE)
+    m.addConstrs((gp.quicksum(x[i, j] for j in R(n) if j != i) == 1
+                  for i in R(n)), name="out")
+    m.addConstrs((gp.quicksum(x[i, j] for i in R(n) if i != j) == 1
+                  for j in R(n)), name="in")
+    m.addConstrs((u[i] - u[j] + n * x[i, j] <= n - 1
+                  for i in R(1, n) for j in R(1, n) if i != j), name="mtz")
+    return m, x, u
+```
+
+On the five-city instance of the [heuristics chapter](modelling-4.md) the
+optimal tour is $1 \to 3 \to 5 \to 2 \to 4 \to 1$ and measures $18$. The model of
+the instance has $24$ columns — twenty arcs and four positions — and twenty-two
+rows:
+
+<!-- modello-esteso: cap06_tsp -->
+
+<div class="modello-esteso largo" markdown>
+
+$$
+\begin{array}{rrrrrrrrrrrrrrrrrrrrrrrrr c l}
+\min & 5x_{12} & +2x_{13} & +2x_{14} & +9x_{15} & +5x_{21} & +4x_{23} & +3x_{24} & +4x_{25} & +2x_{31} & +4x_{32} & +4x_{34} & +7x_{35} & +2x_{41} & +3x_{42} & +4x_{43} & +7x_{45} & +9x_{51} & +4x_{52} & +7x_{53} & +7x_{54} &  &  &  &  &  & \\
+\text{subject to} & x_{12} & +x_{13} & +x_{14} & +x_{15} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & = & 1\\
+ &  &  &  &  & x_{21} & +x_{23} & +x_{24} & +x_{25} &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & = & 1\\
+ &  &  &  &  &  &  &  &  & x_{31} & +x_{32} & +x_{34} & +x_{35} &  &  &  &  &  &  &  &  &  &  &  &  & = & 1\\
+ &  &  &  &  &  &  &  &  &  &  &  &  & x_{41} & +x_{42} & +x_{43} & +x_{45} &  &  &  &  &  &  &  &  & = & 1\\
+ &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & x_{51} & +x_{52} & +x_{53} & +x_{54} &  &  &  &  & = & 1\\
+ &  &  &  &  & x_{21} &  &  &  & +x_{31} &  &  &  & +x_{41} &  &  &  & +x_{51} &  &  &  &  &  &  &  & = & 1\\
+ & x_{12} &  &  &  &  &  &  &  &  & +x_{32} &  &  &  & +x_{42} &  &  &  & +x_{52} &  &  &  &  &  &  & = & 1\\
+ &  & x_{13} &  &  &  & +x_{23} &  &  &  &  &  &  &  &  & +x_{43} &  &  &  & +x_{53} &  &  &  &  &  & = & 1\\
+ &  &  & x_{14} &  &  &  & +x_{24} &  &  &  & +x_{34} &  &  &  &  &  &  &  &  & +x_{54} &  &  &  &  & = & 1\\
+ &  &  &  & x_{15} &  &  &  & +x_{25} &  &  &  & +x_{35} &  &  &  & +x_{45} &  &  &  &  &  &  &  &  & = & 1\\
+ &  &  &  &  &  & 5x_{23} &  &  &  &  &  &  &  &  &  &  &  &  &  &  & +u_2 & -u_3 &  &  & \le & 4\\
+ &  &  &  &  &  &  & 5x_{24} &  &  &  &  &  &  &  &  &  &  &  &  &  & +u_2 &  & -u_4 &  & \le & 4\\
+ &  &  &  &  &  &  &  & 5x_{25} &  &  &  &  &  &  &  &  &  &  &  &  & +u_2 &  &  & -u_5 & \le & 4\\
+ &  &  &  &  &  &  &  &  &  & 5x_{32} &  &  &  &  &  &  &  &  &  &  & -u_2 & +u_3 &  &  & \le & 4\\
+ &  &  &  &  &  &  &  &  &  &  & 5x_{34} &  &  &  &  &  &  &  &  &  &  & +u_3 & -u_4 &  & \le & 4\\
+ &  &  &  &  &  &  &  &  &  &  &  & 5x_{35} &  &  &  &  &  &  &  &  &  & +u_3 &  & -u_5 & \le & 4\\
+ &  &  &  &  &  &  &  &  &  &  &  &  &  & 5x_{42} &  &  &  &  &  &  & -u_2 &  & +u_4 &  & \le & 4\\
+ &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 5x_{43} &  &  &  &  &  &  & -u_3 & +u_4 &  & \le & 4\\
+ &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 5x_{45} &  &  &  &  &  &  & +u_4 & -u_5 & \le & 4\\
+ &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 5x_{52} &  &  & -u_2 &  &  & +u_5 & \le & 4\\
+ &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 5x_{53} &  &  & -u_3 &  & +u_5 & \le & 4\\
+ &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & 5x_{54} &  &  & -u_4 & +u_5 & \le & 4\\
+ & x_{12}, & x_{13}, & x_{14}, & x_{15}, & x_{21}, & x_{23}, & x_{24}, & x_{25}, & x_{31}, & x_{32}, & x_{34}, & x_{35}, & x_{41}, & x_{42}, & x_{43}, & x_{45}, & x_{51}, & x_{52}, & x_{53}, & x_{54} &  &  &  &  & \in & \{0, 1\}\\
+ &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & u_2, & u_3, & u_4, & u_5 & \ge & 1
+\end{array}
+$$
+
+</div>
+
+<!-- modello-esteso: fine -->
+
+!!! warning "MTZ is convenient, not the strongest"
+    The MTZ constraints are $O(n^2)$ and take three lines of `gurobipy`, but their
+    linear relaxation is weak: the continuous $u$ absorb almost everything and the
+    LP stays far from the integer optimum. Formulations that remove subtours with
+    connectivity cuts give much better bounds, at the price of an exponential
+    number of constraints to be generated as they are needed. For the sizes of
+    this course MTZ is enough.
+
 ## The course protocol, from start to finish
 
 $$\text{data} \to \text{model} \to \text{heuristic and check} \to \text{LP and dual} \to \text{MIP} \to \text{table} \to \text{figures and notebook}$$
@@ -264,7 +520,7 @@ the notebook is
 
 <!-- embedded-script: begin (regenerated by python/embed_code.py) -->
 
-??? example "Show the complete script — `python/cap06_gurobi.py` (201 lines)"
+??? example "Show the complete script — `python/cap06_gurobi.py` (307 lines)"
 
     ```python
     """Chapter 3 -- From the model to Python/Gurobi: how it is written and read.
@@ -281,6 +537,7 @@ the notebook is
     from euristiche import best_fit
     from mip import (ammissibile, due_rilassamenti, frazione, nuovo_modello, registra_bound,
                      rilassamento, risolvi, stampa_lp, stampa_soluzione, valuta, viola_interezza)
+    from esteso import salva_modello
     from stile import (ARANCIO, BLU, CICLO, GRIGIO, ROSSO, TEAL, VERDE, intestazione,
                        plt, salva_dati, salva_figura)
 
@@ -444,6 +701,111 @@ the notebook is
     assert lb <= zlp <= z <= ub + 1e-9
     print("  (7) the table row is the one above, and it is saved to CSV: that is where")
     print("      the notes, the website and check_numbers.py read it from.")
+
+    # ---------- 8. THREE PROBLEMS THE COURSE REUSES ----------
+    # Bin packing, makespan on identical machines and the travelling salesman: the
+    # three problems on which the heuristics chapter builds next-fit, first-fit,
+    # best-fit, LPT and nearest neighbour. Here the models are written, so that
+    # chapter has something to compare its solutions with.
+    intestazione("8. Bin packing, makespan and TSP: the models the heuristics will use")
+
+    # --- bin packing: how many containers are enough ---
+    w_bpp = [5, 4, 4, 3, 3, 2]       # weight of the items
+    c_bpp = 8                        # capacity of one container
+    n_bpp = len(w_bpp)
+    k_bpp = n_bpp                    # at most one container per item
+
+
+    def modello_bpp(w, c, k):
+        n = len(w)
+        m = nuovo_modello("bin_packing")
+        x = m.addVars(n, k, vtype=GRB.BINARY, name="x")
+        y = m.addVars(k, vtype=GRB.BINARY, name="y")
+        m.setObjective(y.sum(), GRB.MINIMIZE)
+        m.addConstrs((x.sum(j, "*") == 1 for j in R(n)), name="item")
+        m.addConstrs((gp.quicksum(w[j] * x[j, b] for j in R(n)) <= c * y[b] for b in R(k)),
+                     name="capacity")
+        return m, x, y
+
+
+    m_bpp, x_bpp, y_bpp = modello_bpp(w_bpp, c_bpp, k_bpp)
+    z_bpp = risolvi(m_bpp)
+    minimo_teorico = -(-sum(w_bpp) // c_bpp)        # rounding up
+    print(f"  Bin packing: weights {w_bpp}, capacity {c_bpp}.")
+    print(f"  The total weight is {sum(w_bpp)}: no solution uses fewer than "
+          f"{sum(w_bpp)}/{c_bpp} = {minimo_teorico} containers, and the optimum uses {int(z_bpp)}.")
+    m_bpp3, x_bpp3, y_bpp3 = modello_bpp(w_bpp, c_bpp, int(z_bpp))
+    risolvi(m_bpp3)
+    salva_modello(m_bpp3, "cap06_bpp")
+    assert z_bpp == minimo_teorico
+
+    # --- P||Cmax: the makespan on identical machines ---
+    d_cmax = [5, 5, 4, 4, 3, 3, 3]   # job durations
+    k_cmax = 3                       # identical machines
+
+
+    def modello_cmax(d, k):
+        n = len(d)
+        m = nuovo_modello("makespan")
+        x = m.addVars(n, k, vtype=GRB.BINARY, name="x")
+        cmax = m.addVar(name="cmax")
+        m.setObjective(cmax, GRB.MINIMIZE)
+        m.addConstrs((x.sum(j, "*") == 1 for j in R(n)), name="job")
+        m.addConstrs((gp.quicksum(d[j] * x[j, mm] for j in R(n)) <= cmax for mm in R(k)),
+                     name="load")
+        return m, x, cmax
+
+
+    m_cmax, x_cmax, v_cmax = modello_cmax(d_cmax, k_cmax)
+    z_cmax = risolvi(m_cmax)
+    salva_modello(m_cmax, "cap06_cmax")
+    print(f"  Makespan: durations {d_cmax} on {k_cmax} identical machines.")
+    print(f"  The total load is {sum(d_cmax)}: divided by {k_cmax} it gives "
+          f"{frazione(sum(d_cmax) / k_cmax)}, and the optimum is {frazione(z_cmax)}.")
+
+    # --- TSP with the MTZ formulation ---
+    D_tsp = [[0, 5, 2, 2, 9],
+             [5, 0, 4, 3, 4],
+             [2, 4, 0, 4, 7],
+             [2, 3, 4, 0, 7],
+             [9, 4, 7, 7, 0]]
+    n_tsp = len(D_tsp)
+
+
+    def modello_tsp(D):
+        """TSP with the Miller-Tucker-Zemlin constraints.
+
+        The u variables order the cities along the tour: the constraint
+        u_i - u_j + n x_ij <= n - 1 is true when x_ij = 0 and forces u_j >= u_i + 1
+        when x_ij = 1. Subtours that miss city 1 are thereby excluded, because they
+        would need a chain of ever-growing u that closes on itself.
+        """
+        n = len(D)
+        m = nuovo_modello("tsp")
+        x = m.addVars(((i, j) for i in R(n) for j in R(n) if i != j), vtype=GRB.BINARY, name="x")
+        u = m.addVars(R(1, n), lb=1, ub=n - 1, name="u")
+        m.setObjective(gp.quicksum(D[i][j] * x[i, j] for i, j in x), GRB.MINIMIZE)
+        m.addConstrs((gp.quicksum(x[i, j] for j in R(n) if j != i) == 1 for i in R(n)), name="out")
+        m.addConstrs((gp.quicksum(x[i, j] for i in R(n) if i != j) == 1 for j in R(n)), name="in")
+        m.addConstrs((u[i] - u[j] + n * x[i, j] <= n - 1
+                      for i in R(1, n) for j in R(1, n) if i != j), name="mtz")
+        return m, x, u
+
+
+    m_tsp, x_tsp, u_tsp = modello_tsp(D_tsp)
+    salva_modello(m_tsp, "cap06_tsp")
+    z_tsp = risolvi(m_tsp)
+    seguente = {i: j for (i, j) in x_tsp if x_tsp[i, j].X > 0.5}
+    giro, citta = [0], 0
+    while seguente[citta] != 0:
+        citta = seguente[citta]
+        giro.append(citta)
+    print(f"  TSP on {n_tsp} cities: optimal tour "
+          + " -> ".join(str(c + 1) for c in giro + [0])
+          + f", length {frazione(z_tsp)}.")
+    salva_dati(pd.DataFrame([{"problem": "bin packing", "z_milp": z_bpp},
+                             {"problem": "makespan", "z_milp": z_cmax},
+                             {"problem": "TSP", "z_milp": z_tsp}]), "cap06_tre_problemi")
 
     # ---------- 8. FIGURE: THE FOUR NUMBERS OF THE PROTOCOL ----------
     fig, ax = plt.subplots(figsize=(7.6, 3.0))
