@@ -99,9 +99,30 @@ def undefined_macros() -> list[str]:
             f"but not defined in {MATHJAX.name}" for n, p in sorted(missing.items())]
 
 
+def missing_models() -> list[str]:
+    """Every numerical page shows the primal and, when it exists, the dual.
+
+    The generated model may be there without anyone embedding it: the page then
+    talks about a dual the reader never sees.
+    """
+    fuori = []
+    for page in sorted(DOCS.glob("ex-*.md")):
+        n = page.stem.removeprefix("ex-")
+        text = page.read_text(encoding="utf-8")
+        for side in ("primale", "duale"):
+            nome = f"ex{n}_{side}"
+            if (BASE / "data" / "models" / f"{nome}.tex").exists() \
+                    and f"modello-esteso: {nome}" not in text:
+                fuori.append(f"{page.name}: model {nome} exists but the page does not show it")
+    return fuori
+
+
 def main() -> int:
     trovati = 0
     for trouble in undefined_macros():
+        print(trouble)
+        trovati += 1
+    for trouble in missing_models():
         print(trouble)
         trovati += 1
     for pagina in sorted(DOCS.glob("*.md")):
