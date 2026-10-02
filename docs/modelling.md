@@ -24,6 +24,7 @@ Every chapter has a **script** producing all the numbers quoted and a
 comes out of a reproducible run.
 
 <div class="grid cards" markdown>
+
 -   :material-shape-outline: **1. What is a MIP model**
 
     ---
@@ -33,6 +34,7 @@ comes out of a reproducible run.
     Branch-and-bound in one page.
 
     [:octicons-arrow-right-24: The chapter](modelling-1.md)
+
 -   :material-arrow-collapse-vertical: **2. Relaxations, duality and bounds**
 
     ---
@@ -42,6 +44,7 @@ comes out of a reproducible run.
     marginal prices of the MILP.
 
     [:octicons-arrow-right-24: The chapter](modelling-2.md)
+
 -   :material-language-python: **3. From the model to Python/Gurobi**
 
     ---
@@ -51,6 +54,7 @@ comes out of a reproducible run.
     tolerances. The course protocol, from start to finish.
 
     [:octicons-arrow-right-24: The chapter](modelling-3.md)
+
 -   :material-run-fast: **4. Constructive heuristics**
 
     ---
@@ -60,6 +64,7 @@ comes out of a reproducible run.
     constructive heuristic does not prove infeasibility.
 
     [:octicons-arrow-right-24: The chapter](modelling-4.md)
+
 -   :material-gate-and: **5. Logic and binary variables**
 
     ---
@@ -69,6 +74,7 @@ comes out of a reproducible run.
     solved exercises, all checked by enumeration.
 
     [:octicons-arrow-right-24: The chapter](modelling-5.md)
+
 -   :material-link-variant: **6. Links between variables**
 
     ---

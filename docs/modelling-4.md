@@ -1,4 +1,4 @@
-# Constructive heuristics
+# 4. Constructive heuristics
 
 **Class:** algorithms · **Script:** `python/cap05_heuristics.py`, `python/euristiche.py`
 { .scheda }

@@ -1,4 +1,4 @@
-# Links between variables
+# 6. Links between variables
 
 **Class:** modelling techniques · **Script:** `python/cap03_links.py`
 { .scheda }

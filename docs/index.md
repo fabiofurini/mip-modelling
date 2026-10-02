@@ -7,6 +7,7 @@ professor at [DIAG](https://www.diag.uniroma1.it/), Sapienza University of Rome.
 
 <div class="grid cards" markdown>
 
+
 -   :material-book-open-page-variant:{ .lg .middle } **I am studying the theory**
 
     ---
@@ -16,6 +17,7 @@ professor at [DIAG](https://www.diag.uniroma1.it/), Sapienza University of Rome.
 
     [:octicons-arrow-right-24: The six chapters](modelling.md)
 
+
 -   :material-pencil-ruler:{ .lg .middle } **I want to do exercises**
 
     ---
@@ -24,6 +26,7 @@ professor at [DIAG](https://www.diag.uniroma1.it/), Sapienza University of Rome.
     model, instance, heuristic, dual and optimum.
 
     [:octicons-arrow-right-24: The problems](problems.md)
+
 
 -   :material-language-python:{ .lg .middle } **I want to use Gurobi**
 
@@ -87,6 +90,7 @@ professor at [DIAG](https://www.diag.uniroma1.it/), Sapienza University of Rome.
 
 <div class="grid cards" markdown>
 
+
 -   :material-vector-polygon: **Modelling**
 
     ---
@@ -97,6 +101,7 @@ professor at [DIAG](https://www.diag.uniroma1.it/), Sapienza University of Rome.
 
     [:octicons-arrow-right-24: The six chapters](modelling.md)
 
+
 -   :material-puzzle: **The problems**
 
     ---
@@ -106,6 +111,7 @@ professor at [DIAG](https://www.diag.uniroma1.it/), Sapienza University of Rome.
     have no family. Solved exercises and additional questions.
 
     [:octicons-arrow-right-24: The problems](problems.md)
+
 
 -   :material-school: **The course**
 

@@ -1,4 +1,4 @@
-# Relaxations, duality and bounds
+# 2. Relaxations, duality and bounds
 
 **Class:** LP · MILP · **Script:** `python/cap04_bounds.py`
 { .scheda }

@@ -1,4 +1,4 @@
-# Logic and binary variables
+# 5. Logic and binary variables
 
 **Class:** BIP · **Links:** clauses and implications · **Script:** `python/cap02_logic.py`
 { .scheda }

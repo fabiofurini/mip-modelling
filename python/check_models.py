@@ -6,7 +6,10 @@ notes, the site, the instructors' booklet:
 1. the relation symbol sits on the alignment point (`lhs &\\le rhs`), not before
    it: that way `=`, `\\le`, `\\ge` and `\\in` line up in a column;
 2. one domain row per family of variables, each with its own `\\forall`;
-3. never more than one constraint per row.
+3. never more than one constraint per row;
+4. every shorthand of the preamble the pages use (`\\Z`, `\\ub`, ...) is defined
+   for MathJax too, otherwise the browser prints the command instead of the
+   symbol.
 
 It exits non-zero on the first row out of format, so CI stops.
 
@@ -18,6 +21,8 @@ from pathlib import Path
 
 BASE = Path(__file__).resolve().parent.parent
 DOCS = BASE / "docs"
+PREAMBLE = BASE / "notes_1" / "preambolo.tex"
+MATHJAX = DOCS / "javascripts" / "mathjax.js"
 
 # un dominio: `\in \{0, 1\}`, `\ge 0`, `\le 0`, `\gtreqless 0`, `\in \Z_{\ge 0}`
 DOMINIO = re.compile(r"\\in\s*\\\{0|\\ge\s*0|\\le\s*0|\\gtreqless\s*0|\\in\s*\\(Z|Q|R)")
@@ -62,8 +67,31 @@ def problemi(riga: str) -> list[str]:
     return fuori
 
 
+def undefined_macros() -> list[str]:
+    """The preamble shorthands the pages use and MathJax does not know.
+
+    Without the definition the browser prints `\\Z` in place of Z, and the model
+    looks wrong even when it is not.
+    """
+    in_preamble = set(re.findall(r"\\newcommand\{\\([A-Za-z]+)\}",
+                                 PREAMBLE.read_text(encoding="utf-8")))
+    for_mathjax = set(re.findall(r"^\s*([A-Za-z]+):\s*\"",
+                                 MATHJAX.read_text(encoding="utf-8"), re.M))
+    missing = {}
+    for page in sorted(DOCS.glob("*.md")):
+        text = page.read_text(encoding="utf-8")
+        for name in set(re.findall(r"\\([A-Za-z]+)", text)):
+            if name in in_preamble and name not in for_mathjax:
+                missing.setdefault(name, []).append(page.name)
+    return [f"\\{n} used on {len(p)} pages ({', '.join(sorted(p)[:3])}...) "
+            f"but not defined in {MATHJAX.name}" for n, p in sorted(missing.items())]
+
+
 def main() -> int:
     trovati = 0
+    for trouble in undefined_macros():
+        print(trouble)
+        trovati += 1
     for pagina in sorted(DOCS.glob("*.md")):
         testo = pagina.read_text(encoding="utf-8")
         for n, blocco in enumerate(re.findall(r"\$\$\n(.*?)\n\$\$", testo, re.S), 1):
@@ -76,7 +104,7 @@ def main() -> int:
                     print(f"{pagina.name} (model {n}): {p}\n    {riga[:110]}")
                     trovati += 1
     if trovati:
-        print(f"\n{trovati} rows out of format.")
+        print(f"\n{trovati} points to fix.")
         return 1
     print("Model format: every page in order.")
     return 0
