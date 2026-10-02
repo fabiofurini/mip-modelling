@@ -3,12 +3,10 @@
 **Class:** implementation · **Script:** `python/cap06_bpp.py`, `python/cap06_cmax.py`, `python/cap06_tsp.py`
 { .scheda }
 
-
 Bin packing, makespan and travelling salesman: statement, model, construction in
 `gurobipy` and model of the instance. They are the three problems on which the
 [heuristics chapter](modelling-4.md) builds next-fit, first-fit, best-fit, LPT
 and nearest neighbour.
-
 
 So far the example model has always been the knapsack. The three problems below
 come back in the [heuristics chapter](modelling-4.md), where the solutions of

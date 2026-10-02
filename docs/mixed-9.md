@@ -184,7 +184,6 @@ $$
 
 <!-- modello-esteso: fine -->
 
-
 **Description.** $\alpha_b$ is the value of book $b$, $\beta_s$ the
 (non-positive) price of the width of shelf $s$, and $\gamma_{bs}$ the price of
 the link "the height of shelf $s$ covers book $b$". The objective prices the
@@ -249,19 +248,28 @@ certified gap, before solving the MILP, is $(15-12)/15 = 20\%$.
     The library buys a third shelf, as wide as the others. What is the new
     optimum?
 
-??? question "10.9.2 — Wider shelves"
-    The shelves are $12$ wide instead of $10$. What is the new optimum?
+## A worked variant: wider shelves
 
-## The sandwich on variant 9b
+The shelves are $12$ wide instead of $10$.
 
-The width does not enter the dual certificate: the whole $\gamma$ weight goes on
-the tallest book (number $1$, $8$ tall), and the dual bound stays $8$. The
-combinatorial argument of the base problem is needed here too: the total width
-is $18$ and one shelf holds $12$, so the non-empty shelves are still at least
-two, one at least $8$ tall and the other at least $4$, that is
-$\mathit{LB} = 12$. What changes is the heuristic: first-fit by decreasing width
-now fits the four books on two shelves $5$ and $8$ tall and drops from $15$ to
-$13$; the optimum from $15$ to $12$, and the bound certifies it.
+Only the datum $c$ changes. The optimum drops from $15$ to $12$. With shelves
+$12$ wide the arrangement $\{1, 2, 3\}$ on the first shelf (width
+$3 + 5 + 4 = 12$, height $\max(8,5,7) = 8$) and $\{4\}$ on the second (width $6$,
+height $4$) becomes feasible, for a sum of $8 + 4 = 12$. Note that the
+combinatorial bound built above, the height of the tallest book plus
+$\min_b h_b$, is still $8 + 4 = 12$ and here it is *exact*: the three
+shorter books all sit on the same shelf as the tallest one, and the fourth stays
+alone.
+
+The width does not enter the dual certificate: the recipe puts the whole
+$\gamma$ weight on the tallest book — number $1$, $8$ tall — because
+whatever shelf holds it must be at least as tall, and the dual bound stays $8$.
+The combinatorial argument of the base problem is needed here too: the total
+width is $18$ and one shelf holds $12$, so the non-empty shelves are still at
+least two, one at least $8$ tall and the other at least $4$, that is $\lb = 12$.
+What changes is the heuristic: first-fit by decreasing width now fits the four
+books on two shelves $5$ and $8$ tall and drops from $15$ to $13$; the optimum
+from $15$ to $12$, and the bound certifies it.
 
 <!-- tabella-variante: fam10_9b_bound -->
 

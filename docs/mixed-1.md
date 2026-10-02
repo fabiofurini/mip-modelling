@@ -194,7 +194,6 @@ $$
 
 <!-- modello-esteso: fine -->
 
-
 **Description.** $\pi$ is the price of one point, $\rho$ the value of one unit of
 preference and $\sigma_i$ the price of the mutual exclusion of prize $i$. The
 objective collects the threshold $\ell$ priced at $\rho$ and pays the point
@@ -280,17 +279,32 @@ which costs only $5$ euros of contribution.
     one of them may be taken, in either option. How does the model change? What
     is the new optimum?
 
-??? question "10.1.2 — At least four prizes"
-    Besides the preference threshold, the customer wants at least four different
-    prizes. How does the model change? What is the new optimum?
+## A worked variant: at least four prizes
 
-## The sandwich on variant 1b
+Besides the preference threshold, the customer wants at least four different
+prizes.
+
+One adds the single linear constraint
+
+$$
+\sum_{i=1}^{s} (x_i + y_i) \ge 4 ,
+$$
+
+again written on the indicators $x_i + y_i$. On the instance the optimum rises
+to $13$: with only $20$ points, four prizes force a repeated use of the mode
+that is cheap in points, that is the one that costs money. Note that the
+preference constraint and the counting constraint are not equivalent, however
+similar they look: the first one weights the prizes by $d_i$, the second one
+counts them.
 
 The constraint $\sum_i (x_i + y_i) \ge 4$ adds to the dual a $\kappa \ge 0$ with
-right-hand side $4$, which appears in **both** columns of every prize. Searching
-$\kappa$ too on the grid of quarters gives $\pi = \varrho = 3/2$,
-$\kappa = 9/2$. The heuristic enumerates the $3^5 = 243$ possible states and
-finds $13$, which is the optimum.
+right-hand side $4$: it enters the objective and appears in *both* columns
+of every prize, because a prize counts however it was taken. The recipe of the
+base problem extends by searching $\kappa$ too on the grid of quarters, and
+gives $\pi = \varrho = 3/2$, $\kappa = 9/2$, that is $\lb = 6$. The heuristic
+enumerates the $3^5 = 243$ possible states — each prize not taken, on points
+or with a contribution — and finds $13$, which is the optimum: with five
+objects enumeration is the most honest rule.
 
 <!-- tabella-variante: fam10_1b_bound -->
 

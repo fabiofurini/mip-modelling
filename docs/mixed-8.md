@@ -182,7 +182,6 @@ $$
 
 <!-- modello-esteso: fine -->
 
-
 **Description.** $\alpha_i$ is the value of song $i$, $\beta_j$ the price of the
 minimum number of songs on CD $j$, while $\gamma_j$ and $\delta_j$ are the
 weights with which CD $j$ enters the maximum and the minimum duration. The
@@ -259,20 +258,26 @@ has several optima.
     CD 1 is a reduced medium and cannot exceed $15$ minutes. How does the model
     change? What is the new optimum?
 
-??? question "10.8.2 — Three CDs"
-    The collection is distributed over three CDs instead of two. How does the
-    model change? What is the new optimum?
+## A worked variant: three CDs
 
-## The sandwich on variant 8b
+The collection is distributed over three CDs instead of two.
+
+Only the datum $m$ changes, from $2$ to $3$ (and the list $w$). On the instance
+the optimum rises to $2$: with three CDs the total duration $35$ does not split
+into equal parts, and the parity argument must be redone. The $10$-minute song
+is the structural constraint: if it sits alone on a CD, that CD lasts $10$ and
+the other two share $25$, with a maximum of at least $13$; if it goes with the
+$3$-minute song, one gets $13, 11, 11$ and the difference is $2$.
 
 With three CDs instead of two the structure does not change: the columns of $y$
 and $z$ ask the $\gamma$ and the $\delta$ to sum to one, and spreading them
-evenly, $\gamma_j = \delta_j = 1/3$, favours no CD. The dual is worth $0$ like
-the relaxation, because a fractional solution splits every track into three and
-levels the durations. The useful bound comes from integrality, as in the base
-problem: the durations are integers summing to $35$, which is not a multiple of
-$3$, so they cannot all be equal and the difference is at least $1$. The LPT
-heuristic leaves $2$, which is the optimum.
+evenly, $\gamma_j = \delta_j = 1/3$, is the choice that favours no CD. The dual
+is worth $0$, like the relaxation, for the usual reason: a fractional solution
+splits every track into three equal parts and levels the durations. The useful
+bound comes from integrality, as in the base problem: the durations are integers
+summing to $35$, which is not a multiple of $3$, so they cannot all be equal and
+the difference is at least $1$. The LPT heuristic leaves $2$, which is the
+optimum: the certified gap stays open by one unit.
 
 <!-- tabella-variante: fam10_8b_bound -->
 

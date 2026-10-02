@@ -7,7 +7,6 @@ The thirty-eight solved problems all follow the same scheme: model, proof of the
 links between the variables, instance, constructive heuristic, dual of the LP
 relaxation, solution with Gurobi and additional modelling questions.
 
-
 !!! note "The difficulty stars"
     Every problem carries a difficulty from ★☆☆☆☆ to ★★★★★. It measures how hard
     it is to **build the model**: how many families of variables are needed,
@@ -26,7 +25,6 @@ relaxation, solution with Gurobi and additional modelling questions.
 
 <div class="grid cards" markdown>
 
-
 -   :material-numeric: **Fifteen numerical models**
 
     ---
@@ -36,7 +34,6 @@ relaxation, solution with Gurobi and additional modelling questions.
     EX 15.
 
     [:octicons-arrow-right-24: Go to the fifteen numerical models](numerical.md)
-
 
 -   :material-timer-sand: **Assignment and scheduling**
 
@@ -48,7 +45,6 @@ relaxation, solution with Gurobi and additional modelling questions.
 
     [:octicons-arrow-right-24: Explore the seven assignment and scheduling problems](scheduling.md)
 
-
 -   :material-map-marker-radius: **Location and coverage**
 
     ---
@@ -58,7 +54,6 @@ relaxation, solution with Gurobi and additional modelling questions.
     problems.
 
     [:octicons-arrow-right-24: Explore the four location and coverage problems](location.md)
-
 
 -   :material-factory: **Production planning**
 
@@ -70,7 +65,6 @@ relaxation, solution with Gurobi and additional modelling questions.
 
     [:octicons-arrow-right-24: Explore the three production planning problems](production.md)
 
-
 -   :material-shape-outline: **Mixed problems**
 
     ---
@@ -81,7 +75,6 @@ relaxation, solution with Gurobi and additional modelling questions.
     arguments. Nine solved problems.
 
     [:octicons-arrow-right-24: Explore the nine mixed problems](mixed.md)
-
 
 -   :material-help-circle-outline: **Problems to model**
 

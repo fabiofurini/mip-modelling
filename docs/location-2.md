@@ -171,7 +171,6 @@ $$
 
 <!-- modello-esteso: fine -->
 
-
 With $\bar\varrho=0$, $\bar\pi_{lc}=0$ and $\bar\mu_c = \min_l d_{lc}$
 (the distance to the nearest location overall):
 
@@ -202,21 +201,33 @@ gap $20.0\%$.
 
 ## Additional modelling questions
 
-??? question "8.2.1 — Exactly $k$ open locations"
-    Exactly $k$ locations must be open. How does the model change? What
-    is the new optimum?
-
-??? question "8.2.2 — Proximity coverage for one client"
+??? question "8.2.1 — Proximity coverage for one client"
     Client 1 must be served within distance $4$. How is this modelled?
     What is the new optimum?
 
-## The sandwich on variant 2a
+## A worked variant: exactly $k$ open locations
 
-The algebra settles it in one line: the column of the $x_l$ imposes
-$\varrho + \sigma \le 0$, and the objective contains $k(\varrho + \sigma)$, never
-positive. Imposing **exactly** $k$ sites instead of **at most** $k$ does not move
-the relaxation --- and here it does not move the integer optimum either, which
-stays $15$. That is not an accident of the instance: with no opening cost one
+For organisational reasons, exactly $k$ locations must be open (not at
+most).
+
+It suffices to add the linear constraint
+
+$$
+\sum_{l=1}^{m} x_l \ge k,
+$$
+
+which together with the already-present constraint
+imposes equality (one more linear constraint). On the instance, the
+optimum of problem 8.2 already opens exactly $2 = k$ locations, so the
+additional constraint is not binding and the optimum stays $15$.
+
+Imposing *exactly* $k$ sites instead of *at most* $k$ adds
+$\sigma \ge 0$ with right-hand side $k$ to the dual. The algebra settles it in
+one line: the column of the $x_l$ imposes $\varrho + \sigma \le 0$, and the
+objective contains $k(\varrho + \sigma)$, which is therefore never positive. The
+maximum is at $\varrho + \sigma = 0$ and the value is $\sum_c \mu_c$ again: the
+relaxation does not move — and here the integer optimum does not move either:
+it stays $15$. That is not an accident of the instance: with no opening cost one
 more site cannot worsen the assignment, so from a solution with fewer than $k$
 sites one always gets an equally good one with exactly $k$. The equality
 constraint is redundant; it bites only when opening costs something.

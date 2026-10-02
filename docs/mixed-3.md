@@ -201,7 +201,6 @@ $$
 
 <!-- modello-esteso: fine -->
 
-
 **Description.** $\alpha_j$ is the price of one unit of nutrient $j$ when it
 serves to reach the minimum requirement, $\beta_j$ what is paid not to exceed
 the cap, $\lambda_i$ and $\mu_i$ the prices of the two semicontinuity
@@ -264,17 +263,24 @@ indicators greater than one.
     The minimum lot rises from $1$ to $2$ kilos for every chosen food. How does
     the model change? What is the new optimum?
 
-??? question "10.3.2 — More variety"
-    At least four different foods are wanted instead of three. How does the
-    model change? What is the new optimum?
+## A worked variant: more variety
 
-## The sandwich on variant 3b
+At least four different foods are wanted instead of three.
 
-The variant changes a datum, $t = 4$, not the structure. The count of the foods
-is not priced: the column of the $y_i$ imposes
-$\tau \le c_i \lambda_i - d_i \mu_i$, and with $\lambda = \mu = 0$ it stays
-$\tau = 0$. The dual bound does not move, the optimum does: the heuristic
-switches on the fourth food at its minimum lot and reaches $31/3$.
+Only the datum $t$ changes, from $3$ to $4$. On the instance the optimum rises
+to $31/3 \approx 10.23$: one is forced to buy at least one kilo of the most
+expensive food (the potatoes) or to rearrange the quantities. The cost of
+variety is therefore $31/3 - 48/5 = 11/15 \approx 0.73$ euros a month. With
+$t = s$ the constraint becomes "all the foods", and the model stiffens until it
+coincides with the case in which all the indicators are one.
+
+The variant changes a datum, $t = 4$, not the structure. The count of the foods,
+however, is not priced: $\tau$ enters the objective with its right-hand side,
+but the column of the $y_i$ imposes $\tau \le c_i \lambda_i - d_i \mu_i$, and
+with the recipe of the base problem — $\lambda = \mu = 0$ and a single
+positive $\alpha$, on iron — it stays $\tau = 0$. The dual bound does not
+move, the optimum does: the heuristic switches on the fourth food at its minimum
+lot, completes with bread and reaches $31/3$, which is the optimum.
 
 <!-- tabella-variante: fam10_3b_bound -->
 

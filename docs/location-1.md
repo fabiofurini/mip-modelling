@@ -182,7 +182,6 @@ $$
 
 <!-- modello-esteso: fine -->
 
-
 With $\bar\mu_l = i_l/u_l$ (spreading the fixed cost over capacity) and
 $\bar\pi_c = \min_l(t_{lc}+\bar\mu_l)$:
 
@@ -220,15 +219,27 @@ of client 2 and all of client 3. Heuristic gap $20.3\%$.
     Every open location must ship at least $5$ liters. How does the model
     change? What is the new optimum?
 
-??? question "8.1.2 — Conditional opening"
-    Location 2 can only be installed if location 1 is also installed. How
-    is this modelled? What is the new optimum?
+## A worked variant: conditional opening
 
-## The sandwich on variant 1b
+Location 2 can only be installed if location 1 is also installed (say, a
+supervision requirement).
 
-$\rho \le 0$ moves fixed cost between the two sites. It is tried among the values
-that change the minimum defining $\pi_c$; here the best is $\rho = 0$, because
-site 1 already has the lowest cost per litre.
+This is a link between two variables of the same family, imposed by the
+single linear constraint
+
+$$
+x_2 \le x_1
+$$
+
+(one linear constraint): if $x_2 = 1$ then necessarily $x_1 = 1$. On the
+instance the optimum of problem 8.1 already opens both locations, so the
+additional constraint is not binding and the optimum stays $365$.
+
+"Site 2 opens only if site 1 opens" adds $\rho \le 0$ to the dual, which moves
+fixed cost between the two sites: $\mu_1 = (i_1 + \rho)/u_1$ and
+$\mu_2 = (i_2 - \rho)/u_2$. One tries $\rho$ among the values that change the
+minimum defining $\pi_c$; on this instance the best is $\rho = 0$, because site 1
+already has the lowest cost per litre.
 
 <!-- tabella-variante: fam08_1b_bound -->
 

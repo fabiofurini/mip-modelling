@@ -203,7 +203,6 @@ $$
 
 <!-- modello-esteso: fine -->
 
-
 **The recipe.** $\bar\pi_t = 0$: the setups are given away. What is left is
 $\mu_t \le p_t$ and $\mu_{t+1} \le \mu_t + h_t$, and the largest feasible value
 is built forward,
@@ -248,22 +247,35 @@ optimistic.
 
 ## Additional modelling questions
 
-??? question "9.1.1 — Daily capacity"
-    The plant cannot produce more than $35$ units a day. How does the model
-    change? What is the new optimum?
-
-??? question "9.1.2 — Minimum lot"
+??? question "9.1.1 — Minimum lot"
     If production takes place on a day, at least $25$ units must be produced. How
     does the model change? What is the new optimum?
 
-## The sandwich on variant 1a
+## A worked variant: daily capacity
+
+The plant cannot produce more than $35$ units a day.
+
+One adds the $n$ linear constraints
+
+$$
+x_t \le 35, \qquad \forall t \in \{1, 2, \dots, n\} .
+$$
+
+Alternatively one can replace the big-M with $M_t' = \min(M_t, 35)$:
+constraint then acts both as the activation link and as the
+capacity constraint, exactly as in the capacitated facility location of
+chapter ``Location and covering''. On the instance the optimal plan with only two runs
+is no longer feasible ($80 > 35$) and the optimum rises to $470$.
 
 The cap $x_t \le 35$ adds to the dual a family $\nu_t \ge 0$ with right-hand
-side $-35$. Raising $\nu_t$ lifts the cap on $\mu_t$ and collects $d_t$, but
-costs $35$: it only pays where the demand exceeds the capacity, and here the
-chain of the stocks already keeps $\mu_t$ below the cap, so the certificate is
-the one of the base problem. What changes is the heuristic: on day four it would
-exceed the cap, and the $5$ excess units are anticipated to day three.
+side $-35$: it enters the objective with a negative sign and loosens the column
+of $x_t$. Raising $\nu_t$ by one unit lifts the cap on $\mu_t$ and collects
+$d_t$, but costs $35$, so it only pays where the demand exceeds the capacity;
+and on this instance not even the busiest day justifies it, because the chain of
+the stocks already keeps $\mu_t$ below the cap. The certificate is therefore the
+one of the base problem, $\lb = 270$. What changes is the heuristic: on day four
+lot-for-lot would exceed the cap, and the $5$ excess units are anticipated to
+day three, which holds them in stock.
 
 <!-- tabella-variante: fam09_1a_bound -->
 

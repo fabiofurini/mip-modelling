@@ -182,7 +182,6 @@ $$
 
 <!-- modello-esteso: fine -->
 
-
 **A hand-built dual solution.** $\bar\pi_m = c_m/a_m$: $\tfrac{4}{21}, \tfrac{3}{11}, \tfrac{3}{20}$;
 then $\bar\mu_j = \max\{0, \max_m (r_j - t_j \bar\pi_m)\}$:
 $\bar\mu_1 = \tfrac{25}{4}$, $\bar\mu_2 = 9$, $\bar\mu_3 = \tfrac{75}{4}$;
@@ -215,15 +214,32 @@ second machine ($c_1 = 20 > r_2 = 15$). Heuristic gap: $20\%$.
     All jobs must be executed. How does the model change and how much does
     the obligation cost?
 
-??? question "7.3.2 — A job conditional on another"
-    Job 3 can be executed only if job 2 is executed too. Write the constraint
-    and find the new optimum.
+## A worked variant: a job conditional on another
 
-## The sandwich on variant 3b
+Job 3 requires a semi-finished product made by job 2: job 3 can be executed
+only if job 2 is executed too (on any machine).
 
-The new multiplier $\lambda \ge 0$ discounts the columns of job 3 and loads those
-of job 2. On this instance job 2 has no margin, $\lambda$ stays at zero and the
-certificate coincides with the one of the base problem.
+``I execute job 3'' is the proposition $\sum_m x_{3m} = 1$, ``I execute job 2''
+is $\sum_m x_{2m} = 1$; the implication ``3 $\Rightarrow$ 2'' reads
+
+$$
+\sum_{m=1}^{k} x_{3m} \le \sum_{m=1}^{k} x_{2m}
+$$
+
+(one linear constraint). If job 3 is executed the left-hand side is $1$ and
+the constraint forces the right-hand side to $1$: job 2 is executed;
+conversely, if job 2 is not executed the right-hand side is $0$ and the
+constraint forces $\sum_m x_{3m} = 0$. The constraint does not impose the
+converse: job 2 can be executed without job 3. On the instance the optimum
+becomes $20$: the $25$ solution (jobs 1 and 3 without job 2) is no longer
+feasible, and the best one is again $\{1, 2\}$ on machine 1 and $\{3\}$ on
+machine 3.
+
+"Job 3 only if job 2 as well" adds a multiplier $\lambda \ge 0$ to the dual,
+which discounts the columns of job 3 and loads those of job 2. One raises
+$\lambda$ as far as job 2 can bear for free: on this instance there is no such
+margin, $\lambda$ stays at zero and the certificate coincides with the one of the
+base problem.
 
 <!-- tabella-variante: fam07_3b_bound -->
 

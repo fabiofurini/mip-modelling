@@ -3,7 +3,6 @@
 **Class:** LP · ILP · BIP · MILP · **Script:** `python/cap01_models.py`
 { .scheda }
 
-
 ## Data, variables, objective, constraints
 
 A *mathematical programming* model translates a decision into four ingredients,

@@ -263,7 +263,6 @@ $$
 
 <!-- modello-esteso: fine -->
 
-
 **Description.** $\mu_t$ is the value of one pair available in month $t$ and
 $\nu_t$ the price of one working hour. The objective prices the demand at those
 values and subtracts $r\, m_0 \sum_t \nu_t$, that is, the hours the two initial
@@ -331,21 +330,29 @@ costs $60$ euros against the $1600$ of a hiring in the third month.
 
 ## Additional modelling questions
 
-??? question "9.2.1 — Very expensive hirings"
-    The hiring cost rises from $100$ to $3000$ euros (selection and training).
-    How does the optimal plan change?
-
-??? question "9.2.2 — Overtime"
+??? question "9.2.1 — Overtime"
     Every worker may do up to $40$ hours of overtime a month, paid $25$ euros an
     hour. How does the model change? Is it worth using them?
 
-## The sandwich on variant 2a
+## A worked variant: very expensive hirings
 
-The variant changes a datum, $u = 3000$ instead of $100$, not the structure. The
-certificate does not notice: $\mu_t$ is the lowest cost of having a pair
-available in month $t$, and the hiring cost does not appear there. The bound
-stays $13500$, the optimum rises from $16660$ to $19560$ — a correct bound can
-be completely insensitive to the datum that moves the problem.
+The hiring cost goes up from $100$ to $3000$ euros (selection and training).
+
+Only the datum $u$ changes. The new optimum is $19\,560$, that is $2900$ euros
+more. The plan does not change: one worker is hired anyway, because without that
+hiring the problem is infeasible ($4 \cdot 120 / 160 = 3$ workers are needed in
+any case). The difference is exactly $3000 - 100 = 2900$: the extra cost of an
+unavoidable hiring. It is a useful example of sensitivity analysis carried out
+by re-solving the model.
+
+The variant adds no constraint: it changes a datum, $u = 3000$ instead of $100$.
+Model, dual and recipe are those of the base problem, and the certificate does
+not notice the change, because $\mu_t$ is the lowest cost of having a pair
+available in month $t$ and the hiring cost does not appear there: the bound
+stays $13500$, while the optimum rises from $16660$ to $19560$. It is the
+limiting case of this chapter: a correct dual bound can be completely
+insensitive to the datum that moves the problem, and here it is the heuristic
+that follows it.
 
 <!-- tabella-variante: fam09_2a_bound -->
 

@@ -3,7 +3,6 @@
 **Class:** LP · MILP · **Script:** `python/cap04_bounds.py`
 { .scheda }
 
-
 This chapter teaches how to produce, **by hand**, a number that certainly lies
 on one side of the integer optimum. It serves three purposes: understanding how
 good a model is, how good a heuristic is, and how to read the numbers a solver

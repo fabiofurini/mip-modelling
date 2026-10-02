@@ -172,7 +172,6 @@ $$
 
 <!-- modello-esteso: fine -->
 
-
 With $\bar\pi_c=0$, $\bar\mu=0$ and $\bar\lambda_c = p_c/(m-1) = p_c/2$:
 
 $$
@@ -204,19 +203,29 @@ what the heuristic found. Heuristic gap $44.4\%$.
 
 ## Additional modelling questions
 
-??? question "8.3.1 — Guaranteed minimum coverage"
-    At least 3 clients must be covered. How does the model change? What
-    is the new optimum?
-
-??? question "8.3.2 — Conditional installation"
+??? question "8.3.1 — Conditional installation"
     Location 1 can only be installed if location 3 is also installed. How
     is this modelled? What is the new optimum?
 
-## The sandwich on variant 3a
+## A worked variant: guaranteed minimum coverage
 
-$\omega \le 0$ is best left at zero: lowering it forces every $\lambda_c$ up by
-$-\omega/(m-1)$, and in the objective those $\lambda$ weigh more than the
-right-hand side saves.
+By contract, at least $3$ clients must be covered.
+
+Add the linear constraint
+
+$$
+\sum_{c=1}^{n} y_c \ge 3
+$$
+
+(one linear constraint). On the instance the optimum of problem 8.3
+already covers $3$ clients, so the constraint is not binding and the
+optimum stays $45$.
+
+"At least three clients covered" adds $\omega \le 0$ to the dual. It is best
+left at zero, and the arithmetic says why: lowering it forces every $\lambda_c$
+up by $-\omega/(m-1)$, and in the objective those $\lambda$ weigh more than the
+right-hand side saves. The heuristic, with few sites, tries every choice of $k$
+and keeps the best feasible one.
 
 <!-- tabella-variante: fam08_3a_bound -->
 

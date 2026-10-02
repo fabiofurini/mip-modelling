@@ -212,7 +212,6 @@ $$
 
 <!-- modello-esteso: fine -->
 
-
 **Description.** $\alpha$ is the value of one decorated tree, $\beta_l$ the
 price of one light of colour $l$, $\gamma$ the price of variety and $\delta_c$
 that of the link between configuration $c$ and its indicator. The objective
@@ -270,23 +269,28 @@ bounds is exact.
 
 ## Additional modelling questions
 
-??? question "10.4.1 — All the configurations"
-    All three configurations are to appear. How does the model change? What is
-    the new optimum?
-
-??? question "10.4.2 — A minimum lot per configuration"
+??? question "10.4.1 — A minimum lot per configuration"
     Every configuration used must decorate at least three trees (below that
     threshold it is not worth equipping the crew). How does the model change?
     What is the new optimum?
 
-## The sandwich on variant 4a
+## A worked variant: all the configurations
+
+All three configurations are required to appear.
+
+Only the datum $f$ changes, from $2$ to $3$. On the instance the optimum rises
+from $2141$ to $2239$: forcing the use of configuration 2, the greediest for the
+expensive colour, costs $98$ euros. Note that the variety constraint, on its
+own, does not say *how many* trees must use each configuration: one is
+enough.
 
 Asking for all three configurations changes the right-hand side of the variety
-constraint, but that constraint is not priced: the recipe keeps
-$\gamma = \delta = 0$ and the bound stays $2140$ while the optimum rises from
-$2141$ to $2239$. The heuristic installs the two missing configurations on one
-tree each and costs $3023$: the certified gap stays wide, and here the MILP
-really is needed.
+constraint, not the structure. But that constraint is not priced: the recipe of
+the base problem keeps $\gamma = \delta = 0$ and puts the whole price on a
+single colour, so the bound stays $2140$ while the optimum rises from $2141$ to
+$2239$. The heuristic is the same, and to respect the variety it installs the
+two missing configurations on one tree each: it costs $3023$, and the certified
+gap stays wide. Here the MILP really is needed.
 
 <!-- tabella-variante: fam10_4a_bound -->
 

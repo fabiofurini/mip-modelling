@@ -184,7 +184,6 @@ $$
 
 <!-- modello-esteso: fine -->
 
-
 **A hand-built dual solution.** $\bar\lambda = 0$ and
 $\bar\pi = \max_j r_j/t_j = \tfrac{10}{5} = 2$: value $100$. Hence
 $9 \le z(\mathit{MILP}) \le 100$: a coarse bound, as "knapsack" bounds often
@@ -209,18 +208,26 @@ The heuristic stays at $9$ (gap $57\%$): the scanning order matters.
 
 ## Additional modelling questions
 
-??? question "7.5.1 — A single class"
-    At most one class can be activated.
-
-??? question "7.5.2 — A class subordinate to another"
+??? question "7.5.1 — A class subordinate to another"
     Class 3 can be activated only if class 1 is activated too.
 
-## The sandwich on variant 5a
+## A worked variant: a single class
 
-"At most one class" adds $\theta \ge 0$ with right-hand side $1$. Once the price
-of time $\pi$ is fixed, the other duals are forced: the recipe reduces to
-searching $\pi$ among the ratios $r_j/t_j$ and keeping the lowest value. The
-bound improves a great deal over the recipe of the base problem.
+Changing class requires a cleaning of the machine the company wants to avoid
+altogether: at most one class can be activated.
+
+A *set packing* constraint on the activations,
+$\sum_{c=1}^{q} y_c \le 1$ (one linear constraint): at most one $y_c$ equals
+$1$, and with it, through, only the jobs of that class can
+be executed. On the instance the optimum drops to $17$: the best class alone is
+class 3, with all its jobs ($9 + 5 + 6 + 6 = 26 \le 50$), profit $21 - 4 = 17$.
+
+"At most one class activated" adds a variable $\theta \ge 0$ with right-hand
+side $1$ to the dual: it enters the objective and loosens the columns of the
+$y_c$. Once the price of time $\pi$ is fixed, the $\lambda_j$ and $\theta$ are
+forced by the dual constraints, so the recipe reduces to searching $\pi$ among
+the ratios $r_j/t_j$ and keeping the lowest value. The bound improves a great
+deal over the recipe of the base problem.
 
 <!-- tabella-variante: fam07_5a_bound -->
 

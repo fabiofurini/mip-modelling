@@ -202,7 +202,6 @@ $$
 
 <!-- modello-esteso: fine -->
 
-
 **Description.** $\alpha_{pc}$ is the value of one unit of product $p$ delivered
 to customer $c$, $\beta_{ps}$ the (non-positive) price of availability, and
 $\gamma_{sc}$ the price of one unit of space on the leg from $s$ to $c$. The
@@ -271,23 +270,28 @@ optimal value.
 
 ## Additional modelling questions
 
-??? question "10.5.1 — Smaller boxes"
-    The boxes hold $4$ units instead of $10$. What is the new optimum?
-
-??? question "10.5.2 — Products kept apart"
+??? question "10.5.1 — Products kept apart"
     Different products cannot travel in the same box. How does the model change?
     What is the new optimum?
 
-## The sandwich on variant 5a
+## A worked variant: smaller boxes
+
+The boxes hold $4$ units instead of $10$.
+
+Only the datum $w$ changes. On the instance the optimum rises from $2$ to $3$:
+customer 1, who orders $7$ units, now requires at least
+$\lceil 7/4 \rceil = 2$ boxes, and customer 2 at least $\lceil 4/4 \rceil = 1$.
+The integer bound built above becomes $2 + 1 = 3$ and is exact again.
 
 The capacity of the box changes, $4$ instead of $10$, not the structure: the
-recipe stays $\beta = 0$ and $\gamma = \alpha = 1/w$, and the bound of the
-relaxation is still "units ordered divided by capacity", that is $11/4$ instead
-of $11/10$ — inversely proportional to the capacity, so smaller boxes raise it.
-As in the base problem, though, the per-customer count is stronger: every
-customer receives at least $\lceil (\text{its units}) / 4 \rceil$ boxes and
-boxes are not shared between customers, so $\mathit{LB} = 2 + 1 = 3$. The
-heuristic uses $3$: the sandwich closes, and the optimum goes from $2$ to $3$.
+recipe stays $\beta = 0$ and $\gamma = \alpha = 1/w$, the dual constraints stay
+satisfied by construction and the bound of the relaxation is still ``units
+ordered divided by the capacity of the box'', that is $11/4$ instead of $11/10$
+— inversely proportional to the capacity, so smaller boxes raise it. As in the
+base problem, though, the per-customer count is stronger: every customer
+receives at least $\lceil (\text{its units}) / 4 \rceil$ boxes and boxes are not
+shared between customers, so $\lb = 2 + 1 = 3$. The heuristic uses $3$: the
+sandwich closes, and the optimum goes from $2$ to $3$.
 
 <!-- tabella-variante: fam10_5a_bound -->
 

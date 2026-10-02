@@ -196,7 +196,6 @@ $$
 
 <!-- modello-esteso: fine -->
 
-
 **A hand-built dual solution.** The bonus of every class loaded on one job:
 $\bar\pi_1 = -5$, $\bar\pi_3 = -4$, $\bar\pi_5 = -10$; $\bar\lambda = 0$;
 $\bar\mu = \max_j (r_j - \bar\pi_j)/t_j = \max\{3, \tfrac{1}{3}, \tfrac{24}{25}, \tfrac{4}{5}, 2, \tfrac{11}{19}\} = 3$;
@@ -223,17 +222,27 @@ $10 + 22 + 10$. Heuristic gap $24\%$.
 
 ## Additional modelling questions
 
-??? question "7.6.1 — At least one job per class"
-    Execute at least one job of every class. What happens to $z$?
-
-??? question "7.6.2 — Penalty for a class started and not finished"
+??? question "7.6.1 — Penalty for a class started and not finished"
     Starting a class without completing it costs $w = 3$.
 
-## The sandwich on variant 6a
+## A worked variant: at least one job per class
 
-"At least one job per class" adds a family $\omega_c \le 0$ that enters the
-objective and, being non-positive, **lowers** it. The heuristic starts from the
-shortest job of each class, so it is feasible by construction.
+A union agreement requires executing at least one job of every class.
+
+A covering constraint per class,
+$\sum_{j \in \mathscr{J}_c} x_j \ge 1$ for every $c$ ($q$ linear constraints).
+With $q \ge 2$ classes all touched, for every pair of classes there is a mixed
+pair of executed jobs, and constraints force $z = 1$: the
+reduction $u$ is certain and it can be substituted in the capacity constraint
+($a - u$ instead of $a$, eliminating $z$). On the instance the optimum drops
+from $42$ to $40$: for instance jobs $1$, $3$ and $5$ ($5 + 25 + 10 + 10 = 50$),
+revenue $40$, no complete class.
+
+"At least one job per class" adds a family $\omega_c \le 0$ to the dual, one per
+class, which enters the objective: being non-positive, it *lowers* it. Each
+$\omega_c$ is pushed down as far as the columns of that class allow. The
+heuristic starts from the shortest job of each class — so it is feasible by
+construction — and then fills the remaining time.
 
 <!-- tabella-variante: fam07_6a_bound -->
 

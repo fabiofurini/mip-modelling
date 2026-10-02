@@ -190,7 +190,6 @@ $$
 
 <!-- modello-esteso: fine -->
 
-
 The second constraint is the reduced cost of $y_m$: the coefficient $1$ in
 the primal objective limits the sum of the $\lambda_{jm}$.
 
@@ -217,19 +216,41 @@ best.
 
 ## Additional modelling questions
 
-??? question "7.4.1 — Minimising the time of the slowest machine"
-    Minimise the maximum of the processing times (makespan), not the sum.
-
-??? question "7.4.2 — Fixed cost if the machine works"
+??? question "7.4.1 — Fixed cost if the machine works"
     Switching a machine on costs $g_m = 4$ euros, one minute costs $1$ euro.
     Which link is needed and what is the smallest big-M?
 
-## The sandwich on variant 4a
+## A worked variant: minimising the time of the slowest machine
 
-The min-max removes the cost from the $y_m$ and adds $\nu_m \ge 0$ with
-$\sum_m \nu_m \le 1$. It pays to price the longest job: the $\nu$ maximising
-$\min_m t_{jm}\nu_m$ makes that product constant, and the bound is the harmonic
-mean of its times. The recipe is **optimal** for the relaxation.
+The machines all work together and the company wants to finish as early as
+possible: minimise the *maximum* of the processing times of the machines
+(the makespan), not the sum.
+
+A second level of maximum: a variable $w \ge 0$ with the constraints
+
+$$
+w \ge y_m, \qquad \forall m \in \{1, 2, \dots, k\}
+$$
+
+($k$ linear constraints) and objective $\min w$. The pattern is the same as
+the maximum link: the constraints impose $w \ge \max_m y_m$ and the
+minimisation forces $w = \max_m y_m$ at the optimum. Careful: now the $y_m$ no
+longer have a positive coefficient in the objective, so the argument ``$y_m =$
+maximum of the $t_{jm} x_{jm}$ in every optimum'' falls — $y_m$ can inflate
+up to $w$ at no cost. It remains true that *there exists* an optimum where
+$y_m$ is the maximum: just lower it, the constraints stay satisfied and $w$
+does not grow. On the instance the optimal makespan is $10$: job 3 requires at
+least $10$ minutes on any machine, so no solution goes below $10$; the optimal
+solution puts it on machine 3 and places the other two without exceeding $10$
+(for instance job 2 with it on machine 3 and job 1 on machine 1).
+
+Minimising the *maximum* of the times instead of the sum removes the cost
+from the $y_m$ and adds a family $\nu_m \ge 0$ for the constraints $w \ge y_m$,
+with the column of $w$ imposing $\sum_m \nu_m \le 1$. It pays to price a single
+job, the longest one: the $\nu$ maximising $\min_m t_{jm}\nu_m$ makes that
+product constant, that is $\nu_m$ proportional to $1/t_{jm}$, and the bound is
+the harmonic mean of the times of that job. The recipe turns out to be
+*optimal* for the relaxation.
 
 <!-- tabella-variante: fam07_4a_bound -->
 

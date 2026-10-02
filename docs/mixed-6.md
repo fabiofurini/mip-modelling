@@ -208,7 +208,6 @@ $$
 
 <!-- modello-esteso: fine -->
 
-
 **Description.** $\alpha_i$ and $\beta_i$ are the prices of a place for the
 girls and for the boys of nationality $i$; $\gamma_j$ is the price of a place in
 camp $j$, $\delta_j$ that of the balance constraint and $\varepsilon_{ij}$ that
@@ -288,19 +287,26 @@ the majority.
 
 ## Additional modelling questions
 
-??? question "10.6.1 — A larger camp"
-    Camp 1 is enlarged and reaches $20$ places. What is the new optimum?
-
-??? question "10.6.2 — An indivisible nationality"
+??? question "10.6.1 — An indivisible nationality"
     For organisational reasons the children of nationality 1 must all stay in
     the same camp. How does the model change? What is the new optimum?
 
-## The sandwich on variant 6a
+## A worked variant: a bigger camp
+
+Camp 1 is enlarged and reaches $20$ places.
+
+Only the datum $d_1$ changes. The total capacity rises to $28$, but the optimum
+stops at $24$: the second combinatorial argument is now in charge, the one about
+the majority nationality, $2 \cdot (f_1 + g_1) = 2 \cdot 12 = 24$. It is a good
+example of the fact that the "right" bound changes with the instance: the dual
+recipe $\gamma_j = 1$ would give $28$, which is worse.
 
 Camp 1 goes from $15$ to $20$ places: a datum changes, not the structure. The
-recipe stays $\gamma_j = 1$ with all the other dual variables at zero, because
-every child accepted takes a place, and it returns $\sum_j d_j = 28$ instead of
-$23$. The certificate does not change shape: the datum it adds up does.
+recipe is the one of the base problem — $\gamma_j = 1$ and all the other dual
+variables at zero, because every child accepted takes a place — and it returns
+$\sum_j d_j$, which is now $28$ instead of $23$. The certificate does not change
+shape: the datum it adds up does. The heuristic fills the camps in order and
+reaches $20$, the optimum is $24$.
 
 <!-- tabella-variante: fam10_6a_bound -->
 

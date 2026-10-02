@@ -203,7 +203,6 @@ $$
 
 <!-- modello-esteso: fine -->
 
-
 **A hand-built dual solution.** The $\beta$ have negative coefficient: at
 zero, then $\alpha = 0$; left are $\delta_j \le \gamma_j \le 1$ and every job
 contributes at most $t_j - d_j$, positive only if late even processed first:
@@ -231,18 +230,34 @@ $\tilde\tau = (6, 0, 5)$.
 
 ## Additional modelling questions
 
-??? question "7.7.1 — Release dates"
-    Job 2 cannot start before time $\rho_2 = 2$.
-
-??? question "7.7.2 — Minimising the maximum tardiness"
+??? question "7.7.1 — Minimising the maximum tardiness"
     Minimise the tardiness of the latest job.
 
-## The sandwich on variant 7a
+## A worked variant: release dates
 
-The release dates add $\varepsilon_j \ge 0$ with right-hand side $\rho_j + t_j$.
-With $\gamma_j = 1$, the column of $\kappa_j$ imposes
-$\delta_j + \varepsilon_j \le 1$: it pays to put all the weight on
-$\varepsilon_j$, that is, the release replaces the processing time.
+Job 2 cannot start before time $\rho_2 = 2$ (the material arrives late); the
+others are available from the start.
+
+A job starting no earlier than $\rho_j$ completes no earlier than
+$\rho_j + t_j$: it suffices to strengthen constraints to
+
+$$
+\kappa_j \ge \rho_j + t_j, \qquad \forall j \in \{1, 2, \dots, n\}
+$$
+
+($n$ constraints, with $\rho_j = 0$ for the jobs available at once). Mind the
+big-M: the completions can now exceed $\sum_j t_j$ (the machine may stay idle
+waiting), and $M$ must be updated to $\max_j \rho_j + \sum_j t_j$. On the
+instance the optimum becomes $12$: the sequence $2 \to 1 \to 3$ would force
+the machine to wait until $2$, and with $\kappa_2 = 6$, $\kappa_1 = 11$,
+$\kappa_3 = 17$ the tardiness values would be $2 + 8 + 7$; the order
+$1 \to 2 \to 3$ stays at $12$ and is optimal.
+
+The release dates add a family $\varepsilon_j \ge 0$ to the dual, entering the
+objective with its right-hand side $\rho_j + t_j$. With $\gamma_j = 1$, the
+column of $\kappa_j$ imposes $\delta_j + \varepsilon_j \le 1$, and it pays to put
+all the weight on $\varepsilon_j$: the release replaces the processing time. The
+heuristic is the same EDD rule, which now waits for the release.
 
 <!-- tabella-variante: fam07_7a_bound -->
 

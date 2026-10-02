@@ -173,7 +173,6 @@ $$
 
 <!-- modello-esteso: fine -->
 
-
 **Description.** $\lambda_j$ and $\mu_j$ are the prices of the two constraints
 that bound the imbalance of product $j$, one from above and one from below.
 The objective prices the total $T_j$ of each product at those values. The first
@@ -255,22 +254,34 @@ that is why the column is called "certified bound".
 
 ## Additional modelling questions
 
-??? question "10.7.1 — Two inseparable branches"
-    Branches $1$ and $2$ share premises and must stay in the same company. How
-    does the model change? What is the new optimum?
-
-??? question "10.7.2 — Min-sum instead of min-max"
+??? question "10.7.1 — Min-sum instead of min-max"
     One wants to minimise the *sum* of the differences over all products instead
     of the worst difference. How does the model change? Is the optimal partition
     the same?
 
-## The sandwich on variant 7a
+## A worked variant: two inseparable branches
 
-The equality $x_1 - x_2 = 0$ adds to the dual a free $\sigma$ with right-hand
-side zero, so the objective does not change and the relaxation is worth $0$ as
-in the base problem. The useful bound is combinatorial again: with $1$ and $2$
-tied, the best possible imbalance on the three products is $4$, $0$ and $2$, so
-$z(\mathit{MILP}) \ge 4$. With the branches free it was $2$.
+Branches $1$ and $2$ share their premises and must stay in the same company.
+
+One adds the single linear constraint
+
+$$
+x_1 - x_2 = 0 ,
+$$
+
+that is "both to $A$ or both to $B$". On the instance the optimum worsens from
+$4$ to $6$: the only feasible partitions with $1$ and $2$ together are
+$\{1,2\}$, $\{1,2,3\}$ and $\{1,2,4\}$ (with their complements), and the best
+one is exactly the one found by the heuristic.
+
+The equality $x_1 - x_2 = 0$ adds to the dual a free $\sigma$, which appears
+with a plus sign in the column of branch $1$ and with a minus in that of
+branch $2$. Its right-hand side is zero, so the objective does not change: the
+relaxation is worth $0$ as in the base problem, and for the same reason. The
+useful bound is combinatorial again: keeping branches $1$ and $2$ together, the
+best possible imbalance on the three products is $4$, $0$ and $2$, and every
+feasible partition must respect all of them, so $\zmilp \ge 4$. With the
+branches free it was $2$: tying two branches raises the bound.
 
 <!-- tabella-variante: fam10_7a_bound -->
 

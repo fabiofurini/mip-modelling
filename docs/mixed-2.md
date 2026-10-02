@@ -166,7 +166,6 @@ $$
 
 <!-- modello-esteso: fine -->
 
-
 **Description.** $\lambda_i$ is the price the auctioneer puts on item $i$. The
 objective is the total value of the lots at those prices. The constraints are
 the columns of the $x_j$, one per bid: the items bid $j$ asks for, priced at
@@ -228,17 +227,29 @@ items on the shelf.
     Bids $4$ and $5$ come from the same participant, who may win at most one of
     them. How does the model change? What is the new optimum?
 
-??? question "10.2.2 — Limited deliveries"
-    In this round the auctioneer can deliver at most two items in total. How
-    does the model change? What is the new optimum?
+## A worked variant: limited deliveries
 
-## The sandwich on variant 2b
+In this round the auctioneer can deliver at most two items in total.
 
-The cap $\sum_j |B_j| x_j \le 2$ adds to the dual a $\mu \ge 0$ with right-hand
-side $2$, which in the column of every bid appears multiplied by how many items
-that bid asks for. Trying $\mu$ among the per-item profits one reaches
-$\mu = 6$, $\lambda = 0$ and a bound of $12$; the heuristic accepts bid $3$
-alone and is worth $12$ as well. The sandwich closes without solving the MILP.
+One adds the single linear constraint
+
+$$
+\sum_{j=1}^{r} |B_j|\, x_j \le 2 ,
+$$
+
+in which the coefficient of every bid is the number of items it asks for: it is
+a knapsack constraint laid on top of the set packing. On the instance the
+optimum drops to $12$: a single two-item bid is accepted, the more profitable
+between bid $3$ and bid $4$ (both worth $12$).
+
+The cap on the items delivered, $\sum_j |B_j| x_j \le 2$, adds to the dual a
+$\mu \ge 0$ with right-hand side $2$, and in the column of every bid it appears
+multiplied by how many items that bid asks for. With $\mu$ fixed, every bid
+spreads over its items net of $\mu$ and $\lambda_i$ is the largest among the
+bids asking for item $i$: trying $\mu$ among the per-item profits one reaches
+$\mu = 6$, $\lambda = 0$ and $\ub = 12$. The heuristic accepts bid $3$ alone and
+is worth $12$ as well: the sandwich closes, and the optimum is known without
+solving the MILP.
 
 <!-- tabella-variante: fam10_2b_bound -->
 

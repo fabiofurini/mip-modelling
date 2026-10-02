@@ -209,7 +209,6 @@ $$
 
 <!-- modello-esteso: fine -->
 
-
 **Description.** $\pi_i$ is the price of one unit of resource $i$; $\ell_j$ and
 $\beta_j$ are the prices of the two semi-integrality constraints of type $j$, and
 $\gamma$ that of the bonus. The objective prices all the available resources.
@@ -278,21 +277,34 @@ hours are used.
 
 ## Additional modelling questions
 
-??? question "9.3.1 — A more demanding bonus"
-    The bonus is collected only if at least *three* different types are
-    produced. How does the model change? What is the new optimum?
-
-??? question "9.3.2 — Zero bonus"
+??? question "9.3.1 — Zero bonus"
     The diversification grant is abolished, that is $\bar r = 0$. What happens to
     the variable $z$?
 
-## The sandwich on variant 3a
+## A worked variant: a more demanding bonus
+
+The bonus is collected only if at least *three* different types are
+produced.
+
+Only one coefficient changes: constraint becomes
+
+$$
+-\sum_{j=1}^{s} y_j + 3\, z \le 0 .
+$$
+
+On the instance the new optimum is $9200$, that is $500$ less. Activating the
+third type would cost more than the bonus: it is better to give up the bonus,
+and indeed at the optimum $z = 0$. The value coincides, by coincidence, with
+that of the heuristic solution of the original problem.
 
 The bonus constraint touches a single column of the dual, the one of $z$, which
-now sees $\bar r / 3$ instead of $\bar r / 2$. With $\gamma = 500/3$ the bound
-drops from $11250$ to $32500/3$: asking for three types instead of two spreads
-the bonus over more activations, and the dual prices fall. The heuristic does
-not manage to switch on a third type and stays at $8700$.
+now sees $\bar r / 3$ instead of $\bar r / 2$; the rest of the dual is
+identical. The recipe is the one of the base problem with $\gamma = \bar r / 3 =
+500/3$, and the bound drops from $11250$ to $32500/3$: asking for three types
+instead of two spreads the bonus over more activations, so each type carries
+less of it and the dual prices fall. The heuristic starts from the base plan,
+tries to switch on a third type at its minimum lot and with these resources does
+not manage: it stays at $8700$, and the optimum drops from $9700$ to $9200$.
 
 <!-- tabella-variante: fam09_3a_bound -->
 

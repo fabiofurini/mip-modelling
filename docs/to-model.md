@@ -10,7 +10,6 @@ of every problem of the course: decisions and variables, one constraint per
 sentence of the statement, the links between the variables, a feasible solution
 and a dual one for the two bounds, then the solver.
 
-
 ## Twenty numerical problems
 
 Data written out, as in the fifteen numerical models: one reads the statement, recognises the decisions, writes the MILP and solves it.
@@ -223,7 +222,6 @@ Data written out, as in the fifteen numerical models: one reads the statement, r
     Five pictures are $60$, $45$, $80$, $50$ and $70$ centimetres wide. Two walls are
     $180$ centimetres long each. Every picture must be hung, and on one wall only.
     One wants the free space on the two walls to be as equal as possible.
-
 
 ## Twenty symbolic problems
 

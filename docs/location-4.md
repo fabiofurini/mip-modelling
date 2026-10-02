@@ -189,7 +189,6 @@ $$
 
 <!-- modello-esteso: fine -->
 
-
 With $\bar\gamma_{ij}=0$ and $\bar\beta_j = f_j/k$ (the largest value
 allowed), the constraint on $\alpha_i$ holds for **every** hub $j$, not
 only the most convenient one: $\bar\alpha_i = \min_j \bar\beta_j$.
@@ -236,15 +235,26 @@ it), terminals 2 and 3 on hub 1. Heuristic gap $5.3\%$.
     optimum change? Does the relaxation change? And what happens if, instead of
     adding them, one *replaces* the aggregated constraint by them?
 
-??? question "8.4.2 — Forbidden connection"
-    Terminal 1 cannot connect to hub 2. How is this modelled? What is the
-    new optimum?
+## A worked variant: forbidden connection
 
-## The sandwich on variant 4b
+Terminal 1 cannot be connected to hub 2 (a security requirement).
 
-Forbidding a connection removes a column from the primal, hence **removes** a
-constraint from the dual: $\alpha_1$ can rise. This is the case where one more
-constraint in the primal *improves* the certificate, instead of leaving it still.
+Fix the variable to zero with the linear constraint
+
+$$
+x_{12} = 0
+$$
+
+(one linear constraint). On the instance the optimum of problem 8.4 does
+not already use $x_{12}$ (terminal 1 is connected to hub 3), so the
+additional constraint is not binding and the optimum stays $19$.
+
+Forbidding a connection means removing a column from the primal, hence
+*removing* a constraint from the dual: $\alpha_1$ no longer has to stand the
+comparison with the forbidden hub and can rise. It is given one $\gamma$ on each
+of the hubs left to it — each hub has a budget of $1$ and no other terminal uses
+it — and the bound grows. This is the case where one more constraint in the
+primal *improves* the certificate, instead of leaving it still.
 
 <!-- tabella-variante: fam08_4b_bound -->
 

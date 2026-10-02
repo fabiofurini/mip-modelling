@@ -212,7 +212,6 @@ $$
 
 <!-- modello-esteso: fine -->
 
-
 **A hand-built dual solution.** With $\bar\pi_m = 0$, the constraints become
 $\mu_j \le c_{jm}$ for every $m$: the largest feasible value is
 
@@ -255,22 +254,36 @@ $\lceil 53/5 \rceil = 11$ closes the gap).
 
 ## Additional modelling questions
 
-??? question "7.1.1 — Jobs 1 and 3 on the same machine"
-    Jobs 1 and 3 use the same tool and must be processed by the same machine.
-    How does the model change? What is the new optimum for the instance?
-
-??? question "7.1.2 — Fixed cost per used machine"
+??? question "7.1.1 — Fixed cost per used machine"
     Every machine that processes at least one job costs an extra $g_m = 3$
     euros to switch on. Model the fixed cost and find the new optimum. Which
     link comes into play?
 
-## The sandwich on variant 1a
+## A worked variant: jobs 1 and 3 on the same machine
+
+Jobs 1 and 3 use the same tool and must be processed by the same machine.
+
+It is a link between two variables of the same family: for every machine $m$,
+$x_{1m} = 1$ if and only if $x_{3m} = 1$, that is
+
+$$
+x_{1m} = x_{3m}, \qquad \forall m \in \{1, 2, \dots, k\}
+$$
+
+($k$ linear constraints). Both directions are imposed by the constraint: if
+$x_{1m} = 1$ then $x_{3m} = 1$ and vice versa; constraints
+then guarantee that the common machine is unique. On the instance the new
+optimum is $12$: the pair must go where $t_{1m} + t_{3m} \le a_m$, i.e. on
+machine 1 ($2 + 4 \le 5$? no), on machine 2 ($1 + 5 \le 6$: yes, cost $10 + 4$)
+or on machine 3 ($3 + 3 \le 7$: yes, cost $2 + 6$); with job 2 on machine 2
+($4$) the best choice is machine 3 for the pair: $2 + 6 + 4 = 12$.
 
 The constraint "jobs 1 and 3 on the same machine" adds one free variable
 $\sigma_m$ per machine to the dual, and with it the two jobs can be priced
-**together**: their columns give $\mu_1 + \mu_3 \le \min_m (c_{1m} + c_{3m})$,
-more than pricing them separately. The two bounds meet and the problem closes
-without the solver.
+*together*: the constraints of their columns give
+$\mu_1 + \mu_3 \le \min_m (c_{1m} + c_{3m})$, which is more than pricing them
+separately. The heuristic tries the pair on every machine that can hold it and
+places job 2 last; the two bounds meet and the problem closes without the solver.
 
 <!-- tabella-variante: fam07_1a_bound -->
 

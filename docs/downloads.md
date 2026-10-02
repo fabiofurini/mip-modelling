@@ -14,7 +14,6 @@ are the core of the material. What comes after is supplementary.
 
 <div class="grid cards" markdown>
 
-
 -   :material-book-open-variant: **Modelling**
 
     ---
@@ -25,7 +24,6 @@ are the core of the material. What comes after is supplementary.
 
     [:octicons-download-24: notes-1-modelling.pdf](pdf/notes-1-modelling.pdf)
 
-
 -   :material-numeric: **Numerical problems**
 
     ---
@@ -35,7 +33,6 @@ are the core of the material. What comes after is supplementary.
     things before the general problems.
 
     [:octicons-download-24: notes-2-numerical.pdf](pdf/notes-2-numerical.pdf)
-
 
 -   :material-function-variant: **Problems with a symbolic model**
 
@@ -53,7 +50,6 @@ are the core of the material. What comes after is supplementary.
 
 <div class="grid cards" markdown>
 
-
 -   :material-school-outline: **How to work with the course**
 
     ---
@@ -63,7 +59,6 @@ are the core of the material. What comes after is supplementary.
     most common mistakes, and the reproducibility of the numbers.
 
     [:octicons-download-24: course-organization.pdf](pdf/course-organization.pdf)
-
 
 -   :material-help-circle-outline: **Problems to model**
 
@@ -77,7 +72,6 @@ are the core of the material. What comes after is supplementary.
 
     [:octicons-download-24: exercises.pdf](pdf/exercises.pdf)
 
-
 -   :material-presentation: **The slides**
 
     ---
@@ -89,7 +83,6 @@ are the core of the material. What comes after is supplementary.
     models are generated from the same sources as the notes.
 
     [:octicons-download-24: mip-slides.pdf](pdf/mip-slides.pdf)
-
 
 -   :material-language-python: **The code**
 

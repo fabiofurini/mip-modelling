@@ -214,7 +214,6 @@ $$
 
 <!-- modello-esteso: fine -->
 
-
 **A hand-built dual solution.** $\bar\pi_m = c_m / a_m$ (the cost per minute
 of each machine): $\tfrac{8}{25}, \tfrac{7}{20}, \tfrac{5}{12}$; then
 $\bar\mu_j = \min_m t_{jm}\bar\pi_m$:
@@ -259,16 +258,32 @@ machines 2 and 3 on, $\tilde x_{12} = \tilde x_{23} = \tilde x_{33} = 1$.
     Every machine used must work at least $\ell = 8$ minutes. Model and find
     the new optimum.
 
-??? question "7.2.2 — Link between two activations"
-    If machine 1 is used, machine 3 must be used too. Write the constraint
-    and discuss what it imposes and what it does not.
+## A worked variant: link between two activations
 
-## The sandwich on variant 2b
+Machine 3 shares the power supply with machine 1: if machine 1 is used, machine
+3 must be used too.
 
-The link between activations adds $\rho \le 0$, but here it does not pay to move
-it: machine 3 is the minimum for every job. The certificate stays the one of the
-base problem — a link between activations does not touch the relaxation, which
-can switch on half a machine. What grows is the integer optimum.
+It is an implication between two binary variables, $y_1 \Longrightarrow y_3$,
+i.e. $\NOT y_1 \OR y_3$, already in CNF: the linear constraint is
+
+$$
+1 - y_1 + y_3 \ge 1 \quad\Longleftrightarrow\quad y_1 \le y_3
+$$
+
+(one linear constraint). It imposes that $y_1 = 1$ forces $y_3 = 1$ and, by
+contraposition, that $y_3 = 0$ forces $y_1 = 0$. It does not impose the
+converse: machine 3 can be used alone ($y_3 = 1$, $y_1 = 0$ is feasible), and
+$y_1 = y_3 = 0$ stays feasible. On the instance the constraint does not change
+the optimum, $12$, because the optimal solution does not use machine 1; it
+would change it if the costs made machine 1 alone convenient.
+
+The link "if machine 1 is used then machine 3 is used too" adds a variable
+$\rho \le 0$ to the dual, which loosens the column of $y_1$ and tightens that of
+$y_3$. On the data of the instance it does not pay to move it: machine 3 is the
+minimum for every job, and lowering its price would lower every $\mu_j$. The
+certificate stays the one of the base problem — a link between
+*activations* does not touch the relaxation, which can switch on half a
+machine. What grows is the integer optimum, and therefore the gap.
 
 <!-- tabella-variante: fam07_2b_bound -->
 
