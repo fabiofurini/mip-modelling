@@ -65,9 +65,11 @@ with tempfile.TemporaryDirectory() as d:
     percorso = os.path.join(d, "modello.lp")
     m2.write(percorso)
     testo_lp = open(percorso).read()
-for riga in [r for r in testo_lp.splitlines() if r.strip()][:8]:
+# the model signature changes at every edit: of no use to the reader
+for riga in [r for r in testo_lp.splitlines() if r.strip()]:
+    if riga.startswith("\\ Signature"):
+        continue
     print("    " + riga)
-print("    ...")
 
 # ---------- 3. READING THE RESULTS: THE NORMAL CASE ----------
 intestazione("3. Reading the results when everything goes well")

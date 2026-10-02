@@ -127,7 +127,15 @@ Minimize
    + 5 x[2,0] + 4 x[2,1] + 6 x[2,2]
 Subject To
  assign[0]: x[0,0] + x[0,1] + x[0,2] = 1
- ...
+ assign[1]: x[1,0] + x[1,1] + x[1,2] = 1
+ assign[2]: x[2,0] + x[2,1] + x[2,2] = 1
+ availability[0]: 2 x[0,0] + 3 x[1,0] + 4 x[2,0] <= 5
+ availability[1]: x[0,1] + 4 x[1,1] + 5 x[2,1] <= 6
+ availability[2]: 3 x[0,2] + 2 x[1,2] + 3 x[2,2] <= 7
+Bounds
+Binaries
+ x[0,0] x[0,1] x[0,2] x[1,0] x[1,1] x[1,2] x[2,0] x[2,1] x[2,2]
+End
 ```
 
 It is the quickest way to spot a wrong coefficient: the instance table and this
