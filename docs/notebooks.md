@@ -14,7 +14,7 @@ being written to a file.
 
 | Chapter | Class | Notebook |
 |---|---|---|
-| [3. From the model to Python/Gurobi](modelling-3.md) | implementation | [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/fabiofurini/mip-modelling/blob/main/notebooks/cap06_gurobi.ipynb) |
+| [3.5 The protocol, and how to run it](gurobipy-5.md) | implementation | [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/fabiofurini/mip-modelling/blob/main/notebooks/cap06_gurobi.ipynb) |
 | [4. Constructive heuristics](modelling-4.md) | algorithms | [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/fabiofurini/mip-modelling/blob/main/notebooks/cap05_heuristics.ipynb) |
 | [5. Logic and binary variables](modelling-5.md) | BIP | [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/fabiofurini/mip-modelling/blob/main/notebooks/cap02_logic.ipynb) |
 | [6. Links between variables](links.md) | modelling techniques | [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/fabiofurini/mip-modelling/blob/main/notebooks/cap03_links.ipynb) |

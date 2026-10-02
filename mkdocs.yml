@@ -93,7 +93,13 @@ nav:
       - modelling.md
       - 1. What is a MIP model: modelling-1.md
       - 2. Relaxations, duality and bounds: modelling-2.md
-      - 3. From the model to Python/Gurobi: modelling-3.md
+      - 3. From the model to Python/Gurobi:
+          - modelling-3.md
+          - 3.1 Writing a model in gurobipy: gurobipy-1.md
+          - 3.2 Reading the results: gurobipy-2.md
+          - 3.3 Tolerances and relaxations: gurobipy-3.md
+          - 3.4 Three classic models: gurobipy-4.md
+          - 3.5 The protocol, and how to run it: gurobipy-5.md
       - 4. Constructive heuristics: modelling-4.md
       - 5. Logic and binary variables: modelling-5.md
       - 6. Links between variables:
