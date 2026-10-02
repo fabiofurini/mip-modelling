@@ -116,7 +116,7 @@ impossible to place.
 ## Set covering: the cheapest completion rule
 
 ```text
-CoveringConstructive heuristic(c, S):
+CoveringHeuristic(c, S):
   uncovered <- {1..m};   y[j] <- 0 for every j
   while uncovered is not empty:
       for every j not yet chosen: new(j) <- |{i in uncovered : j in S_i}|
@@ -141,7 +141,7 @@ looks at the ratio between the two, and what it produces is a feasible solution,
 hence a primal bound.
 
 ```text
-KnapsackConstructive heuristic(p, w, C):
+KnapsackHeuristic(p, w, C):
   residual <- C;   y[j] <- 0 for every j
   for j in order of DECREASING p[j]/w[j]:
       if w[j] <= residual:  y[j] <- 1;  residual <- residual - w[j]
