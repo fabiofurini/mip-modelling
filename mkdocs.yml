@@ -44,13 +44,6 @@ theme:
 
 plugins:
   - search
-  # the six chapters changed number: the old addresses keep working
-  - redirects:
-      redirect_maps:
-        modelling-4.md: modelling-2.md
-        modelling-6.md: modelling-3.md
-        modelling-5.md: modelling-4.md
-        modelling-2.md: modelling-5.md
 
 extra:
   social:
