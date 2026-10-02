@@ -30,11 +30,10 @@ DIR_MODELLI = DIR_DATI / "models"
 DISPENSE = sorted(BASE.glob("notes_*/capitoli"))
 ESERCIZI = BASE / "exercises" / "capitoli"
 
-NOME_EX = {
-    1: "ex01", 2: "ex02", 3: "ex03", 4: "ex14", 5: "ex06", 6: "ex04", 7: "ex07",
-    8: "ex08", 9: "ex09", 10: "ex10", 11: "ex12", 12: "ex11", 13: "ex05",
-    14: "ex13", 15: "ex15",
-}
+# The fifteen numerical problems are in order of difficulty, and the number of
+# the exercise and that of its model coincide: the mapping is derived, so it
+# cannot drift as it did with the renumbering.
+NOME_EX = {k: f"ex{k:02d}" for k in range(1, 16)}
 FAMIGLIE = ([(f"7.{i}", f"fam07_{i}") for i in range(1, 8)]
             + [(f"8.{i}", f"fam08_{i}") for i in range(1, 5)]
             + [(f"9.{i}", f"fam09_{i}") for i in range(1, 4)]

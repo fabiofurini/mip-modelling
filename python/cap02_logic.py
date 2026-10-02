@@ -12,6 +12,7 @@ from gurobipy import GRB
 
 from booleane import (AND, IMP, NOT, OR, V, cnf, equivalenti, scrivi, testo_cnf,
                       valuta, variabili, verifica, vincolo)
+from esteso import salva_modello
 from mip import ammissibile, frazione, nuovo_modello, rilassamento, risolvi, stampa_soluzione
 from stile import BLU, CICLO, ROSSO, TEAL, VERDE, intestazione, plt, salva_dati, salva_figura
 
@@ -175,6 +176,7 @@ def modello_selezione(con_logica=True):
 m_libero, _ = modello_selezione(con_logica=False)
 z_libero = risolvi(m_libero)
 m_log, x_log = modello_selezione(con_logica=True)
+salva_modello(m_log, "cap02_progetti")
 z_log = risolvi(m_log)
 zlp_log, _, _ = rilassamento(m_log, rafforzato=True)
 scelti = sorted(p for p in R(1, 11) if x_log[p].X > 0.5)
