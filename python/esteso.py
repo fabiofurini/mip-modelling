@@ -106,6 +106,10 @@ def _dominio(v) -> tuple[str, str]:
     if v.VType == GRB.INTEGER:
         return "\\in", "\\Z_{\\ge 0}" if v.LB == 0 else "\\Z"
     if v.LB <= -GRB.INFINITY / 2:
+        # without looking at the upper bound too, a non-positive variable
+        # (lb = -inf, ub = 0) would be printed as a free one
+        if v.UB <= 0:
+            return "\\le", numero(v.UB) if v.UB else "0"
         return "\\gtreqless", "0"
     if v.LB == 0:
         return "\\ge", "0"

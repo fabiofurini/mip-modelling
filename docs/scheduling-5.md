@@ -100,6 +100,32 @@ $\mathscr{J}_3 = \{5, 6, 7\}$, $a = 50$.
 | $f_c$ | 10 | 5 | 4 |
 | $s_c$ | 10 | 12 | 6 |
 
+The model written on the data of the instance:
+
+<!-- modello-esteso: fam07_5_primale -->
+
+<div class="modello-esteso largo" markdown>
+
+$$
+\begin{array}{rrrrrrrrrrr c l}
+\max & 10x_1 & +6x_2 & +8x_3 & +6x_4 & +7x_5 & +9x_6 & +5x_7 & -10y_1 & -5y_2 & -4y_3 &  & \\
+\text{subject to} & 5x_1 & +10x_2 & +8x_3 & +6x_4 & +9x_5 & +5x_6 & +6x_7 & +10y_1 & +12y_2 & +6y_3 & \le & 50\\
+ & x_1 &  &  &  &  &  &  & -y_1 &  &  & \le & 0\\
+ &  & x_2 &  &  &  &  &  & -y_1 &  &  & \le & 0\\
+ &  &  & x_3 &  &  &  &  &  & -y_2 &  & \le & 0\\
+ &  &  &  & x_4 &  &  &  &  & -y_2 &  & \le & 0\\
+ &  &  &  &  & x_5 &  &  &  &  & -y_3 & \le & 0\\
+ &  &  &  &  &  & x_6 &  &  &  & -y_3 & \le & 0\\
+ &  &  &  &  &  &  & x_7 &  &  & -y_3 & \le & 0\\
+ & x_1, & x_2, & x_3, & x_4, & x_5, & x_6, & x_7 &  &  &  & \in & \{0, 1\}\\
+ &  &  &  &  &  &  &  & y_1, & y_2, & y_3 & \in & \{0, 1\}
+\end{array}
+$$
+
+</div>
+
+<!-- modello-esteso: fine -->
+
 ## Constructive heuristic: the primal bound
 
 Class by class: the first job pays the setup too, if it fits.
@@ -129,6 +155,35 @@ s_c\, \pi - \sum_{j \in \mathscr{J}_c} \lambda_j &\ge -f_c, & \forall c \in \{1,
 $$
 
 <!-- model: end -->
+
+The same dual, written on the data of the instance:
+
+<!-- modello-esteso: fam07_5_duale -->
+
+<div class="modello-esteso largo" markdown>
+
+$$
+\begin{array}{rrrrrrrrr c l}
+\min & 50\pi &  &  &  &  &  &  &  &  & \\
+\text{subject to} & 5\pi & +\lambda_1 &  &  &  &  &  &  & \ge & 10\\
+ & 10\pi &  & +\lambda_2 &  &  &  &  &  & \ge & 6\\
+ & 8\pi &  &  & +\lambda_3 &  &  &  &  & \ge & 8\\
+ & 6\pi &  &  &  & +\lambda_4 &  &  &  & \ge & 6\\
+ & 9\pi &  &  &  &  & +\lambda_5 &  &  & \ge & 7\\
+ & 5\pi &  &  &  &  &  & +\lambda_6 &  & \ge & 9\\
+ & 6\pi &  &  &  &  &  &  & +\lambda_7 & \ge & 5\\
+ & 10\pi & -\lambda_1 & -\lambda_2 &  &  &  &  &  & \ge & -10\\
+ & 12\pi &  &  & -\lambda_3 & -\lambda_4 &  &  &  & \ge & -5\\
+ & 6\pi &  &  &  &  & -\lambda_5 & -\lambda_6 & -\lambda_7 & \ge & -4\\
+ & \pi &  &  &  &  &  &  &  & \ge & 0\\
+ &  & \lambda_1, & \lambda_2, & \lambda_3, & \lambda_4, & \lambda_5, & \lambda_6, & \lambda_7 & \ge & 0
+\end{array}
+$$
+
+</div>
+
+<!-- modello-esteso: fine -->
+
 
 **A hand-built dual solution.** $\bar\lambda = 0$ and
 $\bar\pi = \max_j r_j/t_j = \tfrac{10}{5} = 2$: value $100$. Hence

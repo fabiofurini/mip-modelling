@@ -103,6 +103,40 @@ $n = 3$, $M = 15$.
 | $t_j$ | 5 | 4 | 6 |
 | $d_j$ | 3 | 4 | 10 |
 
+The model written on the data of the instance:
+
+<!-- modello-esteso: fam07_7_primale -->
+
+<div class="modello-esteso largo" markdown>
+
+$$
+\begin{array}{rrrrrrrrrrrrr c l}
+\min &  &  &  &  &  &  &  &  &  & \tau_1 & +\tau_2 & +\tau_3 &  & \\
+\text{subject to} & s_{12} &  & +s_{21} &  &  &  &  &  &  &  &  &  & = & 1\\
+ &  & s_{13} &  &  & +s_{31} &  &  &  &  &  &  &  & = & 1\\
+ &  &  &  & s_{23} &  & +s_{32} &  &  &  &  &  &  & = & 1\\
+ & -15s_{12} &  &  &  &  &  & -\kappa_1 & +\kappa_2 &  &  &  &  & \ge & -11\\
+ &  & -15s_{13} &  &  &  &  & -\kappa_1 &  & +\kappa_3 &  &  &  & \ge & -9\\
+ &  &  & -15s_{21} &  &  &  & +\kappa_1 & -\kappa_2 &  &  &  &  & \ge & -10\\
+ &  &  &  & -15s_{23} &  &  &  & -\kappa_2 & +\kappa_3 &  &  &  & \ge & -9\\
+ &  &  &  &  & -15s_{31} &  & +\kappa_1 &  & -\kappa_3 &  &  &  & \ge & -10\\
+ &  &  &  &  &  & -15s_{32} &  & +\kappa_2 & -\kappa_3 &  &  &  & \ge & -11\\
+ &  &  &  &  &  &  & -\kappa_1 &  &  & +\tau_1 &  &  & \ge & -3\\
+ &  &  &  &  &  &  &  & -\kappa_2 &  &  & +\tau_2 &  & \ge & -4\\
+ &  &  &  &  &  &  &  &  & -\kappa_3 &  &  & +\tau_3 & \ge & -10\\
+ &  &  &  &  &  &  & \kappa_1 &  &  &  &  &  & \ge & 5\\
+ &  &  &  &  &  &  &  & \kappa_2 &  &  &  &  & \ge & 4\\
+ &  &  &  &  &  &  &  &  & \kappa_3 &  &  &  & \ge & 6\\
+ & s_{12}, & s_{13}, & s_{21}, & s_{23}, & s_{31}, & s_{32} &  &  &  &  &  &  & \in & \{0, 1\}\\
+ &  &  &  &  &  &  & \kappa_1, & \kappa_2, & \kappa_3 &  &  &  & \ge & 0\\
+ &  &  &  &  &  &  &  &  &  & \tau_1, & \tau_2, & \tau_3 & \ge & 0
+\end{array}
+$$
+
+</div>
+
+<!-- modello-esteso: fine -->
+
 ## Constructive heuristic: the primal bound
 
 Given order $1 \to 2 \to 3$:
@@ -136,6 +170,39 @@ $$
 $$
 
 <!-- model: end -->
+
+The same dual, written on the data of the instance:
+
+<!-- modello-esteso: fam07_7_duale -->
+
+<div class="modello-esteso largo" markdown>
+
+$$
+\begin{array}{rrrrrrrrrrrrrrrr c l}
+\max & \alpha_{12} & +\alpha_{13} & +\alpha_{23} & -11\beta_{12} & -9\beta_{13} & -10\beta_{21} & -9\beta_{23} & -10\beta_{31} & -11\beta_{32} & -3\gamma_1 & -4\gamma_2 & -10\gamma_3 & +5\delta_1 & +4\delta_2 & +6\delta_3 &  & \\
+\text{subject to} & \alpha_{12} &  &  & -15\beta_{12} &  &  &  &  &  &  &  &  &  &  &  & \le & 0\\
+ &  & \alpha_{13} &  &  & -15\beta_{13} &  &  &  &  &  &  &  &  &  &  & \le & 0\\
+ &  &  & \alpha_{23} &  &  &  & -15\beta_{23} &  &  &  &  &  &  &  &  & \le & 0\\
+ & \alpha_{12} &  &  &  &  & -15\beta_{21} &  &  &  &  &  &  &  &  &  & \le & 0\\
+ &  & \alpha_{13} &  &  &  &  &  & -15\beta_{31} &  &  &  &  &  &  &  & \le & 0\\
+ &  &  & \alpha_{23} &  &  &  &  &  & -15\beta_{32} &  &  &  &  &  &  & \le & 0\\
+ &  &  &  & -\beta_{12} & -\beta_{13} & +\beta_{21} &  & +\beta_{31} &  & -\gamma_1 &  &  & +\delta_1 &  &  & \le & 0\\
+ &  &  &  & \beta_{12} &  & -\beta_{21} & -\beta_{23} &  & +\beta_{32} &  & -\gamma_2 &  &  & +\delta_2 &  & \le & 0\\
+ &  &  &  &  & \beta_{13} &  & +\beta_{23} & -\beta_{31} & -\beta_{32} &  &  & -\gamma_3 &  &  & +\delta_3 & \le & 0\\
+ &  &  &  &  &  &  &  &  &  & \gamma_1 &  &  &  &  &  & \le & 1\\
+ &  &  &  &  &  &  &  &  &  &  & \gamma_2 &  &  &  &  & \le & 1\\
+ &  &  &  &  &  &  &  &  &  &  &  & \gamma_3 &  &  &  & \le & 1\\
+ & \alpha_{12}, & \alpha_{13}, & \alpha_{23} &  &  &  &  &  &  &  &  &  &  &  &  & \gtreqless & 0\\
+ &  &  &  & \beta_{12}, & \beta_{13}, & \beta_{21}, & \beta_{23}, & \beta_{31}, & \beta_{32} &  &  &  &  &  &  & \ge & 0\\
+ &  &  &  &  &  &  &  &  &  & \gamma_1, & \gamma_2, & \gamma_3 &  &  &  & \ge & 0\\
+ &  &  &  &  &  &  &  &  &  &  &  &  & \delta_1, & \delta_2, & \delta_3 & \ge & 0
+\end{array}
+$$
+
+</div>
+
+<!-- modello-esteso: fine -->
+
 
 **A hand-built dual solution.** The $\beta$ have negative coefficient: at
 zero, then $\alpha = 0$; left are $\delta_j \le \gamma_j \le 1$ and every job

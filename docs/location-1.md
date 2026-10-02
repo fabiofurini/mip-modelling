@@ -105,6 +105,29 @@ $m = 2$ locations, $n = 3$ clients:
 |---|---:|---:|---:|
 | $d_c$ | 8 | 25 | 27 |
 
+The model written on the data of the instance:
+
+<!-- modello-esteso: fam08_1_primale -->
+
+<div class="modello-esteso largo" markdown>
+
+$$
+\begin{array}{rrrrrrrrr c l}
+\min & 60x_1 & +90x_2 & +4y_{11} & +5y_{12} & +6y_{13} & +6y_{21} & +4y_{22} & +3y_{23} &  & \\
+\text{subject to} & 50x_1 &  & -y_{11} & -y_{12} & -y_{13} &  &  &  & \ge & 0\\
+ &  & 50x_2 &  &  &  & -y_{21} & -y_{22} & -y_{23} & \ge & 0\\
+ &  &  & y_{11} &  &  & +y_{21} &  &  & = & 8\\
+ &  &  &  & y_{12} &  &  & +y_{22} &  & = & 25\\
+ &  &  &  &  & y_{13} &  &  & +y_{23} & = & 27\\
+ & x_1, & x_2 &  &  &  &  &  &  & \in & \{0, 1\}\\
+ &  &  & y_{11}, & y_{12}, & y_{13}, & y_{21}, & y_{22}, & y_{23} & \ge & 0
+\end{array}
+$$
+
+</div>
+
+<!-- modello-esteso: fine -->
+
 ## Constructive heuristic: the primal bound
 
 Locations are scanned in order; for each, clients are shipped the minimum
@@ -132,6 +155,33 @@ $$
 $$
 
 <!-- model: end -->
+
+The same dual, written on the data of the instance:
+
+<!-- modello-esteso: fam08_1_duale -->
+
+<div class="modello-esteso" markdown>
+
+$$
+\begin{array}{rrrrrr c l}
+\max &  &  & 8\pi_1 & +25\pi_2 & +27\pi_3 &  & \\
+\text{subject to} & 50\mu_1 &  &  &  &  & \le & 60\\
+ &  & 50\mu_2 &  &  &  & \le & 90\\
+ & -\mu_1 &  & +\pi_1 &  &  & \le & 4\\
+ & -\mu_1 &  &  & +\pi_2 &  & \le & 5\\
+ & -\mu_1 &  &  &  & +\pi_3 & \le & 6\\
+ &  & -\mu_2 & +\pi_1 &  &  & \le & 6\\
+ &  & -\mu_2 &  & +\pi_2 &  & \le & 4\\
+ &  & -\mu_2 &  &  & +\pi_3 & \le & 3\\
+ & \mu_1, & \mu_2 &  &  &  & \ge & 0\\
+ &  &  & \pi_1, & \pi_2, & \pi_3 & \gtreqless & 0
+\end{array}
+$$
+
+</div>
+
+<!-- modello-esteso: fine -->
+
 
 With $\bar\mu_l = i_l/u_l$ (spreading the fixed cost over capacity) and
 $\bar\pi_c = \min_l(t_{lc}+\bar\mu_l)$:

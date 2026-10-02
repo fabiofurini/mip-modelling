@@ -78,6 +78,38 @@ $n = 4$ books, $m = 2$ shelves, $c = 10$.
 
 The total width of the books is $18$, the total capacity $2 \cdot 10 = 20$.
 
+The model written on the data of the instance:
+
+<!-- modello-esteso: fam10_9_primale -->
+
+<div class="modello-esteso largo" markdown>
+
+$$
+\begin{array}{rrrrrrrrrrr c l}
+\min &  &  &  &  &  &  &  &  & y_1 & +y_2 &  & \\
+\text{subject to} & x_{11} & +x_{12} &  &  &  &  &  &  &  &  & = & 1\\
+ &  &  & x_{21} & +x_{22} &  &  &  &  &  &  & = & 1\\
+ &  &  &  &  & x_{31} & +x_{32} &  &  &  &  & = & 1\\
+ &  &  &  &  &  &  & x_{41} & +x_{42} &  &  & = & 1\\
+ & 3x_{11} &  & +5x_{21} &  & +4x_{31} &  & +6x_{41} &  &  &  & \le & 10\\
+ &  & 3x_{12} &  & +5x_{22} &  & +4x_{32} &  & +6x_{42} &  &  & \le & 10\\
+ & -8x_{11} &  &  &  &  &  &  &  & +y_1 &  & \ge & 0\\
+ &  & -8x_{12} &  &  &  &  &  &  &  & +y_2 & \ge & 0\\
+ &  &  & -5x_{21} &  &  &  &  &  & +y_1 &  & \ge & 0\\
+ &  &  &  & -5x_{22} &  &  &  &  &  & +y_2 & \ge & 0\\
+ &  &  &  &  & -7x_{31} &  &  &  & +y_1 &  & \ge & 0\\
+ &  &  &  &  &  & -7x_{32} &  &  &  & +y_2 & \ge & 0\\
+ &  &  &  &  &  &  & -4x_{41} &  & +y_1 &  & \ge & 0\\
+ &  &  &  &  &  &  &  & -4x_{42} &  & +y_2 & \ge & 0\\
+ & x_{11}, & x_{12}, & x_{21}, & x_{22}, & x_{31}, & x_{32}, & x_{41}, & x_{42} &  &  & \in & \{0, 1\}\\
+ &  &  &  &  &  &  &  &  & y_1, & y_2 & \ge & 0
+\end{array}
+$$
+
+</div>
+
+<!-- modello-esteso: fine -->
+
 ## Constructive heuristic: two orders, two outcomes
 
 The rule is first-fit: every book on the first shelf it fits on. As in
@@ -122,6 +154,36 @@ $$
 $$
 
 <!-- model: end -->
+
+The same dual, written on the data of the instance:
+
+<!-- modello-esteso: fam10_9_duale -->
+
+<div class="modello-esteso largo" markdown>
+
+$$
+\begin{array}{rrrrrrrrrrrrrrr c l}
+\max & \alpha_1 & +\alpha_2 & +\alpha_3 & +\alpha_4 & +10\beta_1 & +10\beta_2 &  &  &  &  &  &  &  &  &  & \\
+\text{subject to} &  &  &  &  &  &  & \gamma_{11} &  & +\gamma_{21} &  & +\gamma_{31} &  & +\gamma_{41} &  & \le & 1\\
+ &  &  &  &  &  &  &  & \gamma_{12} &  & +\gamma_{22} &  & +\gamma_{32} &  & +\gamma_{42} & \le & 1\\
+ & \alpha_1 &  &  &  & +3\beta_1 &  & -8\gamma_{11} &  &  &  &  &  &  &  & \le & 0\\
+ & \alpha_1 &  &  &  &  & +3\beta_2 &  & -8\gamma_{12} &  &  &  &  &  &  & \le & 0\\
+ &  & \alpha_2 &  &  & +5\beta_1 &  &  &  & -5\gamma_{21} &  &  &  &  &  & \le & 0\\
+ &  & \alpha_2 &  &  &  & +5\beta_2 &  &  &  & -5\gamma_{22} &  &  &  &  & \le & 0\\
+ &  &  & \alpha_3 &  & +4\beta_1 &  &  &  &  &  & -7\gamma_{31} &  &  &  & \le & 0\\
+ &  &  & \alpha_3 &  &  & +4\beta_2 &  &  &  &  &  & -7\gamma_{32} &  &  & \le & 0\\
+ &  &  &  & \alpha_4 & +6\beta_1 &  &  &  &  &  &  &  & -4\gamma_{41} &  & \le & 0\\
+ &  &  &  & \alpha_4 &  & +6\beta_2 &  &  &  &  &  &  &  & -4\gamma_{42} & \le & 0\\
+ & \alpha_1, & \alpha_2, & \alpha_3, & \alpha_4 &  &  &  &  &  &  &  &  &  &  & \gtreqless & 0\\
+ &  &  &  &  & \beta_1, & \beta_2 &  &  &  &  &  &  &  &  & \le & 0\\
+ &  &  &  &  &  &  & \gamma_{11}, & \gamma_{12}, & \gamma_{21}, & \gamma_{22}, & \gamma_{31}, & \gamma_{32}, & \gamma_{41}, & \gamma_{42} & \ge & 0
+\end{array}
+$$
+
+</div>
+
+<!-- modello-esteso: fine -->
+
 
 **Description.** $\alpha_b$ is the value of book $b$, $\beta_s$ the
 (non-positive) price of the width of shelf $s$, and $\gamma_{bs}$ the price of

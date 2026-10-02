@@ -96,6 +96,35 @@ $n = 5$ days, $r_0 = r_n = 0$, total demand $110$ units.
 | $M_t$ | 110 | 90 | 80 | 50 | 10 |
 | $h_t$ | 1 | 1 | 1 | 1 | — |
 
+The model written on the data of the instance:
+
+<!-- modello-esteso: fam09_1_primale -->
+
+<div class="modello-esteso largo" markdown>
+
+$$
+\begin{array}{rrrrrrrrrrrrrrr c l}
+\min & 2x_1 & +3x_2 & +2x_3 & +3x_4 & +2x_5 & +s_1 & +s_2 & +s_3 & +s_4 & +50y_1 & +50y_2 & +50y_3 & +50y_4 & +50y_5 &  & \\
+\text{subject to} & x_1 &  &  &  &  & -s_1 &  &  &  &  &  &  &  &  & = & 20\\
+ &  & x_2 &  &  &  & +s_1 & -s_2 &  &  &  &  &  &  &  & = & 10\\
+ &  &  & x_3 &  &  &  & +s_2 & -s_3 &  &  &  &  &  &  & = & 30\\
+ &  &  &  & x_4 &  &  &  & +s_3 & -s_4 &  &  &  &  &  & = & 40\\
+ &  &  &  &  & x_5 &  &  &  & +s_4 &  &  &  &  &  & = & 10\\
+ & -x_1 &  &  &  &  &  &  &  &  & +110y_1 &  &  &  &  & \ge & 0\\
+ &  & -x_2 &  &  &  &  &  &  &  &  & +90y_2 &  &  &  & \ge & 0\\
+ &  &  & -x_3 &  &  &  &  &  &  &  &  & +80y_3 &  &  & \ge & 0\\
+ &  &  &  & -x_4 &  &  &  &  &  &  &  &  & +50y_4 &  & \ge & 0\\
+ &  &  &  &  & -x_5 &  &  &  &  &  &  &  &  & +10y_5 & \ge & 0\\
+ & x_1, & x_2, & x_3, & x_4, & x_5 &  &  &  &  &  &  &  &  &  & \ge & 0\\
+ &  &  &  &  &  & s_1, & s_2, & s_3, & s_4 &  &  &  &  &  & \ge & 0\\
+ &  &  &  &  &  &  &  &  &  & y_1, & y_2, & y_3, & y_4, & y_5 & \in & \{0, 1\}
+\end{array}
+$$
+
+</div>
+
+<!-- modello-esteso: fine -->
+
 ## Constructive heuristics: the primal bound
 
 **(a) Lot-for-lot.** One produces every day exactly the demand: no stock, but a
@@ -141,6 +170,39 @@ M_t\, \pi_t &\le q_t, & \forall t \in \{1, 2, \dots, n\}, \\
 $$
 
 <!-- model: end -->
+
+The same dual, written on the data of the instance:
+
+<!-- modello-esteso: fam09_1_duale -->
+
+<div class="modello-esteso largo" markdown>
+
+$$
+\begin{array}{rrrrrrrrrrr c l}
+\max & 20\mu_1 & +10\mu_2 & +30\mu_3 & +40\mu_4 & +10\mu_5 &  &  &  &  &  &  & \\
+\text{subject to} & \mu_1 &  &  &  &  & -\pi_1 &  &  &  &  & \le & 2\\
+ &  & \mu_2 &  &  &  &  & -\pi_2 &  &  &  & \le & 3\\
+ &  &  & \mu_3 &  &  &  &  & -\pi_3 &  &  & \le & 2\\
+ &  &  &  & \mu_4 &  &  &  &  & -\pi_4 &  & \le & 3\\
+ &  &  &  &  & \mu_5 &  &  &  &  & -\pi_5 & \le & 2\\
+ &  &  &  &  &  & 110\pi_1 &  &  &  &  & \le & 50\\
+ &  &  &  &  &  &  & 90\pi_2 &  &  &  & \le & 50\\
+ &  &  &  &  &  &  &  & 80\pi_3 &  &  & \le & 50\\
+ &  &  &  &  &  &  &  &  & 50\pi_4 &  & \le & 50\\
+ &  &  &  &  &  &  &  &  &  & 10\pi_5 & \le & 50\\
+ & -\mu_1 & +\mu_2 &  &  &  &  &  &  &  &  & \le & 1\\
+ &  & -\mu_2 & +\mu_3 &  &  &  &  &  &  &  & \le & 1\\
+ &  &  & -\mu_3 & +\mu_4 &  &  &  &  &  &  & \le & 1\\
+ &  &  &  & -\mu_4 & +\mu_5 &  &  &  &  &  & \le & 1\\
+ & \mu_1, & \mu_2, & \mu_3, & \mu_4, & \mu_5 &  &  &  &  &  & \gtreqless & 0\\
+ &  &  &  &  &  & \pi_1, & \pi_2, & \pi_3, & \pi_4, & \pi_5 & \ge & 0
+\end{array}
+$$
+
+</div>
+
+<!-- modello-esteso: fine -->
+
 
 **The recipe.** $\bar\pi_t = 0$: the setups are given away. What is left is
 $\mu_t \le p_t$ and $\mu_{t+1} \le \mu_t + h_t$, and the largest feasible value

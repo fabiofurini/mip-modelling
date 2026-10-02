@@ -93,6 +93,40 @@ $n=3$ terminals, $m=3$ hubs, $k=2$:
 |---|---:|---:|---:|
 | $f_j$ | 5 | 6 | 7 |
 
+The model written on the data of the instance:
+
+<!-- modello-esteso: fam08_4_primale -->
+
+<div class="modello-esteso largo" markdown>
+
+$$
+\begin{array}{rrrrrrrrrrrrrrrr c l}
+\min &  &  &  &  &  &  &  &  &  & 5y_1 & +6y_2 & +7y_3 & +z_1 & +z_2 & +z_3 &  & \\
+\text{subject to} & x_{11} & +x_{12} & +x_{13} &  &  &  &  &  &  &  &  &  &  &  &  & = & 1\\
+ &  &  &  & x_{21} & +x_{22} & +x_{23} &  &  &  &  &  &  &  &  &  & = & 1\\
+ &  &  &  &  &  &  & x_{31} & +x_{32} & +x_{33} &  &  &  &  &  &  & = & 1\\
+ & -x_{11} &  &  & -x_{21} &  &  & -x_{31} &  &  & +2y_1 &  &  &  &  &  & \ge & 0\\
+ &  & -x_{12} &  &  & -x_{22} &  &  & -x_{32} &  &  & +2y_2 &  &  &  &  & \ge & 0\\
+ &  &  & -x_{13} &  &  & -x_{23} &  &  & -x_{33} &  &  & +2y_3 &  &  &  & \ge & 0\\
+ & -5x_{11} &  &  &  &  &  &  &  &  &  &  &  & +z_1 &  &  & \ge & 0\\
+ &  & -10x_{12} &  &  &  &  &  &  &  &  &  &  &  & +z_2 &  & \ge & 0\\
+ &  &  & -2x_{13} &  &  &  &  &  &  &  &  &  &  &  & +z_3 & \ge & 0\\
+ &  &  &  & -5x_{21} &  &  &  &  &  &  &  &  & +z_1 &  &  & \ge & 0\\
+ &  &  &  &  & -4x_{22} &  &  &  &  &  &  &  &  & +z_2 &  & \ge & 0\\
+ &  &  &  &  &  & -6x_{23} &  &  &  &  &  &  &  &  & +z_3 & \ge & 0\\
+ &  &  &  &  &  &  & -5x_{31} &  &  &  &  &  & +z_1 &  &  & \ge & 0\\
+ &  &  &  &  &  &  &  & -4x_{32} &  &  &  &  &  & +z_2 &  & \ge & 0\\
+ &  &  &  &  &  &  &  &  & -6x_{33} &  &  &  &  &  & +z_3 & \ge & 0\\
+ & x_{11}, & x_{12}, & x_{13}, & x_{21}, & x_{22}, & x_{23}, & x_{31}, & x_{32}, & x_{33} &  &  &  &  &  &  & \in & \{0, 1\}\\
+ &  &  &  &  &  &  &  &  &  & y_1, & y_2, & y_3 &  &  &  & \in & \{0, 1\}\\
+ &  &  &  &  &  &  &  &  &  &  &  &  & z_1, & z_2, & z_3 & \ge & 0
+\end{array}
+$$
+
+</div>
+
+<!-- modello-esteso: fine -->
+
 ## Constructive heuristic: the primal bound
 
 A **next-fit** heuristic (bin packing): one hub at a time, up to $k$
@@ -120,6 +154,41 @@ k\, \beta_j &\le f_j, & \forall j \in \{1, 2, \dots, m\}, \\
 $$
 
 <!-- model: end -->
+
+The same dual, written on the data of the instance:
+
+<!-- modello-esteso: fam08_4_duale -->
+
+<div class="modello-esteso largo" markdown>
+
+$$
+\begin{array}{rrrrrrrrrrrrrrrr c l}
+\max & \alpha_1 & +\alpha_2 & +\alpha_3 &  &  &  &  &  &  &  &  &  &  &  &  &  & \\
+\text{subject to} & \alpha_1 &  &  & -\beta_1 &  &  & -5\gamma_{11} &  &  &  &  &  &  &  &  & \le & 0\\
+ & \alpha_1 &  &  &  & -\beta_2 &  &  & -10\gamma_{12} &  &  &  &  &  &  &  & \le & 0\\
+ & \alpha_1 &  &  &  &  & -\beta_3 &  &  & -2\gamma_{13} &  &  &  &  &  &  & \le & 0\\
+ &  & \alpha_2 &  & -\beta_1 &  &  &  &  &  & -5\gamma_{21} &  &  &  &  &  & \le & 0\\
+ &  & \alpha_2 &  &  & -\beta_2 &  &  &  &  &  & -4\gamma_{22} &  &  &  &  & \le & 0\\
+ &  & \alpha_2 &  &  &  & -\beta_3 &  &  &  &  &  & -6\gamma_{23} &  &  &  & \le & 0\\
+ &  &  & \alpha_3 & -\beta_1 &  &  &  &  &  &  &  &  & -5\gamma_{31} &  &  & \le & 0\\
+ &  &  & \alpha_3 &  & -\beta_2 &  &  &  &  &  &  &  &  & -4\gamma_{32} &  & \le & 0\\
+ &  &  & \alpha_3 &  &  & -\beta_3 &  &  &  &  &  &  &  &  & -6\gamma_{33} & \le & 0\\
+ &  &  &  & 2\beta_1 &  &  &  &  &  &  &  &  &  &  &  & \le & 5\\
+ &  &  &  &  & 2\beta_2 &  &  &  &  &  &  &  &  &  &  & \le & 6\\
+ &  &  &  &  &  & 2\beta_3 &  &  &  &  &  &  &  &  &  & \le & 7\\
+ &  &  &  &  &  &  & \gamma_{11} &  &  & +\gamma_{21} &  &  & +\gamma_{31} &  &  & \le & 1\\
+ &  &  &  &  &  &  &  & \gamma_{12} &  &  & +\gamma_{22} &  &  & +\gamma_{32} &  & \le & 1\\
+ &  &  &  &  &  &  &  &  & \gamma_{13} &  &  & +\gamma_{23} &  &  & +\gamma_{33} & \le & 1\\
+ & \alpha_1, & \alpha_2, & \alpha_3 &  &  &  &  &  &  &  &  &  &  &  &  & \gtreqless & 0\\
+ &  &  &  & \beta_1, & \beta_2, & \beta_3 &  &  &  &  &  &  &  &  &  & \ge & 0\\
+ &  &  &  &  &  &  & \gamma_{11}, & \gamma_{12}, & \gamma_{13}, & \gamma_{21}, & \gamma_{22}, & \gamma_{23}, & \gamma_{31}, & \gamma_{32}, & \gamma_{33} & \ge & 0
+\end{array}
+$$
+
+</div>
+
+<!-- modello-esteso: fine -->
+
 
 With $\bar\gamma_{ij}=0$ and $\bar\beta_j = f_j/k$ (the largest value
 allowed), the constraint on $\alpha_i$ holds for **every** hub $j$, not

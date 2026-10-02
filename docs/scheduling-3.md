@@ -94,6 +94,30 @@ m.optimize()
 | $t_j$ | 25 | 40 | 75 |
 | $r_j$ | 10 | 15 | 30 |
 
+The model written on the data of the instance:
+
+<!-- modello-esteso: fam07_3_primale -->
+
+<div class="modello-esteso largo" markdown>
+
+$$
+\begin{array}{rrrrrrrrrrrrr c l}
+\max & 10x_{11} & +10x_{12} & +10x_{13} & +15x_{21} & +15x_{22} & +15x_{23} & +30x_{31} & +30x_{32} & +30x_{33} & -20y_1 & -30y_2 & -15y_3 &  & \\
+\text{subject to} & x_{11} & +x_{12} & +x_{13} &  &  &  &  &  &  &  &  &  & \le & 1\\
+ &  &  &  & x_{21} & +x_{22} & +x_{23} &  &  &  &  &  &  & \le & 1\\
+ &  &  &  &  &  &  & x_{31} & +x_{32} & +x_{33} &  &  &  & \le & 1\\
+ & 25x_{11} &  &  & +40x_{21} &  &  & +75x_{31} &  &  & -105y_1 &  &  & \le & 0\\
+ &  & 25x_{12} &  &  & +40x_{22} &  &  & +75x_{32} &  &  & -110y_2 &  & \le & 0\\
+ &  &  & 25x_{13} &  &  & +40x_{23} &  &  & +75x_{33} &  &  & -100y_3 & \le & 0\\
+ & x_{11}, & x_{12}, & x_{13}, & x_{21}, & x_{22}, & x_{23}, & x_{31}, & x_{32}, & x_{33} &  &  &  & \in & \{0, 1\}\\
+ &  &  &  &  &  &  &  &  &  & y_1, & y_2, & y_3 & \in & \{0, 1\}
+\end{array}
+$$
+
+</div>
+
+<!-- modello-esteso: fine -->
+
 ## Constructive heuristic: the primal bound
 
 In a maximisation problem a feasible solution gives a *lower* bound. A job
@@ -127,6 +151,37 @@ $$
 $$
 
 <!-- model: end -->
+
+The same dual, written on the data of the instance:
+
+<!-- modello-esteso: fam07_3_duale -->
+
+<div class="modello-esteso" markdown>
+
+$$
+\begin{array}{rrrrrrr c l}
+\min & \mu_1 & +\mu_2 & +\mu_3 &  &  &  &  & \\
+\text{subject to} & \mu_1 &  &  & +25\pi_1 &  &  & \ge & 10\\
+ & \mu_1 &  &  &  & +25\pi_2 &  & \ge & 10\\
+ & \mu_1 &  &  &  &  & +25\pi_3 & \ge & 10\\
+ &  & \mu_2 &  & +40\pi_1 &  &  & \ge & 15\\
+ &  & \mu_2 &  &  & +40\pi_2 &  & \ge & 15\\
+ &  & \mu_2 &  &  &  & +40\pi_3 & \ge & 15\\
+ &  &  & \mu_3 & +75\pi_1 &  &  & \ge & 30\\
+ &  &  & \mu_3 &  & +75\pi_2 &  & \ge & 30\\
+ &  &  & \mu_3 &  &  & +75\pi_3 & \ge & 30\\
+ &  &  &  & -105\pi_1 &  &  & \ge & -20\\
+ &  &  &  &  & -110\pi_2 &  & \ge & -30\\
+ &  &  &  &  &  & -100\pi_3 & \ge & -15\\
+ & \mu_1, & \mu_2, & \mu_3 &  &  &  & \ge & 0\\
+ &  &  &  & \pi_1, & \pi_2, & \pi_3 & \ge & 0
+\end{array}
+$$
+
+</div>
+
+<!-- modello-esteso: fine -->
+
 
 **A hand-built dual solution.** $\bar\pi_m = c_m/a_m$: $\tfrac{4}{21}, \tfrac{3}{11}, \tfrac{3}{20}$;
 then $\bar\mu_j = \max\{0, \max_m (r_j - t_j \bar\pi_m)\}$:

@@ -95,6 +95,44 @@ $\mathscr{J}_3 = \{5, 6\}$, $a = 50$, $u = 10$.
 |---|---:|---:|---:|
 | $v_c$ | 5 | 4 | 10 |
 
+The model written on the data of the instance:
+
+<!-- modello-esteso: fam07_6_primale -->
+
+<div class="modello-esteso largo" markdown>
+
+$$
+\begin{array}{rrrrrrrrrrr c l}
+\max & 10x_1 & +5x_2 & +20x_3 & +12x_4 & +10x_5 & +22x_6 & +5y_1 & +4y_2 & +10y_3 &  &  & \\
+\text{subject to} & x_1 &  &  &  &  &  & -y_1 &  &  &  & \ge & 0\\
+ &  & x_2 &  &  &  &  & -y_1 &  &  &  & \ge & 0\\
+ &  &  & x_3 &  &  &  &  & -y_2 &  &  & \ge & 0\\
+ &  &  &  & x_4 &  &  &  & -y_2 &  &  & \ge & 0\\
+ &  &  &  &  & x_5 &  &  &  & -y_3 &  & \ge & 0\\
+ &  &  &  &  &  & x_6 &  &  & -y_3 &  & \ge & 0\\
+ & x_1 &  & +x_3 &  &  &  &  &  &  & -z & \le & 1\\
+ & x_1 &  &  & +x_4 &  &  &  &  &  & -z & \le & 1\\
+ &  & x_2 & +x_3 &  &  &  &  &  &  & -z & \le & 1\\
+ &  & x_2 &  & +x_4 &  &  &  &  &  & -z & \le & 1\\
+ & x_1 &  &  &  & +x_5 &  &  &  &  & -z & \le & 1\\
+ & x_1 &  &  &  &  & +x_6 &  &  &  & -z & \le & 1\\
+ &  & x_2 &  &  & +x_5 &  &  &  &  & -z & \le & 1\\
+ &  & x_2 &  &  &  & +x_6 &  &  &  & -z & \le & 1\\
+ &  &  & x_3 &  & +x_5 &  &  &  &  & -z & \le & 1\\
+ &  &  & x_3 &  &  & +x_6 &  &  &  & -z & \le & 1\\
+ &  &  &  & x_4 & +x_5 &  &  &  &  & -z & \le & 1\\
+ &  &  &  & x_4 &  & +x_6 &  &  &  & -z & \le & 1\\
+ & 5x_1 & +15x_2 & +25x_3 & +15x_4 & +10x_5 & +38x_6 &  &  &  & +10z & \le & 50\\
+ & x_1, & x_2, & x_3, & x_4, & x_5, & x_6 &  &  &  &  & \in & \{0, 1\}\\
+ &  &  &  &  &  &  & y_1, & y_2, & y_3 &  & \in & \{0, 1\}\\
+ &  &  &  &  &  &  &  &  &  & z & \in & \{0, 1\}
+\end{array}
+$$
+
+</div>
+
+<!-- modello-esteso: fine -->
+
 ## Constructive heuristic: the primal bound
 
 Class by class; from the second class on, the first executed job also pays
@@ -128,6 +166,36 @@ $$
 $$
 
 <!-- model: end -->
+
+The same dual, written on the data of the instance:
+
+<!-- modello-esteso: fam07_6_duale -->
+
+<div class="modello-esteso largo" markdown>
+
+$$
+\begin{array}{rrrrrrrrrrrrrrrrrrrr c l}
+\min &  &  &  &  &  &  & \lambda_{13} & +\lambda_{14} & +\lambda_{23} & +\lambda_{24} & +\lambda_{15} & +\lambda_{16} & +\lambda_{25} & +\lambda_{26} & +\lambda_{35} & +\lambda_{36} & +\lambda_{45} & +\lambda_{46} & +50\mu &  & \\
+\text{subject to} & \pi_1 &  &  &  &  &  & +\lambda_{13} & +\lambda_{14} &  &  & +\lambda_{15} & +\lambda_{16} &  &  &  &  &  &  & +5\mu & \ge & 10\\
+ &  & \pi_2 &  &  &  &  &  &  & +\lambda_{23} & +\lambda_{24} &  &  & +\lambda_{25} & +\lambda_{26} &  &  &  &  & +15\mu & \ge & 5\\
+ &  &  & \pi_3 &  &  &  & +\lambda_{13} &  & +\lambda_{23} &  &  &  &  &  & +\lambda_{35} & +\lambda_{36} &  &  & +25\mu & \ge & 20\\
+ &  &  &  & \pi_4 &  &  &  & +\lambda_{14} &  & +\lambda_{24} &  &  &  &  &  &  & +\lambda_{45} & +\lambda_{46} & +15\mu & \ge & 12\\
+ &  &  &  &  & \pi_5 &  &  &  &  &  & +\lambda_{15} &  & +\lambda_{25} &  & +\lambda_{35} &  & +\lambda_{45} &  & +10\mu & \ge & 10\\
+ &  &  &  &  &  & \pi_6 &  &  &  &  &  & +\lambda_{16} &  & +\lambda_{26} &  & +\lambda_{36} &  & +\lambda_{46} & +38\mu & \ge & 22\\
+ & -\pi_1 & -\pi_2 &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & \ge & 5\\
+ &  &  & -\pi_3 & -\pi_4 &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & \ge & 4\\
+ &  &  &  &  & -\pi_5 & -\pi_6 &  &  &  &  &  &  &  &  &  &  &  &  &  & \ge & 10\\
+ &  &  &  &  &  &  & -\lambda_{13} & -\lambda_{14} & -\lambda_{23} & -\lambda_{24} & -\lambda_{15} & -\lambda_{16} & -\lambda_{25} & -\lambda_{26} & -\lambda_{35} & -\lambda_{36} & -\lambda_{45} & -\lambda_{46} & +10\mu & \ge & 0\\
+ & \pi_1, & \pi_2, & \pi_3, & \pi_4, & \pi_5, & \pi_6 &  &  &  &  &  &  &  &  &  &  &  &  &  & \le & 0\\
+ &  &  &  &  &  &  & \lambda_{13}, & \lambda_{14}, & \lambda_{23}, & \lambda_{24}, & \lambda_{15}, & \lambda_{16}, & \lambda_{25}, & \lambda_{26}, & \lambda_{35}, & \lambda_{36}, & \lambda_{45}, & \lambda_{46} &  & \ge & 0\\
+ &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & \mu & \ge & 0
+\end{array}
+$$
+
+</div>
+
+<!-- modello-esteso: fine -->
+
 
 **A hand-built dual solution.** The bonus of every class loaded on one job:
 $\bar\pi_1 = -5$, $\bar\pi_3 = -4$, $\bar\pi_5 = -10$; $\bar\lambda = 0$;

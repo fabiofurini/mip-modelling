@@ -107,6 +107,36 @@ $n = 2$ plants, $m = 2$ customers, $k = 2$ products, $w = 10$.
 
 The units to ship are $5 + 0 + 2 + 4 = 11$ in all.
 
+The model written on the data of the instance:
+
+<!-- modello-esteso: fam10_5_primale -->
+
+<div class="modello-esteso largo" markdown>
+
+$$
+\begin{array}{rrrrrrrrrrrrr c l}
+\min &  &  &  &  &  &  &  &  & y_{11} & +y_{12} & +y_{21} & +y_{22} &  & \\
+\text{subject to} & x_{111} &  & +x_{121} &  &  &  &  &  &  &  &  &  & = & 5\\
+ &  & x_{112} &  & +x_{122} &  &  &  &  &  &  &  &  & = & 0\\
+ &  &  &  &  & x_{211} &  & +x_{221} &  &  &  &  &  & = & 2\\
+ &  &  &  &  &  & x_{212} &  & +x_{222} &  &  &  &  & = & 4\\
+ & x_{111} & +x_{112} &  &  &  &  &  &  &  &  &  &  & \le & 8\\
+ &  &  & x_{121} & +x_{122} &  &  &  &  &  &  &  &  & \le & 6\\
+ &  &  &  &  & x_{211} & +x_{212} &  &  &  &  &  &  & \le & 5\\
+ &  &  &  &  &  &  & x_{221} & +x_{222} &  &  &  &  & \le & 7\\
+ & -x_{111} &  &  &  & -x_{211} &  &  &  & +10y_{11} &  &  &  & \ge & 0\\
+ &  & -x_{112} &  &  &  & -x_{212} &  &  &  & +10y_{12} &  &  & \ge & 0\\
+ &  &  & -x_{121} &  &  &  & -x_{221} &  &  &  & +10y_{21} &  & \ge & 0\\
+ &  &  &  & -x_{122} &  &  &  & -x_{222} &  &  &  & +10y_{22} & \ge & 0\\
+ & x_{111}, & x_{112}, & x_{121}, & x_{122}, & x_{211}, & x_{212}, & x_{221}, & x_{222} &  &  &  &  & \in & \Z_{\ge 0}\\
+ &  &  &  &  &  &  &  &  & y_{11}, & y_{12}, & y_{21}, & y_{22} & \in & \Z_{\ge 0}
+\end{array}
+$$
+
+</div>
+
+<!-- modello-esteso: fine -->
+
 ## Constructive heuristic: the primal bound
 
 Customer by customer: one tries to serve them from a single plant, the one that
@@ -140,6 +170,38 @@ w\, \gamma_{sc} &\le 1, & \forall s \in S,\ \forall c \in C, \\
 $$
 
 <!-- model: end -->
+
+The same dual, written on the data of the instance:
+
+<!-- modello-esteso: fam10_5_duale -->
+
+<div class="modello-esteso largo" markdown>
+
+$$
+\begin{array}{rrrrrrrrrrrrr c l}
+\max & 5\alpha_{11} &  & +2\alpha_{21} & +4\alpha_{22} & +8\beta_{11} & +6\beta_{12} & +5\beta_{21} & +7\beta_{22} &  &  &  &  &  & \\
+\text{subject to} & \alpha_{11} &  &  &  & +\beta_{11} &  &  &  & -\gamma_{11} &  &  &  & \le & 0\\
+ &  & \alpha_{12} &  &  & +\beta_{11} &  &  &  &  & -\gamma_{12} &  &  & \le & 0\\
+ & \alpha_{11} &  &  &  &  & +\beta_{12} &  &  &  &  & -\gamma_{21} &  & \le & 0\\
+ &  & \alpha_{12} &  &  &  & +\beta_{12} &  &  &  &  &  & -\gamma_{22} & \le & 0\\
+ &  &  & \alpha_{21} &  &  &  & +\beta_{21} &  & -\gamma_{11} &  &  &  & \le & 0\\
+ &  &  &  & \alpha_{22} &  &  & +\beta_{21} &  &  & -\gamma_{12} &  &  & \le & 0\\
+ &  &  & \alpha_{21} &  &  &  &  & +\beta_{22} &  &  & -\gamma_{21} &  & \le & 0\\
+ &  &  &  & \alpha_{22} &  &  &  & +\beta_{22} &  &  &  & -\gamma_{22} & \le & 0\\
+ &  &  &  &  &  &  &  &  & 10\gamma_{11} &  &  &  & \le & 1\\
+ &  &  &  &  &  &  &  &  &  & 10\gamma_{12} &  &  & \le & 1\\
+ &  &  &  &  &  &  &  &  &  &  & 10\gamma_{21} &  & \le & 1\\
+ &  &  &  &  &  &  &  &  &  &  &  & 10\gamma_{22} & \le & 1\\
+ & \alpha_{11}, & \alpha_{12}, & \alpha_{21}, & \alpha_{22} &  &  &  &  &  &  &  &  & \gtreqless & 0\\
+ &  &  &  &  & \beta_{11}, & \beta_{12}, & \beta_{21}, & \beta_{22} &  &  &  &  & \le & 0\\
+ &  &  &  &  &  &  &  &  & \gamma_{11}, & \gamma_{12}, & \gamma_{21}, & \gamma_{22} & \ge & 0
+\end{array}
+$$
+
+</div>
+
+<!-- modello-esteso: fine -->
+
 
 **Description.** $\alpha_{pc}$ is the value of one unit of product $p$ delivered
 to customer $c$, $\beta_{ps}$ the (non-positive) price of availability, and

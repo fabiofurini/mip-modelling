@@ -82,6 +82,37 @@ $n = 6$ songs, $m = 2$ CDs, $w_j = 1$.
 
 The total duration is $35$ minutes.
 
+The model written on the data of the instance:
+
+<!-- modello-esteso: fam10_8_primale -->
+
+<div class="modello-esteso largo" markdown>
+
+$$
+\begin{array}{rrrrrrrrrrrrrrr c l}
+\min &  &  &  &  &  &  &  &  &  &  &  &  & y & -z &  & \\
+\text{subject to} & x_{11} & +x_{12} &  &  &  &  &  &  &  &  &  &  &  &  & = & 1\\
+ &  &  & x_{21} & +x_{22} &  &  &  &  &  &  &  &  &  &  & = & 1\\
+ &  &  &  &  & x_{31} & +x_{32} &  &  &  &  &  &  &  &  & = & 1\\
+ &  &  &  &  &  &  & x_{41} & +x_{42} &  &  &  &  &  &  & = & 1\\
+ &  &  &  &  &  &  &  &  & x_{51} & +x_{52} &  &  &  &  & = & 1\\
+ &  &  &  &  &  &  &  &  &  &  & x_{61} & +x_{62} &  &  & = & 1\\
+ & x_{11} &  & +x_{21} &  & +x_{31} &  & +x_{41} &  & +x_{51} &  & +x_{61} &  &  &  & \ge & 1\\
+ &  & x_{12} &  & +x_{22} &  & +x_{32} &  & +x_{42} &  & +x_{52} &  & +x_{62} &  &  & \ge & 1\\
+ & -5x_{11} &  & -6x_{21} &  & -7x_{31} &  & -3x_{41} &  & -4x_{51} &  & -10x_{61} &  & +y &  & \ge & 0\\
+ &  & -5x_{12} &  & -6x_{22} &  & -7x_{32} &  & -3x_{42} &  & -4x_{52} &  & -10x_{62} & +y &  & \ge & 0\\
+ & 5x_{11} &  & +6x_{21} &  & +7x_{31} &  & +3x_{41} &  & +4x_{51} &  & +10x_{61} &  &  & -z & \ge & 0\\
+ &  & 5x_{12} &  & +6x_{22} &  & +7x_{32} &  & +3x_{42} &  & +4x_{52} &  & +10x_{62} &  & -z & \ge & 0\\
+ & x_{11}, & x_{12}, & x_{21}, & x_{22}, & x_{31}, & x_{32}, & x_{41}, & x_{42}, & x_{51}, & x_{52}, & x_{61}, & x_{62} &  &  & \in & \{0, 1\}\\
+ &  &  &  &  &  &  &  &  &  &  &  &  & y &  & \ge & 0\\
+ &  &  &  &  &  &  &  &  &  &  &  &  &  & z & \ge & 0
+\end{array}
+$$
+
+</div>
+
+<!-- modello-esteso: fine -->
+
 ## Constructive heuristic: the primal bound
 
 The songs are scanned and each is put on the currently shortest CD. The same
@@ -116,6 +147,41 @@ $$
 $$
 
 <!-- model: end -->
+
+The same dual, written on the data of the instance:
+
+<!-- modello-esteso: fam10_8_duale -->
+
+<div class="modello-esteso largo" markdown>
+
+$$
+\begin{array}{rrrrrrrrrrrrr c l}
+\max & \alpha_1 & +\alpha_2 & +\alpha_3 & +\alpha_4 & +\alpha_5 & +\alpha_6 & +\beta_1 & +\beta_2 &  &  &  &  &  & \\
+\text{subject to} &  &  &  &  &  &  &  &  & \gamma_1 & +\gamma_2 &  &  & = & 1\\
+ &  &  &  &  &  &  &  &  &  &  & \delta_1 & +\delta_2 & = & 1\\
+ & \alpha_1 &  &  &  &  &  & +\beta_1 &  & -5\gamma_1 &  & +5\delta_1 &  & \le & 0\\
+ & \alpha_1 &  &  &  &  &  &  & +\beta_2 &  & -5\gamma_2 &  & +5\delta_2 & \le & 0\\
+ &  & \alpha_2 &  &  &  &  & +\beta_1 &  & -6\gamma_1 &  & +6\delta_1 &  & \le & 0\\
+ &  & \alpha_2 &  &  &  &  &  & +\beta_2 &  & -6\gamma_2 &  & +6\delta_2 & \le & 0\\
+ &  &  & \alpha_3 &  &  &  & +\beta_1 &  & -7\gamma_1 &  & +7\delta_1 &  & \le & 0\\
+ &  &  & \alpha_3 &  &  &  &  & +\beta_2 &  & -7\gamma_2 &  & +7\delta_2 & \le & 0\\
+ &  &  &  & \alpha_4 &  &  & +\beta_1 &  & -3\gamma_1 &  & +3\delta_1 &  & \le & 0\\
+ &  &  &  & \alpha_4 &  &  &  & +\beta_2 &  & -3\gamma_2 &  & +3\delta_2 & \le & 0\\
+ &  &  &  &  & \alpha_5 &  & +\beta_1 &  & -4\gamma_1 &  & +4\delta_1 &  & \le & 0\\
+ &  &  &  &  & \alpha_5 &  &  & +\beta_2 &  & -4\gamma_2 &  & +4\delta_2 & \le & 0\\
+ &  &  &  &  &  & \alpha_6 & +\beta_1 &  & -10\gamma_1 &  & +10\delta_1 &  & \le & 0\\
+ &  &  &  &  &  & \alpha_6 &  & +\beta_2 &  & -10\gamma_2 &  & +10\delta_2 & \le & 0\\
+ & \alpha_1, & \alpha_2, & \alpha_3, & \alpha_4, & \alpha_5, & \alpha_6 &  &  &  &  &  &  & \gtreqless & 0\\
+ &  &  &  &  &  &  & \beta_1, & \beta_2 &  &  &  &  & \ge & 0\\
+ &  &  &  &  &  &  &  &  & \gamma_1, & \gamma_2 &  &  & \ge & 0\\
+ &  &  &  &  &  &  &  &  &  &  & \delta_1, & \delta_2 & \ge & 0
+\end{array}
+$$
+
+</div>
+
+<!-- modello-esteso: fine -->
+
 
 **Description.** $\alpha_i$ is the value of song $i$, $\beta_j$ the price of the
 minimum number of songs on CD $j$, while $\gamma_j$ and $\delta_j$ are the

@@ -89,6 +89,35 @@ $m=3$, $n=5$, $t=5$, $b=4$, $k=2$:
 With $b=4$: $\mathscr{L}_1=\{1,2\}$, $\mathscr{L}_2=\{2,3\}$,
 $\mathscr{L}_3=\{1,3\}$, $\mathscr{L}_4=\{3\}$, $\mathscr{L}_5=\emptyset$.
 
+The model written on the data of the instance:
+
+<!-- modello-esteso: fam08_3_primale -->
+
+<div class="modello-esteso largo" markdown>
+
+$$
+\begin{array}{rrrrrrrrr c l}
+\max &  &  &  & 10y_1 & +20y_2 & +5y_3 & +15y_4 & +25y_5 &  & \\
+\text{subject to} & -6x_1 & -4x_2 &  & +5y_1 &  &  &  &  & \le & 0\\
+ &  & -5x_2 & -7x_3 &  & +5y_2 &  &  &  & \le & 0\\
+ & -5x_1 & -2x_2 & -5x_3 &  &  & +5y_3 &  &  & \le & 0\\
+ & -3x_1 &  & -4x_3 &  &  &  & +5y_4 &  & \le & 0\\
+ & -x_1 &  & -2x_3 &  &  &  &  & +5y_5 & \le & 0\\
+ & x_1 & +x_2 &  & +2y_1 &  &  &  &  & \le & 3\\
+ &  & x_2 & +x_3 &  & +2y_2 &  &  &  & \le & 3\\
+ & x_1 &  & +x_3 &  &  & +2y_3 &  &  & \le & 3\\
+ &  &  & x_3 &  &  &  & +2y_4 &  & \le & 3\\
+ &  &  &  &  &  &  &  & 2y_5 & \le & 3\\
+ & x_1 & +x_2 & +x_3 &  &  &  &  &  & \le & 2\\
+ & x_1, & x_2, & x_3 &  &  &  &  &  & \in & \{0, 1\}\\
+ &  &  &  & y_1, & y_2, & y_3, & y_4, & y_5 & \in & \{0, 1\}
+\end{array}
+$$
+
+</div>
+
+<!-- modello-esteso: fine -->
+
 ## Constructive heuristic: the primal bound
 
 The first $k$ locations open. Client 1: signal $10\ge5$ but 2 strong
@@ -115,6 +144,34 @@ t\, \pi_c + (m-1)\, \lambda_c &\ge p_c, & \forall c \in \{1, 2, \dots, n\}, \\
 $$
 
 <!-- model: end -->
+
+The same dual, written on the data of the instance:
+
+<!-- modello-esteso: fam08_3_duale -->
+
+<div class="modello-esteso largo" markdown>
+
+$$
+\begin{array}{rrrrrrrrrrrr c l}
+\min &  &  &  &  &  & 3\lambda_1 & +3\lambda_2 & +3\lambda_3 & +3\lambda_4 & +3\lambda_5 & +2\mu &  & \\
+\text{subject to} & -6\pi_1 &  & -5\pi_3 & -3\pi_4 & -\pi_5 & +\lambda_1 &  & +\lambda_3 &  &  & +\mu & \ge & 0\\
+ & -4\pi_1 & -5\pi_2 & -2\pi_3 &  &  & +\lambda_1 & +\lambda_2 &  &  &  & +\mu & \ge & 0\\
+ &  & -7\pi_2 & -5\pi_3 & -4\pi_4 & -2\pi_5 &  & +\lambda_2 & +\lambda_3 & +\lambda_4 &  & +\mu & \ge & 0\\
+ & 5\pi_1 &  &  &  &  & +2\lambda_1 &  &  &  &  &  & \ge & 10\\
+ &  & 5\pi_2 &  &  &  &  & +2\lambda_2 &  &  &  &  & \ge & 20\\
+ &  &  & 5\pi_3 &  &  &  &  & +2\lambda_3 &  &  &  & \ge & 5\\
+ &  &  &  & 5\pi_4 &  &  &  &  & +2\lambda_4 &  &  & \ge & 15\\
+ &  &  &  &  & 5\pi_5 &  &  &  &  & +2\lambda_5 &  & \ge & 25\\
+ & \pi_1, & \pi_2, & \pi_3, & \pi_4, & \pi_5 &  &  &  &  &  &  & \ge & 0\\
+ &  &  &  &  &  & \lambda_1, & \lambda_2, & \lambda_3, & \lambda_4, & \lambda_5 &  & \ge & 0\\
+ &  &  &  &  &  &  &  &  &  &  & \mu & \ge & 0
+\end{array}
+$$
+
+</div>
+
+<!-- modello-esteso: fine -->
+
 
 With $\bar\pi_c=0$, $\bar\mu=0$ and $\bar\lambda_c = p_c/(m-1) = p_c/2$:
 

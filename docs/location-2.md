@@ -83,6 +83,37 @@ $m = 3$ locations, $n = 3$ clients, $k = 2$:
 | $l=2$ | 3 | 12 | 9 |
 | $l=3$ | 10 | 9 | 4 |
 
+The model written on the data of the instance:
+
+<!-- modello-esteso: fam08_2_primale -->
+
+<div class="modello-esteso largo" markdown>
+
+$$
+\begin{array}{rrrrrrrrrrrrr c l}
+\min &  &  &  & 5y_{11} & +6y_{12} & +10y_{13} & +3y_{21} & +12y_{22} & +9y_{23} & +10y_{31} & +9y_{32} & +4y_{33} &  & \\
+\text{subject to} &  &  &  & y_{11} &  &  & +y_{21} &  &  & +y_{31} &  &  & = & 1\\
+ &  &  &  &  & y_{12} &  &  & +y_{22} &  &  & +y_{32} &  & = & 1\\
+ &  &  &  &  &  & y_{13} &  &  & +y_{23} &  &  & +y_{33} & = & 1\\
+ & x_1 & +x_2 & +x_3 &  &  &  &  &  &  &  &  &  & \le & 2\\
+ & x_1 &  &  & -y_{11} &  &  &  &  &  &  &  &  & \ge & 0\\
+ & x_1 &  &  &  & -y_{12} &  &  &  &  &  &  &  & \ge & 0\\
+ & x_1 &  &  &  &  & -y_{13} &  &  &  &  &  &  & \ge & 0\\
+ &  & x_2 &  &  &  &  & -y_{21} &  &  &  &  &  & \ge & 0\\
+ &  & x_2 &  &  &  &  &  & -y_{22} &  &  &  &  & \ge & 0\\
+ &  & x_2 &  &  &  &  &  &  & -y_{23} &  &  &  & \ge & 0\\
+ &  &  & x_3 &  &  &  &  &  &  & -y_{31} &  &  & \ge & 0\\
+ &  &  & x_3 &  &  &  &  &  &  &  & -y_{32} &  & \ge & 0\\
+ &  &  & x_3 &  &  &  &  &  &  &  &  & -y_{33} & \ge & 0\\
+ & x_1, & x_2, & x_3 &  &  &  &  &  &  &  &  &  & \in & \{0, 1\}\\
+ &  &  &  & y_{11}, & y_{12}, & y_{13}, & y_{21}, & y_{22}, & y_{23}, & y_{31}, & y_{32}, & y_{33} & \in & \{0, 1\}
+\end{array}
+$$
+
+</div>
+
+<!-- modello-esteso: fine -->
+
 ## Constructive heuristic: the primal bound
 
 The first $k$ locations open; every client goes to the nearest open
@@ -108,6 +139,38 @@ $$
 $$
 
 <!-- model: end -->
+
+The same dual, written on the data of the instance:
+
+<!-- modello-esteso: fam08_2_duale -->
+
+<div class="modello-esteso largo" markdown>
+
+$$
+\begin{array}{rrrrrrrrrrrrrr c l}
+\max & \mu_1 & +\mu_2 & +\mu_3 & +2varrho &  &  &  &  &  &  &  &  &  &  & \\
+\text{subject to} &  &  &  & varrho & +\pi_{11} & +\pi_{12} & +\pi_{13} &  &  &  &  &  &  & \le & 0\\
+ &  &  &  & varrho &  &  &  & +\pi_{21} & +\pi_{22} & +\pi_{23} &  &  &  & \le & 0\\
+ &  &  &  & varrho &  &  &  &  &  &  & +\pi_{31} & +\pi_{32} & +\pi_{33} & \le & 0\\
+ & \mu_1 &  &  &  & -\pi_{11} &  &  &  &  &  &  &  &  & \le & 5\\
+ &  & \mu_2 &  &  &  & -\pi_{12} &  &  &  &  &  &  &  & \le & 6\\
+ &  &  & \mu_3 &  &  &  & -\pi_{13} &  &  &  &  &  &  & \le & 10\\
+ & \mu_1 &  &  &  &  &  &  & -\pi_{21} &  &  &  &  &  & \le & 3\\
+ &  & \mu_2 &  &  &  &  &  &  & -\pi_{22} &  &  &  &  & \le & 12\\
+ &  &  & \mu_3 &  &  &  &  &  &  & -\pi_{23} &  &  &  & \le & 9\\
+ & \mu_1 &  &  &  &  &  &  &  &  &  & -\pi_{31} &  &  & \le & 10\\
+ &  & \mu_2 &  &  &  &  &  &  &  &  &  & -\pi_{32} &  & \le & 9\\
+ &  &  & \mu_3 &  &  &  &  &  &  &  &  &  & -\pi_{33} & \le & 4\\
+ & \mu_1, & \mu_2, & \mu_3 &  &  &  &  &  &  &  &  &  &  & \gtreqless & 0\\
+ &  &  &  & varrho &  &  &  &  &  &  &  &  &  & \le & 0\\
+ &  &  &  &  & \pi_{11}, & \pi_{12}, & \pi_{13}, & \pi_{21}, & \pi_{22}, & \pi_{23}, & \pi_{31}, & \pi_{32}, & \pi_{33} & \ge & 0
+\end{array}
+$$
+
+</div>
+
+<!-- modello-esteso: fine -->
+
 
 With $\bar\varrho=0$, $\bar\pi_{lc}=0$ and $\bar\mu_c = \min_l d_{lc}$
 (the distance to the nearest location overall):

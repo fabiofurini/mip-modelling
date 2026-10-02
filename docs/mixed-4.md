@@ -118,6 +118,32 @@ The price of one light depends on the colour and on the box type: colour 1 at
 $10$ in box 1 and at $40/3$ in box 2; colour 2 at $50$ in both. Colour 2 is far
 more expensive, and that is what drives the solution.
 
+The model written on the data of the instance:
+
+<!-- modello-esteso: fam10_4_primale -->
+
+<div class="modello-esteso largo" markdown>
+
+$$
+\begin{array}{rrrrrrrrr c l}
+\min & 7x_1 & +6x_2 & +8x_3 & +100y_1 & +200y_2 &  &  &  &  & \\
+\text{subject to} & x_1 & +x_2 & +x_3 &  &  &  &  &  & = & 20\\
+ & -4x_1 & -2x_2 & -2x_3 & +10y_1 & +15y_2 &  &  &  & \ge & 0\\
+ & -2x_1 & -3x_2 & -2x_3 & +2y_1 & +4y_2 &  &  &  & \ge & 0\\
+ &  &  &  &  &  & z_1 & +z_2 & +z_3 & \ge & 2\\
+ & x_1 &  &  &  &  & -z_1 &  &  & \ge & 0\\
+ &  & x_2 &  &  &  &  & -z_2 &  & \ge & 0\\
+ &  &  & x_3 &  &  &  &  & -z_3 & \ge & 0\\
+ & x_1, & x_2, & x_3 &  &  &  &  &  & \in & \Z_{\ge 0}\\
+ &  &  &  & y_1, & y_2 &  &  &  & \in & \Z_{\ge 0}\\
+ &  &  &  &  &  & z_1, & z_2, & z_3 & \in & \{0, 1\}
+\end{array}
+$$
+
+</div>
+
+<!-- modello-esteso: fine -->
+
 ## Constructive heuristic: the primal bound
 
 Two phases. First the configurations: $q - f + 1$ trees with the cheapest one to
@@ -157,6 +183,35 @@ $$
 $$
 
 <!-- model: end -->
+
+The same dual, written on the data of the instance:
+
+<!-- modello-esteso: fam10_4_duale -->
+
+<div class="modello-esteso largo" markdown>
+
+$$
+\begin{array}{rrrrrrrr c l}
+\max & 20\alpha &  &  & +2\gamma &  &  &  &  & \\
+\text{subject to} & \alpha & -4\beta_1 & -2\beta_2 &  & +\delta_1 &  &  & \le & 7\\
+ & \alpha & -2\beta_1 & -3\beta_2 &  &  & +\delta_2 &  & \le & 6\\
+ & \alpha & -2\beta_1 & -2\beta_2 &  &  &  & +\delta_3 & \le & 8\\
+ &  & 10\beta_1 & +2\beta_2 &  &  &  &  & \le & 100\\
+ &  & 15\beta_1 & +4\beta_2 &  &  &  &  & \le & 200\\
+ &  &  &  & \gamma & -\delta_1 &  &  & \le & 0\\
+ &  &  &  & \gamma &  & -\delta_2 &  & \le & 0\\
+ &  &  &  & \gamma &  &  & -\delta_3 & \le & 0\\
+ & \alpha &  &  &  &  &  &  & \gtreqless & 0\\
+ &  & \beta_1, & \beta_2 &  &  &  &  & \ge & 0\\
+ &  &  &  & \gamma &  &  &  & \ge & 0\\
+ &  &  &  &  & \delta_1, & \delta_2, & \delta_3 & \ge & 0
+\end{array}
+$$
+
+</div>
+
+<!-- modello-esteso: fine -->
+
 
 **Description.** $\alpha$ is the value of one decorated tree, $\beta_l$ the
 price of one light of colour $l$, $\gamma$ the price of variety and $\delta_c$

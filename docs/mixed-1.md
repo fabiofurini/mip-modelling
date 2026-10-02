@@ -98,6 +98,31 @@ $s = 5$ prizes, $p = 20$ points, $\ell = 16$.
 | $c_i$ | 10 | 8 | 15 | 5 | 9 |
 | $d_i$ | 5 | 4 | 7 | 3 | 6 |
 
+The model written on the data of the instance:
+
+<!-- modello-esteso: fam10_1_primale -->
+
+<div class="modello-esteso largo" markdown>
+
+$$
+\begin{array}{rrrrrrrrrrr c l}
+\min &  &  &  &  &  & 10y_1 & +8y_2 & +15y_3 & +5y_4 & +9y_5 &  & \\
+\text{subject to} & x_1 &  &  &  &  & +y_1 &  &  &  &  & \le & 1\\
+ &  & x_2 &  &  &  &  & +y_2 &  &  &  & \le & 1\\
+ &  &  & x_3 &  &  &  &  & +y_3 &  &  & \le & 1\\
+ &  &  &  & x_4 &  &  &  &  & +y_4 &  & \le & 1\\
+ &  &  &  &  & x_5 &  &  &  &  & +y_5 & \le & 1\\
+ & 8x_1 & +6x_2 & +10x_3 & +5x_4 & +7x_5 & +4y_1 & +3y_2 & +6y_3 & +2y_4 & +4y_5 & \le & 20\\
+ & 5x_1 & +4x_2 & +7x_3 & +3x_4 & +6x_5 & +5y_1 & +4y_2 & +7y_3 & +3y_4 & +6y_5 & \ge & 16\\
+ & x_1, & x_2, & x_3, & x_4, & x_5 &  &  &  &  &  & \in & \{0, 1\}\\
+ &  &  &  &  &  & y_1, & y_2, & y_3, & y_4, & y_5 & \in & \{0, 1\}
+\end{array}
+$$
+
+</div>
+
+<!-- modello-esteso: fine -->
+
 ## Constructive heuristic: the primal bound
 
 The prizes are scanned by decreasing preference. Each is taken with points only
@@ -139,6 +164,36 @@ $$
 $$
 
 <!-- model: end -->
+
+The same dual, written on the data of the instance:
+
+<!-- modello-esteso: fam10_1_duale -->
+
+<div class="modello-esteso largo" markdown>
+
+$$
+\begin{array}{rrrrrrrr c l}
+\max & -\sigma_1 & -\sigma_2 & -\sigma_3 & -\sigma_4 & -\sigma_5 & -20\pi & +16\rho &  & \\
+\text{subject to} & -\sigma_1 &  &  &  &  & -8\pi & +5\rho & \le & 0\\
+ &  & -\sigma_2 &  &  &  & -6\pi & +4\rho & \le & 0\\
+ &  &  & -\sigma_3 &  &  & -10\pi & +7\rho & \le & 0\\
+ &  &  &  & -\sigma_4 &  & -5\pi & +3\rho & \le & 0\\
+ &  &  &  &  & -\sigma_5 & -7\pi & +6\rho & \le & 0\\
+ & -\sigma_1 &  &  &  &  & -4\pi & +5\rho & \le & 10\\
+ &  & -\sigma_2 &  &  &  & -3\pi & +4\rho & \le & 8\\
+ &  &  & -\sigma_3 &  &  & -6\pi & +7\rho & \le & 15\\
+ &  &  &  & -\sigma_4 &  & -2\pi & +3\rho & \le & 5\\
+ &  &  &  &  & -\sigma_5 & -4\pi & +6\rho & \le & 9\\
+ & \sigma_1, & \sigma_2, & \sigma_3, & \sigma_4, & \sigma_5 &  &  & \ge & 0\\
+ &  &  &  &  &  & \pi &  & \ge & 0\\
+ &  &  &  &  &  &  & \rho & \ge & 0
+\end{array}
+$$
+
+</div>
+
+<!-- modello-esteso: fine -->
+
 
 **Description.** $\pi$ is the price of one point, $\rho$ the value of one unit of
 preference and $\sigma_i$ the price of the mutual exclusion of prize $i$. The

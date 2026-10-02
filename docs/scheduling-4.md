@@ -95,6 +95,39 @@ m.optimize()
 |---|---:|---:|---:|
 | $p_m$ | 1 | 2 | 2 |
 
+The model written on the data of the instance:
+
+<!-- modello-esteso: fam07_4_primale -->
+
+<div class="modello-esteso largo" markdown>
+
+$$
+\begin{array}{rrrrrrrrrrrrr c l}
+\min &  &  &  &  &  &  &  &  &  & y_1 & +y_2 & +y_3 &  & \\
+\text{subject to} & x_{11} & +x_{12} & +x_{13} &  &  &  &  &  &  &  &  &  & = & 1\\
+ &  &  &  & x_{21} & +x_{22} & +x_{23} &  &  &  &  &  &  & = & 1\\
+ &  &  &  &  &  &  & x_{31} & +x_{32} & +x_{33} &  &  &  & = & 1\\
+ & x_{11} &  &  & +x_{21} &  &  & +x_{31} &  &  &  &  &  & \le & 1\\
+ &  & x_{12} &  &  & +x_{22} &  &  & +x_{32} &  &  &  &  & \le & 2\\
+ &  &  & x_{13} &  &  & +x_{23} &  &  & +x_{33} &  &  &  & \le & 2\\
+ & -6x_{11} &  &  &  &  &  &  &  &  & +y_1 &  &  & \ge & 0\\
+ &  & -5x_{12} &  &  &  &  &  &  &  &  & +y_2 &  & \ge & 0\\
+ &  &  & -3x_{13} &  &  &  &  &  &  &  &  & +y_3 & \ge & 0\\
+ &  &  &  & -5x_{21} &  &  &  &  &  & +y_1 &  &  & \ge & 0\\
+ &  &  &  &  & -10x_{22} &  &  &  &  &  & +y_2 &  & \ge & 0\\
+ &  &  &  &  &  & -2x_{23} &  &  &  &  &  & +y_3 & \ge & 0\\
+ &  &  &  &  &  &  & -20x_{31} &  &  & +y_1 &  &  & \ge & 0\\
+ &  &  &  &  &  &  &  & -13x_{32} &  &  & +y_2 &  & \ge & 0\\
+ &  &  &  &  &  &  &  &  & -10x_{33} &  &  & +y_3 & \ge & 0\\
+ & x_{11}, & x_{12}, & x_{13}, & x_{21}, & x_{22}, & x_{23}, & x_{31}, & x_{32}, & x_{33} &  &  &  & \in & \{0, 1\}\\
+ &  &  &  &  &  &  &  &  &  & y_1, & y_2, & y_3 & \ge & 0
+\end{array}
+$$
+
+</div>
+
+<!-- modello-esteso: fine -->
+
 ## Constructive heuristic: the primal bound
 
 Next-fit on the cardinalities: machine 1 is filled up to $p_1$ jobs, then
@@ -125,6 +158,38 @@ $$
 $$
 
 <!-- model: end -->
+
+The same dual, written on the data of the instance:
+
+<!-- modello-esteso: fam07_4_duale -->
+
+<div class="modello-esteso largo" markdown>
+
+$$
+\begin{array}{rrrrrrrrrrrrrrrr c l}
+\max & \mu_1 & +\mu_2 & +\mu_3 & +\pi_1 & +2\pi_2 & +2\pi_3 &  &  &  &  &  &  &  &  &  &  & \\
+\text{subject to} & \mu_1 &  &  & +\pi_1 &  &  & -6\lambda_{11} &  &  &  &  &  &  &  &  & \le & 0\\
+ & \mu_1 &  &  &  & +\pi_2 &  &  & -5\lambda_{12} &  &  &  &  &  &  &  & \le & 0\\
+ & \mu_1 &  &  &  &  & +\pi_3 &  &  & -3\lambda_{13} &  &  &  &  &  &  & \le & 0\\
+ &  & \mu_2 &  & +\pi_1 &  &  &  &  &  & -5\lambda_{21} &  &  &  &  &  & \le & 0\\
+ &  & \mu_2 &  &  & +\pi_2 &  &  &  &  &  & -10\lambda_{22} &  &  &  &  & \le & 0\\
+ &  & \mu_2 &  &  &  & +\pi_3 &  &  &  &  &  & -2\lambda_{23} &  &  &  & \le & 0\\
+ &  &  & \mu_3 & +\pi_1 &  &  &  &  &  &  &  &  & -20\lambda_{31} &  &  & \le & 0\\
+ &  &  & \mu_3 &  & +\pi_2 &  &  &  &  &  &  &  &  & -13\lambda_{32} &  & \le & 0\\
+ &  &  & \mu_3 &  &  & +\pi_3 &  &  &  &  &  &  &  &  & -10\lambda_{33} & \le & 0\\
+ &  &  &  &  &  &  & \lambda_{11} &  &  & +\lambda_{21} &  &  & +\lambda_{31} &  &  & \le & 1\\
+ &  &  &  &  &  &  &  & \lambda_{12} &  &  & +\lambda_{22} &  &  & +\lambda_{32} &  & \le & 1\\
+ &  &  &  &  &  &  &  &  & \lambda_{13} &  &  & +\lambda_{23} &  &  & +\lambda_{33} & \le & 1\\
+ & \mu_1, & \mu_2, & \mu_3 &  &  &  &  &  &  &  &  &  &  &  &  & \gtreqless & 0\\
+ &  &  &  & \pi_1, & \pi_2, & \pi_3 &  &  &  &  &  &  &  &  &  & \le & 0\\
+ &  &  &  &  &  &  & \lambda_{11}, & \lambda_{12}, & \lambda_{13}, & \lambda_{21}, & \lambda_{22}, & \lambda_{23}, & \lambda_{31}, & \lambda_{32}, & \lambda_{33} & \ge & 0
+\end{array}
+$$
+
+</div>
+
+<!-- modello-esteso: fine -->
+
 
 The second constraint is the reduced cost of $y_m$: the coefficient $1$ in
 the primal objective limits the sum of the $\lambda_{jm}$.

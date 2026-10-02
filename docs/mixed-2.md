@@ -87,6 +87,27 @@ $$
 
 with $x_j \in \{0,1\}$.
 
+The model written on the data of the instance:
+
+<!-- modello-esteso: fam10_2_primale -->
+
+<div class="modello-esteso" markdown>
+
+$$
+\begin{array}{rrrrrrr c l}
+\max & 6x_1 & +3x_2 & +12x_3 & +12x_4 & +10x_5 & +16x_6 &  & \\
+\text{subject to} & x_1 &  &  & +x_4 &  & +x_6 & \le & 1\\
+ &  & x_2 &  &  & +x_5 &  & \le & 1\\
+ &  &  & x_3 & +x_4 &  & +x_6 & \le & 1\\
+ &  &  & x_3 &  & +x_5 & +x_6 & \le & 1\\
+ & x_1, & x_2, & x_3, & x_4, & x_5, & x_6 & \in & \{0, 1\}
+\end{array}
+$$
+
+</div>
+
+<!-- modello-esteso: fine -->
+
 ## Constructive heuristic: the primal bound
 
 The problem is a maximisation, so the heuristic gives the **primal** bound,
@@ -121,6 +142,30 @@ $$
 $$
 
 <!-- model: end -->
+
+The same dual, written on the data of the instance:
+
+<!-- modello-esteso: fam10_2_duale -->
+
+<div class="modello-esteso" markdown>
+
+$$
+\begin{array}{rrrrr c l}
+\min & \lambda_1 & +\lambda_2 & +\lambda_3 & +\lambda_4 &  & \\
+\text{subject to} & \lambda_1 &  &  &  & \ge & 6\\
+ &  & \lambda_2 &  &  & \ge & 3\\
+ &  &  & \lambda_3 & +\lambda_4 & \ge & 12\\
+ & \lambda_1 &  & +\lambda_3 &  & \ge & 12\\
+ &  & \lambda_2 &  & +\lambda_4 & \ge & 10\\
+ & \lambda_1 &  & +\lambda_3 & +\lambda_4 & \ge & 16\\
+ & \lambda_1, & \lambda_2, & \lambda_3, & \lambda_4 & \ge & 0
+\end{array}
+$$
+
+</div>
+
+<!-- modello-esteso: fine -->
+
 
 **Description.** $\lambda_i$ is the price the auctioneer puts on item $i$. The
 objective is the total value of the lots at those prices. The constraints are

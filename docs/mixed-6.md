@@ -110,6 +110,34 @@ $s = 2$ nationalities, $r = 2$ camps, $c = 1$.
 
 In all there are $34$ children available and $23$ places.
 
+The model written on the data of the instance:
+
+<!-- modello-esteso: fam10_6_primale -->
+
+<div class="modello-esteso largo" markdown>
+
+$$
+\begin{array}{rrrrrrrrr c l}
+\max & x_{11} & +x_{12} & +x_{21} & +x_{22} & +y_{11} & +y_{12} & +y_{21} & +y_{22} &  & \\
+\text{subject to} & x_{11} & +x_{12} &  &  &  &  &  &  & \le & 8\\
+ &  &  & x_{21} & +x_{22} &  &  &  &  & \le & 10\\
+ &  &  &  &  & y_{11} & +y_{12} &  &  & \le & 4\\
+ &  &  &  &  &  &  & y_{21} & +y_{22} & \le & 12\\
+ & x_{11} &  & +x_{21} &  & +y_{11} &  & +y_{21} &  & \le & 15\\
+ &  & x_{12} &  & +x_{22} &  & +y_{12} &  & +y_{22} & \le & 8\\
+ & x_{11} &  & +x_{21} &  & -y_{11} &  & -y_{21} &  & \ge & 0\\
+ &  & x_{12} &  & +x_{22} &  & -y_{12} &  & -y_{22} & \ge & 0\\
+ & x_{11} &  & -x_{21} &  & +y_{11} &  & -y_{21} &  & \ge & 0\\
+ &  & x_{12} &  & -x_{22} &  & +y_{12} &  & -y_{22} & \ge & 0\\
+ & x_{11}, & x_{12}, & x_{21}, & x_{22} &  &  &  &  & \in & \Z_{\ge 0}\\
+ &  &  &  &  & y_{11}, & y_{12}, & y_{21}, & y_{22} & \in & \Z_{\ge 0}
+\end{array}
+$$
+
+</div>
+
+<!-- modello-esteso: fine -->
+
 ## Constructive heuristic: the primal bound
 
 The problem is a maximisation. One camp is filled at a time, taking first the
@@ -150,6 +178,36 @@ $$
 $$
 
 <!-- model: end -->
+
+The same dual, written on the data of the instance:
+
+<!-- modello-esteso: fam10_6_duale -->
+
+<div class="modello-esteso largo" markdown>
+
+$$
+\begin{array}{rrrrrrrrrrr c l}
+\min & 8\alpha_1 & +10\alpha_2 & +4\beta_1 & +12\beta_2 & +15\gamma_1 & +8\gamma_2 &  &  &  &  &  & \\
+\text{subject to} & \alpha_1 &  &  &  & +\gamma_1 &  & -\delta_1 &  & -\varepsilon_{21} &  & \ge & 1\\
+ &  &  & \beta_1 &  & +\gamma_1 &  & +\delta_1 &  & -\varepsilon_{21} &  & \ge & 1\\
+ & \alpha_1 &  &  &  &  & +\gamma_2 &  & -\delta_2 &  & -\varepsilon_{22} & \ge & 1\\
+ &  &  & \beta_1 &  &  & +\gamma_2 &  & +\delta_2 &  & -\varepsilon_{22} & \ge & 1\\
+ &  & \alpha_2 &  &  & +\gamma_1 &  & -\delta_1 &  & +\varepsilon_{21} &  & \ge & 1\\
+ &  &  &  & \beta_2 & +\gamma_1 &  & +\delta_1 &  & +\varepsilon_{21} &  & \ge & 1\\
+ &  & \alpha_2 &  &  &  & +\gamma_2 &  & -\delta_2 &  & +\varepsilon_{22} & \ge & 1\\
+ &  &  &  & \beta_2 &  & +\gamma_2 &  & +\delta_2 &  & +\varepsilon_{22} & \ge & 1\\
+ & \alpha_1, & \alpha_2 &  &  &  &  &  &  &  &  & \ge & 0\\
+ &  &  & \beta_1, & \beta_2 &  &  &  &  &  &  & \ge & 0\\
+ &  &  &  &  & \gamma_1, & \gamma_2 &  &  &  &  & \ge & 0\\
+ &  &  &  &  &  &  & \delta_1, & \delta_2 &  &  & \ge & 0\\
+ &  &  &  &  &  &  &  &  & \varepsilon_{21}, & \varepsilon_{22} & \ge & 0
+\end{array}
+$$
+
+</div>
+
+<!-- modello-esteso: fine -->
+
 
 **Description.** $\alpha_i$ and $\beta_i$ are the prices of a place for the
 girls and for the boys of nationality $i$; $\gamma_j$ is the price of a place in

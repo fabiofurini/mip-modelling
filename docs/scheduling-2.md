@@ -125,6 +125,30 @@ $-6x_{11} - 5x_{21} - 20x_{31} + 25y_1 \ge 0$,
 $-5x_{12} - 10x_{22} - 13x_{32} + 20y_2 \ge 0$,
 $-3x_{13} - 2x_{23} - 10x_{33} + 12y_3 \ge 0$.
 
+The model written on the data of the instance:
+
+<!-- modello-esteso: fam07_2_primale -->
+
+<div class="modello-esteso largo" markdown>
+
+$$
+\begin{array}{rrrrrrrrrrrrr c l}
+\min &  &  &  &  &  &  &  &  &  & 8y_1 & +7y_2 & +5y_3 &  & \\
+\text{subject to} & x_{11} & +x_{12} & +x_{13} &  &  &  &  &  &  &  &  &  & = & 1\\
+ &  &  &  & x_{21} & +x_{22} & +x_{23} &  &  &  &  &  &  & = & 1\\
+ &  &  &  &  &  &  & x_{31} & +x_{32} & +x_{33} &  &  &  & = & 1\\
+ & -6x_{11} &  &  & -5x_{21} &  &  & -20x_{31} &  &  & +25y_1 &  &  & \ge & 0\\
+ &  & -5x_{12} &  &  & -10x_{22} &  &  & -13x_{32} &  &  & +20y_2 &  & \ge & 0\\
+ &  &  & -3x_{13} &  &  & -2x_{23} &  &  & -10x_{33} &  &  & +12y_3 & \ge & 0\\
+ & x_{11}, & x_{12}, & x_{13}, & x_{21}, & x_{22}, & x_{23}, & x_{31}, & x_{32}, & x_{33} &  &  &  & \in & \{0, 1\}\\
+ &  &  &  &  &  &  &  &  &  & y_1, & y_2, & y_3 & \in & \{0, 1\}
+\end{array}
+$$
+
+</div>
+
+<!-- modello-esteso: fine -->
+
 ## Constructive heuristic: the primal bound
 
 The best-fit criterion becomes the **minimum time** (there are no assignment
@@ -159,6 +183,37 @@ a_m\, \pi_m &\le c_m, & \forall m \in \{1, 2, \dots, k\}, \\
 $$
 
 <!-- model: end -->
+
+The same dual, written on the data of the instance:
+
+<!-- modello-esteso: fam07_2_duale -->
+
+<div class="modello-esteso" markdown>
+
+$$
+\begin{array}{rrrrrrr c l}
+\max & \mu_1 & +\mu_2 & +\mu_3 &  &  &  &  & \\
+\text{subject to} & \mu_1 &  &  & -6\pi_1 &  &  & \le & 0\\
+ & \mu_1 &  &  &  & -5\pi_2 &  & \le & 0\\
+ & \mu_1 &  &  &  &  & -3\pi_3 & \le & 0\\
+ &  & \mu_2 &  & -5\pi_1 &  &  & \le & 0\\
+ &  & \mu_2 &  &  & -10\pi_2 &  & \le & 0\\
+ &  & \mu_2 &  &  &  & -2\pi_3 & \le & 0\\
+ &  &  & \mu_3 & -20\pi_1 &  &  & \le & 0\\
+ &  &  & \mu_3 &  & -13\pi_2 &  & \le & 0\\
+ &  &  & \mu_3 &  &  & -10\pi_3 & \le & 0\\
+ &  &  &  & 25\pi_1 &  &  & \le & 8\\
+ &  &  &  &  & 20\pi_2 &  & \le & 7\\
+ &  &  &  &  &  & 12\pi_3 & \le & 5\\
+ & \mu_1, & \mu_2, & \mu_3 &  &  &  & \gtreqless & 0\\
+ &  &  &  & \pi_1, & \pi_2, & \pi_3 & \ge & 0
+\end{array}
+$$
+
+</div>
+
+<!-- modello-esteso: fine -->
+
 
 **A hand-built dual solution.** $\bar\pi_m = c_m / a_m$ (the cost per minute
 of each machine): $\tfrac{8}{25}, \tfrac{7}{20}, \tfrac{5}{12}$; then
