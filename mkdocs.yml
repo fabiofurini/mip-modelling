@@ -44,6 +44,13 @@ theme:
 
 plugins:
   - search
+  # the six chapters changed number: the old addresses keep working
+  - redirects:
+      redirect_maps:
+        modelling-4.md: modelling-2.md
+        modelling-6.md: modelling-3.md
+        modelling-5.md: modelling-4.md
+        modelling-2.md: modelling-5.md
 
 extra:
   social:
@@ -92,10 +99,10 @@ nav:
   - Modelling:
       - modelling.md
       - 1. What is a MIP model: modelling-1.md
-      - 2. Relaxations, duality and bounds: modelling-4.md
-      - 3. From the model to Python/Gurobi: modelling-6.md
-      - 4. Constructive heuristics: modelling-5.md
-      - 5. Logic and binary variables: modelling-2.md
+      - 2. Relaxations, duality and bounds: modelling-2.md
+      - 3. From the model to Python/Gurobi: modelling-3.md
+      - 4. Constructive heuristics: modelling-4.md
+      - 5. Logic and binary variables: modelling-5.md
       - 6. Links between variables:
           - links.md
           - 6.1 Activation: links-01.md
@@ -112,9 +119,6 @@ nav:
           - 6.12 Alldiff and expansion: links-12.md
           - 6.13 Soft constraints: links-13.md
           - 6.14 Piecewise functions: links-14.md
-      - 4. Relaxations, duality and bounds: modelling-4.md
-      - 5. Constructive heuristics: modelling-5.md
-      - 6. From the model to Python/Gurobi: modelling-6.md
   - The problems:
       - problems.md
       - Numerical models:

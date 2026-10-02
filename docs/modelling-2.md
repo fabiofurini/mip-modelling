@@ -1,482 +1,537 @@
-# Logic and binary variables
+# Relaxations, duality and bounds
 
-**Class:** BIP · **Links:** clauses and implications · **Script:** `python/cap02_logic.py`
+**Class:** LP · MILP · **Script:** `python/cap04_bounds.py`
 { .scheda }
 
-[![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/fabiofurini/mip-modelling/blob/main/notebooks/cap02_logic.ipynb)
 
-A binary variable is a "yes/no" answer. This chapter translates logical
-conditions between those answers into **linear constraints** and — above all —
-shows how to *prove* that the translation is exact.
+This chapter teaches how to produce, **by hand**, a number that certainly lies
+on one side of the integer optimum. It serves three purposes: understanding how
+good a model is, how good a heuristic is, and how to read the numbers a solver
+reports when it has not finished.
 
-## Propositions, expressions, satisfiability
+## What a relaxation is
 
-A boolean function returns `TRUE` or `FALSE` and is represented by
-$x \in \{0,1\}$: $x = 1$ if and only if the proposition is true. A **boolean
-expression** is built from binary variables, the three operators `AND`
-($\land$), `OR` ($\lor$), `NOT` ($\lnot$) and parentheses. The **satisfiability
-problem** asks whether an assignment exists that makes the expression true.
+A **relaxation** of $\min\{c'x : x \in X\}$ is a problem
+$\min\{c'x : x \in \hat X\}$ with $X \subseteq \hat X$: the minimum over a
+larger set cannot be higher. In a maximisation the inequality is reversed.
 
-!!! example "Satisfiable and not"
-    - `NOT` $x_a$ `OR` $\big((x_b$ `OR` $x_c)$ `AND` $(x_d$ `OR` $x_e)\big)$ is
-      satisfied by $x_a = 0$.
-    - $(x_a$ `OR` $x_b)$ `AND` $(x_c$ `OR` $x_d)$ `AND` `NOT` $x_e$ is
-      satisfied by $x_a = x_c = 1$, $x_b = x_d = x_e = 0$.
-    - $(x_a \lor x_b) \land (\lnot x_a \lor x_b) \land (x_a \lor \lnot x_b) \land (\lnot x_a \lor \lnot x_b)$
-      is **unsatisfiable**: each of the four assignments of $(x_a, x_b)$
-      falsifies one clause.
-
-## Literals, clauses, conjunctive normal form
-
-A **literal** is a variable or its negation; a **clause** is a disjunction of
-literals; an expression is in **conjunctive normal form** (CNF) if it is a
-conjunction of clauses.
-
-The equivalences needed, for every $x_a, x_b, x_c \in \{0,1\}$:
-
-$$
-\begin{aligned}
-x_a \land (x_b \lor x_c) &\iff (x_a \land x_b) \lor (x_a \land x_c) &&\text{(distributive C)}\\
-x_a \lor (x_b \land x_c) &\iff (x_a \lor x_b) \land (x_a \lor x_c) &&\text{(distributive D)}\\
-\lnot(x_a \lor x_b) &\iff \lnot x_a \land \lnot x_b &&\text{(De Morgan A)}\\
-\lnot(x_a \land x_b) &\iff \lnot x_a \lor \lnot x_b &&\text{(De Morgan B)}\\
-x_a \lor (x_a \land x_b) &\iff x_a &&\text{(absorption E)}\\
-x_a \land (x_a \lor x_b) &\iff x_a &&\text{(absorption F)}\\
-\lnot(\lnot x_a) &\iff x_a &&\text{(double negation)}
-\end{aligned}
-$$
-
-Each is proved by cases: with two variables there are $4$ assignments, with
-three there are $8$. The script runs the check on all seven.
-
-!!! tip "Collecting: distributive (C) read backwards"
-    $(x_a \land x_b) \lor (x_a \land x_c) \iff x_a \land (x_b \lor x_c)$. It is
-    useful when putting into CNF a disjunction of several conjunctions sharing
-    literals. For instance "at least two of $a, b, c$", that is
-    $(x_a \land x_b) \lor (x_a \land x_c) \lor (x_b \land x_c)$, becomes
-
-    $$(x_a \lor x_b) \land (x_a \lor x_c) \land (x_b \lor x_c).$$
-
-## From CNF to linear constraints
-
-!!! note "The translation, in three rules"
-    1. every **clause** becomes an inequality constraint $\ge 1$;
-    2. every `OR` inside the clause becomes a $+$;
-    3. every negative literal `NOT` $x$ becomes $1 - x$.
-
-A clause with positive literals $P$ and negative literals $N$ becomes
-
-$$\sum_{i \in P} x_i + \sum_{i \in N} (1 - x_i) \ge 1
-\iff \sum_{i \in P} x_i - \sum_{i \in N} x_i \ge 1 - |N|.$$
-
-The left-hand side counts **how many literals of the clause are true**: asking
-it to be $\ge 1$ is asking the clause to be true.
-
-!!! warning "The form in which the constraint is written"
-    With two or more negative literals the equivalent form obtained by
-    multiplying by $-1$ reads better: $1 - x_1 + 1 - x_6 + x_7 \ge 1$ is written
-    $x_1 + x_6 - x_7 \le 1$. It is the same constraint. What never changes is
-    the number of constraints: **one per clause**, counted after removing
-    tautologies and absorbed clauses.
-
-## Logical implications
-
-$x_a \Rightarrow x_b$ is equivalent to `NOT` $x_a$ `OR` $x_b$, already in CNF,
-that is to $x_b - x_a \ge 0$. The **contrapositive**
-$\lnot x_b \Rightarrow \lnot x_a$ is not a second constraint: by double negation
-its expression is the same one.
-
-| Implication | Expression in CNF | Constraints | # |
-|---|---|---|---|
-| $x_a \land x_b \Rightarrow x_c$ | $\lnot x_a \lor \lnot x_b \lor x_c$ | $x_a + x_b - x_c \le 1$ | 1 |
-| $x_a \lor x_b \Rightarrow x_c$ | $(\lnot x_a \lor x_c) \land (\lnot x_b \lor x_c)$ | $x_c - x_a \ge 0$, $x_c - x_b \ge 0$ | 2 |
-| $x_a \Rightarrow x_b \land x_c$ | $(\lnot x_a \lor x_b) \land (\lnot x_a \lor x_c)$ | $x_b - x_a \ge 0$, $x_c - x_a \ge 0$ | 2 |
-| $x_a \Rightarrow x_b \lor x_c$ | $\lnot x_a \lor x_b \lor x_c$ | $x_b + x_c - x_a \ge 0$ | 1 |
-
-A **disjunction in the antecedent** and a **conjunction in the consequent** cost
-two constraints; the opposite costs one.
-
-## Splitting an implication: when it is allowed
-
-$$(x_a \lor x_b) \Rightarrow x_c \iff (x_a \Rightarrow x_c) \land (x_b \Rightarrow x_c)$$
-$$x_a \Rightarrow (x_b \land x_c) \iff (x_a \Rightarrow x_b) \land (x_a \Rightarrow x_c)$$
-
-!!! danger "The split with a conjunctive antecedent is **not** valid"
-    $(x_a \land x_b) \Rightarrow x_c$ is **not** equivalent to
-    $(x_a \Rightarrow x_c) \land (x_b \Rightarrow x_c)$. With $x_a = 1$,
-    $x_b = 0$, $x_c = 0$ the original implication is *true* (false antecedent)
-    but $x_a \Rightarrow x_c$ is *false*: the conjunction of the two splits is
-    **strictly stronger** and cuts off solutions the problem allows.
-
-## Counting: at most one, at least one, exactly one
-
-| Condition | Constraint | Note |
+| Name | What is dropped | Note |
 |---|---|---|
-| at least one | $\sum_{i \in I} x_i \ge 1$ | it is the clause: *set covering* |
-| at most one | $\sum_{i \in I} x_i \le 1$ | *set packing*; equivalent to $\binom{|I|}{2}$ clauses, but in one constraint and tighter |
-| exactly one | $\sum_{i \in I} x_i = 1$ | *set partitioning* |
-| at least $p$ | $\sum_{i \in I} x_i \ge p$ | in CNF it would take $\binom{|I|}{|I|-p+1}$ clauses |
-| at most $p$ | $\sum_{i \in I} x_i \le p$ | in CNF it would take $\binom{|I|}{p+1}$ clauses |
+| $z(\mathit{LP})$, pure | $x \in \{0,1\}$ becomes $x \ge 0$ | this is the one whose dual is written by hand: fewer constraints, hence a dual with fewer variables |
+| $z(\mathit{LP}^+)$, bounds kept | $x \in \{0,1\}$ becomes $0 \le x \le 1$ | this is Gurobi's `relax()` and the root relaxation |
+| $z(\mathit{LP}^{++})$, strengthened | as above, plus valid inequalities | see below |
 
-!!! tip "One cardinality constraint beats many clauses"
-    "At most one out of three" is written as three clauses ($x_1+x_2 \le 1$,
-    $x_1+x_3 \le 1$, $x_2+x_3 \le 1$) or as $x_1+x_2+x_3 \le 1$. Same binary
-    solutions, different relaxations: $x = (1/2,1/2,1/2)$ satisfies the three
-    clauses and violates the aggregated constraint. When counting is possible,
-    count.
+In a minimisation
+$z(\mathit{LP}) \le z(\mathit{LP}^+) \le z(\mathit{LP}^{++}) \le z(\mathit{MILP})$.
 
-## Checking the translation, not trusting it
+!!! note "The two relaxations coincide more often than one thinks"
+    If the model contains an assignment constraint $\sum_m x_{jm} = 1$ with
+    $x \ge 0$, then $x_{jm} \le 1$ is already implied and the two relaxations
+    are **equal**. In the bound table of [chapter 7](scheduling.md) this happens
+    in problems 1, 4, 6 and 7.
 
-A translation is correct when, for **every** binary assignment, the expression
-is true if and only if all constraints are satisfied. With few variables this is
-an enumeration of $2^n$ cases: it is the proof, by cases, of the result. The
-module
-[`python/booleane.py`](https://github.com/fabiofurini/mip-modelling/blob/main/python/booleane.py)
-performs it, and every translation below is checked this way.
+## The primal/dual conversion table
 
-## Five solved exercises
+Minimisation primal, constraints indexed by $i$, variables by $j$:
 
-In all of them, $x_p = 1$ if project $p$ is chosen.
+| In the primal (min) | In the dual (max) |
+|---|---|
+| constraint $i$ of type $\ge$ | variable $\pi_i \ge 0$ |
+| constraint $i$ of type $\le$ | variable $\pi_i \le 0$ |
+| equality constraint $i$ | free variable $\pi_i$ |
+| variable $x_j \ge 0$ | constraint $j$ of type $\le c_j$ |
+| free variable $x_j$ | equality constraint $j$, $= c_j$ |
 
-??? question "2.1 — Direct implications (ten projects)"
-    (1) if 2 is chosen then 3 is chosen; (2) if 2 is chosen then 4 is not
-    chosen; (3) if 1 and 6 are chosen then 7 is chosen; (4) if 1 or 6 is chosen
-    then 8 is chosen; (5) if 2 and 3 are chosen then 9 is not chosen; (6) if 2
-    or 3 is chosen then 10 is not chosen.
+The dual objective is $\max \sum_i b_i \pi_i$. If the primal is a **maximisation**,
+every direction is reversed and the dual is a minimisation.
 
-??? question "2.2 — Negated antecedents and consequents (ten projects)"
-    (1) $\lnot x_3 \Rightarrow x_2$; (2) $\lnot x_4 \Rightarrow \lnot x_2$;
-    (3) $x_7 \Rightarrow x_1 \land x_6$; (4) $x_8 \Rightarrow x_1 \lor x_6$;
-    (5) $\lnot x_9 \Rightarrow x_2 \land x_3$;
-    (6) $\lnot x_{10} \Rightarrow x_2 \lor x_3$.
+Dual constraint $j$ says: "the value I attach to the resources consumed by
+activity $j$ cannot exceed its cost". With this reading, every recipe for
+building a dual solution has an economic meaning.
 
-??? question "2.3 — Compound antecedents and consequents (eight projects)"
-    (1) $x_7 \lor x_3 \Rightarrow x_1 \land x_2$;
-    (2) $x_1 \land x_6 \land x_7 \Rightarrow x_8$;
-    (3) $x_5 \land x_2 \land \lnot x_4 \Rightarrow \lnot x_3$;
-    (4) $(x_1 \lor x_4) \land x_6 \Rightarrow x_2 \land (x_5 \lor x_7)$;
-    (5) $(x_2 \lor x_5) \land \lnot x_8 \Rightarrow x_3 \lor \lnot x_6$;
-    (6) $(x_1 \lor x_4) \land (x_2 \lor x_5) \land \lnot x_8 \Rightarrow x_3 \land (\lnot x_6 \lor x_7)$.
+## Weak duality, strong duality
 
-??? question "2.4 — "At least two of" (nine projects)"
-    (1) $x_4 \Rightarrow$ at least two of 1, 2, 3; (2) at least two of 6, 7, 8
-    $\Rightarrow x_5$; (3) $\lnot x_4 \Rightarrow$ at least two of 1, 2, 3, 9;
-    (4) $x_8 \Rightarrow (x_1 \land x_6) \lor (x_1 \land x_7) \lor (x_2 \land x_6)$;
-    (5) at least two of 1, 3, 5 $\Rightarrow \lnot x_9$;
-    (6) $(x_1 \land x_2) \lor (x_3 \land x_4) \Rightarrow x_5$.
+- **Weak duality**: $\sum_i b_i \bar\pi_i \le \sum_j c_j \bar x_j$ for every pair of feasible
+  solutions. *Always*, with no assumptions. This is the one we need: it gives a
+  lower bound from **any** feasible dual solution, even one built by hand.
+- **Strong duality**: if the relaxation has a finite optimum, $z(\mathit{D}(\mathit{LP})) = z(\mathit{LP})$. It
+  serves as a **check**: the optimum of the dual written by hand must coincide
+  with $z(\mathit{LP})$. The course scripts verify it with an `assert`.
 
-    !!! warning "«At least two» can also be written by counting"
-        As the consequent of the implication governed by $x_4$, the condition is
-        also $x_1 + x_2 + x_3 \ge 2 x_4$: one constraint instead of three, with
-        the same $16$ binary solutions but **stronger** in the relaxation. On
-        $\max x_1+x_2+x_3+3x_4$ with $x_1+x_2+x_3+2x_4 \le 3$ and
-        $z(\mathit{MILP}) = 3$, the three clauses give
-        $z(\mathit{LP}^+) = 27/7 \approx 3.86$ and the counted constraint
-        $15/4 = 3.75$.
+And then: since every feasible solution of the MILP is feasible for the
+relaxation too,
 
-??? question "2.5 — Splits (ten projects)"
-    (1) $x_1 \lor x_2 \Rightarrow x_3$; (2) $x_4 \Rightarrow x_5 \land x_6$;
-    (3) $x_1 \lor x_2 \Rightarrow x_3 \land x_4$;
-    (4) $x_1 \land x_2 \Rightarrow x_3$; (5) $x_5 \lor x_6 \Rightarrow \lnot x_7$;
-    (6) $\lnot x_8 \lor \lnot x_9 \Rightarrow x_{10}$.
+$$\textstyle\sum_i b_i \bar\pi_i ~\le~ z(\mathit{LP}) ~\le~ z(\mathit{MILP}).$$
 
-## Logical constraints inside an optimisation model
+!!! danger "There is no such thing as «the dual of the MILP»"
+    The dual one writes is that of the **relaxation**. A MILP has no linear
+    dual, and strong duality between a MILP and any linear program does not hold
+    in general: the jump $z(\mathit{MILP}) - z(\mathit{LP})$ is precisely what
+    is missing.
 
-With the ten projects of exercise 2.1, revenues and costs
+## Three recipes for building a dual solution by hand
 
-| project $p$ | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 |
-|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
-| revenue $r_p$ | 9 | 7 | 4 | 8 | 3 | 6 | 2 | 5 | 7 | 6 |
-| cost $b_p$ | 4 | 3 | 2 | 4 | 2 | 3 | 1 | 3 | 4 | 3 |
+1. **Zero out and saturate.** Set all dual variables to zero except one family,
+   and push those to the largest feasible value. In problem
+   [7.1](scheduling-1.md): $\bar\pi = 0$ and $\bar\mu_j = \min_m c_{jm}$, that
+   is "every job costs at least its cheapest option".
+2. **Constructive heuristic on the constraints.** Scan the primal constraints one at a time,
+   raise the corresponding dual variable until the first dual constraint that
+   opposes it becomes tight, and update the residuals.
+3. **The best ratio.** With a single capacity constraint in a maximisation,
+   $\bar v = \max_j p_j / w_j$ is feasible and gives the bound $b \bar v$.
 
-and budget $B = 14$:
+Whichever recipe is used, the solution must be **checked feasible** for the dual
+— that is the only thing that makes the bound valid — and its value compared
+with $z(\mathit{LP})$.
+
+## A minimisation problem, in full
+
+!!! abstract "Minimum-cost zone covering"
+    A town has $4$ districts; activating the team of district $j$ costs $c_j$.
+    There are $6$ sensitive zones, each on the border between two districts:
+    zone $i$ is covered if at least one of the two neighbouring teams is active.
+    All zones must be covered at minimum cost.
+
+Data $c = (4, 3, 5, 3)$; the six zones are the six pairs of districts, in the
+order $\{1,2\}$, $\{2,3\}$, $\{1,3\}$, $\{1,4\}$, $\{2,4\}$, $\{3,4\}$.
 
 $$
 \begin{aligned}
-\max ~~ \sum_{p=1}^{n} r_p\, x_p & &\\
-\text{subject to}\quad \sum_{p=1}^{n} b_p\, x_p &\le B, &\\
-\text{the 8 constraints} &\text{ of exercise 2.1}, &\\
-x_p &\in \{0, 1\}, & \forall p \in \{1, 2, \dots, n\}.
+\min ~~ \sum_{j=1}^{n} c_j\, x_j & &\\
+\text{subject to}\quad \sum_{j \in S_i} x_j &\ge 1, & \forall i \in \{1, 2, \dots, m\},\\
+x_j &\in \{0, 1\}, & \forall j \in \{1, 2, \dots, n\}.
 \end{aligned}
 $$
 
-Without the logical constraints the optimum is $30$. With them it drops to
-$z(\mathit{MILP}) = 28$, with projects $1, 2, 3, 5, 8$ of total cost $14$: the
-budget is tight. The relaxation $z(\mathit{LP}^+)$ is $29$.
+**The dual of the relaxation without the bounds**, with $\pi_i \ge 0$ for every covering
+constraint:
 
-!!! tip "How much six implications cut"
-    The $2^{10} = 1024$ assignments drop to $234$ once all six implications are
-    imposed: less than a quarter. None of them, on its own, cuts more than half
-    the space.
+$$
+\begin{aligned}
+\max ~~ \sum_{i=1}^{m} \pi_i & &\\
+\text{subject to}\quad \sum_{i \,:\, j \in S_i} \pi_i &\le c_j, & \forall j,\\
+\pi_i &\ge 0, & \forall i.
+\end{aligned}
+$$
 
-![How many assignments survive](img/cap02_implicazioni.png)
+For the instance, every team covers three zones:
+$\pi_1 + \pi_3 + \pi_4 \le 4$, $\pi_1 + \pi_2 + \pi_5 \le 3$, $\pi_2 + \pi_3 + \pi_6 \le 5$,
+$\pi_4 + \pi_5 + \pi_6 \le 3$.
 
-```python
-from booleane import cnf, vincolo, IMP, AND, OR, NOT, V
+**A dual solution by hand (recipe 2).**
 
-x = {p: V(f"x{p}") for p in range(1, 11)}
-implications = [IMP(x[2], x[3]), IMP(x[2], NOT(x[4])),
-                IMP(AND(x[1], x[6]), x[7]), IMP(OR(x[1], x[6]), x[8]),
-                IMP(AND(x[2], x[3]), NOT(x[9])), IMP(OR(x[2], x[3]), NOT(x[10]))]
+- **Zone 1** ($\{1,2\}$): residuals $(4,3,5,3)$, the smallest among teams 1 and
+  2 is $3$. $\bar \pi_1 = 3$; residuals $(1,0,5,3)$.
+- **Zone 2** ($\{2,3\}$): the residual of team 2 is $0$, so $\bar \pi_2 = 0$.
+- **Zone 3** ($\{1,3\}$): the smallest of $1$ and $5$ is $1$. $\bar \pi_3 = 1$;
+  residuals $(0,0,4,3)$.
+- **Zones 4 and 5**: teams 1 and 2 have zero residual, so
+  $\bar \pi_4 = \bar \pi_5 = 0$.
+- **Zone 6** ($\{3,4\}$): the smallest of $4$ and $3$ is $3$. $\bar \pi_6 = 3$.
 
-m = gp.Model("project_selection");  m.Params.OutputFlag = 0
-xv = m.addVars(range(1, 11), vtype=GRB.BINARY, name="x")
-m.setObjective(gp.quicksum(r[p] * xv[p] for p in range(1, 11)), GRB.MAXIMIZE)
-m.addConstr(gp.quicksum(b[p] * xv[p] for p in range(1, 11)) <= budget, name="budget")
-for i, formula in enumerate(implications, 1):          # one clause, one constraint
-    for j, clause in enumerate(cnf(formula), 1):
-        coef, sense, rhs = vincolo(clause)
-        lhs = gp.quicksum(k * xv[int(n[1:])] for n, k in coef.items())
-        m.addConstr(lhs <= rhs if sense == "<=" else lhs >= rhs, name=f"logic{i}_{j}")
-m.optimize()
-```
+$$\mathit{LB} = 3 + 0 + 1 + 0 + 0 + 3 = 7.$$
 
-## What this chapter has put in your hands
+**A primal upper bound.** The covering constructive heuristic — at each step one
+picks the element costing least per newly covered requirement — takes teams $1$,
+$2$, $4$, of cost $4+3+3 = 10$: a feasible and **integer** solution, so
+$\mathit{UB} = 10$.
 
-A logical condition between yes/no decisions is always written the same way: one
-binary per elementary fact, the condition brought into conjunctive normal form —
-a conjunction of ORs — and every clause becomes a linear inequality. The AND
-costs nothing, because constraints are already in AND with each other; the OR
-becomes a sum $\ge 1$; the NOT becomes $1 - x$; the implication
-$x \Rightarrow y$ becomes $x \le y$; the "if and only if" asks for both
-inequalities.
+| $UB$ (constructive heuristic) | $LB$ (dual by hand) | $z(\mathit{LP})$ | $z(\mathit{MILP})$ | heuristic gap |
+|---:|---:|---:|---:|---:|
+| 10 | 7 | $15/2$ | 10 | $0.0\%$ |
 
-Three shapes recur often enough to have a name: the **set covering**
-($\sum_{j \in S} x_j \ge 1$, at least one), the **set packing** ($\le 1$, at most
-one) and the **set partitioning** ($= 1$, exactly one). Recognising them in a
-statement is half of the modelling work.
+The certified gap between the two hand-built bounds is $(10-7)/10 = 30\%$:
+without solving the MILP we would know only that the optimum lies between $7$
+and $10$. The heuristic was already optimal, but the bounds cannot tell us that.
+
+## A maximisation problem: the roles swap
+
+!!! abstract "Knapsack"
+    Four items of value $p = (10, 7, 6, 4)$ and weight $w = (5, 4, 3, 3)$;
+    capacity $b = 9$.
+
+The dual of the relaxation without the bounds has a single variable $v \ge 0$: $\min\ b v$
+with $w_j v \ge p_j$ for every $j$.
+
+- **Heuristic** (ratio constructive heuristic): ratios $2$, $7/4$, $2$, $4/3$; items 1 and 3 are
+  taken (weight $8$), value $16$. In a **maximisation** the heuristic gives a
+  **lower** bound: $\mathit{LB} = 16$.
+- **Dual by hand** (recipe 3): $\bar v = \max_j p_j/w_j = 2$, value
+  $b \bar v = 18$. In a **maximisation** the dual gives an **upper** bound:
+  $\mathit{UB} = 18$.
+
+$$16 ~\le~ z(\mathit{MILP}) = 17 ~\le~ z(\mathit{LP}^+) = \tfrac{71}{4} ~\le~ z(\mathit{LP}) = 18.$$
+
+Here the dual by hand is **optimal** for the relaxation without the bounds, and the relaxation
+with the bounds kept is strictly better ($71/4 < 18$): the constraint
+$x_j \le 1$ bites, because without it the LP takes $9/5$ units of item 1.
+
+![The sandwich of the two problems](img/cap04_sandwich.png)
+
+!!! note "The sandwich, written once and for all"
+    $$\text{minimisation:}\quad \mathit{LB}(\bar\pi) \le z(\mathit{D}(\mathit{LP})) = z(\mathit{LP}) \le z(\mathit{LP}^+) \le z(\mathit{MILP}) \le \mathit{UB}(\bar x)$$
+    $$\text{maximisation:}\quad \mathit{LB}(\bar x) \le z(\mathit{MILP}) \le z(\mathit{LP}^+) \le z(\mathit{LP}) = z(\mathit{D}(\mathit{LP})) \le \mathit{UB}(\bar\pi)$$
+
+    where $(\bar\pi_1, \bar\pi_2, \dots, \bar\pi_m)$ is a feasible dual
+    solution of the relaxation, of value $\sum_{i=1}^{m} b_i\, \bar\pi_i$, and
+    $(\bar x_1, \bar x_2, \dots, \bar x_n)$ a feasible solution of the MILP, of
+    value $\sum_{j=1}^{n} c_j\, \bar x_j$.
+
+    The *relaxation side* is optimistic and holds all the dual bounds; the
+    *heuristic side* is pessimistic and holds all the feasible solutions. The
+    name ($\mathit{LB}$ or $\mathit{UB}$) depends on the direction of the
+    objective, the role does not.
+
+## Valid inequalities and constraints that preserve optimality
+
+- A **valid inequality** is satisfied by *all* feasible integer solutions:
+  adding it does not change $z(\mathit{MILP})$; if it reduces
+  $z(\mathit{LP}^+)$ it is called a **cut**.
+- A **constraint that preserves optimality** cuts off some feasible solutions
+  but not all the optimal ones. It is not a valid inequality, and must be
+  declared as such (example: $z_j \le M_j y_j$ in
+  an activation binary).
+
+**The cover cut.** A set $S$ is a *cover* if $\sum_{j \in S} w_j > b$; then
+$\sum_{j \in S} x_j \le |S| - 1$ is valid. On the knapsack ($w = (5,4,3,3)$,
+$b = 9$) the minimal covers are the four triples. The optimal solution of the
+relaxation is $\tilde x = (1,\ 1/4,\ 1,\ 0)$:
+
+| Cover $S$ | $\sum_{j \in S} \tilde x_j$ | $\|S\|-1$ | |
+|---|---:|---:|---|
+| $\{1,2,3\}$ | $9/4$ | 2 | **violated**: the cut is needed |
+| $\{1,2,4\}$ | $5/4$ | 2 | satisfied |
+| $\{1,3,4\}$ | $2$ | 2 | satisfied (with equality) |
+| $\{2,3,4\}$ | $5/4$ | 2 | satisfied |
+
+Adding the four cuts, $z(\mathit{LP}^+)$ drops from $71/4 = 17.75$ to
+$69/4 = 17.25$ and $z(\mathit{MILP})$ stays $17$.
+
+## Stronger formulations
+
+Two formulations $A$ and $B$ are compared in **two steps**: (1) same integer
+set, that is the two formulations must admit exactly the same points with
+integer coordinates — without this nothing is
+being compared; (2) $B$ is *stronger* if $X_B \subseteq X_A$ as polyhedra. The
+reference case is [activation](links-01.md).
+
+!!! warning "Stronger does not mean faster"
+    A stronger formulation has fewer nodes but more rows, and every node costs
+    more. What can be **proved** is the strength of the relaxation; speed is
+    **measured**.
+
+## What the solver says
+
+!!! danger "`ObjBound` is not the root relaxation"
+    On the covering instance, the relaxation of the model *as we wrote it* is
+    $15/2$ and the integer optimum $10$. Yet Gurobi reports `ObjBound = 10` and
+    `NodeCount = 0`: it closed the gap at the root, with presolve, its own cuts
+    and heuristics, without ever branching. Switching those off
+    (`Presolve = Cuts = Heuristics = 0`) the same model gives the same optimum
+    but with $5$ nodes.
+
+    Two consequences: "how hard a model is" is not a property of the model
+    alone; and the relaxation we speak of in the hand-built bounds is that of
+    the model as written, obtained with `relax()`.
+
+## LP duals are not the marginal prices of the MILP
+
+| $b$ | $z(\mathit{MILP})$ | $z(\mathit{LP}^+)$ | LP dual | true change |
+|---:|---:|---:|---:|---:|
+| 8 | 16 | 16 | $2$ | — |
+| 9 | 17 | $71/4$ | $7/4$ | $+1$ |
+| 10 | 17 | $39/2$ | $7/4$ | **0** |
+| 11 | 20 | $85/4$ | $7/4$ | $+3$ |
+| 12 | 23 | 23 | $7/4$ | $+3$ |
+
+The LP dual is the ratio $p_j/w_j$ of the "critical" item. The true change of
+the integer optimum comes in jumps: from $b = 9$ to $b = 10$ it does not change
+*at all*, while the dual promises $7/4$.
+
+!!! note "What can be said, then"
+    Of the LP dual, the only use this course makes of it remains true: it is a
+    **bound**. As managerial advice ("is it worth buying one more unit?") it must
+    be checked by solving the MILP again: the difference
+    $z(\mathit{MILP})(b_i + 1) - z(\mathit{MILP})(b_i)$ is the only correct
+    answer, and there is no closed formula for it.
+
+## The bound protocol of the course
+
+Every exercise of [Part II](problems.md) produces: (1) a feasible **and
+integer** solution from a heuristic, checked on constraints, bounds and
+integrality; (2) the dual of the relaxation without the bounds, in general form and for the
+instance; (3) a feasible dual solution built by hand, with the recipe declared;
+(4) the two relaxations from the solver; (5) the optimum and the table
+$\mathit{UB} \cdot \mathit{LB} \cdot z(\mathit{LP}) \cdot z(\mathit{LP}^+) \cdot z(\mathit{MILP}) \cdot$ gap;
+(6) the additional considerations.
+
+Every number in the table exists in a CSV produced by the problem's script, and
+an `assert` in `check_numbers.py` compares it with the value quoted in the text.
 
 ## Code
 
 The complete script is
-[`python/cap02_logic.py`](https://github.com/fabiofurini/mip-modelling/blob/main/python/cap02_logic.py),
-which uses the module
-[`python/booleane.py`](https://github.com/fabiofurini/mip-modelling/blob/main/python/booleane.py).
-The notebook is
-[`notebooks/cap02_logic.ipynb`](https://github.com/fabiofurini/mip-modelling/blob/main/notebooks/cap02_logic.ipynb).
+[`python/cap04_bounds.py`](https://github.com/fabiofurini/mip-modelling/blob/main/python/cap04_bounds.py);
+the notebook is
+[`notebooks/cap04_bounds.ipynb`](https://github.com/fabiofurini/mip-modelling/blob/main/notebooks/cap04_bounds.ipynb).
 
 <!-- embedded-script: begin (regenerated by python/embed_code.py) -->
 
-??? example "Show the complete script — `python/cap02_logic.py` (218 lines)"
+??? example "Show the complete script — `python/cap04_bounds.py` (252 lines)"
 
     ```python
-    """Chapter 5 -- Logic and binary variables: from CNF to linear constraints.
+    """Chapter 2 -- Relaxations, duality and bounds: the checked examples.
 
-    Turns the implications of the chapter's five exercises into conjunctive normal
-    form and then into linear constraints, and *proves by enumeration* that the
-    translation is exact: for every binary assignment, the formula is true if and
-    only if the linear system is satisfied. It ends with a project-selection model
-    that uses those constraints.
+    A minimisation and a maximisation problem, written with their duals; a dual
+    solution built by hand and the check of weak duality; the comparison between the
+    relaxation without the bounds and the one with the bounds kept; a cover cut; the
+    bound read from Gurobi at the end of the solve; and the counterexample showing why the
+    LP duals are not the marginal prices of the MILP.
     """
     import gurobipy as gp
     import pandas as pd
     from gurobipy import GRB
 
-    from booleane import (AND, IMP, NOT, OR, V, cnf, equivalenti, scrivi, testo_cnf,
-                          valuta, variabili, verifica, vincolo)
-    from mip import ammissibile, frazione, nuovo_modello, rilassamento, risolvi, stampa_soluzione
-    from stile import BLU, CICLO, ROSSO, TEAL, VERDE, intestazione, plt, salva_dati, salva_figura
+    from mip import (ammissibile, due_rilassamenti, frazione, nuovo_modello, registra_bound,
+                     rilassamento, risolvi, stampa_soluzione, valuta, viola_interezza)
+    from stile import (ARANCIO, BLU, CICLO, GRIGIO, ROSSO, TEAL, VERDE, intestazione,
+                       plt, salva_dati, salva_figura)
 
     R = range
-    x = {p: V(f"x{p}") for p in R(1, 11)}
 
-    # ---------- 1. THE PROPERTIES OF BOOLEAN ALGEBRA ----------
-    intestazione("1. De Morgan, distributivity, absorption: checked by enumeration")
-    a, b, c = V("xa"), V("xb"), V("xc")
-    PROPRIETA = [
-        ("distributivity (C)", AND(a, OR(b, c)), OR(AND(a, b), AND(a, c))),
-        ("distributivity (D)", OR(a, AND(b, c)), AND(OR(a, b), OR(a, c))),
-        ("De Morgan (A)", NOT(OR(a, b)), AND(NOT(a), NOT(b))),
-        ("De Morgan (B)", NOT(AND(a, b)), OR(NOT(a), NOT(b))),
-        ("absorption (E)", OR(a, AND(a, b)), a),
-        ("absorption (F)", AND(a, OR(a, b)), a),
-        ("double negation", NOT(NOT(a)), a),
-    ]
-    for nome, sinistra, destra in PROPRIETA:
-        assert equivalenti(sinistra, destra), nome
-        print(f"  {nome:22s} checked on all {2 ** len(variabili(sinistra) | variabili(destra))} assignments")
+    # ---------- 1. A MINIMISATION, ITS DUAL, A DUAL SOLUTION BUILT BY HAND ----------
+    intestazione("4.1  Minimum-cost covering: primal, dual and a bound built by hand")
+    # min sum c_j x_j   s.t.  sum_{j in S_i} x_j >= 1 for every i,  x binary
+    c41 = [4, 3, 5, 3]                       # cost of the four teams
+    # six zones, each on the border between two districts: zone i is covered by the
+    # two teams of the districts it borders
+    S41 = [[0, 1], [1, 2], [0, 2], [0, 3], [1, 3], [2, 3]]
+    n41, m41 = len(c41), len(S41)
 
-    # ---------- 2. THE VALID SPLITS AND THE INVALID ONE ----------
-    intestazione("2. Splitting an implication: when it is allowed and when it is not")
-    scissioni = [
-        ("disjunctive antecedent", IMP(OR(a, b), c), AND(IMP(a, c), IMP(b, c)), True),
-        ("conjunctive consequent", IMP(a, AND(b, c)), AND(IMP(a, b), IMP(a, c)), True),
-        ("conjunctive antecedent", IMP(AND(a, b), c), AND(IMP(a, c), IMP(b, c)), False),
-    ]
-    for nome, sinistra, destra, attesa in scissioni:
-        ok = equivalenti(sinistra, destra)
-        assert ok == attesa, nome
-        print(f"  {nome:24s} split {'valid' if ok else 'NOT valid'}")
-    contro = {"xa": 1, "xb": 0, "xc": 0}
-    assert valuta(IMP(AND(a, b), c), contro) and not valuta(AND(IMP(a, c), IMP(b, c)), contro)
-    print("  counterexample to the third: xa = 1, xb = 0, xc = 0 makes the original")
-    print("  implication true (false antecedent) but the conjunction of the splits false.")
 
-    # ---------- 3. THE FIVE EXERCISES: CNF AND LINEAR CONSTRAINTS ----------
-    intestazione("3. Exercises 2.1-2.5: conjunctive normal form and linear constraints")
-    ESERCIZI = {
-        "2.1": [("if 2 is chosen, then 3 is chosen", IMP(x[2], x[3])),
-                ("if 2 is chosen, then 4 is not chosen", IMP(x[2], NOT(x[4]))),
-                ("if 1 and 6 are chosen, then 7 is chosen", IMP(AND(x[1], x[6]), x[7])),
-                ("if 1 or 6 is chosen, then 8 is chosen", IMP(OR(x[1], x[6]), x[8])),
-                ("if 2 and 3 are chosen, then 9 is not chosen", IMP(AND(x[2], x[3]), NOT(x[9]))),
-                ("if 2 or 3 is chosen, then 10 is not chosen", IMP(OR(x[2], x[3]), NOT(x[10])))],
-        "2.2": [("if 3 is not chosen, then 2 is chosen", IMP(NOT(x[3]), x[2])),
-                ("if 4 is not chosen, then 2 is not chosen", IMP(NOT(x[4]), NOT(x[2]))),
-                ("if 7 is chosen, then 1 and 6 are chosen", IMP(x[7], AND(x[1], x[6]))),
-                ("if 8 is chosen, then 1 or 6 is chosen", IMP(x[8], OR(x[1], x[6]))),
-                ("if 9 is not chosen, then 2 and 3 are chosen", IMP(NOT(x[9]), AND(x[2], x[3]))),
-                ("if 10 is not chosen, then 2 or 3 is chosen", IMP(NOT(x[10]), OR(x[2], x[3])))],
-        "2.3": [("if 7 or 3 is chosen, then 1 and 2 are chosen", IMP(OR(x[7], x[3]), AND(x[1], x[2]))),
-                ("if 1, 6 and 7 are chosen, then 8 is chosen", IMP(AND(x[1], x[6], x[7]), x[8])),
-                ("if 5 and 2 are chosen and 4 is not, then 3 is not chosen",
-                 IMP(AND(x[5], x[2], NOT(x[4])), NOT(x[3]))),
-                ("if 6 and (1 or 4) are chosen, then 2 and (5 or 7) are chosen",
-                 IMP(AND(OR(x[1], x[4]), x[6]), AND(x[2], OR(x[5], x[7])))),
-                ("if (2 or 5) is chosen and 8 is not, then 3 is chosen or 6 is not",
-                 IMP(AND(OR(x[2], x[5]), NOT(x[8])), OR(x[3], NOT(x[6])))),
-                ("if (1 or 4) and (2 or 5) and not 8, then 3 and (not 6 or 7)",
-                 IMP(AND(OR(x[1], x[4]), OR(x[2], x[5]), NOT(x[8])),
-                     AND(x[3], OR(NOT(x[6]), x[7]))))],
-        "2.4": [("if 4 is chosen, at least two of 1, 2, 3",
-                 IMP(x[4], OR(AND(x[1], x[2]), AND(x[1], x[3]), AND(x[2], x[3])))),
-                ("if at least two of 6, 7, 8, then 5",
-                 IMP(OR(AND(x[6], x[7]), AND(x[6], x[8]), AND(x[7], x[8])), x[5])),
-                ("if 4 is not chosen, at least two of 1, 2, 3, 9",
-                 IMP(NOT(x[4]), OR(AND(x[1], x[2]), AND(x[1], x[3]), AND(x[1], x[9]),
-                                   AND(x[2], x[3]), AND(x[2], x[9]), AND(x[3], x[9])))),
-                ("if 8 is chosen, then (1 and 6) or (1 and 7) or (2 and 6)",
-                 IMP(x[8], OR(AND(x[1], x[6]), AND(x[1], x[7]), AND(x[2], x[6])))),
-                ("if at least two of 1, 3, 5, then 9 is not chosen",
-                 IMP(OR(AND(x[1], x[3]), AND(x[1], x[5]), AND(x[3], x[5])), NOT(x[9]))),
-                ("if (1 and 2) or (3 and 4), then 5",
-                 IMP(OR(AND(x[1], x[2]), AND(x[3], x[4])), x[5]))],
-        "2.5": [("if 1 or 2 is chosen, then 3 is chosen", IMP(OR(x[1], x[2]), x[3])),
-                ("if 4 is chosen, then 5 and 6 are chosen", IMP(x[4], AND(x[5], x[6]))),
-                ("if 1 or 2 is chosen, then 3 and 4 are chosen",
-                 IMP(OR(x[1], x[2]), AND(x[3], x[4]))),
-                ("if 1 and 2 are chosen, then 3 is chosen", IMP(AND(x[1], x[2]), x[3])),
-                ("if 5 or 6 is chosen, then 7 is not chosen", IMP(OR(x[5], x[6]), NOT(x[7]))),
-                ("if 8 is not chosen or 9 is not chosen, then 10 is chosen",
-                 IMP(OR(NOT(x[8]), NOT(x[9])), x[10]))],
-    }
+    def primale_41():
+        m = nuovo_modello("covering")
+        x = m.addVars(n41, vtype=GRB.BINARY, name="x")
+        m.setObjective(gp.quicksum(c41[j] * x[j] for j in R(n41)), GRB.MINIMIZE)
+        m.addConstrs((gp.quicksum(x[j] for j in S41[i]) >= 1 for i in R(m41)), name="cover")
+        return m, x
+
+
+    def duale_41():
+        """max sum u_i  s.t.  sum_{i : j in S_i} u_i <= c_j,  u >= 0."""
+        d = nuovo_modello("dual_covering")
+        u = d.addVars(m41, name="u")
+        d.setObjective(u.sum(), GRB.MAXIMIZE)
+        d.addConstrs((gp.quicksum(u[i] for i in R(m41) if j in S41[i]) <= c41[j] for j in R(n41)),
+                     name="rc")
+        return d, u
+
+
+    m41p, x41 = primale_41()
+    z41 = risolvi(m41p)
+    scelte41 = [j + 1 for j in R(n41) if x41[j].X > 0.5]
+    print(f"  Integer optimum: z(MILP) = {frazione(z41)}, teams chosen {scelte41}")
+
+    # dual solution built by hand: each zone gets the smallest unit cost still
+    # available, respecting the dual constraints one column at a time (dual constructive heuristic)
+    u_mano = {i: 0.0 for i in R(m41)}
+    residuo = {j: c41[j] for j in R(n41)}
+    for i in R(m41):
+        incremento = min(residuo[j] for j in S41[i])
+        u_mano[i] = incremento
+        for j in S41[i]:
+            residuo[j] -= incremento
+    d41, u41 = duale_41()
+    lb41, viol = valuta(d41, {f"u[{i}]": u_mano[i] for i in R(m41)})
+    assert viol <= 1e-9, viol
+    print("  Dual solution by hand (constructive heuristic on the zones): u = "
+          + ", ".join(f"u_{i+1} = {frazione(u_mano[i])}" for i in R(m41))
+          + f"   ->  lb = {frazione(lb41)}")
+    zlp41, zlp41r, pi41 = due_rilassamenti(m41p, d41)
+    print(f"  Weak duality checked: {frazione(lb41)} <= {frazione(zlp41)} <= "
+          f"{frazione(z41)}")
+    assert lb41 <= zlp41 + 1e-9 <= z41 + 1e-9
+    # primal upper bound: the covering constructive heuristic (one uncovered zone at a time)
+    scoperte = set(R(m41))
+    presi41 = []
+    while scoperte:
+        j = min(R(n41), key=lambda j: c41[j] / max(1, len({i for i in scoperte if j in S41[i]}))
+                if any(j in S41[i] for i in scoperte) else float("inf"))
+        presi41.append(j)
+        scoperte -= {i for i in scoperte if j in S41[i]}
+    ub41_primale = sum(c41[j] for j in presi41)
+    assert ammissibile(m41p, {f"x[{j}]": 1 for j in presi41})
+    print(f"  Constructive covering heuristic heuristic: teams {sorted(j + 1 for j in presi41)}, "
+          f"ub = {frazione(ub41_primale)}")
+    riga41 = registra_bound("minimum-cost covering", ub41_primale, lb41, zlp41, zlp41r, z41)
+    salva_dati(pd.DataFrame([riga41]), "cap04_copertura")
+
+    # ---------- 2. A MAXIMISATION: THE ROLES SWAP ----------
+    intestazione("4.2  A knapsack: the heuristic gives the lower bound, the dual the upper")
+    p42 = [10, 7, 6, 4]                      # values
+    w42 = [5, 4, 3, 3]                       # weights
+    C42 = 9
+
+
+    def primale_42():
+        m = nuovo_modello("knapsack")
+        x = m.addVars(4, vtype=GRB.BINARY, name="x")
+        m.setObjective(gp.quicksum(p42[j] * x[j] for j in R(4)), GRB.MAXIMIZE)
+        m.addConstr(gp.quicksum(w42[j] * x[j] for j in R(4)) <= C42, name="capacity")
+        return m, x
+
+
+    def duale_42():
+        """Dual of the relaxation without the bounds (x >= 0): min C v  s.t.  w_j v >= p_j, v >= 0."""
+        d = nuovo_modello("dual_knapsack")
+        v = d.addVar(name="v")
+        d.setObjective(C42 * v, GRB.MINIMIZE)
+        d.addConstrs((w42[j] * v >= p42[j] for j in R(4)), name="rc")
+        return d, v
+
+
+    m42, x42 = primale_42()
+    z42 = risolvi(m42)
+    scelte42 = [j + 1 for j in R(4) if x42[j].X > 0.5]
+    print(f"  Integer optimum: z(MILP) = {frazione(z42)}, items {scelte42}, "
+          f"weight {sum(w42[j] for j in R(4) if x42[j].X > 0.5)} out of {C42}")
+    # constructive heuristic heuristic by value/weight ratio: gives a LOWER bound
+    ordine = sorted(R(4), key=lambda j: -p42[j] / w42[j])
+    carico, presi = 0, []
+    for j in ordine:
+        if carico + w42[j] <= C42:
+            presi.append(j)
+            carico += w42[j]
+    lb42 = sum(p42[j] for j in presi)
+    assert ammissibile(m42, {f"x[{j}]": 1 for j in presi})
+    print(f"  Constructive heuristic by ratio p_j/w_j: takes {sorted(j + 1 for j in presi)}, "
+          f"lb = {frazione(lb42)}")
+    # dual by hand: v = max_j p_j / w_j  (the best ratio) is feasible
+    v_mano = max(p42[j] / w42[j] for j in R(4))
+    d42, v42 = duale_42()
+    ub42, viol = valuta(d42, {"v": v_mano})
+    assert viol <= 1e-9, viol
+    print(f"  Dual solution by hand: v = max_j p_j/w_j = {frazione(v_mano)}  ->  "
+          f"ub = C v = {frazione(ub42)}")
+    zlp42, zlp42r, _ = due_rilassamenti(m42, d42)
+    print(f"  The maximisation sandwich: {frazione(lb42)} <= z(MILP) = {frazione(z42)} <= "
+          f"z(LP) = {frazione(zlp42)} <= ub = {frazione(ub42)}")
+    assert lb42 <= z42 <= zlp42 + 1e-9 <= ub42 + 1e-9
+    riga42 = registra_bound("knapsack", ub42, lb42, zlp42, zlp42r, z42, senso="max")
+    salva_dati(pd.DataFrame([riga42]), "cap04_zaino")
+
+    # ---------- 3. A COVER CUT ----------
+    intestazione("4.3  A valid inequality: the cover cut")
+    from itertools import combinations
+    tutte = [s for k in R(2, 5) for s in combinations(R(4), k) if sum(w42[j] for j in s) > C42]
+    coperture = [s for s in tutte                                   # only the minimal ones
+                 if all(sum(w42[j] for j in t) <= C42
+                        for t in combinations(s, len(s) - 1))]
+    print("  Minimal covers found: "
+          + "; ".join("{" + ", ".join(str(j + 1) for j in s) + "}" for s in coperture))
+    m43, x43 = primale_42()
+    zlp43_prima, sol43, _ = rilassamento(m43, rafforzato=True)
+    print("  Optimal solution of the relaxation without cuts: "
+          + ", ".join(f"x_{j+1} = {frazione(sol43[f'x[{j}]'])}" for j in R(4)))
+    for s in coperture:
+        somma = sum(sol43[f"x[{j}]"] for j in s)
+        stato = "VIOLATED" if somma > len(s) - 1 + 1e-9 else "satisfied"
+        print(f"    cut on {{{', '.join(str(j + 1) for j in s)}}}: "
+              f"sum = {frazione(somma)} against {len(s) - 1}  ->  {stato}")
+    for s in coperture:
+        m43.addConstr(gp.quicksum(x43[j] for j in s) <= len(s) - 1, name="cover" + "".join(map(str, s)))
+    z43 = risolvi(m43)
+    zlp43_dopo, _, _ = rilassamento(m43, rafforzato=True)
+    print(f"  z(LP+) without cuts = {frazione(zlp43_prima)}   with the cover cuts = "
+          f"{frazione(zlp43_dopo)}   z(MILP) = {frazione(z43)}")
+    assert z43 == z42, "the cuts must not change the integer optimum"
+    assert zlp43_dopo <= zlp43_prima + 1e-9
+    salva_dati(pd.DataFrame([{"model": "knapsack", "z_lp_without_cuts": zlp43_prima,
+                              "z_lp_with_cuts": zlp43_dopo, "z_milp": z43}]), "cap04_tagli")
+
+    # ---------- 4. WHAT THE SOLVER DOES: relax() AND ObjBound ----------
+    intestazione("4.4  The first relaxation and the solver's final bound")
+    m44, x44 = primale_41()          # the covering: here the solver has work to do
+    m44.Params.OutputFlag = 0
+    m44.optimize()
+    print(f"  Status = {m44.Status} (2 = OPTIMAL), SolCount = {m44.SolCount}")
+    print(f"  ObjVal   = {frazione(m44.ObjVal)}   (the best integer solution found)")
+    print(f"  ObjBound = {frazione(m44.ObjBound)} (the best bound proved)")
+    print(f"  MIPGap   = {m44.MIPGap:.4f}          NodeCount = {int(m44.NodeCount)}")
+    zrad, _, _ = rilassamento(m44, rafforzato=True)
+    print(f"  Relaxation of the model as we wrote it, with relax(): {frazione(zrad)}")
+    assert abs(m44.ObjBound - m44.ObjVal) <= 1e-6
+    assert zrad <= m44.ObjVal + 1e-9         # minimisation: the relaxation lies below the optimum
+    print(f"  The relaxation is {frazione(zrad)} and the integer optimum {frazione(m44.ObjVal)}:")
+    print("  the gap is there, but NodeCount = 0. Gurobi closes it *at the root*, with")
+    print("  presolve, its own cuts and heuristics, without ever splitting the problem.")
+    # to see the solver at work, switch off presolve, cuts and heuristics
+    m45, x45 = primale_41()
+    m45.Params.Presolve = 0
+    m45.Params.Cuts = 0
+    m45.Params.Heuristics = 0
+    m45.optimize()
+    print(f"  With Presolve = Cuts = Heuristics = 0: z = {frazione(m45.ObjVal)}, "
+          f"NodeCount = {int(m45.NodeCount)}")
+    print("  Same optimum, but now the nodes count: 'how hard a model is' is not a")
+    print("  property of the model alone, it also depends on what the solver brings.")
+    assert m45.ObjVal == m44.ObjVal
+    salva_dati(pd.DataFrame([{"configuration": "default settings", "z": m44.ObjVal,
+                              "z_lp_written": zrad, "nodes": int(m44.NodeCount)},
+                             {"configuration": "no presolve, cuts or heuristics",
+                              "z": m45.ObjVal, "z_lp_written": zrad,
+                              "nodes": int(m45.NodeCount)}]), "cap04_solver")
+
+    # ---------- 5. LP DUALS ARE NOT THE MARGINAL PRICES OF THE MILP ----------
+    intestazione("4.5  Why the LP duals are not the marginal prices of the MILP")
     righe = []
-    for es, voci in ESERCIZI.items():
-        print(f"\nExercise {es}")
-        for i, (testo, formula) in enumerate(voci, 1):
-            clausole = cnf(formula)
-            vincoli = [vincolo(c) for c in clausole]
-            totali, vere = verifica(formula, vincoli)
-            print(f"  {es}.{i}  {testo}")
-            print(f"        CNF ({len(clausole)} clauses) -> "
-                  + " ;  ".join(scrivi(v, mat=False) for v in vincoli))
-            print(f"        equivalence checked on {totali} assignments "
-                  f"({vere} make the formula true)")
-            righe.append({"exercise": es, "item": i, "description": testo,
-                          "clauses": len(clausole),
-                          "constraints": " ; ".join(scrivi(v, mat=False) for v in vincoli),
-                          "assignments": totali, "true": vere})
-    salva_dati(pd.DataFrame(righe), "cap02_implicazioni")
-
-    # ---------- 4. CLAUSES OR COUNTING: TWO FORMULATIONS OF THE SAME SET ----------
-    intestazione("4. 'At least two of 1, 2, 3 if 4 is chosen': clauses versus counting")
-
-
-    def confronta(clausole=True):
-        """max x1+x2+x3+3 x4 with the implication x4 => at least two of 1,2,3."""
-        m = nuovo_modello("at_least_two")
-        v = m.addVars(R(1, 5), vtype=GRB.BINARY, name="x")
-        m.setObjective(v[1] + v[2] + v[3] + 3 * v[4], GRB.MAXIMIZE)
-        m.addConstr(v[1] + v[2] + v[3] + 2 * v[4] <= 3, name="budget")
-        if clausole:                       # three clauses: x_i + x_j >= x4 for every pair
-            for i, j in [(1, 2), (1, 3), (2, 3)]:
-                m.addConstr(v[i] + v[j] - v[4] >= 0, name=f"pair{i}{j}")
-        else:                              # counted form: x1 + x2 + x3 >= 2 x4
-            m.addConstr(v[1] + v[2] + v[3] - 2 * v[4] >= 0, name="counting")
-        return m, v
-
-
-    for nome, cl in [("three clauses", True), ("one counted constraint", False)]:
-        m, v = confronta(cl)
+    for C in (8, 9, 10, 11, 12):
+        m = nuovo_modello("knapsack_C")
+        x = m.addVars(4, vtype=GRB.BINARY, name="x")
+        m.setObjective(gp.quicksum(p42[j] * x[j] for j in R(4)), GRB.MAXIMIZE)
+        con = m.addConstr(gp.quicksum(w42[j] * x[j] for j in R(4)) <= C, name="capacity")
         z = risolvi(m)
-        zr, sol, _ = rilassamento(m, rafforzato=True)
-        print(f"  {nome:24s} z(MILP) = {frazione(z)}   z(LP+) = {frazione(zr)}   "
-              + "  ".join(f"x{p}={frazione(sol[f'x[{p}]'])}" for p in R(1, 5)))
-    from itertools import product as _p
-    for valori in _p((0, 1), repeat=4):
-        a4 = dict(zip(R(1, 5), valori))
-        cl3 = all(a4[i] + a4[j] - a4[4] >= 0 for i, j in [(1, 2), (1, 3), (2, 3)])
-        cnt = a4[1] + a4[2] + a4[3] - 2 * a4[4] >= 0
-        assert cl3 == cnt, a4
-    print("  The two formulations have the same 16 binary solutions (checked by")
-    print("  enumeration) but different relaxations: the counted constraint is stronger.")
+        zr, _, pi = rilassamento(m, rafforzato=True)
+        righe.append({"capacity": C, "z_milp": z, "z_lp": zr, "lp_dual": pi["capacity"]})
+    print("   C   z(MILP)   z(LP+)   LP dual   true change in z(MILP)")
+    for k, r in enumerate(righe):
+        delta = "" if k == 0 else frazione(r["z_milp"] - righe[k - 1]["z_milp"])
+        print(f"  {r['capacity']:2d}    {frazione(r['z_milp']):>5}   {frazione(r['z_lp']):>6}   "
+              f"{r['lp_dual']:>10.4f}      {delta:>6}")
+    salva_dati(pd.DataFrame(righe), "cap04_prezzi")
+    print("  The LP dual is the p_j/w_j ratio of the 'critical' item: 2 when the capacity")
+    print("  runs out on item 1, 7/4 when there is room left for item 2. It says how much an")
+    print("  extra unit of capacity is worth *in the continuous problem*. On the integer")
+    print("  problem the true change is in jumps (1, 0, 3, 3) and never matches that value:")
+    print("  going from C = 9 to C = 10 the integer optimum does not change at all, while")
+    print("  the dual keeps promising 7/4. The LP dual is not the marginal price of the")
+    print("  MILP, and using it as such is a mistake, not an approximation.")
 
-    # ---------- 5. A SELECTION MODEL WITH THE LOGICAL CONSTRAINTS ----------
-    intestazione("5. Project selection subject to the implications of exercise 2.1")
-    r = {1: 9, 2: 7, 3: 4, 4: 8, 5: 3, 6: 6, 7: 2, 8: 5, 9: 7, 10: 6}   # revenues
-    b = {1: 4, 2: 3, 3: 2, 4: 4, 5: 2, 6: 3, 7: 1, 8: 3, 9: 4, 10: 3}   # costs
-    budget = 14
-    salva_dati(pd.DataFrame({"project": list(r), "revenue": list(r.values()),
-                             "cost": list(b.values())}), "cap02_progetti")
-
-
-    def modello_selezione(con_logica=True):
-        m = nuovo_modello("project_selection")
-        xv = m.addVars(R(1, 11), vtype=GRB.BINARY, name="x")
-        m.setObjective(gp.quicksum(r[p] * xv[p] for p in R(1, 11)), GRB.MAXIMIZE)
-        m.addConstr(gp.quicksum(b[p] * xv[p] for p in R(1, 11)) <= budget, name="budget")
-        if con_logica:
-            for i, (_, formula) in enumerate(ESERCIZI["2.1"], 1):
-                for j, cl in enumerate(cnf(formula), 1):
-                    coef, verso, rhs = vincolo(cl)
-                    lhs = gp.quicksum(k * xv[int(n[1:])] for n, k in coef.items())
-                    m.addConstr(lhs <= rhs if verso == "<=" else lhs >= rhs, name=f"logic{i}_{j}")
-        return m, xv
-
-
-    m_libero, _ = modello_selezione(con_logica=False)
-    z_libero = risolvi(m_libero)
-    m_log, x_log = modello_selezione(con_logica=True)
-    z_log = risolvi(m_log)
-    zlp_log, _, _ = rilassamento(m_log, rafforzato=True)
-    scelti = sorted(p for p in R(1, 11) if x_log[p].X > 0.5)
-    print(f"Without the logical constraints:  z = {frazione(z_libero)}")
-    print(f"With the logical constraints:     z = {frazione(z_log)}   projects chosen: {scelti}")
-    print(f"                                  cost {sum(b[p] for p in scelti)} out of a budget of {budget}")
-    print(f"LP+ relaxation of the model with the logical constraints: {frazione(zlp_log)}")
-    for _, formula in ESERCIZI["2.1"]:
-        assert valuta(formula, {f"x{p}": int(p in scelti) for p in R(1, 11)})
-    print("All six implications are satisfied by the optimal solution.")
-    salva_dati(pd.DataFrame([{"model": "without logical constraints", "z": z_libero, "z_lp": None},
-                             {"model": "with logical constraints", "z": z_log, "z_lp": zlp_log}]),
-               "cap02_selezione")
-
-    # ---------- 6. FIGURE: HOW MANY ASSIGNMENTS SURVIVE EACH IMPLICATION ----------
-    sopravvivono = []
-    etichette = []
-    for i, (testo, formula) in enumerate(ESERCIZI["2.1"], 1):
-        totali, vere = verifica(formula, nomi=[f"x{p}" for p in R(1, 11)])
-        sopravvivono.append(vere)
-        etichette.append(f"2.1.{i}")
-    tutte = [dict(zip([f"x{p}" for p in R(1, 11)], v)) for v in _p((0, 1), repeat=10)]
-    cumulate = []
-    vive = tutte
-    for testo, formula in ESERCIZI["2.1"]:
-        vive = [ass for ass in vive if valuta(formula, ass)]
-        cumulate.append(len(vive))
-    print(f"Assignments of the 10 binaries: {len(tutte)}; after the six implications: {cumulate[-1]}")
-    fig, ax = plt.subplots(figsize=(7.2, 3.6))
-    ax.bar(etichette, sopravvivono, color=TEAL, label="single implication")
-    ax.plot(etichette, cumulate, "o-", color=ROSSO, label="all implications imposed together")
-    ax.axhline(len(tutte), color=BLU, lw=1, ls="--")
-    ax.annotate(f"$2^{{10}} = {len(tutte)}$ assignments", (0, len(tutte)),
-                textcoords="offset points", xytext=(4, -14), fontsize=9, color=BLU)
-    ax.set_ylabel("feasible assignments")
-    ax.set_title("Exercise 2.1: how many of the $2^{10}$ assignments survive")
-    ax.legend(loc="lower left", fontsize=9)
-    salva_figura(fig, "cap02_implicazioni")
-    salva_dati(pd.DataFrame({"implication": etichette, "single": sopravvivono,
-                             "cumulative": cumulate}), "cap02_ammissibili")
+    # ---------- 6. FIGURE: THE SANDWICH OF THE TWO PROBLEMS ----------
+    fig, ax = plt.subplots(figsize=(7.2, 2.5))
+    etichette = ["covering (min)", "knapsack (max)"]
+    lb = [lb41, lb42]
+    ub = [ub41_primale, ub42]
+    zl = [zlp41, zlp42]
+    zm = [z41, z42]
+    for i in R(2):
+        ax.plot([lb[i], ub[i]], [i, i], color=GRIGIO, lw=2, solid_capstyle="round")
+        ax.plot(lb[i], i, "|", color=TEAL, ms=18, mew=2.5)
+        ax.plot(ub[i], i, "|", color=ARANCIO, ms=18, mew=2.5)
+        ax.plot(zl[i], i, "d", color=BLU, ms=8)
+        ax.plot(zm[i], i, "o", color=ROSSO, ms=9)
+    ax.plot([], [], "|", color=TEAL, ms=12, mew=2.5, label="lower bound")
+    ax.plot([], [], "|", color=ARANCIO, ms=12, mew=2.5, label="upper bound")
+    ax.plot([], [], "d", color=BLU, ms=7, label="$z(\\mathrm{LP})$")
+    ax.plot([], [], "o", color=ROSSO, ms=8, label="$z(\\mathrm{MILP})$")
+    ax.set_yticks(R(2))
+    ax.set_yticklabels(etichette)
+    ax.set_xlabel("objective value")
+    ax.set_title("The sandwich: the dual is left in a min, right in a max")
+    ax.legend(fontsize=8, ncols=4, loc="lower center", bbox_to_anchor=(0.5, -0.42))
+    ax.set_ylim(-0.6, 1.6)
+    salva_figura(fig, "cap04_sandwich")
     print("Done.")
     ```
 

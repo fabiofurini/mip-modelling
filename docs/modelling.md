@@ -41,7 +41,7 @@ comes out of a reproducible run.
     by hand, valid inequalities and cover cuts, and why the LP duals are not the
     marginal prices of the MILP.
 
-    [:octicons-arrow-right-24: The chapter](modelling-4.md)
+    [:octicons-arrow-right-24: The chapter](modelling-2.md)
 -   :material-language-python: **3. From the model to Python/Gurobi**
 
     ---
@@ -50,7 +50,7 @@ comes out of a reproducible run.
     `Status`, `SolCount`, `ObjVal`, `ObjBound`, `MIPGap`, `NodeCount` and the
     tolerances. The course protocol, from start to finish.
 
-    [:octicons-arrow-right-24: The chapter](modelling-6.md)
+    [:octicons-arrow-right-24: The chapter](modelling-3.md)
 -   :material-run-fast: **4. Constructive heuristics**
 
     ---
@@ -59,7 +59,7 @@ comes out of a reproducible run.
     sizing: pseudocode, trace, feasibility check and bound. A failure of the
     constructive heuristic does not prove infeasibility.
 
-    [:octicons-arrow-right-24: The chapter](modelling-5.md)
+    [:octicons-arrow-right-24: The chapter](modelling-4.md)
 -   :material-gate-and: **5. Logic and binary variables**
 
     ---
@@ -68,7 +68,7 @@ comes out of a reproducible run.
     CNF into linear constraints; implications, contrapositives and splits; five
     solved exercises, all checked by enumeration.
 
-    [:octicons-arrow-right-24: The chapter](modelling-2.md)
+    [:octicons-arrow-right-24: The chapter](modelling-5.md)
 -   :material-link-variant: **6. Links between variables**
 
     ---

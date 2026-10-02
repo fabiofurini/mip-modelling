@@ -1,537 +1,540 @@
-# Relaxations, duality and bounds
+# Constructive heuristics
 
-**Class:** LP · MILP · **Script:** `python/cap04_bounds.py`
+**Class:** algorithms · **Script:** `python/cap05_heuristics.py`, `python/euristiche.py`
 { .scheda }
 
+[![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/fabiofurini/mip-modelling/blob/main/notebooks/cap05_heuristics.ipynb)
 
-This chapter teaches how to produce, **by hand**, a number that certainly lies
-on one side of the integer optimum. It serves three purposes: understanding how
-good a model is, how good a heuristic is, and how to read the numbers a solver
-reports when it has not finished.
+A constructive heuristic builds **one** solution quickly, adding one element at a
+time and never backtracking. It proves nothing about the quality of that
+solution, and it is not even guaranteed to reach a feasible one: it can get stuck
+part-way, with an element that fits nowhere. When it does end with a feasible
+solution, that solution is the other half of the sandwich of
+[chapter 2](modelling-2.md): the pessimistic side, the one guaranteed by a
+solution that really exists; when it fails, there is no primal bound.
 
-## What a relaxation is
+!!! note "What a heuristic must produce in this course"
+    1. a readable **pseudocode**, with the scanning order, the choice criterion,
+       the tie-breaking rule and the failure case stated;
+    2. the corresponding **Python function**, line by line;
+    3. the **trace** of the execution on an instance;
+    4. the **feasibility check**: constraints, bounds *and* integrality;
+    5. the resulting **bound**, with the right name.
 
-A **relaxation** of $\min\{c'x : x \in X\}$ is a problem
-$\min\{c'x : x \in \hat X\}$ with $X \subseteq \hat X$: the minimum over a
-larger set cannot be higher. In a maximisation the inequality is reversed.
+    Point 4 is not a formality: a solution satisfying the linear constraints but
+    with a fractional component is feasible for the *relaxation*, not for the
+    MILP, and its value is not a primal bound.
 
-| Name | What is dropped | Note |
-|---|---|---|
-| $z(\mathit{LP})$, pure | $x \in \{0,1\}$ becomes $x \ge 0$ | this is the one whose dual is written by hand: fewer constraints, hence a dual with fewer variables |
-| $z(\mathit{LP}^+)$, bounds kept | $x \in \{0,1\}$ becomes $0 \le x \le 1$ | this is Gurobi's `relax()` and the root relaxation |
-| $z(\mathit{LP}^{++})$, strengthened | as above, plus valid inequalities | see below |
+!!! danger "The side of the bound depends on the objective, not on the heuristic"
+    In a **minimisation** the value of a feasible solution is an *upper* bound:
+    $z(\mathit{MILP}) \le \mathit{UB}$. In a **maximisation** it is a *lower*
+    bound: $\mathit{LB} \le z(\mathit{MILP})$. Calling $UB$ the result
+    of a constructive heuristic on a maximisation is the commonest sign error in the course.
 
-In a minimisation
-$z(\mathit{LP}) \le z(\mathit{LP}^+) \le z(\mathit{LP}^{++}) \le z(\mathit{MILP})$.
+## Bin packing: the insertion rules
 
-!!! note "The two relaxations coincide more often than one thinks"
-    If the model contains an assignment constraint $\sum_m x_{jm} = 1$ with
-    $x \ge 0$, then $x_{jm} \le 1$ is already implied and the two relaxations
-    are **equal**. In the bound table of [chapter 7](scheduling.md) this happens
-    in problems 1, 4, 6 and 7.
+The classical problem is **bin packing**, whose model is in the solver chapter:
+items must be put into identical bins of limited capacity, using as few of them
+as possible. Here it is not solved: it is *built*, one choice at a time.
 
-## The primal/dual conversion table
+```text
+Build(n, k, t, a, gamma):
+  x[j][m] <- 0 for every j, m;   ra[m] <- a[m] for every m
+  for j = 1..n:
+      # next-fit:  the current machine only, then the next one
+      # first-fit: the first m with t[j][m] <= ra[m]
+      # best-fit:  among the feasible m, the one with smallest gamma(j,m,ra)
+      choose m* by the rule
+      if no m is feasible: return "no solution found"
+      x[j][m*] <- 1;  ra[m*] <- ra[m*] - t[j][m*]
+  return x
+```
 
-Minimisation primal, constraints indexed by $i$, variables by $j$:
+All three scan the jobs **in the given order**: changing the order changes the
+result, and this must be said when a value is reported. Ties are broken on the
+smallest index, so the run is reproducible.
 
-| In the primal (min) | In the dual (max) |
-|---|---|
-| constraint $i$ of type $\ge$ | variable $\pi_i \ge 0$ |
-| constraint $i$ of type $\le$ | variable $\pi_i \le 0$ |
-| equality constraint $i$ | free variable $\pi_i$ |
-| variable $x_j \ge 0$ | constraint $j$ of type $\le c_j$ |
-| free variable $x_j$ | equality constraint $j$, $= c_j$ |
+On a small assignment instance (a **minimisation**):
 
-The dual objective is $\max \sum_i b_i \pi_i$. If the primal is a **maximisation**,
-every direction is reversed and the dual is a minimisation.
+| Heuristic | $UB$ | $z(\mathit{MILP})$ | heuristic gap |
+|---|---:|---:|---:|
+| next-fit | 14 | 11 | $27.3\%$ |
+| first-fit | 14 | 11 | $27.3\%$ |
+| best-fit on cost | 11 | 11 | $0.0\%$ |
 
-Dual constraint $j$ says: "the value I attach to the resources consumed by
-activity $j$ cannot exceed its cost". With this reading, every recipe for
-building a dual solution has an economic meaning.
+The best-fit on cost finds the optimum; but no bound certifies it — that takes
+the solver, or a dual bound reaching $11$, and there the hand-built
+dual stops at $10$.
 
-## Weak duality, strong duality
+## $P||C_{\max}$: the least loaded rule
 
-- **Weak duality**: $\sum_i b_i \bar\pi_i \le \sum_j c_j \bar x_j$ for every pair of feasible
-  solutions. *Always*, with no assumptions. This is the one we need: it gives a
-  lower bound from **any** feasible dual solution, even one built by hand.
-- **Strong duality**: if the relaxation has a finite optimum, $z(\mathit{D}(\mathit{LP})) = z(\mathit{LP})$. It
-  serves as a **check**: the optimum of the dual written by hand must coincide
-  with $z(\mathit{LP})$. The course scripts verify it with an `assert`.
+The second classic is **scheduling on identical machines**, written
+$P||C_{\max}$: $n$ jobs of duration $t_j$ over $k$ identical machines, minimising
+the instant the last one finishes. The natural rule is **list scheduling** — the
+current job goes to the least loaded machine — and the order in which the jobs
+are looked at decides the result. The best order is by decreasing duration, and
+the rule it gives is called **LPT**.
 
-And then: since every feasible solution of the MILP is feasible for the
-relaxation too,
+```text
+LPT(n, k, t):
+  L[m] <- 0 for every m                       # current loads
+  for j in order of DECREASING t[j]:
+      m* <- argmin_m L[m]                     # ties: the smallest index
+      x[j][m*] <- 1;  L[m*] <- L[m*] + t[j]
+  return x, max_m L[m]
+```
 
-$$\textstyle\sum_i b_i \bar\pi_i ~\le~ z(\mathit{LP}) ~\le~ z(\mathit{MILP}).$$
+The decreasing order is essential: leaving the long jobs for last makes them
+impossible to place.
 
-!!! danger "There is no such thing as «the dual of the MILP»"
-    The dual one writes is that of the **relaxation**. A MILP has no linear
-    dual, and strong duality between a MILP and any linear program does not hold
-    in general: the jump $z(\mathit{MILP}) - z(\mathit{LP})$ is precisely what
-    is missing.
+!!! example "Seven jobs on three machines"
+    $t = (5, 5, 4, 4, 3, 3, 3)$, $k = 3$, total $27$.
 
-## Three recipes for building a dual solution by hand
+    - **Steps 1–3.** The jobs $5$, $5$, $4$ go to the three empty machines:
+      $L = (5, 5, 4)$.
+    - **Step 4.** Job $4$: the smallest load is machine 3, which goes to $8$.
+      $L = (5, 5, 8)$.
+    - **Steps 5–6.** The two jobs of length $3$ go to machines 1 and 2:
+      $L = (8, 8, 8)$.
+    - **Step 7.** The last job of length $3$ finds all loads equal to $8$; by
+      the tie rule it goes to machine 1, which reaches $11$.
 
-1. **Zero out and saturate.** Set all dual variables to zero except one family,
-   and push those to the largest feasible value. In problem
-   [7.1](scheduling-1.md): $\bar\pi = 0$ and $\bar\mu_j = \min_m c_{jm}$, that
-   is "every job costs at least its cheapest option".
-2. **Constructive heuristic on the constraints.** Scan the primal constraints one at a time,
-   raise the corresponding dual variable until the first dual constraint that
-   opposes it becomes tight, and update the residuals.
-3. **The best ratio.** With a single capacity constraint in a maximisation,
-   $\bar v = \max_j p_j / w_j$ is feasible and gives the bound $b \bar v$.
+    LPT makespan: $\mathit{UB} = 11$, with loads $(11, 8, 8)$.
 
-Whichever recipe is used, the solution must be **checked feasible** for the dual
-— that is the only thing that makes the bound valid — and its value compared
-with $z(\mathit{LP})$.
+    **The elementary bound.** The makespan is at least
+    $\max(\max_j t_j,\ \sum_j t_j / k) = \max(5, 9) = 9$. The optimum is exactly
+    $z(\mathit{MILP}) = 9$ — attained with $\{5,4\}$, $\{5,4\}$, $\{3,3,3\}$ —
+    and LPT is off by $22.2\%$.
 
-## A minimisation problem, in full
+!!! tip "Two free bounds, to be compared"
+    $\max_j t_j$ and $\sum_j t_j / k$ are computable without solving anything,
+    and the better of the two is often already close to the optimum. An
+    "obvious" bound nobody writes down is a wasted bound: the dual of
+    [chapter 2](modelling-2.md) is for when the obvious ones are not enough, not
+    instead of them.
 
-!!! abstract "Minimum-cost zone covering"
-    A town has $4$ districts; activating the team of district $j$ costs $c_j$.
-    There are $6$ sensitive zones, each on the border between two districts:
-    zone $i$ is covered if at least one of the two neighbouring teams is active.
-    All zones must be covered at minimum cost.
+## Set covering: the cheapest completion rule
 
-Data $c = (4, 3, 5, 3)$; the six zones are the six pairs of districts, in the
-order $\{1,2\}$, $\{2,3\}$, $\{1,3\}$, $\{1,4\}$, $\{2,4\}$, $\{3,4\}$.
+```text
+CoveringConstructive heuristic(c, S):
+  uncovered <- {1..m};   y[j] <- 0 for every j
+  while uncovered is not empty:
+      for every j not yet chosen: new(j) <- |{i in uncovered : j in S_i}|
+      if new(j) = 0 for every j: return "no solution found"
+      j* <- argmin_{j : new(j) > 0} c[j] / new(j)
+      y[j*] <- 1;   uncovered <- uncovered \ {i : j* in S_i}
+  return y
+```
 
-$$
-\begin{aligned}
-\min ~~ \sum_{j=1}^{n} c_j\, x_j & &\\
-\text{subject to}\quad \sum_{j \in S_i} x_j &\ge 1, & \forall i \in \{1, 2, \dots, m\},\\
-x_j &\in \{0, 1\}, & \forall j \in \{1, 2, \dots, n\}.
-\end{aligned}
-$$
+The criterion is the **cost per newly covered zone**, not the absolute cost.
 
-**The dual of the relaxation without the bounds**, with $\pi_i \ge 0$ for every covering
-constraint:
+On the four teams of [chapter 2](modelling-2.md), $c = (4,3,5,3)$: step 1 ratios
+$4/3$, $1$, $5/3$, $1$ → element 2 (covers zones 1, 2, 5); step 2 ratios $2$,
+$5/2$, $3/2$ → element 4 (zones 4 and 6); step 3 ratios $4$ and $5$ → element 1.
+Solution $\{1,2,4\}$, cost $\mathit{UB} = 10$, which here is the optimum.
 
-$$
-\begin{aligned}
-\max ~~ \sum_{i=1}^{m} \pi_i & &\\
-\text{subject to}\quad \sum_{i \,:\, j \in S_i} \pi_i &\le c_j, & \forall j,\\
-\pi_i &\ge 0, & \forall i.
-\end{aligned}
-$$
+## Knapsack: the best ratio rule
 
-For the instance, every team covers three zones:
-$\pi_1 + \pi_3 + \pi_4 \le 4$, $\pi_1 + \pi_2 + \pi_5 \le 3$, $\pi_2 + \pi_3 + \pi_6 \le 5$,
-$\pi_4 + \pi_5 + \pi_6 \le 3$.
+The **knapsack** is the model the solver chapter opens with: the items have a
+value as well as a weight, and there is a single resource. The constructive rule
+looks at the ratio between the two, and what it produces is a feasible solution,
+hence a primal bound.
 
-**A dual solution by hand (recipe 2).**
+```text
+KnapsackConstructive heuristic(p, w, C):
+  residual <- C;   y[j] <- 0 for every j
+  for j in order of DECREASING p[j]/w[j]:
+      if w[j] <= residual:  y[j] <- 1;  residual <- residual - w[j]
+  return y
+```
 
-- **Zone 1** ($\{1,2\}$): residuals $(4,3,5,3)$, the smallest among teams 1 and
-  2 is $3$. $\bar \pi_1 = 3$; residuals $(1,0,5,3)$.
-- **Zone 2** ($\{2,3\}$): the residual of team 2 is $0$, so $\bar \pi_2 = 0$.
-- **Zone 3** ($\{1,3\}$): the smallest of $1$ and $5$ is $1$. $\bar \pi_3 = 1$;
-  residuals $(0,0,4,3)$.
-- **Zones 4 and 5**: teams 1 and 2 have zero residual, so
-  $\bar \pi_4 = \bar \pi_5 = 0$.
-- **Zone 6** ($\{3,4\}$): the smallest of $4$ and $3$ is $3$. $\bar \pi_6 = 3$.
+On $p = (10,7,6,4)$, $w = (5,4,3,3)$, $C = 9$: ratios $2$, $7/4$, $2$, $4/3$;
+items 1 and 3 are taken (weight $8$), value $16$. Since the problem is a
+**maximisation**, $\mathit{LB} = 16 \le z(\mathit{MILP}) = 17$, gap $5.9\%$: the
+optimum takes items 1 and 2, filling the knapsack exactly. The constructive heuristic goes wrong
+because item 3 leaves an unusable residual.
 
-$$\mathit{LB} = 3 + 0 + 1 + 0 + 0 + 3 = 7.$$
+## TSP: the nearest neighbour
 
-**A primal upper bound.** The covering constructive heuristic — at each step one
-picks the element costing least per newly covered requirement — takes teams $1$,
-$2$, $4$, of cost $4+3+3 = 10$: a feasible and **integer** solution, so
-$\mathit{UB} = 10$.
+The fourth classic is the **travelling salesman problem** (TSP): given $n$
+cities and the distances $d_{ij}$ between every pair, find the shortest tour that
+visits them all once and returns to the start. It is the problem where
+step-by-step construction shows best, because the solution *is* a sequence: the
+order is the solution.
 
-| $UB$ (constructive heuristic) | $LB$ (dual by hand) | $z(\mathit{LP})$ | $z(\mathit{MILP})$ | heuristic gap |
-|---:|---:|---:|---:|---:|
-| 10 | 7 | $15/2$ | 10 | $0.0\%$ |
+The classical constructive rule is the **nearest neighbour**: start from a city
+and each time go to the nearest among those not yet visited; when none are left,
+return to the start. It is feasible by construction and fast, because at each
+step it looks only at the distances from the current city.
 
-The certified gap between the two hand-built bounds is $(10-7)/10 = 30\%$:
-without solving the MILP we would know only that the optimum lies between $7$
-and $10$. The heuristic was already optimal, but the bounds cannot tell us that.
+!!! example "Five cities, five starting points"
+    The distances, symmetric:
 
-## A maximisation problem: the roles swap
+    |  | 1 | 2 | 3 | 4 | 5 |
+    |---|---:|---:|---:|---:|---:|
+    | 1 | — | 5 | 2 | 2 | 9 |
+    | 2 | 5 | — | 4 | 3 | 4 |
+    | 3 | 2 | 4 | — | 4 | 7 |
+    | 4 | 2 | 3 | 4 | — | 7 |
+    | 5 | 9 | 4 | 7 | 7 | — |
 
-!!! abstract "Knapsack"
-    Four items of value $p = (10, 7, 6, 4)$ and weight $w = (5, 4, 3, 3)$;
-    capacity $b = 9$.
+    Starting from city 1: the nearest is 3 (distance 2); from there 2 (4); then
+    4 (3); 5 is left (7); and the return to 1 costs 9. The tour
+    $1 \to 3 \to 2 \to 4 \to 5 \to 1$ has length 25.
 
-The dual of the relaxation without the bounds has a single variable $v \ge 0$: $\min\ b v$
-with $w_j v \ge p_j$ for every $j$.
+    The last arc is the one that is paid for: the rule chooses well while it has a
+    choice, and at the last step it has none. Changing the starting city changes
+    the tour:
 
-- **Heuristic** (ratio constructive heuristic): ratios $2$, $7/4$, $2$, $4/3$; items 1 and 3 are
-  taken (weight $8$), value $16$. In a **maximisation** the heuristic gives a
-  **lower** bound: $\mathit{LB} = 16$.
-- **Dual by hand** (recipe 3): $\bar v = \max_j p_j/w_j = 2$, value
-  $b \bar v = 18$. In a **maximisation** the dual gives an **upper** bound:
-  $\mathit{UB} = 18$.
+    | start | tour | length |
+    |---|---|---:|
+    | 1 | $1 \to 3 \to 2 \to 4 \to 5 \to 1$ | 25 |
+    | 2 | $2 \to 4 \to 1 \to 3 \to 5 \to 2$ | 18 |
+    | 3 | $3 \to 1 \to 4 \to 2 \to 5 \to 3$ | 18 |
+    | 4 | $4 \to 1 \to 3 \to 2 \to 5 \to 4$ | 19 |
+    | 5 | $5 \to 2 \to 4 \to 1 \to 3 \to 5$ | 18 |
 
-$$16 ~\le~ z(\mathit{MILP}) = 17 ~\le~ z(\mathit{LP}^+) = \tfrac{71}{4} ~\le~ z(\mathit{LP}) = 18.$$
+    With five cities the distinct tours are $(5-1)!/2 = 12$ and they can all be
+    enumerated: the optimum is $1 \to 3 \to 5 \to 2 \to 4 \to 1$, of length 18.
+    Three starting points out of five find it, one stops at 19 and the one we
+    started from at 25, that is 38.9 % above the optimum.
 
-Here the dual by hand is **optimal** for the relaxation without the bounds, and the relaxation
-with the bounds kept is strictly better ($71/4 < 18$): the constraint
-$x_j \le 1$ bites, because without it the LP takes $9/5$ units of item 1.
+    Two things to take away. The heuristic gives *one* feasible solution, hence an
+    upper bound — here $z(\mathit{MILP}) \le 25$ — and nothing else; that 18 is
+    the optimum is known by enumeration. And running the same rule from every
+    start, keeping the best tour, costs $n$ times as much and gives a better
+    bound: it is the simplest form of *multi-start*, and it is still a bound from
+    one side only.
 
-![The sandwich of the two problems](img/cap04_sandwich.png)
+## Lot sizing: least unit cost period covering
 
-!!! note "The sandwich, written once and for all"
-    $$\text{minimisation:}\quad \mathit{LB}(\bar\pi) \le z(\mathit{D}(\mathit{LP})) = z(\mathit{LP}) \le z(\mathit{LP}^+) \le z(\mathit{MILP}) \le \mathit{UB}(\bar x)$$
-    $$\text{maximisation:}\quad \mathit{LB}(\bar x) \le z(\mathit{MILP}) \le z(\mathit{LP}^+) \le z(\mathit{LP}) = z(\mathit{D}(\mathit{LP})) \le \mathit{UB}(\bar\pi)$$
+```text
+LeastUnitCost(d, f, h):
+  t <- 1
+  while t <= T:
+      skip the periods with d[t] = 0
+      for k = 1..T-t+1:
+          Q_k <- sum of d[t..t+k-1]
+          c_k <- (f + h * sum of (s-t)*d[s] for s = t..t+k-1) / Q_k
+      k* <- argmin_k c_k                      # the lowest average cost per unit
+      produce Q_{k*} in period t;   t <- t + k*
+```
 
-    where $(\bar\pi_1, \bar\pi_2, \dots, \bar\pi_m)$ is a feasible dual
-    solution of the relaxation, of value $\sum_{i=1}^{m} b_i\, \bar\pi_i$, and
-    $(\bar x_1, \bar x_2, \dots, \bar x_n)$ a feasible solution of the MILP, of
-    value $\sum_{j=1}^{n} c_j\, \bar x_j$.
+!!! danger "This is not the Wagner–Whitin procedure"
+    Wagner–Whitin is an **exact** dynamic-programming algorithm for the
+    *uncapacitated* lot-sizing model: it solves that model to optimality in
+    polynomial time. The procedure above is a heuristic, and its value is only a
+    bound. Calling it "the Wagner–Whitin constructive heuristic" confuses two different things.
 
-    The *relaxation side* is optimistic and holds all the dual bounds; the
-    *heuristic side* is pessimistic and holds all the feasible solutions. The
-    name ($\mathit{LB}$ or $\mathit{UB}$) depends on the direction of the
-    objective, the role does not.
+On $d = (20, 10, 30, 40, 10)$, setup $f = 50$, holding $h = 1$: from period 1 it
+pays to cover 2 periods (unit cost $2$); from period 3 another 2 (unit cost
+$\approx 1.286$); from period 5 only that one (unit cost $5$). Cost
+$\mathit{UB} = 200$ against $z(\mathit{MILP}) = 170$, gap $17.6\%$ — which is
+also the value Wagner–Whitin would give, being exact on this model.
 
-## Valid inequalities and constraints that preserve optimality
+## Local search, and what it does not give
 
-- A **valid inequality** is satisfied by *all* feasible integer solutions:
-  adding it does not change $z(\mathit{MILP})$; if it reduces
-  $z(\mathit{LP}^+)$ it is called a **cut**.
-- A **constraint that preserves optimality** cuts off some feasible solutions
-  but not all the optimal ones. It is not a valid inequality, and must be
-  declared as such (example: $z_j \le M_j y_j$ in
-  an activation binary).
+A **local search** starts from a feasible solution and tries elementary moves,
+accepting those that improve; it stops at a **local optimum**.
 
-**The cover cut.** A set $S$ is a *cover* if $\sum_{j \in S} w_j > b$; then
-$\sum_{j \in S} x_j \le |S| - 1$ is valid. On the knapsack ($w = (5,4,3,3)$,
-$b = 9$) the minimal covers are the four triples. The optimal solution of the
-relaxation is $\tilde x = (1,\ 1/4,\ 1,\ 0)$:
+On the LPT solution ($L = (11, 8, 8)$, makespan $11$), the move "move one job to
+another machine" improves nothing: moving one of the two jobs of length $3$ off
+machine 1 brings its load to $8$ but raises the receiving machine to $11$. The
+local search stops at $11$, while the optimum is $9$: to get there a **swap**
+between two machines is needed.
 
-| Cover $S$ | $\sum_{j \in S} \tilde x_j$ | $\|S\|-1$ | |
-|---|---:|---:|---|
-| $\{1,2,3\}$ | $9/4$ | 2 | **violated**: the cut is needed |
-| $\{1,2,4\}$ | $5/4$ | 2 | satisfied |
-| $\{1,3,4\}$ | $2$ | 2 | satisfied (with equality) |
-| $\{2,3,4\}$ | $5/4$ | 2 | satisfied |
+!!! warning "A local optimum is not a better bound"
+    Local search returns a feasible solution, hence a bound on the pessimistic
+    side, and nothing else. The fact that it stopped does not mean it has
+    arrived.
 
-Adding the four cuts, $z(\mathit{LP}^+)$ drops from $71/4 = 17.75$ to
-$69/4 = 17.25$ and $z(\mathit{MILP})$ stays $17$.
+## When the constructive heuristic fails
 
-## Stronger formulations
+!!! danger "«No solution found» is not «no solution exists»"
+    Three jobs of duration $(3, 3, 2)$ on two machines with availability
+    $(5, 3)$. Next-fit: job 1 goes to machine 1 (residual $2$); job 2 does not
+    fit and moves to machine 2 (residual $0$); job 3 does not fit and there are
+    no more machines: **failure**. But the problem is feasible: jobs 2 and 3 fit
+    together on machine 1 ($3 + 2 = 5$) and job 1 on machine 2 ($3 \le 3$).
 
-Two formulations $A$ and $B$ are compared in **two steps**: (1) same integer
-set, that is the two formulations must admit exactly the same points with
-integer coordinates — without this nothing is
-being compared; (2) $B$ is *stronger* if $X_B \subseteq X_A$ as polyhedra. The
-reference case is [activation](links-01.md).
+    A constructive heuristic is *myopic*: it decides one thing at a time and
+    never backtracks. Its failure is information about the heuristic, not about
+    the problem. To prove a model infeasible one needs the solver
+    (`Status = INFEASIBLE`) or a proof.
 
-!!! warning "Stronger does not mean faster"
-    A stronger formulation has fewer nodes but more rows, and every node costs
-    more. What can be **proved** is the strength of the relaxation; speed is
-    **measured**.
+## The overview of the heuristics
 
-## What the solver says
+| Heuristic | Direction | value | $z(\mathit{MILP})$ | heuristic gap |
+|---|---|---:|---:|---:|
+| next-fit / first-fit (assignment) | min ($UB$) | 14 | 11 | $27.3\%$ |
+| best-fit on cost (assignment) | min ($UB$) | 11 | 11 | $0.0\%$ |
+| LPT (makespan) | min ($UB$) | 11 | 9 | $22.2\%$ |
+| covering constructive heuristic | min ($UB$) | 10 | 10 | $0.0\%$ |
+| ratio constructive heuristic (knapsack) | max ($LB$) | 16 | 17 | $5.9\%$ |
+| least unit cost (lot sizing) | min ($UB$) | 200 | 170 | $17.6\%$ |
 
-!!! danger "`ObjBound` is not the root relaxation"
-    On the covering instance, the relaxation of the model *as we wrote it* is
-    $15/2$ and the integer optimum $10$. Yet Gurobi reports `ObjBound = 10` and
-    `NodeCount = 0`: it closed the gap at the root, with presolve, its own cuts
-    and heuristics, without ever branching. Switching those off
-    (`Presolve = Cuts = Heuristics = 0`) the same model gives the same optimum
-    but with $5$ nodes.
+![The heuristic gaps](img/cap05_gap.png)
 
-    Two consequences: "how hard a model is" is not a property of the model
-    alone; and the relaxation we speak of in the hand-built bounds is that of
-    the model as written, obtained with `relax()`.
-
-## LP duals are not the marginal prices of the MILP
-
-| $b$ | $z(\mathit{MILP})$ | $z(\mathit{LP}^+)$ | LP dual | true change |
-|---:|---:|---:|---:|---:|
-| 8 | 16 | 16 | $2$ | — |
-| 9 | 17 | $71/4$ | $7/4$ | $+1$ |
-| 10 | 17 | $39/2$ | $7/4$ | **0** |
-| 11 | 20 | $85/4$ | $7/4$ | $+3$ |
-| 12 | 23 | 23 | $7/4$ | $+3$ |
-
-The LP dual is the ratio $p_j/w_j$ of the "critical" item. The true change of
-the integer optimum comes in jumps: from $b = 9$ to $b = 10$ it does not change
-*at all*, while the dual promises $7/4$.
-
-!!! note "What can be said, then"
-    Of the LP dual, the only use this course makes of it remains true: it is a
-    **bound**. As managerial advice ("is it worth buying one more unit?") it must
-    be checked by solving the MILP again: the difference
-    $z(\mathit{MILP})(b_i + 1) - z(\mathit{MILP})(b_i)$ is the only correct
-    answer, and there is no closed formula for it.
-
-## The bound protocol of the course
-
-Every exercise of [Part II](problems.md) produces: (1) a feasible **and
-integer** solution from a heuristic, checked on constraints, bounds and
-integrality; (2) the dual of the relaxation without the bounds, in general form and for the
-instance; (3) a feasible dual solution built by hand, with the recipe declared;
-(4) the two relaxations from the solver; (5) the optimum and the table
-$\mathit{UB} \cdot \mathit{LB} \cdot z(\mathit{LP}) \cdot z(\mathit{LP}^+) \cdot z(\mathit{MILP}) \cdot$ gap;
-(6) the additional considerations.
-
-Every number in the table exists in a CSV produced by the problem's script, and
-an `assert` in `check_numbers.py` compares it with the value quoted in the text.
+!!! tip "What this table teaches"
+    Two heuristics find the optimum and four do not, and **before** solving the
+    MILP there is no way of knowing which. A $0\%$ gap and a $27\%$ gap are told
+    apart only *afterwards*. This is why the course always asks for two bounds:
+    a heuristic on its own says how much a solution one can actually implement
+    costs, not how much is being lost.
 
 ## Code
 
-The complete script is
-[`python/cap04_bounds.py`](https://github.com/fabiofurini/mip-modelling/blob/main/python/cap04_bounds.py);
+The heuristics live in
+[`python/euristiche.py`](https://github.com/fabiofurini/mip-modelling/blob/main/python/euristiche.py),
+the examples in
+[`python/cap05_heuristics.py`](https://github.com/fabiofurini/mip-modelling/blob/main/python/cap05_heuristics.py);
 the notebook is
-[`notebooks/cap04_bounds.ipynb`](https://github.com/fabiofurini/mip-modelling/blob/main/notebooks/cap04_bounds.ipynb).
+[`notebooks/cap05_heuristics.ipynb`](https://github.com/fabiofurini/mip-modelling/blob/main/notebooks/cap05_heuristics.ipynb).
 
 <!-- embedded-script: begin (regenerated by python/embed_code.py) -->
 
-??? example "Show the complete script — `python/cap04_bounds.py` (252 lines)"
+??? example "Show the complete script — `python/cap05_heuristics.py` (240 lines)"
 
     ```python
-    """Chapter 2 -- Relaxations, duality and bounds: the checked examples.
+    """Chapter 4 -- Constructive heuristics on the classical problems, with trace and bound.
 
-    A minimisation and a maximisation problem, written with their duals; a dual
-    solution built by hand and the check of weak duality; the comparison between the
-    relaxation without the bounds and the one with the bounds kept; a cover cut; the
-    bound read from Gurobi at the end of the solve; and the counterexample showing why the
-    LP duals are not the marginal prices of the MILP.
+    Every heuristic of the course on a minimal instance: the step-by-step trace (the
+    same text that ends up in the notes), the feasibility check of the solution
+    produced --- constraints, bounds *and* integrality --- and the comparison with
+    the optimum of the corresponding MILP. It ends with a local-search step and with
+    the case where the constructive heuristic fails although the problem is feasible.
     """
     import gurobipy as gp
     import pandas as pd
     from gurobipy import GRB
 
-    from mip import (ammissibile, due_rilassamenti, frazione, nuovo_modello, registra_bound,
-                     rilassamento, risolvi, stampa_soluzione, valuta, viola_interezza)
+    from euristiche import (vicino_piu_vicino, best_fit, first_fit, euristica_copertura, euristica_lotti, euristica_zaino,
+                            lpt, matrice, next_fit)
+    from mip import (ammissibile, frazione, nuovo_modello, rilassamento, risolvi,
+                     stampa_soluzione, valuta, viola_interezza)
     from stile import (ARANCIO, BLU, CICLO, GRIGIO, ROSSO, TEAL, VERDE, intestazione,
                        plt, salva_dati, salva_figura)
 
     R = range
-
-    # ---------- 1. A MINIMISATION, ITS DUAL, A DUAL SOLUTION BUILT BY HAND ----------
-    intestazione("4.1  Minimum-cost covering: primal, dual and a bound built by hand")
-    # min sum c_j x_j   s.t.  sum_{j in S_i} x_j >= 1 for every i,  x binary
-    c41 = [4, 3, 5, 3]                       # cost of the four teams
-    # six zones, each on the border between two districts: zone i is covered by the
-    # two teams of the districts it borders
-    S41 = [[0, 1], [1, 2], [0, 2], [0, 3], [1, 3], [2, 3]]
-    n41, m41 = len(c41), len(S41)
+    CONFRONTO = []
 
 
-    def primale_41():
-        m = nuovo_modello("covering")
-        x = m.addVars(n41, vtype=GRB.BINARY, name="x")
-        m.setObjective(gp.quicksum(c41[j] * x[j] for j in R(n41)), GRB.MINIMIZE)
-        m.addConstrs((gp.quicksum(x[j] for j in S41[i]) >= 1 for i in R(m41)), name="cover")
+    def confronta(nome, senso, valore_eur, zmilp, note=""):
+        gap = abs(valore_eur - zmilp) / abs(zmilp) if abs(zmilp) > 1e-9 else 0.0
+        ruolo = "ub" if senso == "min" else "lb"
+        print(f"  {nome:34s} heuristic = {frazione(valore_eur):>6} ({ruolo})   "
+              f"z(MILP) = {frazione(zmilp):>6}   gap = {100 * gap:.1f}%  {note}")
+        CONFRONTO.append({"heuristic": nome, "sense": senso, "heuristic_value": valore_eur,
+                          "role": ruolo, "z_milp": zmilp, "gap": gap})
+
+
+    # ---------- 1. BIN PACKING: NEXT-FIT, FIRST-FIT, BEST-FIT ----------
+    intestazione("5.1  The three bin-packing heuristics on jobs and machines")
+    t51 = [[2, 1, 3], [3, 4, 2], [4, 5, 3]]
+    c51 = [[5, 10, 2], [5, 4, 6], [5, 4, 6]]
+    a51 = [5, 6, 7]
+
+
+    def modello_assegnamento(t, c, a):
+        n, k = len(t), len(a)
+        m = nuovo_modello("assignment")
+        x = m.addVars(n, k, vtype=GRB.BINARY, name="x")
+        m.setObjective(gp.quicksum(c[j][mm] * x[j, mm] for j in R(n) for mm in R(k)), GRB.MINIMIZE)
+        m.addConstrs((x.sum(j, "*") == 1 for j in R(n)), name="assign")
+        m.addConstrs((gp.quicksum(t[j][mm] * x[j, mm] for j in R(n)) <= a[mm] for mm in R(k)),
+                     name="availability")
         return m, x
 
 
-    def duale_41():
-        """max sum u_i  s.t.  sum_{i : j in S_i} u_i <= c_j,  u >= 0."""
-        d = nuovo_modello("dual_covering")
-        u = d.addVars(m41, name="u")
-        d.setObjective(u.sum(), GRB.MAXIMIZE)
-        d.addConstrs((gp.quicksum(u[i] for i in R(m41) if j in S41[i]) <= c41[j] for j in R(n41)),
-                     name="rc")
-        return d, u
+    m51, x51 = modello_assegnamento(t51, c51, a51)
+    z51 = risolvi(m51)
+    for nome, e in [("next-fit", next_fit(t51, a51)),
+                    ("first-fit", first_fit(t51, a51)),
+                    ("best-fit (minimum cost)", best_fit(t51, a51, lambda j, mm, ra: c51[j][mm], "cost"))]:
+        valore = sum(c51[j][mm] for (j, mm) in e.x)
+        sol = {f"x[{j},{mm}]": 1 for (j, mm) in e.x}
+        assert ammissibile(m51, sol), nome           # constraints, bounds AND integrality
+        confronta(f"5.1 {nome}", "min", valore, z51)
+    print("  Trace of the best-fit (the text that appears in the notes):")
+    best_fit(t51, a51, lambda j, mm, ra: c51[j][mm], "cost").traccia.stampa()
 
+    # ---------- 2. LPT: BALANCING OVER IDENTICAL MACHINES ----------
+    intestazione("5.2  LPT: the makespan on identical machines")
+    t52 = [5, 5, 4, 4, 3, 3, 3]
+    k52 = 3
+    e52 = lpt(t52, k52)
+    e52.traccia.stampa()
+    m52 = nuovo_modello("makespan")
+    x52 = m52.addVars(len(t52), k52, vtype=GRB.BINARY, name="x")
+    T52 = m52.addVar(name="T")
+    m52.setObjective(T52, GRB.MINIMIZE)
+    m52.addConstrs((x52.sum(j, "*") == 1 for j in R(len(t52))), name="assign")
+    m52.addConstrs((T52 >= gp.quicksum(t52[j] * x52[j, mm] for j in R(len(t52))) for mm in R(k52)),
+                   name="max")
+    z52 = risolvi(m52)
+    sol52 = {f"x[{j},{mm}]": 1 for (j, mm) in e52.x} | {"T": e52.makespan}
+    assert ammissibile(m52, sol52)
+    confronta("5.2 LPT (makespan)", "min", e52.makespan, z52,
+              f"loads {[int(c) for c in e52.carichi]}, total {sum(t52)}")
+    print(f"  Elementary bound: the makespan is at least max(max_j t_j, total/k) = "
+          f"max({max(t52)}, {frazione(sum(t52) / k52)}) = {frazione(max(max(t52), sum(t52) / k52))}")
 
-    m41p, x41 = primale_41()
-    z41 = risolvi(m41p)
-    scelte41 = [j + 1 for j in R(n41) if x41[j].X > 0.5]
-    print(f"  Integer optimum: z(MILP) = {frazione(z41)}, teams chosen {scelte41}")
+    # ---------- 3. COVERING GREEDY ----------
+    intestazione("5.3  Constructive covering heuristic")
+    c53 = [4, 3, 5, 3]
+    S53 = [[0, 1], [1, 2], [0, 2], [0, 3], [1, 3], [2, 3]]
+    e53 = euristica_copertura(c53, S53)
+    e53.traccia.stampa()
+    m53 = nuovo_modello("covering")
+    x53 = m53.addVars(len(c53), vtype=GRB.BINARY, name="x")
+    m53.setObjective(gp.quicksum(c53[j] * x53[j] for j in R(len(c53))), GRB.MINIMIZE)
+    m53.addConstrs((gp.quicksum(x53[j] for j in S53[i]) >= 1 for i in R(len(S53))), name="cover")
+    z53 = risolvi(m53)
+    assert ammissibile(m53, {f"x[{j}]": e53.y[j] for j in R(len(c53))})
+    confronta("5.3 covering constructive heuristic", "min", e53.valore, z53,
+              f"chosen {[j + 1 for j in R(len(c53)) if e53.y[j]]}")
 
-    # dual solution built by hand: each zone gets the smallest unit cost still
-    # available, respecting the dual constraints one column at a time (dual constructive heuristic)
-    u_mano = {i: 0.0 for i in R(m41)}
-    residuo = {j: c41[j] for j in R(n41)}
-    for i in R(m41):
-        incremento = min(residuo[j] for j in S41[i])
-        u_mano[i] = incremento
-        for j in S41[i]:
-            residuo[j] -= incremento
-    d41, u41 = duale_41()
-    lb41, viol = valuta(d41, {f"u[{i}]": u_mano[i] for i in R(m41)})
-    assert viol <= 1e-9, viol
-    print("  Dual solution by hand (constructive heuristic on the zones): u = "
-          + ", ".join(f"u_{i+1} = {frazione(u_mano[i])}" for i in R(m41))
-          + f"   ->  lb = {frazione(lb41)}")
-    zlp41, zlp41r, pi41 = due_rilassamenti(m41p, d41)
-    print(f"  Weak duality checked: {frazione(lb41)} <= {frazione(zlp41)} <= "
-          f"{frazione(z41)}")
-    assert lb41 <= zlp41 + 1e-9 <= z41 + 1e-9
-    # primal upper bound: the covering constructive heuristic (one uncovered zone at a time)
-    scoperte = set(R(m41))
-    presi41 = []
-    while scoperte:
-        j = min(R(n41), key=lambda j: c41[j] / max(1, len({i for i in scoperte if j in S41[i]}))
-                if any(j in S41[i] for i in scoperte) else float("inf"))
-        presi41.append(j)
-        scoperte -= {i for i in scoperte if j in S41[i]}
-    ub41_primale = sum(c41[j] for j in presi41)
-    assert ammissibile(m41p, {f"x[{j}]": 1 for j in presi41})
-    print(f"  Constructive covering heuristic heuristic: teams {sorted(j + 1 for j in presi41)}, "
-          f"ub = {frazione(ub41_primale)}")
-    riga41 = registra_bound("minimum-cost covering", ub41_primale, lb41, zlp41, zlp41r, z41)
-    salva_dati(pd.DataFrame([riga41]), "cap04_copertura")
+    # ---------- 4. KNAPSACK GREEDY: A LOWER BOUND ----------
+    intestazione("5.4  Knapsack constructive heuristic: in a maximisation the heuristic gives a lower bound")
+    p54, w54, C54 = [10, 7, 6, 4], [5, 4, 3, 3], 9
+    e54 = euristica_zaino(p54, w54, C54)
+    e54.traccia.stampa()
+    m54 = nuovo_modello("knapsack")
+    x54 = m54.addVars(4, vtype=GRB.BINARY, name="x")
+    m54.setObjective(gp.quicksum(p54[j] * x54[j] for j in R(4)), GRB.MAXIMIZE)
+    m54.addConstr(gp.quicksum(w54[j] * x54[j] for j in R(4)) <= C54, name="capacity")
+    z54 = risolvi(m54)
+    assert ammissibile(m54, {f"x[{j}]": e54.y[j] for j in R(4)})
+    confronta("5.4 constructive heuristic by ratio p/w", "max", e54.valore, z54,
+              f"taken {[j + 1 for j in R(4) if e54.y[j]]}, residual {e54.residuo:g}")
 
-    # ---------- 2. A MAXIMISATION: THE ROLES SWAP ----------
-    intestazione("4.2  A knapsack: the heuristic gives the lower bound, the dual the upper")
-    p42 = [10, 7, 6, 4]                      # values
-    w42 = [5, 4, 3, 3]                       # weights
-    C42 = 9
+    # ---------- 5. NEAREST NEIGHBOUR FOR THE TSP ----------
+    intestazione("5.5  Nearest neighbour for the TSP: the tour depends on the starting node")
+    # five cities, symmetric distances satisfying the triangle inequality
+    D55 = [[0, 5, 2, 2, 9],
+           [5, 0, 4, 3, 4],
+           [2, 4, 0, 4, 7],
+           [2, 3, 4, 0, 7],
+           [9, 4, 7, 7, 0]]
+    n55 = len(D55)
+    e55t = vicino_piu_vicino(D55, partenza=0)
+    e55t.traccia.stampa()
+    print(f"  Tour from node 1: {' -> '.join(str(v + 1) for v in e55t.tour)}, length {e55t.valore:g}")
+    tour_da = {}
+    for s in R(n55):
+        e = vicino_piu_vicino(D55, partenza=s)
+        tour_da[s] = (e.tour, e.valore)
+        if s:
+            print(f"  Tour from node {s + 1}: {' -> '.join(str(v + 1) for v in e.tour)}, "
+                  f"length {e.valore:g}")
+    from itertools import permutations
+    ottimo, tour_ottimo = None, None
+    for perm in permutations(R(1, n55)):
+        if perm[0] > perm[-1]:
+            continue
+        giro = (0,) + perm + (0,)
+        lung = sum(D55[giro[i]][giro[i + 1]] for i in R(n55))
+        if ottimo is None or lung < ottimo:
+            ottimo, tour_ottimo = lung, giro
+    print(f"  Optimum by enumeration: {' -> '.join(str(v + 1) for v in tour_ottimo)}, "
+          f"length {ottimo:g}")
+    salva_dati(pd.DataFrame({"start": [s + 1 for s in R(n55)],
+                             "tour": [" - ".join(str(v + 1) for v in tour_da[s][0]) for s in R(n55)],
+                             "length": [tour_da[s][1] for s in R(n55)]}),
+               "cap05_tsp")
+    confronta("5.5 nearest neighbour (TSP)", "min", e55t.valore, ottimo,
+              f"tour {' - '.join(str(v + 1) for v in e55t.tour)}")
 
+    # ---------- 5. LOT SIZING GREEDY ----------
+    intestazione("5.6  Lot sizing: least unit cost period covering")
+    d55 = [20, 10, 30, 40, 10]
+    setup55, hold55 = 50, 1
+    e55 = euristica_lotti(d55, setup55, hold55)
+    e55.traccia.stampa()
+    T55 = len(d55)
+    m55 = nuovo_modello("lot_sizing")
+    q55 = m55.addVars(T55, name="q")
+    I55 = m55.addVars(T55, name="I")
+    y55 = m55.addVars(T55, vtype=GRB.BINARY, name="y")
+    Mtot = sum(d55)
+    m55.setObjective(gp.quicksum(setup55 * y55[t] + hold55 * I55[t] for t in R(T55)), GRB.MINIMIZE)
+    for t in R(T55):
+        m55.addConstr((I55[t - 1] if t else 0) + q55[t] - I55[t] == d55[t], name=f"bilancio{t}")
+        m55.addConstr(q55[t] <= Mtot * y55[t], name=f"link{t}")
+    z55 = risolvi(m55)
+    sol55 = {}
+    for t in R(T55):
+        sol55[f"q[{t}]"] = e55.lanci.get(t, 0)
+        sol55[f"y[{t}]"] = 1 if t in e55.lanci else 0
+    scorta = 0
+    for t in R(T55):
+        scorta += sol55[f"q[{t}]"] - d55[t]
+        sol55[f"I[{t}]"] = scorta
+    assert ammissibile(m55, sol55)
+    confronta("5.5 lot sizing (least unit cost)", "min", e55.valore, z55,
+              f"runs in periods {[t + 1 for t in sorted(e55.lanci)]}")
+    print("  Wagner-Whitin solves this very model *to optimality* by dynamic programming:")
+    print(f"  its value is {frazione(z55)}, not the heuristic one.")
 
-    def primale_42():
-        m = nuovo_modello("knapsack")
-        x = m.addVars(4, vtype=GRB.BINARY, name="x")
-        m.setObjective(gp.quicksum(p42[j] * x[j] for j in R(4)), GRB.MAXIMIZE)
-        m.addConstr(gp.quicksum(w42[j] * x[j] for j in R(4)) <= C42, name="capacity")
-        return m, x
+    # ---------- 6. A LOCAL SEARCH STEP ----------
+    intestazione("5.7  A local-search step on the LPT solution")
+    carichi = list(e52.carichi)
+    assegn = {j: mm for (j, mm) in e52.x}
+    migliorato = True
+    passi = 0
+    while migliorato:
+        migliorato = False
+        for j, mm in list(assegn.items()):
+            for nuovo in R(k52):
+                if nuovo == mm:
+                    continue
+                prova = list(carichi)
+                prova[mm] -= t52[j]
+                prova[nuovo] += t52[j]
+                if max(prova) < max(carichi) - 1e-9:
+                    print(f"  Moving job {j + 1} from machine {mm + 1} to {nuovo + 1}: "
+                          f"makespan {max(carichi):g} -> {max(prova):g}")
+                    carichi, assegn[j], migliorato, passi = prova, nuovo, True, passi + 1
+                    break
+            if migliorato:
+                break
+    if passi == 0:
+        print(f"  No single move improves the makespan {max(carichi):g}: the LPT solution")
+        print(f"  is a local optimum for this move. The global optimum is {frazione(z52)}.")
+    print("  A local optimum is not a global optimum, and local search produces no bound")
+    print("  better than that of the solution it returns.")
 
+    # ---------- 7. WHEN THE GREEDY FAILS ----------
+    intestazione("5.8  A failure of the constructive heuristic does not prove infeasibility")
+    t57 = matrice([3, 3, 2], 2)
+    a57 = [5, 3]
+    e57 = next_fit(t57, a57)
+    e57.traccia.stampa()
+    print(f"  next-fit: ok = {e57.ok}")
+    m57, x57 = modello_assegnamento(t57, [[1, 1], [1, 1], [1, 1]], a57)
+    z57 = risolvi(m57)
+    print(f"  The MILP, however, is feasible, with optimum {frazione(z57)}: solution "
+          + ", ".join(f"x[{j+1}][{mm+1}]" for j in R(3) for mm in R(2) if x57[j, mm].X > 0.5))
+    print("  The constructive heuristic fails because it is myopic, not because the problem has no")
+    print("  solution: 'no solution found' is not 'no solution exists'.")
+    assert not e57.ok
 
-    def duale_42():
-        """Dual of the relaxation without the bounds (x >= 0): min C v  s.t.  w_j v >= p_j, v >= 0."""
-        d = nuovo_modello("dual_knapsack")
-        v = d.addVar(name="v")
-        d.setObjective(C42 * v, GRB.MINIMIZE)
-        d.addConstrs((w42[j] * v >= p42[j] for j in R(4)), name="rc")
-        return d, v
-
-
-    m42, x42 = primale_42()
-    z42 = risolvi(m42)
-    scelte42 = [j + 1 for j in R(4) if x42[j].X > 0.5]
-    print(f"  Integer optimum: z(MILP) = {frazione(z42)}, items {scelte42}, "
-          f"weight {sum(w42[j] for j in R(4) if x42[j].X > 0.5)} out of {C42}")
-    # constructive heuristic heuristic by value/weight ratio: gives a LOWER bound
-    ordine = sorted(R(4), key=lambda j: -p42[j] / w42[j])
-    carico, presi = 0, []
-    for j in ordine:
-        if carico + w42[j] <= C42:
-            presi.append(j)
-            carico += w42[j]
-    lb42 = sum(p42[j] for j in presi)
-    assert ammissibile(m42, {f"x[{j}]": 1 for j in presi})
-    print(f"  Constructive heuristic by ratio p_j/w_j: takes {sorted(j + 1 for j in presi)}, "
-          f"lb = {frazione(lb42)}")
-    # dual by hand: v = max_j p_j / w_j  (the best ratio) is feasible
-    v_mano = max(p42[j] / w42[j] for j in R(4))
-    d42, v42 = duale_42()
-    ub42, viol = valuta(d42, {"v": v_mano})
-    assert viol <= 1e-9, viol
-    print(f"  Dual solution by hand: v = max_j p_j/w_j = {frazione(v_mano)}  ->  "
-          f"ub = C v = {frazione(ub42)}")
-    zlp42, zlp42r, _ = due_rilassamenti(m42, d42)
-    print(f"  The maximisation sandwich: {frazione(lb42)} <= z(MILP) = {frazione(z42)} <= "
-          f"z(LP) = {frazione(zlp42)} <= ub = {frazione(ub42)}")
-    assert lb42 <= z42 <= zlp42 + 1e-9 <= ub42 + 1e-9
-    riga42 = registra_bound("knapsack", ub42, lb42, zlp42, zlp42r, z42, senso="max")
-    salva_dati(pd.DataFrame([riga42]), "cap04_zaino")
-
-    # ---------- 3. A COVER CUT ----------
-    intestazione("4.3  A valid inequality: the cover cut")
-    from itertools import combinations
-    tutte = [s for k in R(2, 5) for s in combinations(R(4), k) if sum(w42[j] for j in s) > C42]
-    coperture = [s for s in tutte                                   # only the minimal ones
-                 if all(sum(w42[j] for j in t) <= C42
-                        for t in combinations(s, len(s) - 1))]
-    print("  Minimal covers found: "
-          + "; ".join("{" + ", ".join(str(j + 1) for j in s) + "}" for s in coperture))
-    m43, x43 = primale_42()
-    zlp43_prima, sol43, _ = rilassamento(m43, rafforzato=True)
-    print("  Optimal solution of the relaxation without cuts: "
-          + ", ".join(f"x_{j+1} = {frazione(sol43[f'x[{j}]'])}" for j in R(4)))
-    for s in coperture:
-        somma = sum(sol43[f"x[{j}]"] for j in s)
-        stato = "VIOLATED" if somma > len(s) - 1 + 1e-9 else "satisfied"
-        print(f"    cut on {{{', '.join(str(j + 1) for j in s)}}}: "
-              f"sum = {frazione(somma)} against {len(s) - 1}  ->  {stato}")
-    for s in coperture:
-        m43.addConstr(gp.quicksum(x43[j] for j in s) <= len(s) - 1, name="cover" + "".join(map(str, s)))
-    z43 = risolvi(m43)
-    zlp43_dopo, _, _ = rilassamento(m43, rafforzato=True)
-    print(f"  z(LP+) without cuts = {frazione(zlp43_prima)}   with the cover cuts = "
-          f"{frazione(zlp43_dopo)}   z(MILP) = {frazione(z43)}")
-    assert z43 == z42, "the cuts must not change the integer optimum"
-    assert zlp43_dopo <= zlp43_prima + 1e-9
-    salva_dati(pd.DataFrame([{"model": "knapsack", "z_lp_without_cuts": zlp43_prima,
-                              "z_lp_with_cuts": zlp43_dopo, "z_milp": z43}]), "cap04_tagli")
-
-    # ---------- 4. WHAT THE SOLVER DOES: relax() AND ObjBound ----------
-    intestazione("4.4  The first relaxation and the solver's final bound")
-    m44, x44 = primale_41()          # the covering: here the solver has work to do
-    m44.Params.OutputFlag = 0
-    m44.optimize()
-    print(f"  Status = {m44.Status} (2 = OPTIMAL), SolCount = {m44.SolCount}")
-    print(f"  ObjVal   = {frazione(m44.ObjVal)}   (the best integer solution found)")
-    print(f"  ObjBound = {frazione(m44.ObjBound)} (the best bound proved)")
-    print(f"  MIPGap   = {m44.MIPGap:.4f}          NodeCount = {int(m44.NodeCount)}")
-    zrad, _, _ = rilassamento(m44, rafforzato=True)
-    print(f"  Relaxation of the model as we wrote it, with relax(): {frazione(zrad)}")
-    assert abs(m44.ObjBound - m44.ObjVal) <= 1e-6
-    assert zrad <= m44.ObjVal + 1e-9         # minimisation: the relaxation lies below the optimum
-    print(f"  The relaxation is {frazione(zrad)} and the integer optimum {frazione(m44.ObjVal)}:")
-    print("  the gap is there, but NodeCount = 0. Gurobi closes it *at the root*, with")
-    print("  presolve, its own cuts and heuristics, without ever splitting the problem.")
-    # to see the solver at work, switch off presolve, cuts and heuristics
-    m45, x45 = primale_41()
-    m45.Params.Presolve = 0
-    m45.Params.Cuts = 0
-    m45.Params.Heuristics = 0
-    m45.optimize()
-    print(f"  With Presolve = Cuts = Heuristics = 0: z = {frazione(m45.ObjVal)}, "
-          f"NodeCount = {int(m45.NodeCount)}")
-    print("  Same optimum, but now the nodes count: 'how hard a model is' is not a")
-    print("  property of the model alone, it also depends on what the solver brings.")
-    assert m45.ObjVal == m44.ObjVal
-    salva_dati(pd.DataFrame([{"configuration": "default settings", "z": m44.ObjVal,
-                              "z_lp_written": zrad, "nodes": int(m44.NodeCount)},
-                             {"configuration": "no presolve, cuts or heuristics",
-                              "z": m45.ObjVal, "z_lp_written": zrad,
-                              "nodes": int(m45.NodeCount)}]), "cap04_solver")
-
-    # ---------- 5. LP DUALS ARE NOT THE MARGINAL PRICES OF THE MILP ----------
-    intestazione("4.5  Why the LP duals are not the marginal prices of the MILP")
-    righe = []
-    for C in (8, 9, 10, 11, 12):
-        m = nuovo_modello("knapsack_C")
-        x = m.addVars(4, vtype=GRB.BINARY, name="x")
-        m.setObjective(gp.quicksum(p42[j] * x[j] for j in R(4)), GRB.MAXIMIZE)
-        con = m.addConstr(gp.quicksum(w42[j] * x[j] for j in R(4)) <= C, name="capacity")
-        z = risolvi(m)
-        zr, _, pi = rilassamento(m, rafforzato=True)
-        righe.append({"capacity": C, "z_milp": z, "z_lp": zr, "lp_dual": pi["capacity"]})
-    print("   C   z(MILP)   z(LP+)   LP dual   true change in z(MILP)")
-    for k, r in enumerate(righe):
-        delta = "" if k == 0 else frazione(r["z_milp"] - righe[k - 1]["z_milp"])
-        print(f"  {r['capacity']:2d}    {frazione(r['z_milp']):>5}   {frazione(r['z_lp']):>6}   "
-              f"{r['lp_dual']:>10.4f}      {delta:>6}")
-    salva_dati(pd.DataFrame(righe), "cap04_prezzi")
-    print("  The LP dual is the p_j/w_j ratio of the 'critical' item: 2 when the capacity")
-    print("  runs out on item 1, 7/4 when there is room left for item 2. It says how much an")
-    print("  extra unit of capacity is worth *in the continuous problem*. On the integer")
-    print("  problem the true change is in jumps (1, 0, 3, 3) and never matches that value:")
-    print("  going from C = 9 to C = 10 the integer optimum does not change at all, while")
-    print("  the dual keeps promising 7/4. The LP dual is not the marginal price of the")
-    print("  MILP, and using it as such is a mistake, not an approximation.")
-
-    # ---------- 6. FIGURE: THE SANDWICH OF THE TWO PROBLEMS ----------
-    fig, ax = plt.subplots(figsize=(7.2, 2.5))
-    etichette = ["covering (min)", "knapsack (max)"]
-    lb = [lb41, lb42]
-    ub = [ub41_primale, ub42]
-    zl = [zlp41, zlp42]
-    zm = [z41, z42]
-    for i in R(2):
-        ax.plot([lb[i], ub[i]], [i, i], color=GRIGIO, lw=2, solid_capstyle="round")
-        ax.plot(lb[i], i, "|", color=TEAL, ms=18, mew=2.5)
-        ax.plot(ub[i], i, "|", color=ARANCIO, ms=18, mew=2.5)
-        ax.plot(zl[i], i, "d", color=BLU, ms=8)
-        ax.plot(zm[i], i, "o", color=ROSSO, ms=9)
-    ax.plot([], [], "|", color=TEAL, ms=12, mew=2.5, label="lower bound")
-    ax.plot([], [], "|", color=ARANCIO, ms=12, mew=2.5, label="upper bound")
-    ax.plot([], [], "d", color=BLU, ms=7, label="$z(\\mathrm{LP})$")
-    ax.plot([], [], "o", color=ROSSO, ms=8, label="$z(\\mathrm{MILP})$")
-    ax.set_yticks(R(2))
-    ax.set_yticklabels(etichette)
-    ax.set_xlabel("objective value")
-    ax.set_title("The sandwich: the dual is left in a min, right in a max")
-    ax.legend(fontsize=8, ncols=4, loc="lower center", bbox_to_anchor=(0.5, -0.42))
-    ax.set_ylim(-0.6, 1.6)
-    salva_figura(fig, "cap04_sandwich")
+    # ---------- 8. THE OVERVIEW ----------
+    intestazione("5.9  The overview")
+    tab = pd.DataFrame(CONFRONTO)
+    salva_dati(tab, "cap05_euristiche")
+    fig, ax = plt.subplots(figsize=(7.6, 3.6))
+    etichette = [r["heuristic"].split(" ", 1)[1][:22] for r in CONFRONTO]
+    gap = [100 * r["gap"] for r in CONFRONTO]
+    colori = [TEAL if r["sense"] == "min" else ARANCIO for r in CONFRONTO]
+    ax.barh(etichette, gap, color=colori)
+    for i, g in enumerate(gap):
+        ax.annotate(f"{g:.1f}%", (g, i), textcoords="offset points", xytext=(4, -3), fontsize=9)
+    ax.set_xlabel("heuristic gap with respect to the MILP optimum (%)")
+    ax.set_title("How good each constructive heuristic is")
+    ax.invert_yaxis()
+    ax.set_xlim(0, max(gap) * 1.25 + 1)
+    salva_figura(fig, "cap05_gap")
     print("Done.")
     ```
 

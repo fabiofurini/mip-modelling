@@ -9,15 +9,15 @@ once.
 
 1. [What is a MIP model](modelling-1.md) — data, variables, objective,
    constraints; relaxations, bounds and gaps
-2. [Logic and binary variables](modelling-2.md) — CNF, the three translation
+2. [Logic and binary variables](modelling-5.md) — CNF, the three translation
    rules, five exercises
 3. [Links between variables](links.md) — the fourteen techniques, one per
    subpage, with the [map](links.md)
-4. [Relaxations, duality and bounds](modelling-4.md) — the conversion table,
+4. [Relaxations, duality and bounds](modelling-2.md) — the conversion table,
    three recipes for a hand-built dual solution
-5. [Constructive heuristics](modelling-5.md) — the six rules, and when they
+5. [Constructive heuristics](modelling-4.md) — the six rules, and when they
    fail
-6. [From the model to Python/Gurobi](modelling-6.md) — the four classes of
+6. [From the model to Python/Gurobi](modelling-3.md) — the four classes of
    variables, the tolerances, the course protocol
 
 **[The problems](problems.md)**

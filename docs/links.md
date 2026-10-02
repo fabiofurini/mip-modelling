@@ -5,7 +5,7 @@
 
 [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/fabiofurini/mip-modelling/blob/main/notebooks/cap03_links.ipynb)
 
-[chapter 5](modelling-2.md) links variables that are **all binary**. Here we
+[chapter 5](modelling-5.md) links variables that are **all binary**. Here we
 link **different** families: binary with continuous, binary with integer,
 continuous with each other. There are fourteen techniques, and they are the real
 content of MIP modelling.

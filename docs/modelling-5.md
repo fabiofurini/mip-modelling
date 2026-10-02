@@ -1,540 +1,482 @@
-# Constructive heuristics
+# Logic and binary variables
 
-**Class:** algorithms · **Script:** `python/cap05_heuristics.py`, `python/euristiche.py`
+**Class:** BIP · **Links:** clauses and implications · **Script:** `python/cap02_logic.py`
 { .scheda }
 
-[![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/fabiofurini/mip-modelling/blob/main/notebooks/cap05_heuristics.ipynb)
+[![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/fabiofurini/mip-modelling/blob/main/notebooks/cap02_logic.ipynb)
 
-A constructive heuristic builds **one** solution quickly, adding one element at a
-time and never backtracking. It proves nothing about the quality of that
-solution, and it is not even guaranteed to reach a feasible one: it can get stuck
-part-way, with an element that fits nowhere. When it does end with a feasible
-solution, that solution is the other half of the sandwich of
-[chapter 2](modelling-4.md): the pessimistic side, the one guaranteed by a
-solution that really exists; when it fails, there is no primal bound.
+A binary variable is a "yes/no" answer. This chapter translates logical
+conditions between those answers into **linear constraints** and — above all —
+shows how to *prove* that the translation is exact.
 
-!!! note "What a heuristic must produce in this course"
-    1. a readable **pseudocode**, with the scanning order, the choice criterion,
-       the tie-breaking rule and the failure case stated;
-    2. the corresponding **Python function**, line by line;
-    3. the **trace** of the execution on an instance;
-    4. the **feasibility check**: constraints, bounds *and* integrality;
-    5. the resulting **bound**, with the right name.
+## Propositions, expressions, satisfiability
 
-    Point 4 is not a formality: a solution satisfying the linear constraints but
-    with a fractional component is feasible for the *relaxation*, not for the
-    MILP, and its value is not a primal bound.
+A boolean function returns `TRUE` or `FALSE` and is represented by
+$x \in \{0,1\}$: $x = 1$ if and only if the proposition is true. A **boolean
+expression** is built from binary variables, the three operators `AND`
+($\land$), `OR` ($\lor$), `NOT` ($\lnot$) and parentheses. The **satisfiability
+problem** asks whether an assignment exists that makes the expression true.
 
-!!! danger "The side of the bound depends on the objective, not on the heuristic"
-    In a **minimisation** the value of a feasible solution is an *upper* bound:
-    $z(\mathit{MILP}) \le \mathit{UB}$. In a **maximisation** it is a *lower*
-    bound: $\mathit{LB} \le z(\mathit{MILP})$. Calling $UB$ the result
-    of a constructive heuristic on a maximisation is the commonest sign error in the course.
+!!! example "Satisfiable and not"
+    - `NOT` $x_a$ `OR` $\big((x_b$ `OR` $x_c)$ `AND` $(x_d$ `OR` $x_e)\big)$ is
+      satisfied by $x_a = 0$.
+    - $(x_a$ `OR` $x_b)$ `AND` $(x_c$ `OR` $x_d)$ `AND` `NOT` $x_e$ is
+      satisfied by $x_a = x_c = 1$, $x_b = x_d = x_e = 0$.
+    - $(x_a \lor x_b) \land (\lnot x_a \lor x_b) \land (x_a \lor \lnot x_b) \land (\lnot x_a \lor \lnot x_b)$
+      is **unsatisfiable**: each of the four assignments of $(x_a, x_b)$
+      falsifies one clause.
 
-## Bin packing: the insertion rules
+## Literals, clauses, conjunctive normal form
 
-The classical problem is **bin packing**, whose model is in the solver chapter:
-items must be put into identical bins of limited capacity, using as few of them
-as possible. Here it is not solved: it is *built*, one choice at a time.
+A **literal** is a variable or its negation; a **clause** is a disjunction of
+literals; an expression is in **conjunctive normal form** (CNF) if it is a
+conjunction of clauses.
 
-```text
-Build(n, k, t, a, gamma):
-  x[j][m] <- 0 for every j, m;   ra[m] <- a[m] for every m
-  for j = 1..n:
-      # next-fit:  the current machine only, then the next one
-      # first-fit: the first m with t[j][m] <= ra[m]
-      # best-fit:  among the feasible m, the one with smallest gamma(j,m,ra)
-      choose m* by the rule
-      if no m is feasible: return "no solution found"
-      x[j][m*] <- 1;  ra[m*] <- ra[m*] - t[j][m*]
-  return x
+The equivalences needed, for every $x_a, x_b, x_c \in \{0,1\}$:
+
+$$
+\begin{aligned}
+x_a \land (x_b \lor x_c) &\iff (x_a \land x_b) \lor (x_a \land x_c) &&\text{(distributive C)}\\
+x_a \lor (x_b \land x_c) &\iff (x_a \lor x_b) \land (x_a \lor x_c) &&\text{(distributive D)}\\
+\lnot(x_a \lor x_b) &\iff \lnot x_a \land \lnot x_b &&\text{(De Morgan A)}\\
+\lnot(x_a \land x_b) &\iff \lnot x_a \lor \lnot x_b &&\text{(De Morgan B)}\\
+x_a \lor (x_a \land x_b) &\iff x_a &&\text{(absorption E)}\\
+x_a \land (x_a \lor x_b) &\iff x_a &&\text{(absorption F)}\\
+\lnot(\lnot x_a) &\iff x_a &&\text{(double negation)}
+\end{aligned}
+$$
+
+Each is proved by cases: with two variables there are $4$ assignments, with
+three there are $8$. The script runs the check on all seven.
+
+!!! tip "Collecting: distributive (C) read backwards"
+    $(x_a \land x_b) \lor (x_a \land x_c) \iff x_a \land (x_b \lor x_c)$. It is
+    useful when putting into CNF a disjunction of several conjunctions sharing
+    literals. For instance "at least two of $a, b, c$", that is
+    $(x_a \land x_b) \lor (x_a \land x_c) \lor (x_b \land x_c)$, becomes
+
+    $$(x_a \lor x_b) \land (x_a \lor x_c) \land (x_b \lor x_c).$$
+
+## From CNF to linear constraints
+
+!!! note "The translation, in three rules"
+    1. every **clause** becomes an inequality constraint $\ge 1$;
+    2. every `OR` inside the clause becomes a $+$;
+    3. every negative literal `NOT` $x$ becomes $1 - x$.
+
+A clause with positive literals $P$ and negative literals $N$ becomes
+
+$$\sum_{i \in P} x_i + \sum_{i \in N} (1 - x_i) \ge 1
+\iff \sum_{i \in P} x_i - \sum_{i \in N} x_i \ge 1 - |N|.$$
+
+The left-hand side counts **how many literals of the clause are true**: asking
+it to be $\ge 1$ is asking the clause to be true.
+
+!!! warning "The form in which the constraint is written"
+    With two or more negative literals the equivalent form obtained by
+    multiplying by $-1$ reads better: $1 - x_1 + 1 - x_6 + x_7 \ge 1$ is written
+    $x_1 + x_6 - x_7 \le 1$. It is the same constraint. What never changes is
+    the number of constraints: **one per clause**, counted after removing
+    tautologies and absorbed clauses.
+
+## Logical implications
+
+$x_a \Rightarrow x_b$ is equivalent to `NOT` $x_a$ `OR` $x_b$, already in CNF,
+that is to $x_b - x_a \ge 0$. The **contrapositive**
+$\lnot x_b \Rightarrow \lnot x_a$ is not a second constraint: by double negation
+its expression is the same one.
+
+| Implication | Expression in CNF | Constraints | # |
+|---|---|---|---|
+| $x_a \land x_b \Rightarrow x_c$ | $\lnot x_a \lor \lnot x_b \lor x_c$ | $x_a + x_b - x_c \le 1$ | 1 |
+| $x_a \lor x_b \Rightarrow x_c$ | $(\lnot x_a \lor x_c) \land (\lnot x_b \lor x_c)$ | $x_c - x_a \ge 0$, $x_c - x_b \ge 0$ | 2 |
+| $x_a \Rightarrow x_b \land x_c$ | $(\lnot x_a \lor x_b) \land (\lnot x_a \lor x_c)$ | $x_b - x_a \ge 0$, $x_c - x_a \ge 0$ | 2 |
+| $x_a \Rightarrow x_b \lor x_c$ | $\lnot x_a \lor x_b \lor x_c$ | $x_b + x_c - x_a \ge 0$ | 1 |
+
+A **disjunction in the antecedent** and a **conjunction in the consequent** cost
+two constraints; the opposite costs one.
+
+## Splitting an implication: when it is allowed
+
+$$(x_a \lor x_b) \Rightarrow x_c \iff (x_a \Rightarrow x_c) \land (x_b \Rightarrow x_c)$$
+$$x_a \Rightarrow (x_b \land x_c) \iff (x_a \Rightarrow x_b) \land (x_a \Rightarrow x_c)$$
+
+!!! danger "The split with a conjunctive antecedent is **not** valid"
+    $(x_a \land x_b) \Rightarrow x_c$ is **not** equivalent to
+    $(x_a \Rightarrow x_c) \land (x_b \Rightarrow x_c)$. With $x_a = 1$,
+    $x_b = 0$, $x_c = 0$ the original implication is *true* (false antecedent)
+    but $x_a \Rightarrow x_c$ is *false*: the conjunction of the two splits is
+    **strictly stronger** and cuts off solutions the problem allows.
+
+## Counting: at most one, at least one, exactly one
+
+| Condition | Constraint | Note |
+|---|---|---|
+| at least one | $\sum_{i \in I} x_i \ge 1$ | it is the clause: *set covering* |
+| at most one | $\sum_{i \in I} x_i \le 1$ | *set packing*; equivalent to $\binom{|I|}{2}$ clauses, but in one constraint and tighter |
+| exactly one | $\sum_{i \in I} x_i = 1$ | *set partitioning* |
+| at least $p$ | $\sum_{i \in I} x_i \ge p$ | in CNF it would take $\binom{|I|}{|I|-p+1}$ clauses |
+| at most $p$ | $\sum_{i \in I} x_i \le p$ | in CNF it would take $\binom{|I|}{p+1}$ clauses |
+
+!!! tip "One cardinality constraint beats many clauses"
+    "At most one out of three" is written as three clauses ($x_1+x_2 \le 1$,
+    $x_1+x_3 \le 1$, $x_2+x_3 \le 1$) or as $x_1+x_2+x_3 \le 1$. Same binary
+    solutions, different relaxations: $x = (1/2,1/2,1/2)$ satisfies the three
+    clauses and violates the aggregated constraint. When counting is possible,
+    count.
+
+## Checking the translation, not trusting it
+
+A translation is correct when, for **every** binary assignment, the expression
+is true if and only if all constraints are satisfied. With few variables this is
+an enumeration of $2^n$ cases: it is the proof, by cases, of the result. The
+module
+[`python/booleane.py`](https://github.com/fabiofurini/mip-modelling/blob/main/python/booleane.py)
+performs it, and every translation below is checked this way.
+
+## Five solved exercises
+
+In all of them, $x_p = 1$ if project $p$ is chosen.
+
+??? question "2.1 — Direct implications (ten projects)"
+    (1) if 2 is chosen then 3 is chosen; (2) if 2 is chosen then 4 is not
+    chosen; (3) if 1 and 6 are chosen then 7 is chosen; (4) if 1 or 6 is chosen
+    then 8 is chosen; (5) if 2 and 3 are chosen then 9 is not chosen; (6) if 2
+    or 3 is chosen then 10 is not chosen.
+
+??? question "2.2 — Negated antecedents and consequents (ten projects)"
+    (1) $\lnot x_3 \Rightarrow x_2$; (2) $\lnot x_4 \Rightarrow \lnot x_2$;
+    (3) $x_7 \Rightarrow x_1 \land x_6$; (4) $x_8 \Rightarrow x_1 \lor x_6$;
+    (5) $\lnot x_9 \Rightarrow x_2 \land x_3$;
+    (6) $\lnot x_{10} \Rightarrow x_2 \lor x_3$.
+
+??? question "2.3 — Compound antecedents and consequents (eight projects)"
+    (1) $x_7 \lor x_3 \Rightarrow x_1 \land x_2$;
+    (2) $x_1 \land x_6 \land x_7 \Rightarrow x_8$;
+    (3) $x_5 \land x_2 \land \lnot x_4 \Rightarrow \lnot x_3$;
+    (4) $(x_1 \lor x_4) \land x_6 \Rightarrow x_2 \land (x_5 \lor x_7)$;
+    (5) $(x_2 \lor x_5) \land \lnot x_8 \Rightarrow x_3 \lor \lnot x_6$;
+    (6) $(x_1 \lor x_4) \land (x_2 \lor x_5) \land \lnot x_8 \Rightarrow x_3 \land (\lnot x_6 \lor x_7)$.
+
+??? question "2.4 — "At least two of" (nine projects)"
+    (1) $x_4 \Rightarrow$ at least two of 1, 2, 3; (2) at least two of 6, 7, 8
+    $\Rightarrow x_5$; (3) $\lnot x_4 \Rightarrow$ at least two of 1, 2, 3, 9;
+    (4) $x_8 \Rightarrow (x_1 \land x_6) \lor (x_1 \land x_7) \lor (x_2 \land x_6)$;
+    (5) at least two of 1, 3, 5 $\Rightarrow \lnot x_9$;
+    (6) $(x_1 \land x_2) \lor (x_3 \land x_4) \Rightarrow x_5$.
+
+    !!! warning "«At least two» can also be written by counting"
+        As the consequent of the implication governed by $x_4$, the condition is
+        also $x_1 + x_2 + x_3 \ge 2 x_4$: one constraint instead of three, with
+        the same $16$ binary solutions but **stronger** in the relaxation. On
+        $\max x_1+x_2+x_3+3x_4$ with $x_1+x_2+x_3+2x_4 \le 3$ and
+        $z(\mathit{MILP}) = 3$, the three clauses give
+        $z(\mathit{LP}^+) = 27/7 \approx 3.86$ and the counted constraint
+        $15/4 = 3.75$.
+
+??? question "2.5 — Splits (ten projects)"
+    (1) $x_1 \lor x_2 \Rightarrow x_3$; (2) $x_4 \Rightarrow x_5 \land x_6$;
+    (3) $x_1 \lor x_2 \Rightarrow x_3 \land x_4$;
+    (4) $x_1 \land x_2 \Rightarrow x_3$; (5) $x_5 \lor x_6 \Rightarrow \lnot x_7$;
+    (6) $\lnot x_8 \lor \lnot x_9 \Rightarrow x_{10}$.
+
+## Logical constraints inside an optimisation model
+
+With the ten projects of exercise 2.1, revenues and costs
+
+| project $p$ | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| revenue $r_p$ | 9 | 7 | 4 | 8 | 3 | 6 | 2 | 5 | 7 | 6 |
+| cost $b_p$ | 4 | 3 | 2 | 4 | 2 | 3 | 1 | 3 | 4 | 3 |
+
+and budget $B = 14$:
+
+$$
+\begin{aligned}
+\max ~~ \sum_{p=1}^{n} r_p\, x_p & &\\
+\text{subject to}\quad \sum_{p=1}^{n} b_p\, x_p &\le B, &\\
+\text{the 8 constraints} &\text{ of exercise 2.1}, &\\
+x_p &\in \{0, 1\}, & \forall p \in \{1, 2, \dots, n\}.
+\end{aligned}
+$$
+
+Without the logical constraints the optimum is $30$. With them it drops to
+$z(\mathit{MILP}) = 28$, with projects $1, 2, 3, 5, 8$ of total cost $14$: the
+budget is tight. The relaxation $z(\mathit{LP}^+)$ is $29$.
+
+!!! tip "How much six implications cut"
+    The $2^{10} = 1024$ assignments drop to $234$ once all six implications are
+    imposed: less than a quarter. None of them, on its own, cuts more than half
+    the space.
+
+![How many assignments survive](img/cap02_implicazioni.png)
+
+```python
+from booleane import cnf, vincolo, IMP, AND, OR, NOT, V
+
+x = {p: V(f"x{p}") for p in range(1, 11)}
+implications = [IMP(x[2], x[3]), IMP(x[2], NOT(x[4])),
+                IMP(AND(x[1], x[6]), x[7]), IMP(OR(x[1], x[6]), x[8]),
+                IMP(AND(x[2], x[3]), NOT(x[9])), IMP(OR(x[2], x[3]), NOT(x[10]))]
+
+m = gp.Model("project_selection");  m.Params.OutputFlag = 0
+xv = m.addVars(range(1, 11), vtype=GRB.BINARY, name="x")
+m.setObjective(gp.quicksum(r[p] * xv[p] for p in range(1, 11)), GRB.MAXIMIZE)
+m.addConstr(gp.quicksum(b[p] * xv[p] for p in range(1, 11)) <= budget, name="budget")
+for i, formula in enumerate(implications, 1):          # one clause, one constraint
+    for j, clause in enumerate(cnf(formula), 1):
+        coef, sense, rhs = vincolo(clause)
+        lhs = gp.quicksum(k * xv[int(n[1:])] for n, k in coef.items())
+        m.addConstr(lhs <= rhs if sense == "<=" else lhs >= rhs, name=f"logic{i}_{j}")
+m.optimize()
 ```
 
-All three scan the jobs **in the given order**: changing the order changes the
-result, and this must be said when a value is reported. Ties are broken on the
-smallest index, so the run is reproducible.
+## What this chapter has put in your hands
 
-On a small assignment instance (a **minimisation**):
+A logical condition between yes/no decisions is always written the same way: one
+binary per elementary fact, the condition brought into conjunctive normal form —
+a conjunction of ORs — and every clause becomes a linear inequality. The AND
+costs nothing, because constraints are already in AND with each other; the OR
+becomes a sum $\ge 1$; the NOT becomes $1 - x$; the implication
+$x \Rightarrow y$ becomes $x \le y$; the "if and only if" asks for both
+inequalities.
 
-| Heuristic | $UB$ | $z(\mathit{MILP})$ | heuristic gap |
-|---|---:|---:|---:|
-| next-fit | 14 | 11 | $27.3\%$ |
-| first-fit | 14 | 11 | $27.3\%$ |
-| best-fit on cost | 11 | 11 | $0.0\%$ |
-
-The best-fit on cost finds the optimum; but no bound certifies it — that takes
-the solver, or a dual bound reaching $11$, and there the hand-built
-dual stops at $10$.
-
-## $P||C_{\max}$: the least loaded rule
-
-The second classic is **scheduling on identical machines**, written
-$P||C_{\max}$: $n$ jobs of duration $t_j$ over $k$ identical machines, minimising
-the instant the last one finishes. The natural rule is **list scheduling** — the
-current job goes to the least loaded machine — and the order in which the jobs
-are looked at decides the result. The best order is by decreasing duration, and
-the rule it gives is called **LPT**.
-
-```text
-LPT(n, k, t):
-  L[m] <- 0 for every m                       # current loads
-  for j in order of DECREASING t[j]:
-      m* <- argmin_m L[m]                     # ties: the smallest index
-      x[j][m*] <- 1;  L[m*] <- L[m*] + t[j]
-  return x, max_m L[m]
-```
-
-The decreasing order is essential: leaving the long jobs for last makes them
-impossible to place.
-
-!!! example "Seven jobs on three machines"
-    $t = (5, 5, 4, 4, 3, 3, 3)$, $k = 3$, total $27$.
-
-    - **Steps 1–3.** The jobs $5$, $5$, $4$ go to the three empty machines:
-      $L = (5, 5, 4)$.
-    - **Step 4.** Job $4$: the smallest load is machine 3, which goes to $8$.
-      $L = (5, 5, 8)$.
-    - **Steps 5–6.** The two jobs of length $3$ go to machines 1 and 2:
-      $L = (8, 8, 8)$.
-    - **Step 7.** The last job of length $3$ finds all loads equal to $8$; by
-      the tie rule it goes to machine 1, which reaches $11$.
-
-    LPT makespan: $\mathit{UB} = 11$, with loads $(11, 8, 8)$.
-
-    **The elementary bound.** The makespan is at least
-    $\max(\max_j t_j,\ \sum_j t_j / k) = \max(5, 9) = 9$. The optimum is exactly
-    $z(\mathit{MILP}) = 9$ — attained with $\{5,4\}$, $\{5,4\}$, $\{3,3,3\}$ —
-    and LPT is off by $22.2\%$.
-
-!!! tip "Two free bounds, to be compared"
-    $\max_j t_j$ and $\sum_j t_j / k$ are computable without solving anything,
-    and the better of the two is often already close to the optimum. An
-    "obvious" bound nobody writes down is a wasted bound: the dual of
-    [chapter 2](modelling-4.md) is for when the obvious ones are not enough, not
-    instead of them.
-
-## Set covering: the cheapest completion rule
-
-```text
-CoveringConstructive heuristic(c, S):
-  uncovered <- {1..m};   y[j] <- 0 for every j
-  while uncovered is not empty:
-      for every j not yet chosen: new(j) <- |{i in uncovered : j in S_i}|
-      if new(j) = 0 for every j: return "no solution found"
-      j* <- argmin_{j : new(j) > 0} c[j] / new(j)
-      y[j*] <- 1;   uncovered <- uncovered \ {i : j* in S_i}
-  return y
-```
-
-The criterion is the **cost per newly covered zone**, not the absolute cost.
-
-On the four teams of [chapter 2](modelling-4.md), $c = (4,3,5,3)$: step 1 ratios
-$4/3$, $1$, $5/3$, $1$ → element 2 (covers zones 1, 2, 5); step 2 ratios $2$,
-$5/2$, $3/2$ → element 4 (zones 4 and 6); step 3 ratios $4$ and $5$ → element 1.
-Solution $\{1,2,4\}$, cost $\mathit{UB} = 10$, which here is the optimum.
-
-## Knapsack: the best ratio rule
-
-The **knapsack** is the model the solver chapter opens with: the items have a
-value as well as a weight, and there is a single resource. The constructive rule
-looks at the ratio between the two, and what it produces is a feasible solution,
-hence a primal bound.
-
-```text
-KnapsackConstructive heuristic(p, w, C):
-  residual <- C;   y[j] <- 0 for every j
-  for j in order of DECREASING p[j]/w[j]:
-      if w[j] <= residual:  y[j] <- 1;  residual <- residual - w[j]
-  return y
-```
-
-On $p = (10,7,6,4)$, $w = (5,4,3,3)$, $C = 9$: ratios $2$, $7/4$, $2$, $4/3$;
-items 1 and 3 are taken (weight $8$), value $16$. Since the problem is a
-**maximisation**, $\mathit{LB} = 16 \le z(\mathit{MILP}) = 17$, gap $5.9\%$: the
-optimum takes items 1 and 2, filling the knapsack exactly. The constructive heuristic goes wrong
-because item 3 leaves an unusable residual.
-
-## TSP: the nearest neighbour
-
-The fourth classic is the **travelling salesman problem** (TSP): given $n$
-cities and the distances $d_{ij}$ between every pair, find the shortest tour that
-visits them all once and returns to the start. It is the problem where
-step-by-step construction shows best, because the solution *is* a sequence: the
-order is the solution.
-
-The classical constructive rule is the **nearest neighbour**: start from a city
-and each time go to the nearest among those not yet visited; when none are left,
-return to the start. It is feasible by construction and fast, because at each
-step it looks only at the distances from the current city.
-
-!!! example "Five cities, five starting points"
-    The distances, symmetric:
-
-    |  | 1 | 2 | 3 | 4 | 5 |
-    |---|---:|---:|---:|---:|---:|
-    | 1 | — | 5 | 2 | 2 | 9 |
-    | 2 | 5 | — | 4 | 3 | 4 |
-    | 3 | 2 | 4 | — | 4 | 7 |
-    | 4 | 2 | 3 | 4 | — | 7 |
-    | 5 | 9 | 4 | 7 | 7 | — |
-
-    Starting from city 1: the nearest is 3 (distance 2); from there 2 (4); then
-    4 (3); 5 is left (7); and the return to 1 costs 9. The tour
-    $1 \to 3 \to 2 \to 4 \to 5 \to 1$ has length 25.
-
-    The last arc is the one that is paid for: the rule chooses well while it has a
-    choice, and at the last step it has none. Changing the starting city changes
-    the tour:
-
-    | start | tour | length |
-    |---|---|---:|
-    | 1 | $1 \to 3 \to 2 \to 4 \to 5 \to 1$ | 25 |
-    | 2 | $2 \to 4 \to 1 \to 3 \to 5 \to 2$ | 18 |
-    | 3 | $3 \to 1 \to 4 \to 2 \to 5 \to 3$ | 18 |
-    | 4 | $4 \to 1 \to 3 \to 2 \to 5 \to 4$ | 19 |
-    | 5 | $5 \to 2 \to 4 \to 1 \to 3 \to 5$ | 18 |
-
-    With five cities the distinct tours are $(5-1)!/2 = 12$ and they can all be
-    enumerated: the optimum is $1 \to 3 \to 5 \to 2 \to 4 \to 1$, of length 18.
-    Three starting points out of five find it, one stops at 19 and the one we
-    started from at 25, that is 38.9 % above the optimum.
-
-    Two things to take away. The heuristic gives *one* feasible solution, hence an
-    upper bound — here $z(\mathit{MILP}) \le 25$ — and nothing else; that 18 is
-    the optimum is known by enumeration. And running the same rule from every
-    start, keeping the best tour, costs $n$ times as much and gives a better
-    bound: it is the simplest form of *multi-start*, and it is still a bound from
-    one side only.
-
-## Lot sizing: least unit cost period covering
-
-```text
-LeastUnitCost(d, f, h):
-  t <- 1
-  while t <= T:
-      skip the periods with d[t] = 0
-      for k = 1..T-t+1:
-          Q_k <- sum of d[t..t+k-1]
-          c_k <- (f + h * sum of (s-t)*d[s] for s = t..t+k-1) / Q_k
-      k* <- argmin_k c_k                      # the lowest average cost per unit
-      produce Q_{k*} in period t;   t <- t + k*
-```
-
-!!! danger "This is not the Wagner–Whitin procedure"
-    Wagner–Whitin is an **exact** dynamic-programming algorithm for the
-    *uncapacitated* lot-sizing model: it solves that model to optimality in
-    polynomial time. The procedure above is a heuristic, and its value is only a
-    bound. Calling it "the Wagner–Whitin constructive heuristic" confuses two different things.
-
-On $d = (20, 10, 30, 40, 10)$, setup $f = 50$, holding $h = 1$: from period 1 it
-pays to cover 2 periods (unit cost $2$); from period 3 another 2 (unit cost
-$\approx 1.286$); from period 5 only that one (unit cost $5$). Cost
-$\mathit{UB} = 200$ against $z(\mathit{MILP}) = 170$, gap $17.6\%$ — which is
-also the value Wagner–Whitin would give, being exact on this model.
-
-## Local search, and what it does not give
-
-A **local search** starts from a feasible solution and tries elementary moves,
-accepting those that improve; it stops at a **local optimum**.
-
-On the LPT solution ($L = (11, 8, 8)$, makespan $11$), the move "move one job to
-another machine" improves nothing: moving one of the two jobs of length $3$ off
-machine 1 brings its load to $8$ but raises the receiving machine to $11$. The
-local search stops at $11$, while the optimum is $9$: to get there a **swap**
-between two machines is needed.
-
-!!! warning "A local optimum is not a better bound"
-    Local search returns a feasible solution, hence a bound on the pessimistic
-    side, and nothing else. The fact that it stopped does not mean it has
-    arrived.
-
-## When the constructive heuristic fails
-
-!!! danger "«No solution found» is not «no solution exists»"
-    Three jobs of duration $(3, 3, 2)$ on two machines with availability
-    $(5, 3)$. Next-fit: job 1 goes to machine 1 (residual $2$); job 2 does not
-    fit and moves to machine 2 (residual $0$); job 3 does not fit and there are
-    no more machines: **failure**. But the problem is feasible: jobs 2 and 3 fit
-    together on machine 1 ($3 + 2 = 5$) and job 1 on machine 2 ($3 \le 3$).
-
-    A constructive heuristic is *myopic*: it decides one thing at a time and
-    never backtracks. Its failure is information about the heuristic, not about
-    the problem. To prove a model infeasible one needs the solver
-    (`Status = INFEASIBLE`) or a proof.
-
-## The overview of the heuristics
-
-| Heuristic | Direction | value | $z(\mathit{MILP})$ | heuristic gap |
-|---|---|---:|---:|---:|
-| next-fit / first-fit (assignment) | min ($UB$) | 14 | 11 | $27.3\%$ |
-| best-fit on cost (assignment) | min ($UB$) | 11 | 11 | $0.0\%$ |
-| LPT (makespan) | min ($UB$) | 11 | 9 | $22.2\%$ |
-| covering constructive heuristic | min ($UB$) | 10 | 10 | $0.0\%$ |
-| ratio constructive heuristic (knapsack) | max ($LB$) | 16 | 17 | $5.9\%$ |
-| least unit cost (lot sizing) | min ($UB$) | 200 | 170 | $17.6\%$ |
-
-![The heuristic gaps](img/cap05_gap.png)
-
-!!! tip "What this table teaches"
-    Two heuristics find the optimum and four do not, and **before** solving the
-    MILP there is no way of knowing which. A $0\%$ gap and a $27\%$ gap are told
-    apart only *afterwards*. This is why the course always asks for two bounds:
-    a heuristic on its own says how much a solution one can actually implement
-    costs, not how much is being lost.
+Three shapes recur often enough to have a name: the **set covering**
+($\sum_{j \in S} x_j \ge 1$, at least one), the **set packing** ($\le 1$, at most
+one) and the **set partitioning** ($= 1$, exactly one). Recognising them in a
+statement is half of the modelling work.
 
 ## Code
 
-The heuristics live in
-[`python/euristiche.py`](https://github.com/fabiofurini/mip-modelling/blob/main/python/euristiche.py),
-the examples in
-[`python/cap05_heuristics.py`](https://github.com/fabiofurini/mip-modelling/blob/main/python/cap05_heuristics.py);
-the notebook is
-[`notebooks/cap05_heuristics.ipynb`](https://github.com/fabiofurini/mip-modelling/blob/main/notebooks/cap05_heuristics.ipynb).
+The complete script is
+[`python/cap02_logic.py`](https://github.com/fabiofurini/mip-modelling/blob/main/python/cap02_logic.py),
+which uses the module
+[`python/booleane.py`](https://github.com/fabiofurini/mip-modelling/blob/main/python/booleane.py).
+The notebook is
+[`notebooks/cap02_logic.ipynb`](https://github.com/fabiofurini/mip-modelling/blob/main/notebooks/cap02_logic.ipynb).
 
 <!-- embedded-script: begin (regenerated by python/embed_code.py) -->
 
-??? example "Show the complete script — `python/cap05_heuristics.py` (240 lines)"
+??? example "Show the complete script — `python/cap02_logic.py` (218 lines)"
 
     ```python
-    """Chapter 4 -- Constructive heuristics on the classical problems, with trace and bound.
+    """Chapter 5 -- Logic and binary variables: from CNF to linear constraints.
 
-    Every heuristic of the course on a minimal instance: the step-by-step trace (the
-    same text that ends up in the notes), the feasibility check of the solution
-    produced --- constraints, bounds *and* integrality --- and the comparison with
-    the optimum of the corresponding MILP. It ends with a local-search step and with
-    the case where the constructive heuristic fails although the problem is feasible.
+    Turns the implications of the chapter's five exercises into conjunctive normal
+    form and then into linear constraints, and *proves by enumeration* that the
+    translation is exact: for every binary assignment, the formula is true if and
+    only if the linear system is satisfied. It ends with a project-selection model
+    that uses those constraints.
     """
     import gurobipy as gp
     import pandas as pd
     from gurobipy import GRB
 
-    from euristiche import (vicino_piu_vicino, best_fit, first_fit, euristica_copertura, euristica_lotti, euristica_zaino,
-                            lpt, matrice, next_fit)
-    from mip import (ammissibile, frazione, nuovo_modello, rilassamento, risolvi,
-                     stampa_soluzione, valuta, viola_interezza)
-    from stile import (ARANCIO, BLU, CICLO, GRIGIO, ROSSO, TEAL, VERDE, intestazione,
-                       plt, salva_dati, salva_figura)
+    from booleane import (AND, IMP, NOT, OR, V, cnf, equivalenti, scrivi, testo_cnf,
+                          valuta, variabili, verifica, vincolo)
+    from mip import ammissibile, frazione, nuovo_modello, rilassamento, risolvi, stampa_soluzione
+    from stile import BLU, CICLO, ROSSO, TEAL, VERDE, intestazione, plt, salva_dati, salva_figura
 
     R = range
-    CONFRONTO = []
+    x = {p: V(f"x{p}") for p in R(1, 11)}
+
+    # ---------- 1. THE PROPERTIES OF BOOLEAN ALGEBRA ----------
+    intestazione("1. De Morgan, distributivity, absorption: checked by enumeration")
+    a, b, c = V("xa"), V("xb"), V("xc")
+    PROPRIETA = [
+        ("distributivity (C)", AND(a, OR(b, c)), OR(AND(a, b), AND(a, c))),
+        ("distributivity (D)", OR(a, AND(b, c)), AND(OR(a, b), OR(a, c))),
+        ("De Morgan (A)", NOT(OR(a, b)), AND(NOT(a), NOT(b))),
+        ("De Morgan (B)", NOT(AND(a, b)), OR(NOT(a), NOT(b))),
+        ("absorption (E)", OR(a, AND(a, b)), a),
+        ("absorption (F)", AND(a, OR(a, b)), a),
+        ("double negation", NOT(NOT(a)), a),
+    ]
+    for nome, sinistra, destra in PROPRIETA:
+        assert equivalenti(sinistra, destra), nome
+        print(f"  {nome:22s} checked on all {2 ** len(variabili(sinistra) | variabili(destra))} assignments")
+
+    # ---------- 2. THE VALID SPLITS AND THE INVALID ONE ----------
+    intestazione("2. Splitting an implication: when it is allowed and when it is not")
+    scissioni = [
+        ("disjunctive antecedent", IMP(OR(a, b), c), AND(IMP(a, c), IMP(b, c)), True),
+        ("conjunctive consequent", IMP(a, AND(b, c)), AND(IMP(a, b), IMP(a, c)), True),
+        ("conjunctive antecedent", IMP(AND(a, b), c), AND(IMP(a, c), IMP(b, c)), False),
+    ]
+    for nome, sinistra, destra, attesa in scissioni:
+        ok = equivalenti(sinistra, destra)
+        assert ok == attesa, nome
+        print(f"  {nome:24s} split {'valid' if ok else 'NOT valid'}")
+    contro = {"xa": 1, "xb": 0, "xc": 0}
+    assert valuta(IMP(AND(a, b), c), contro) and not valuta(AND(IMP(a, c), IMP(b, c)), contro)
+    print("  counterexample to the third: xa = 1, xb = 0, xc = 0 makes the original")
+    print("  implication true (false antecedent) but the conjunction of the splits false.")
+
+    # ---------- 3. THE FIVE EXERCISES: CNF AND LINEAR CONSTRAINTS ----------
+    intestazione("3. Exercises 2.1-2.5: conjunctive normal form and linear constraints")
+    ESERCIZI = {
+        "2.1": [("if 2 is chosen, then 3 is chosen", IMP(x[2], x[3])),
+                ("if 2 is chosen, then 4 is not chosen", IMP(x[2], NOT(x[4]))),
+                ("if 1 and 6 are chosen, then 7 is chosen", IMP(AND(x[1], x[6]), x[7])),
+                ("if 1 or 6 is chosen, then 8 is chosen", IMP(OR(x[1], x[6]), x[8])),
+                ("if 2 and 3 are chosen, then 9 is not chosen", IMP(AND(x[2], x[3]), NOT(x[9]))),
+                ("if 2 or 3 is chosen, then 10 is not chosen", IMP(OR(x[2], x[3]), NOT(x[10])))],
+        "2.2": [("if 3 is not chosen, then 2 is chosen", IMP(NOT(x[3]), x[2])),
+                ("if 4 is not chosen, then 2 is not chosen", IMP(NOT(x[4]), NOT(x[2]))),
+                ("if 7 is chosen, then 1 and 6 are chosen", IMP(x[7], AND(x[1], x[6]))),
+                ("if 8 is chosen, then 1 or 6 is chosen", IMP(x[8], OR(x[1], x[6]))),
+                ("if 9 is not chosen, then 2 and 3 are chosen", IMP(NOT(x[9]), AND(x[2], x[3]))),
+                ("if 10 is not chosen, then 2 or 3 is chosen", IMP(NOT(x[10]), OR(x[2], x[3])))],
+        "2.3": [("if 7 or 3 is chosen, then 1 and 2 are chosen", IMP(OR(x[7], x[3]), AND(x[1], x[2]))),
+                ("if 1, 6 and 7 are chosen, then 8 is chosen", IMP(AND(x[1], x[6], x[7]), x[8])),
+                ("if 5 and 2 are chosen and 4 is not, then 3 is not chosen",
+                 IMP(AND(x[5], x[2], NOT(x[4])), NOT(x[3]))),
+                ("if 6 and (1 or 4) are chosen, then 2 and (5 or 7) are chosen",
+                 IMP(AND(OR(x[1], x[4]), x[6]), AND(x[2], OR(x[5], x[7])))),
+                ("if (2 or 5) is chosen and 8 is not, then 3 is chosen or 6 is not",
+                 IMP(AND(OR(x[2], x[5]), NOT(x[8])), OR(x[3], NOT(x[6])))),
+                ("if (1 or 4) and (2 or 5) and not 8, then 3 and (not 6 or 7)",
+                 IMP(AND(OR(x[1], x[4]), OR(x[2], x[5]), NOT(x[8])),
+                     AND(x[3], OR(NOT(x[6]), x[7]))))],
+        "2.4": [("if 4 is chosen, at least two of 1, 2, 3",
+                 IMP(x[4], OR(AND(x[1], x[2]), AND(x[1], x[3]), AND(x[2], x[3])))),
+                ("if at least two of 6, 7, 8, then 5",
+                 IMP(OR(AND(x[6], x[7]), AND(x[6], x[8]), AND(x[7], x[8])), x[5])),
+                ("if 4 is not chosen, at least two of 1, 2, 3, 9",
+                 IMP(NOT(x[4]), OR(AND(x[1], x[2]), AND(x[1], x[3]), AND(x[1], x[9]),
+                                   AND(x[2], x[3]), AND(x[2], x[9]), AND(x[3], x[9])))),
+                ("if 8 is chosen, then (1 and 6) or (1 and 7) or (2 and 6)",
+                 IMP(x[8], OR(AND(x[1], x[6]), AND(x[1], x[7]), AND(x[2], x[6])))),
+                ("if at least two of 1, 3, 5, then 9 is not chosen",
+                 IMP(OR(AND(x[1], x[3]), AND(x[1], x[5]), AND(x[3], x[5])), NOT(x[9]))),
+                ("if (1 and 2) or (3 and 4), then 5",
+                 IMP(OR(AND(x[1], x[2]), AND(x[3], x[4])), x[5]))],
+        "2.5": [("if 1 or 2 is chosen, then 3 is chosen", IMP(OR(x[1], x[2]), x[3])),
+                ("if 4 is chosen, then 5 and 6 are chosen", IMP(x[4], AND(x[5], x[6]))),
+                ("if 1 or 2 is chosen, then 3 and 4 are chosen",
+                 IMP(OR(x[1], x[2]), AND(x[3], x[4]))),
+                ("if 1 and 2 are chosen, then 3 is chosen", IMP(AND(x[1], x[2]), x[3])),
+                ("if 5 or 6 is chosen, then 7 is not chosen", IMP(OR(x[5], x[6]), NOT(x[7]))),
+                ("if 8 is not chosen or 9 is not chosen, then 10 is chosen",
+                 IMP(OR(NOT(x[8]), NOT(x[9])), x[10]))],
+    }
+    righe = []
+    for es, voci in ESERCIZI.items():
+        print(f"\nExercise {es}")
+        for i, (testo, formula) in enumerate(voci, 1):
+            clausole = cnf(formula)
+            vincoli = [vincolo(c) for c in clausole]
+            totali, vere = verifica(formula, vincoli)
+            print(f"  {es}.{i}  {testo}")
+            print(f"        CNF ({len(clausole)} clauses) -> "
+                  + " ;  ".join(scrivi(v, mat=False) for v in vincoli))
+            print(f"        equivalence checked on {totali} assignments "
+                  f"({vere} make the formula true)")
+            righe.append({"exercise": es, "item": i, "description": testo,
+                          "clauses": len(clausole),
+                          "constraints": " ; ".join(scrivi(v, mat=False) for v in vincoli),
+                          "assignments": totali, "true": vere})
+    salva_dati(pd.DataFrame(righe), "cap02_implicazioni")
+
+    # ---------- 4. CLAUSES OR COUNTING: TWO FORMULATIONS OF THE SAME SET ----------
+    intestazione("4. 'At least two of 1, 2, 3 if 4 is chosen': clauses versus counting")
 
 
-    def confronta(nome, senso, valore_eur, zmilp, note=""):
-        gap = abs(valore_eur - zmilp) / abs(zmilp) if abs(zmilp) > 1e-9 else 0.0
-        ruolo = "ub" if senso == "min" else "lb"
-        print(f"  {nome:34s} heuristic = {frazione(valore_eur):>6} ({ruolo})   "
-              f"z(MILP) = {frazione(zmilp):>6}   gap = {100 * gap:.1f}%  {note}")
-        CONFRONTO.append({"heuristic": nome, "sense": senso, "heuristic_value": valore_eur,
-                          "role": ruolo, "z_milp": zmilp, "gap": gap})
+    def confronta(clausole=True):
+        """max x1+x2+x3+3 x4 with the implication x4 => at least two of 1,2,3."""
+        m = nuovo_modello("at_least_two")
+        v = m.addVars(R(1, 5), vtype=GRB.BINARY, name="x")
+        m.setObjective(v[1] + v[2] + v[3] + 3 * v[4], GRB.MAXIMIZE)
+        m.addConstr(v[1] + v[2] + v[3] + 2 * v[4] <= 3, name="budget")
+        if clausole:                       # three clauses: x_i + x_j >= x4 for every pair
+            for i, j in [(1, 2), (1, 3), (2, 3)]:
+                m.addConstr(v[i] + v[j] - v[4] >= 0, name=f"pair{i}{j}")
+        else:                              # counted form: x1 + x2 + x3 >= 2 x4
+            m.addConstr(v[1] + v[2] + v[3] - 2 * v[4] >= 0, name="counting")
+        return m, v
 
 
-    # ---------- 1. BIN PACKING: NEXT-FIT, FIRST-FIT, BEST-FIT ----------
-    intestazione("5.1  The three bin-packing heuristics on jobs and machines")
-    t51 = [[2, 1, 3], [3, 4, 2], [4, 5, 3]]
-    c51 = [[5, 10, 2], [5, 4, 6], [5, 4, 6]]
-    a51 = [5, 6, 7]
+    for nome, cl in [("three clauses", True), ("one counted constraint", False)]:
+        m, v = confronta(cl)
+        z = risolvi(m)
+        zr, sol, _ = rilassamento(m, rafforzato=True)
+        print(f"  {nome:24s} z(MILP) = {frazione(z)}   z(LP+) = {frazione(zr)}   "
+              + "  ".join(f"x{p}={frazione(sol[f'x[{p}]'])}" for p in R(1, 5)))
+    from itertools import product as _p
+    for valori in _p((0, 1), repeat=4):
+        a4 = dict(zip(R(1, 5), valori))
+        cl3 = all(a4[i] + a4[j] - a4[4] >= 0 for i, j in [(1, 2), (1, 3), (2, 3)])
+        cnt = a4[1] + a4[2] + a4[3] - 2 * a4[4] >= 0
+        assert cl3 == cnt, a4
+    print("  The two formulations have the same 16 binary solutions (checked by")
+    print("  enumeration) but different relaxations: the counted constraint is stronger.")
+
+    # ---------- 5. A SELECTION MODEL WITH THE LOGICAL CONSTRAINTS ----------
+    intestazione("5. Project selection subject to the implications of exercise 2.1")
+    r = {1: 9, 2: 7, 3: 4, 4: 8, 5: 3, 6: 6, 7: 2, 8: 5, 9: 7, 10: 6}   # revenues
+    b = {1: 4, 2: 3, 3: 2, 4: 4, 5: 2, 6: 3, 7: 1, 8: 3, 9: 4, 10: 3}   # costs
+    budget = 14
+    salva_dati(pd.DataFrame({"project": list(r), "revenue": list(r.values()),
+                             "cost": list(b.values())}), "cap02_progetti")
 
 
-    def modello_assegnamento(t, c, a):
-        n, k = len(t), len(a)
-        m = nuovo_modello("assignment")
-        x = m.addVars(n, k, vtype=GRB.BINARY, name="x")
-        m.setObjective(gp.quicksum(c[j][mm] * x[j, mm] for j in R(n) for mm in R(k)), GRB.MINIMIZE)
-        m.addConstrs((x.sum(j, "*") == 1 for j in R(n)), name="assign")
-        m.addConstrs((gp.quicksum(t[j][mm] * x[j, mm] for j in R(n)) <= a[mm] for mm in R(k)),
-                     name="availability")
-        return m, x
+    def modello_selezione(con_logica=True):
+        m = nuovo_modello("project_selection")
+        xv = m.addVars(R(1, 11), vtype=GRB.BINARY, name="x")
+        m.setObjective(gp.quicksum(r[p] * xv[p] for p in R(1, 11)), GRB.MAXIMIZE)
+        m.addConstr(gp.quicksum(b[p] * xv[p] for p in R(1, 11)) <= budget, name="budget")
+        if con_logica:
+            for i, (_, formula) in enumerate(ESERCIZI["2.1"], 1):
+                for j, cl in enumerate(cnf(formula), 1):
+                    coef, verso, rhs = vincolo(cl)
+                    lhs = gp.quicksum(k * xv[int(n[1:])] for n, k in coef.items())
+                    m.addConstr(lhs <= rhs if verso == "<=" else lhs >= rhs, name=f"logic{i}_{j}")
+        return m, xv
 
 
-    m51, x51 = modello_assegnamento(t51, c51, a51)
-    z51 = risolvi(m51)
-    for nome, e in [("next-fit", next_fit(t51, a51)),
-                    ("first-fit", first_fit(t51, a51)),
-                    ("best-fit (minimum cost)", best_fit(t51, a51, lambda j, mm, ra: c51[j][mm], "cost"))]:
-        valore = sum(c51[j][mm] for (j, mm) in e.x)
-        sol = {f"x[{j},{mm}]": 1 for (j, mm) in e.x}
-        assert ammissibile(m51, sol), nome           # constraints, bounds AND integrality
-        confronta(f"5.1 {nome}", "min", valore, z51)
-    print("  Trace of the best-fit (the text that appears in the notes):")
-    best_fit(t51, a51, lambda j, mm, ra: c51[j][mm], "cost").traccia.stampa()
+    m_libero, _ = modello_selezione(con_logica=False)
+    z_libero = risolvi(m_libero)
+    m_log, x_log = modello_selezione(con_logica=True)
+    z_log = risolvi(m_log)
+    zlp_log, _, _ = rilassamento(m_log, rafforzato=True)
+    scelti = sorted(p for p in R(1, 11) if x_log[p].X > 0.5)
+    print(f"Without the logical constraints:  z = {frazione(z_libero)}")
+    print(f"With the logical constraints:     z = {frazione(z_log)}   projects chosen: {scelti}")
+    print(f"                                  cost {sum(b[p] for p in scelti)} out of a budget of {budget}")
+    print(f"LP+ relaxation of the model with the logical constraints: {frazione(zlp_log)}")
+    for _, formula in ESERCIZI["2.1"]:
+        assert valuta(formula, {f"x{p}": int(p in scelti) for p in R(1, 11)})
+    print("All six implications are satisfied by the optimal solution.")
+    salva_dati(pd.DataFrame([{"model": "without logical constraints", "z": z_libero, "z_lp": None},
+                             {"model": "with logical constraints", "z": z_log, "z_lp": zlp_log}]),
+               "cap02_selezione")
 
-    # ---------- 2. LPT: BALANCING OVER IDENTICAL MACHINES ----------
-    intestazione("5.2  LPT: the makespan on identical machines")
-    t52 = [5, 5, 4, 4, 3, 3, 3]
-    k52 = 3
-    e52 = lpt(t52, k52)
-    e52.traccia.stampa()
-    m52 = nuovo_modello("makespan")
-    x52 = m52.addVars(len(t52), k52, vtype=GRB.BINARY, name="x")
-    T52 = m52.addVar(name="T")
-    m52.setObjective(T52, GRB.MINIMIZE)
-    m52.addConstrs((x52.sum(j, "*") == 1 for j in R(len(t52))), name="assign")
-    m52.addConstrs((T52 >= gp.quicksum(t52[j] * x52[j, mm] for j in R(len(t52))) for mm in R(k52)),
-                   name="max")
-    z52 = risolvi(m52)
-    sol52 = {f"x[{j},{mm}]": 1 for (j, mm) in e52.x} | {"T": e52.makespan}
-    assert ammissibile(m52, sol52)
-    confronta("5.2 LPT (makespan)", "min", e52.makespan, z52,
-              f"loads {[int(c) for c in e52.carichi]}, total {sum(t52)}")
-    print(f"  Elementary bound: the makespan is at least max(max_j t_j, total/k) = "
-          f"max({max(t52)}, {frazione(sum(t52) / k52)}) = {frazione(max(max(t52), sum(t52) / k52))}")
-
-    # ---------- 3. COVERING GREEDY ----------
-    intestazione("5.3  Constructive covering heuristic")
-    c53 = [4, 3, 5, 3]
-    S53 = [[0, 1], [1, 2], [0, 2], [0, 3], [1, 3], [2, 3]]
-    e53 = euristica_copertura(c53, S53)
-    e53.traccia.stampa()
-    m53 = nuovo_modello("covering")
-    x53 = m53.addVars(len(c53), vtype=GRB.BINARY, name="x")
-    m53.setObjective(gp.quicksum(c53[j] * x53[j] for j in R(len(c53))), GRB.MINIMIZE)
-    m53.addConstrs((gp.quicksum(x53[j] for j in S53[i]) >= 1 for i in R(len(S53))), name="cover")
-    z53 = risolvi(m53)
-    assert ammissibile(m53, {f"x[{j}]": e53.y[j] for j in R(len(c53))})
-    confronta("5.3 covering constructive heuristic", "min", e53.valore, z53,
-              f"chosen {[j + 1 for j in R(len(c53)) if e53.y[j]]}")
-
-    # ---------- 4. KNAPSACK GREEDY: A LOWER BOUND ----------
-    intestazione("5.4  Knapsack constructive heuristic: in a maximisation the heuristic gives a lower bound")
-    p54, w54, C54 = [10, 7, 6, 4], [5, 4, 3, 3], 9
-    e54 = euristica_zaino(p54, w54, C54)
-    e54.traccia.stampa()
-    m54 = nuovo_modello("knapsack")
-    x54 = m54.addVars(4, vtype=GRB.BINARY, name="x")
-    m54.setObjective(gp.quicksum(p54[j] * x54[j] for j in R(4)), GRB.MAXIMIZE)
-    m54.addConstr(gp.quicksum(w54[j] * x54[j] for j in R(4)) <= C54, name="capacity")
-    z54 = risolvi(m54)
-    assert ammissibile(m54, {f"x[{j}]": e54.y[j] for j in R(4)})
-    confronta("5.4 constructive heuristic by ratio p/w", "max", e54.valore, z54,
-              f"taken {[j + 1 for j in R(4) if e54.y[j]]}, residual {e54.residuo:g}")
-
-    # ---------- 5. NEAREST NEIGHBOUR FOR THE TSP ----------
-    intestazione("5.5  Nearest neighbour for the TSP: the tour depends on the starting node")
-    # five cities, symmetric distances satisfying the triangle inequality
-    D55 = [[0, 5, 2, 2, 9],
-           [5, 0, 4, 3, 4],
-           [2, 4, 0, 4, 7],
-           [2, 3, 4, 0, 7],
-           [9, 4, 7, 7, 0]]
-    n55 = len(D55)
-    e55t = vicino_piu_vicino(D55, partenza=0)
-    e55t.traccia.stampa()
-    print(f"  Tour from node 1: {' -> '.join(str(v + 1) for v in e55t.tour)}, length {e55t.valore:g}")
-    tour_da = {}
-    for s in R(n55):
-        e = vicino_piu_vicino(D55, partenza=s)
-        tour_da[s] = (e.tour, e.valore)
-        if s:
-            print(f"  Tour from node {s + 1}: {' -> '.join(str(v + 1) for v in e.tour)}, "
-                  f"length {e.valore:g}")
-    from itertools import permutations
-    ottimo, tour_ottimo = None, None
-    for perm in permutations(R(1, n55)):
-        if perm[0] > perm[-1]:
-            continue
-        giro = (0,) + perm + (0,)
-        lung = sum(D55[giro[i]][giro[i + 1]] for i in R(n55))
-        if ottimo is None or lung < ottimo:
-            ottimo, tour_ottimo = lung, giro
-    print(f"  Optimum by enumeration: {' -> '.join(str(v + 1) for v in tour_ottimo)}, "
-          f"length {ottimo:g}")
-    salva_dati(pd.DataFrame({"start": [s + 1 for s in R(n55)],
-                             "tour": [" - ".join(str(v + 1) for v in tour_da[s][0]) for s in R(n55)],
-                             "length": [tour_da[s][1] for s in R(n55)]}),
-               "cap05_tsp")
-    confronta("5.5 nearest neighbour (TSP)", "min", e55t.valore, ottimo,
-              f"tour {' - '.join(str(v + 1) for v in e55t.tour)}")
-
-    # ---------- 5. LOT SIZING GREEDY ----------
-    intestazione("5.6  Lot sizing: least unit cost period covering")
-    d55 = [20, 10, 30, 40, 10]
-    setup55, hold55 = 50, 1
-    e55 = euristica_lotti(d55, setup55, hold55)
-    e55.traccia.stampa()
-    T55 = len(d55)
-    m55 = nuovo_modello("lot_sizing")
-    q55 = m55.addVars(T55, name="q")
-    I55 = m55.addVars(T55, name="I")
-    y55 = m55.addVars(T55, vtype=GRB.BINARY, name="y")
-    Mtot = sum(d55)
-    m55.setObjective(gp.quicksum(setup55 * y55[t] + hold55 * I55[t] for t in R(T55)), GRB.MINIMIZE)
-    for t in R(T55):
-        m55.addConstr((I55[t - 1] if t else 0) + q55[t] - I55[t] == d55[t], name=f"bilancio{t}")
-        m55.addConstr(q55[t] <= Mtot * y55[t], name=f"link{t}")
-    z55 = risolvi(m55)
-    sol55 = {}
-    for t in R(T55):
-        sol55[f"q[{t}]"] = e55.lanci.get(t, 0)
-        sol55[f"y[{t}]"] = 1 if t in e55.lanci else 0
-    scorta = 0
-    for t in R(T55):
-        scorta += sol55[f"q[{t}]"] - d55[t]
-        sol55[f"I[{t}]"] = scorta
-    assert ammissibile(m55, sol55)
-    confronta("5.5 lot sizing (least unit cost)", "min", e55.valore, z55,
-              f"runs in periods {[t + 1 for t in sorted(e55.lanci)]}")
-    print("  Wagner-Whitin solves this very model *to optimality* by dynamic programming:")
-    print(f"  its value is {frazione(z55)}, not the heuristic one.")
-
-    # ---------- 6. A LOCAL SEARCH STEP ----------
-    intestazione("5.7  A local-search step on the LPT solution")
-    carichi = list(e52.carichi)
-    assegn = {j: mm for (j, mm) in e52.x}
-    migliorato = True
-    passi = 0
-    while migliorato:
-        migliorato = False
-        for j, mm in list(assegn.items()):
-            for nuovo in R(k52):
-                if nuovo == mm:
-                    continue
-                prova = list(carichi)
-                prova[mm] -= t52[j]
-                prova[nuovo] += t52[j]
-                if max(prova) < max(carichi) - 1e-9:
-                    print(f"  Moving job {j + 1} from machine {mm + 1} to {nuovo + 1}: "
-                          f"makespan {max(carichi):g} -> {max(prova):g}")
-                    carichi, assegn[j], migliorato, passi = prova, nuovo, True, passi + 1
-                    break
-            if migliorato:
-                break
-    if passi == 0:
-        print(f"  No single move improves the makespan {max(carichi):g}: the LPT solution")
-        print(f"  is a local optimum for this move. The global optimum is {frazione(z52)}.")
-    print("  A local optimum is not a global optimum, and local search produces no bound")
-    print("  better than that of the solution it returns.")
-
-    # ---------- 7. WHEN THE GREEDY FAILS ----------
-    intestazione("5.8  A failure of the constructive heuristic does not prove infeasibility")
-    t57 = matrice([3, 3, 2], 2)
-    a57 = [5, 3]
-    e57 = next_fit(t57, a57)
-    e57.traccia.stampa()
-    print(f"  next-fit: ok = {e57.ok}")
-    m57, x57 = modello_assegnamento(t57, [[1, 1], [1, 1], [1, 1]], a57)
-    z57 = risolvi(m57)
-    print(f"  The MILP, however, is feasible, with optimum {frazione(z57)}: solution "
-          + ", ".join(f"x[{j+1}][{mm+1}]" for j in R(3) for mm in R(2) if x57[j, mm].X > 0.5))
-    print("  The constructive heuristic fails because it is myopic, not because the problem has no")
-    print("  solution: 'no solution found' is not 'no solution exists'.")
-    assert not e57.ok
-
-    # ---------- 8. THE OVERVIEW ----------
-    intestazione("5.9  The overview")
-    tab = pd.DataFrame(CONFRONTO)
-    salva_dati(tab, "cap05_euristiche")
-    fig, ax = plt.subplots(figsize=(7.6, 3.6))
-    etichette = [r["heuristic"].split(" ", 1)[1][:22] for r in CONFRONTO]
-    gap = [100 * r["gap"] for r in CONFRONTO]
-    colori = [TEAL if r["sense"] == "min" else ARANCIO for r in CONFRONTO]
-    ax.barh(etichette, gap, color=colori)
-    for i, g in enumerate(gap):
-        ax.annotate(f"{g:.1f}%", (g, i), textcoords="offset points", xytext=(4, -3), fontsize=9)
-    ax.set_xlabel("heuristic gap with respect to the MILP optimum (%)")
-    ax.set_title("How good each constructive heuristic is")
-    ax.invert_yaxis()
-    ax.set_xlim(0, max(gap) * 1.25 + 1)
-    salva_figura(fig, "cap05_gap")
+    # ---------- 6. FIGURE: HOW MANY ASSIGNMENTS SURVIVE EACH IMPLICATION ----------
+    sopravvivono = []
+    etichette = []
+    for i, (testo, formula) in enumerate(ESERCIZI["2.1"], 1):
+        totali, vere = verifica(formula, nomi=[f"x{p}" for p in R(1, 11)])
+        sopravvivono.append(vere)
+        etichette.append(f"2.1.{i}")
+    tutte = [dict(zip([f"x{p}" for p in R(1, 11)], v)) for v in _p((0, 1), repeat=10)]
+    cumulate = []
+    vive = tutte
+    for testo, formula in ESERCIZI["2.1"]:
+        vive = [ass for ass in vive if valuta(formula, ass)]
+        cumulate.append(len(vive))
+    print(f"Assignments of the 10 binaries: {len(tutte)}; after the six implications: {cumulate[-1]}")
+    fig, ax = plt.subplots(figsize=(7.2, 3.6))
+    ax.bar(etichette, sopravvivono, color=TEAL, label="single implication")
+    ax.plot(etichette, cumulate, "o-", color=ROSSO, label="all implications imposed together")
+    ax.axhline(len(tutte), color=BLU, lw=1, ls="--")
+    ax.annotate(f"$2^{{10}} = {len(tutte)}$ assignments", (0, len(tutte)),
+                textcoords="offset points", xytext=(4, -14), fontsize=9, color=BLU)
+    ax.set_ylabel("feasible assignments")
+    ax.set_title("Exercise 2.1: how many of the $2^{10}$ assignments survive")
+    ax.legend(loc="lower left", fontsize=9)
+    salva_figura(fig, "cap02_implicazioni")
+    salva_dati(pd.DataFrame({"implication": etichette, "single": sopravvivono,
+                             "cumulative": cumulate}), "cap02_ammissibili")
     print("Done.")
     ```
 

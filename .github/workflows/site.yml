@@ -16,7 +16,7 @@ jobs:
           python-version: "3.12"
       # reproducible numerical check: the licence bundled with gurobipy (2000
       # variables and 2000 constraints) is enough for every instance of the course
-      - run: pip install gurobipy pandas matplotlib mkdocs-material
+      - run: pip install gurobipy pandas matplotlib mkdocs-material mkdocs-redirects
       - run: python3 python/run_all.py
       - run: python3 python/check_numbers.py
       # the CSVs regenerate identically; the PNGs do not (they depend on the
