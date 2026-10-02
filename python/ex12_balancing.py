@@ -1,9 +1,9 @@
-"""EX 11 -- Balancing between two workers (family 7, pointer to family 11).
+"""EX 12 -- Balancing between two workers (family 7, pointer to family 11).
 
 Four indivisible jobs of duration 2, 3, 6, 7 and two workers: the workloads must
 be as balanced as possible.
 
-Two warnings the archive draft conflated:
+Two warnings that are easy to conflate:
 1. "balanced workloads" can be written as a min-max or as the minimisation of
    the difference: the optimal solutions are the same (the total is constant) but
    the *values* of the objective are not. Both are reported here.
@@ -24,11 +24,11 @@ from esteso import salva_modello
 R = range
 
 # ---------- 1. MODEL AND INSTANCE ----------
-intestazione("EX 11. Balancing: four indivisible jobs on two workers")
+intestazione("EX 12. Balancing: four indivisible jobs on two workers")
 d = [2, 3, 6, 7]
 n, D = len(d), sum(d)
 print(f"  Durations {d}; total {D}; with perfectly equal loads each would do {frazione(D / 2)}")
-salva_dati(pd.DataFrame({"job": R(1, n + 1), "duration": d}), "ex11_lavori")
+salva_dati(pd.DataFrame({"job": R(1, n + 1), "duration": d}), "ex12_lavori")
 
 
 def modello_minmax(d):
@@ -61,8 +61,8 @@ def duale_minmax(d):
        max 0*pi1 - D*pi2   s.t.  d_j (pi1 - pi2) <= 0 for every j;  -pi1 - pi2 <= 1;  pi <= 0."""
     n, D = len(d), sum(d)
     dl = nuovo_modello("dual_balancing")
-    pi1 = dl.addVar(lb=-GRB.INFINITY, ub=0.0, name="pi1")
-    pi2 = dl.addVar(lb=-GRB.INFINITY, ub=0.0, name="pi2")
+    pi1 = dl.addVar(lb=-GRB.INFINITY, ub=0.0, name="pi[0]")
+    pi2 = dl.addVar(lb=-GRB.INFINITY, ub=0.0, name="pi[1]")
     dl.setObjective(-D * pi2, GRB.MAXIMIZE)
     dl.addConstrs((d[j] * (pi1 - pi2) <= 0 for j in R(n)), name="rc_x")
     dl.addConstr(-pi1 - pi2 <= 1, name="rc_z")
@@ -70,7 +70,7 @@ def duale_minmax(d):
 
 
 m, x, z = modello_minmax(d)
-salva_modello(m, "ex11_primale")
+salva_modello(m, "ex12_primale")
 
 # ---------- 2. CONSTRUCTIVE HEURISTIC (UPPER BOUND) ----------
 carico = [0, 0]
@@ -90,8 +90,8 @@ print(f"  ub = max of the loads = {frazione(ub)}")
 
 # ---------- 3. LP RELAXATION AND DUAL (LOWER BOUND) ----------
 dl, pi1, pi2 = duale_minmax(d)
-salva_modello(dl, "ex11_duale")
-mano = {"pi1": -0.5, "pi2": -0.5}
+salva_modello(dl, "ex12_duale")
+mano = {"pi[0]": -0.5, "pi[1]": -0.5}
 lb, viol = valuta(dl, mano)
 assert viol <= 1e-9, viol
 print("  Dual by hand: the constraints d_j (pi1 - pi2) <= 0 impose pi1 <= pi2; setting")
@@ -109,12 +109,12 @@ op2 = [j + 1 for j in R(n) if x[j].X <= 0.5]
 c1 = sum(d[j - 1] for j in op1)
 print(f"  Optimal solution (min-max): worker 1 = {op1} (load {c1}), worker 2 = {op2} "
       f"(load {D - c1});  z(MILP) = {frazione(zv)}")
-riga = registra_bound("EX 11 balancing", ub, lb, zlp, zlpr, zv)
-salva_dati(pd.DataFrame([riga]), "ex11_bound")
+riga = registra_bound("EX 12 balancing", ub, lb, zlp, zlpr, zv)
+salva_dati(pd.DataFrame([riga]), "ex12_bound")
 assert lb <= zlp <= zv <= ub + 1e-9
 
 # ---------- 5. THE SAME PROBLEM WITH THE "RANGE" OBJECTIVE ----------
-intestazione("EX 11 (continued). The same problem written as the minimum difference")
+intestazione("EX 12 (continued). The same problem written as the minimum difference")
 md, xd, sd = modello_differenza(d)
 zd = risolvi(md)
 op1d = [j + 1 for j in R(n) if xd[j].X > 0.5]
@@ -129,7 +129,7 @@ assert abs(zv - (D / 2 + zd / 2)) < 1e-9
 print("  So the two models have the same optimal solutions, but their values are not")
 print("  comparable: calling the min-max value a 'difference' is a mistake.")
 salva_dati(pd.DataFrame([{"objective": "min-max", "z": zv},
-                         {"objective": "minimum range", "z": zd}]), "ex11_obiettivi")
+                         {"objective": "minimum range", "z": zd}]), "ex12_obiettivi")
 
 # ---------- 6. FIGURE ----------
 fig, ax = plt.subplots(figsize=(6.6, 2.6))
@@ -146,8 +146,8 @@ ax.annotate(f"D/2 = {frazione(D / 2)}", (D / 2, -0.62), ha="center", fontsize=9,
 ax.set_yticks([0, 1])
 ax.set_yticklabels(["worker 1", "worker 2"])
 ax.set_xlabel("load")
-ax.set_title(f"EX 11: optimal loads ({c1}, {D - c1}); max = {frazione(zv)}, "
+ax.set_title(f"EX 12: optimal loads ({c1}, {D - c1}); max = {frazione(zv)}, "
              f"range = {frazione(zd)}")
 ax.invert_yaxis()
-salva_figura(fig, "ex11_ottimo")
+salva_figura(fig, "ex12_ottimo")
 print("Done.")

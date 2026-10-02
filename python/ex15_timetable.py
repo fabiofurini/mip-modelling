@@ -19,7 +19,8 @@ import gurobipy as gp
 import pandas as pd
 from gurobipy import GRB
 
-from mip import ammissibile, frazione, nuovo_modello, risolvi, rilassamento, valuta
+from mip import (ammissibile, due_rilassamenti, frazione, nuovo_modello, risolvi,
+                 valuta)
 from stile import ARANCIO, BLU, GRIGIO, TEAL, intestazione, plt, salva_dati, salva_figura
 from esteso import salva_modello
 
@@ -27,12 +28,11 @@ R = range
 
 # ---------- 1. MODEL AND INSTANCE ----------
 intestazione("EX 15. Music school timetable: minimising the violated preferences")
-GIORNI = ["Monday", "Tuesday", "Wednesday", "Thursday"]
-ORE = [1, 2, 3]
-STRUM = ["guitar", "violin", "piano", "harp"]
-h14 = [6, 3, 2, 1]              # hours to place per instrument
+GIORNI = ["Monday", "Tuesday"]
+ORE = [1, 2]
+STRUM = ["guitar", "violin"]
+h14 = [2, 2]                    # hours to place per instrument
 nd, nt, ni = len(GIORNI), len(ORE), len(STRUM)
-PIANO, ARPA = 2, 3
 print(f"  Hours to place: {sum(h14)}; slots available: {nd} * {nt} = {nd * nt}.")
 print("  The two figures coincide: every slot of the timetable holds exactly one lesson.")
 
@@ -42,16 +42,12 @@ def costi(extra_chitarra=()):
     c = [[[0] * ni for _ in R(nt)] for _ in R(nd)]
     for d in R(nd):
         for t in R(nt):
-            if t == 0 and d in (0, 1):
-                c[d][t][0] = 1                      # guitar: hour 1 of Monday and Tuesday
+            if d == 1:
+                c[d][t][0] = 1                      # guitar: the teacher does not come on Tuesday
             if t in extra_chitarra:
                 c[d][t][0] = 1                      # extra preferences of the guitar
-            if t == 1 and d in (2, 3):
-                c[d][t][1] = 1                      # violin: hour 2 of Wednesday and Thursday
-            if t == 2:
-                c[d][t][2] = 1                      # piano: never at hour 3
-            if d == 1:
-                c[d][t][3] = 1                      # harp: never on Tuesday
+            if d == 0:
+                c[d][t][1] = 1                      # violin: the teacher does not come on Monday
     return c
 
 
@@ -62,7 +58,7 @@ salva_dati(pd.DataFrame([{"day": GIORNI[d], "hour": ORE[t], "instrument": STRUM[
 
 
 def modello(h, c, minimo_strumenti=2, legame_doppio=True):
-    """With `legame_doppio=False` one gets the model of the source draft."""
+    """With `legame_doppio=False` one gets the model written one way only."""
     mod = nuovo_modello("timetable")
     x = mod.addVars(nd, nt, ni, vtype=GRB.BINARY, name="x")
     y = mod.addVars(nd, ni, vtype=GRB.BINARY, name="y")
@@ -77,15 +73,39 @@ def modello(h, c, minimo_strumenti=2, legame_doppio=True):
         # without this direction y_di may be 1 even if instrument i does not appear
         mod.addConstrs((y[d, i] - x.sum(d, "*", i) <= 0 for d in R(nd) for i in R(ni)),
                        name="activate_reverse")
-    mod.addConstrs((x[d, t, PIANO] + x[d, t + 1, ARPA] <= 1
-                    for d in R(nd) for t in R(nt - 1)), name="conflict1")
-    mod.addConstrs((x[d, t, ARPA] + x[d, t + 1, PIANO] <= 1
-                    for d in R(nd) for t in R(nt - 1)), name="conflict2")
     return mod, x, y
 
 
 m14, x14, y14 = modello(h14, c14)
 salva_modello(m14, "ex15_primale")
+
+
+def duale(h, c, minimo_strumenti=2):
+    """Dual of the LP relaxation (with x, y >= 0 only).
+
+    One variable per family of primal constraints: alpha_i free on the hours of
+    each instrument (an equality), beta_dt <= 0 on the slots, gamma_d >= 0 on the
+    variety, delta_dti <= 0 and epsilon_di <= 0 on the two directions of the link
+    between lesson and indicator.
+    """
+    d = nuovo_modello("dual_timetable")
+    alpha = d.addVars(ni, lb=-GRB.INFINITY, name="alpha")
+    beta = d.addVars(nd, nt, lb=-GRB.INFINITY, ub=0.0, name="beta")
+    gamma = d.addVars(nd, name="gamma")
+    delta = d.addVars(nd, nt, ni, lb=-GRB.INFINITY, ub=0.0, name="delta")
+    epsilon = d.addVars(nd, ni, lb=-GRB.INFINITY, ub=0.0, name="epsilon")
+    d.setObjective(gp.quicksum(h[i] * alpha[i] for i in R(ni))
+                   + gp.quicksum(beta[dd, tt] for dd in R(nd) for tt in R(nt))
+                   + minimo_strumenti * gamma.sum(), GRB.MAXIMIZE)
+    d.addConstrs((alpha[i] + beta[dd, tt] + delta[dd, tt, i] - epsilon[dd, i] <= c[dd][tt][i]
+                  for dd in R(nd) for tt in R(nt) for i in R(ni)), name="rc_x")
+    d.addConstrs((gamma[dd] - gp.quicksum(delta[dd, tt, i] for tt in R(nt)) + epsilon[dd, i] <= 0
+                  for dd in R(nd) for i in R(ni)), name="rc_y")
+    return d
+
+
+d14 = duale(h14, c14)
+salva_modello(d14, "ex15_duale")
 
 
 def stampa_orario(valore):
@@ -124,10 +144,8 @@ salva_dati(pd.DataFrame({"day": GIORNI, "instruments_wrong_model": strumenti_gio
 # Thursday (never on Tuesday); the violin takes the remaining slots, avoiding hour 2
 # of Wednesday and Thursday.
 piano_orario = {
-    (0, 0): PIANO, (0, 1): 0, (0, 2): 0,
-    (1, 0): 1, (1, 1): 0, (1, 2): 0,
-    (2, 0): PIANO, (2, 1): 0, (2, 2): 0,
-    (3, 0): 1, (3, 1): ARPA, (3, 2): 1,
+    (0, 0): 0, (0, 1): 1,
+    (1, 0): 0, (1, 1): 1,
 }
 sol_eur = {f"x[{d},{t},{i}]": 1 for (d, t), i in piano_orario.items()}
 for (d, t), i in piano_orario.items():
@@ -141,14 +159,18 @@ for i in R(ni):
 print(f"  Preferences violated: {ub14}  ->  ub = {frazione(ub14)}")
 
 # ---------- 4. THE LOWER BOUND ----------
-print("  All the costs c_dti are 0 or 1, so the objective is a sum of non-negative terms:")
-print("  z >= 0 with no dual needed. The hand-built timetable is worth 0, so it is optimal.")
-print("  The dual of the relaxation cannot do better:")
-zlp14, _, _ = rilassamento(m14, rafforzato=False)
-zlp14r, _, _ = rilassamento(m14, rafforzato=True)
 lb14 = 0.0
-print(f"    z(LP) = {frazione(zlp14)}   z(LP+) = {frazione(zlp14r)}")
-assert abs(zlp14) <= 1e-9
+conteggio = nd       # one violated preference per day
+print("  All the costs c_dti are 0 or 1, so the objective is a sum of non-negative terms:")
+print("  lb = 0 with no dual needed.")
+print("  Counting says more: every day holds both instruments, and on each day one of the")
+print("  two teachers would rather not be there; the violations are therefore at least")
+print(f"  {conteggio}. Careful: that count uses the integrality of the variables, not the")
+print("  relaxation --- indeed z(LP) = 0 --- so it cannot take the place of lb in the chain")
+print("  of bounds.")
+zlp14, zlp14r, _ = due_rilassamenti(m14, d14)
+print(f"    lb = {frazione(lb14)}   z(LP) = {frazione(zlp14)}   z(LP+) = {frazione(zlp14r)}")
+assert lb14 <= zlp14 + 1e-9 <= zlp14r + 1e-9
 
 # ---------- 5. OPTIMUM OF THE MILP ----------
 z14 = risolvi(m14)
@@ -162,14 +184,18 @@ salva_dati(pd.DataFrame([{"problem": "EX 15 timetable", "ub": ub14, "lb": lb14,
 salva_dati(pd.DataFrame([{"day": GIORNI[d], "hour": ORE[t], "instrument": STRUM[i]}
                          for d in R(nd) for t in R(nt) for i in R(ni)
                          if x14[d, t, i].X > 0.5]), "ex15_ottimo")
-assert abs(z14) <= 1e-9
+assert lb14 <= z14 and abs(z14 - ub14) <= 1e-9, (lb14, z14, ub14)
+assert conteggio <= z14
+print("  The hand-built timetable was already optimal, but neither bound proves it:")
+print(f"  between {frazione(lb14)} and {frazione(ub14)} a gap is left that only branch and")
+print("  bound closes.")
 
 # ---------- 6. VARIANTS ----------
 intestazione("EX 15. What happens if the preferences get tighter")
 # 14a: the guitar teacher would rather not teach at hours 1 and 2 of any day
-c_a = costi(extra_chitarra=(0, 1))
+c_a = costi(extra_chitarra=(1,))
 libere = sum(1 for d in R(nd) for t in R(nt) if c_a[d][t][0] == 0)
-print("  14a. The guitar teacher would rather not teach at hours 1 and 2 of any day.")
+print("  14a. The guitar teacher would rather not teach at hour 2 of any day either.")
 print(f"       Only {libere} slots stay penalty-free for the guitar, but the hours to place")
 print(f"       are {h14[0]}: at least {h14[0] - libere} lessons will violate the preference.")
 print("       It is a lower bound read off the data alone.")

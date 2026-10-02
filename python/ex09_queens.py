@@ -1,9 +1,17 @@
-"""EX 9 -- Eight queens on the chessboard (family 11).
+"""EX 9 -- Queens on the chessboard (family 11).
 
 Set packing on four families of lines: rows, columns and the two diagonals. The
 dual of the relaxation is built by hand in a single line (one pays 1 per row) and
 is worth exactly as much as the optimum: a case in which the certificate settles
-the problem. The constructive heuristic heuristic, on the other hand, stops below eight queens.
+the problem. The constructive heuristic, on the other hand, stops below n queens.
+
+The instance is 4x4, the smallest board on which n queens fit: sixteen binaries
+and eighteen constraints, so the model is written out in full like every other
+one of the chapter. The classic 8x8 case stays among the variants.
+
+Diagonals with a single square do not become constraints: `x <= 1` on a binary
+is already true by definition, and writing it would fill the model with empty
+rows.
 """
 import gurobipy as gp
 import pandas as pd
@@ -17,8 +25,19 @@ from esteso import salva_modello
 R = range
 
 # ---------- 1. MODEL AND INSTANCE ----------
-intestazione("EX 9. Eight queens: the largest number of non-attacking queens")
-N = 8
+intestazione("EX 9. Queens: the largest number of non-attacking queens")
+N = 4
+
+
+def diagonali(n):
+    """The diagonals with at least two squares, in both directions.
+
+    On `i - j = k` the squares are `n - |k|`, on `i + j = k` they are
+    `min(k, 2n-2-k) + 1`: the ones with a single square are dropped.
+    """
+    prima = [k for k in R(-(n - 1), n) if n - abs(k) >= 2]
+    seconda = [k for k in R(0, 2 * n - 1) if min(k, 2 * n - 2 - k) + 1 >= 2]
+    return prima, seconda
 
 
 def modello(n):
@@ -27,10 +46,11 @@ def modello(n):
     m.setObjective(x.sum(), GRB.MAXIMIZE)
     m.addConstrs((x.sum(i, "*") <= 1 for i in R(n)), name="row")
     m.addConstrs((x.sum("*", j) <= 1 for j in R(n)), name="column")
+    prima, seconda = diagonali(n)
     m.addConstrs((gp.quicksum(x[i, j] for i in R(n) for j in R(n) if i - j == k) <= 1
-                  for k in R(-(n - 1), n)), name="diag1")
+                  for k in prima), name="diag1")
     m.addConstrs((gp.quicksum(x[i, j] for i in R(n) for j in R(n) if i + j == k) <= 1
-                  for k in R(0, 2 * n - 1)), name="diag2")
+                  for k in seconda), name="diag2")
     return m, x
 
 
@@ -40,18 +60,23 @@ def duale(n):
     d = nuovo_modello("dual_queens")
     alpha = d.addVars(n, name="alpha")
     beta = d.addVars(n, name="beta")
-    gamma = d.addVars(R(-(n - 1), n), name="gamma")
-    delta = d.addVars(R(0, 2 * n - 1), name="delta")
+    prima, seconda = diagonali(n)
+    gamma = d.addVars(prima, name="gamma")
+    delta = d.addVars(seconda, name="delta")
     d.setObjective(alpha.sum() + beta.sum() + gamma.sum() + delta.sum(), GRB.MINIMIZE)
-    d.addConstrs((alpha[i] + beta[j] + gamma[i - j] + delta[i + j] >= 1
+    d.addConstrs((alpha[i] + beta[j]
+                  + (gamma[i - j] if i - j in prima else 0)
+                  + (delta[i + j] if i + j in seconda else 0) >= 1
                   for i in R(n) for j in R(n)), name="rc")
     return d
 
 
 m8, x8 = modello(N)
 salva_modello(m8, "ex09_primale")
-print(f"  A {N}x{N} board: {N * N} binary variables and {2 * N + (2 * N - 1) * 2} constraints")
-print("  (one row, one column and two diagonals for every line of the board).")
+_p, _s = diagonali(N)
+print(f"  A {N}x{N} board: {N * N} binary variables and {2 * N + len(_p) + len(_s)} constraints")
+print(f"  ({N} rows, {N} columns and {len(_p)} + {len(_s)} diagonals with at least "
+      "two squares).")
 
 # ---------- 2. CONSTRUCTIVE HEURISTIC (LOWER BOUND) ----------
 # constructive heuristic row by row: the first free column that is not attacked by the queens already
@@ -109,7 +134,7 @@ print("  not the bound, that leaves the gap.")
 # ---------- 5. TWO VARIANTS ----------
 intestazione("EX 9. Variants")
 varianti = {}
-for n in (4, 5, 6):
+for n in (5, 6):
     m, x = modello(n)
     z = risolvi(m)
     varianti[f"n = {n}"] = z

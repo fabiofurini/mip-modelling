@@ -1,0 +1,20 @@
+\begin{array}{r@{}r@{}r@{}r@{}r@{}r@{}r@{}r@{}r@{}r@{}r@{}r@{}r@{}r@{}r@{}r@{}r@{}r@{}r@{}r@{}r c l}
+\max & 2\alpha_1 & +2\alpha_2 & +\beta_{11} & +\beta_{12} & +\beta_{21} & +\beta_{22} & +2\gamma_1 & +2\gamma_2 &  &  &  &  &  &  &  &  &  &  &  &  &  & \\
+\text{subject to} & \alpha_1 &  & +\beta_{11} &  &  &  &  &  & +\delta_{111} &  &  &  &  &  &  &  & -\epsilon_{11} &  &  &  & \le & 0\\
+ &  & \alpha_2 & +\beta_{11} &  &  &  &  &  &  & +\delta_{112} &  &  &  &  &  &  &  & -\epsilon_{12} &  &  & \le & 1\\
+ & \alpha_1 &  &  & +\beta_{12} &  &  &  &  &  &  & +\delta_{121} &  &  &  &  &  & -\epsilon_{11} &  &  &  & \le & 0\\
+ &  & \alpha_2 &  & +\beta_{12} &  &  &  &  &  &  &  & +\delta_{122} &  &  &  &  &  & -\epsilon_{12} &  &  & \le & 1\\
+ & \alpha_1 &  &  &  & +\beta_{21} &  &  &  &  &  &  &  & +\delta_{211} &  &  &  &  &  & -\epsilon_{21} &  & \le & 1\\
+ &  & \alpha_2 &  &  & +\beta_{21} &  &  &  &  &  &  &  &  & +\delta_{212} &  &  &  &  &  & -\epsilon_{22} & \le & 0\\
+ & \alpha_1 &  &  &  &  & +\beta_{22} &  &  &  &  &  &  &  &  & +\delta_{221} &  &  &  & -\epsilon_{21} &  & \le & 1\\
+ &  & \alpha_2 &  &  &  & +\beta_{22} &  &  &  &  &  &  &  &  &  & +\delta_{222} &  &  &  & -\epsilon_{22} & \le & 0\\
+ &  &  &  &  &  &  & \gamma_1 &  & -\delta_{111} &  & -\delta_{121} &  &  &  &  &  & +\epsilon_{11} &  &  &  & \le & 0\\
+ &  &  &  &  &  &  & \gamma_1 &  &  & -\delta_{112} &  & -\delta_{122} &  &  &  &  &  & +\epsilon_{12} &  &  & \le & 0\\
+ &  &  &  &  &  &  &  & \gamma_2 &  &  &  &  & -\delta_{211} &  & -\delta_{221} &  &  &  & +\epsilon_{21} &  & \le & 0\\
+ &  &  &  &  &  &  &  & \gamma_2 &  &  &  &  &  & -\delta_{212} &  & -\delta_{222} &  &  &  & +\epsilon_{22} & \le & 0\\
+ & \alpha_1, & \alpha_2 &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & \gtreqless & 0\\
+ &  &  & \beta_{11}, & \beta_{12}, & \beta_{21}, & \beta_{22} &  &  &  &  &  &  &  &  &  &  &  &  &  &  & \gtreqless & 0\\
+ &  &  &  &  &  &  & \gamma_1, & \gamma_2 &  &  &  &  &  &  &  &  &  &  &  &  & \ge & 0\\
+ &  &  &  &  &  &  &  &  & \delta_{111}, & \delta_{112}, & \delta_{121}, & \delta_{122}, & \delta_{211}, & \delta_{212}, & \delta_{221}, & \delta_{222} &  &  &  &  & \gtreqless & 0\\
+ &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  &  & \epsilon_{11}, & \epsilon_{12}, & \epsilon_{21}, & \epsilon_{22} & \gtreqless & 0
+\end{array}

@@ -4,7 +4,7 @@ Disaggregated activation the other way round: an operation runs only if *all* of
 its tools are loaded, and the magazine holds at most four. It is a maximisation,
 so the heuristic gives the lower bound and the dual the upper one.
 
-The archive draft proposed alpha = 2000 with all multipliers at 900: that dual
+It comes naturally to propose alpha = 2000 with all multipliers at 900: that dual
 solution is *not feasible*, because some tools serve more than two operations.
 The recipe used here is different and it is checked.
 """
@@ -99,7 +99,7 @@ bozza = {f"beta[{i},{j}]": 900 for i in R(no) for j in T[i]} | {"alpha": 2000}
 _, viol_bozza = valuta(d, bozza)
 assert viol_bozza > 1e-6
 peggiore = max(R(nu), key=lambda j: sum(900 for i in R(no) if j in T[i]))
-print("  Check of the draft's recipe (alpha = 2000, all beta = 900): NOT feasible,")
+print("  Check of the natural recipe (alpha = 2000, all beta = 900): NOT feasible,")
 print(f"  largest violation {frazione(viol_bozza)}. Tool {peggiore + 1} serves "
       f"{sum(1 for i in R(no) if peggiore in T[i])} operations, so it receives "
       f"{sum(900 for i in R(no) if peggiore in T[i])} > 2000.")

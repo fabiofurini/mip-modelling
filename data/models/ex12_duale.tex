@@ -1,12 +1,9 @@
-\begin{array}{r@{\,}r@{\,}r@{\,}r@{\,}r@{\,}r@{\,}r@{\,}r@{\,}r@{\,}r c l}
-\min & 120000\pi_1 & +7000\pi_2 & +40000\pi_3 &  &  &  &  &  &  &  & \\
-\text{subject to} & 850\pi_1 & +3\pi_2 & +20\pi_3 & +\lambda_1 &  &  & +\mu_1 &  &  & \ge & 150\\
- & 600\pi_1 & +2\pi_2 & +15\pi_3 &  & +\lambda_2 &  &  & +\mu_2 &  & \ge & 120\\
- & 700\pi_1 & +\frac{5}{2}\pi_2 & +20\pi_3 &  &  & +\lambda_3 &  &  & +\mu_3 & \ge & 130\\
- &  &  &  & -100\lambda_1 &  &  & -141\mu_1 &  &  & \ge & 0\\
- &  &  &  &  & -200\lambda_2 &  &  & -200\mu_2 &  & \ge & 0\\
- &  &  &  &  &  & -150\lambda_3 &  &  & -171\mu_3 & \ge & 0\\
- & \pi_1, & \pi_2, & \pi_3 &  &  &  &  &  &  & \ge & 0\\
- &  &  &  & \lambda_1, & \lambda_2, & \lambda_3 &  &  &  & \gtreqless & 0\\
- &  &  &  &  &  &  & \mu_1, & \mu_2, & \mu_3 & \ge & 0
+\begin{array}{r@{\,}r@{\,}r c l}
+\max &  & -18\pi_2 &  & \\
+\text{subject to} & 2\pi_1 & -2\pi_2 & \le & 0\\
+ & 3\pi_1 & -3\pi_2 & \le & 0\\
+ & 6\pi_1 & -6\pi_2 & \le & 0\\
+ & 7\pi_1 & -7\pi_2 & \le & 0\\
+ & -\pi_1 & -\pi_2 & \le & 1\\
+ & \pi_1, & \pi_2 & \gtreqless & 0
 \end{array}

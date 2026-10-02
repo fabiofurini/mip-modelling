@@ -152,7 +152,7 @@ def pagina_indice() -> str:
         return (1, 0, p.stem)
 
     for percorso in sorted((p for p in list(DIR_SCRIPT.glob("cap*.py")) + list(DIR_SCRIPT.glob("fam*.py"))
-              + list(DIR_SCRIPT.glob("num*.py"))
+              + list(DIR_SCRIPT.glob("ex*.py"))
               if not p.stem.endswith("_summary") and p.stem not in SENZA_NOTEBOOK), key=chiave):
         nome = percorso.stem
         slug = pagina_del_capitolo(nome)
@@ -278,7 +278,7 @@ def main() -> int:
         indice.write_text(pagina_indice())
         print(f"  [page]     docs/{indice.name}")
     for percorso in sorted(p for p in list(DIR_SCRIPT.glob("cap*.py")) + list(DIR_SCRIPT.glob("fam*.py"))
-              + list(DIR_SCRIPT.glob("num*.py"))
+              + list(DIR_SCRIPT.glob("ex*.py"))
               if not p.stem.endswith("_summary")):
         atteso = json.dumps(notebook(percorso), ensure_ascii=False, indent=1) + "\n"
         uscita = DIR_NOTEBOOK / f"{percorso.stem}.ipynb"

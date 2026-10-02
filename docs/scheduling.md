@@ -121,6 +121,6 @@ bound table.
 | [EX 2 — Bus lines](ex-02.md) | assignment with a capacity in number of jobs | 9 |
 | [EX 3 — Relay](ex-03.md) | assignment with more resources than tasks; totally unimodular matrix | 95 |
 | [EX 8 — Seminars](ex-08.md) | exact cardinality, non-adjacency, dual with a free variable | 18 |
-| [EX 11 — Balancing](ex-11.md) | min-max versus range: same solutions, different values | 9 |
-| [EX 14 — Emergency department shifts](ex-14.md) | covering the daily requirements with weekly shifts | 7 060 |
+| [EX 12 — Balancing](ex-12.md) | min-max versus range: same solutions, different values | 9 |
+| [EX 13 — Emergency department shifts](ex-13.md) | covering the daily requirements with weekly shifts | 7 060 |
 | [EX 15 — The music school timetable](ex-15.md) | conflicts, non-adjacency and preferences to avoid | 0 |

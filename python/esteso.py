@@ -58,6 +58,10 @@ def nome_latex(nome: str) -> str:
     """`x[0,1]` -> `x_{12}`, `alpha[2]` -> `\\alpha_3`, `gamma` -> `\\gamma`."""
     radice, _, coda = nome.partition("[")
     radice = radice.strip()
+    if not coda:
+        m = re.fullmatch(r"([A-Za-z]+?)(\d+)", radice)
+        if m and (m.group(1) in GRECHE or m.group(1) == "varepsilon"):
+            return f"\\{m.group(1)}_{m.group(2)}"
     radice = ALIAS.get(radice, radice)
     testa = f"\\{radice}" if radice in GRECHE or radice == "varepsilon" else radice
     if not coda:

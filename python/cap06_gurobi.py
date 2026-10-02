@@ -177,20 +177,24 @@ print("  (7) the table row is the one above, and it is saved to CSV: that is whe
 print("      the notes, the website and check_numbers.py read it from.")
 
 # ---------- 8. FIGURE: THE FOUR NUMBERS OF THE PROTOCOL ----------
-fig, ax = plt.subplots(figsize=(7.2, 2.6))
+fig, ax = plt.subplots(figsize=(7.6, 3.0))
 ax.plot([lb, ub], [0, 0], color=GRIGIO, lw=3, solid_capstyle="round")
-for valore, colore, testo, dy in [(lb, TEAL, "$\\mathrm{lb}$ (dual by hand)", 14),
-                                  (zlp, BLU, "$z(\\mathrm{LP})$", -20),
-                                  (z, ROSSO, "$z(\\mathrm{MILP})$", 14),
-                                  (ub, ARANCIO, "$\\mathrm{ub}$ (heuristic)", -20)]:
-    ax.plot(valore, 0, "o", color=colore, ms=10)
+# z(MILP) and ub fall on the same point when the heuristic is optimal: the larger
+# dot sits underneath, so one sees they are two numbers and not one, and the
+# labels move left and right so they do not overlap
+for valore, colore, testo, dx, dy, ha, ms in [
+        (lb, TEAL, "$\\mathrm{lb}$ (dual by hand)", 0, 16, "center", 10),
+        (zlp, BLU, "$z(\\mathrm{LP})$", -8, -30, "right", 10),
+        (ub, ARANCIO, "$\\mathrm{ub}$ (heuristic)", 8, -30, "left", 15),
+        (z, ROSSO, "$z(\\mathrm{MILP})$", 0, 16, "center", 9)]:
+    ax.plot(valore, 0, "o", color=colore, ms=ms)
     ax.annotate(f"{testo}\n{frazione(valore)}", (valore, 0), textcoords="offset points",
-                xytext=(0, dy), ha="center", fontsize=9, color=colore)
+                xytext=(dx, dy), ha=ha, fontsize=9, color=colore)
 ax.set_yticks([])
-ax.set_ylim(-0.8, 0.8)
-ax.set_xlim(lb - 0.5, ub + 0.5)
+ax.set_ylim(-1.1, 1.0)
+ax.set_xlim(lb - 0.7, ub + 0.7)
 ax.set_xlabel("objective value")
-ax.set_title("The four numbers every Part II exercise produces")
+ax.set_title("The four numbers every exercise produces")
 ax.spines["left"].set_visible(False)
 ax.grid(False)
 salva_figura(fig, "cap06_protocollo")

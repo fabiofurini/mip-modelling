@@ -16,7 +16,7 @@ content of MIP modelling.
     the constraints, with an exchange argument if one follows from optimality,
     with a *counterexample* when a converse is false; (d) the **strength of the
     relaxation** on a minimal instance solved by the script; (e) the `gurobipy`
-    line and the pointers to the Part II problems.
+    line and the pointers to the problems of the course.
 
 !!! warning "Two properties never to be confused"
     A property **imposed by the constraints** holds for *every* feasible

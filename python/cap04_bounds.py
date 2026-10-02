@@ -79,75 +79,111 @@ while scoperte:
     scoperte -= {i for i in scoperte if j in S41[i]}
 ub41_primale = sum(c41[j] for j in presi41)
 assert ammissibile(m41p, {f"x[{j}]": 1 for j in presi41})
-print(f"  Constructive covering heuristic heuristic: teams {sorted(j + 1 for j in presi41)}, "
+print(f"  Constructive covering heuristic: teams {sorted(j + 1 for j in presi41)}, "
       f"ub = {frazione(ub41_primale)}")
 riga41 = registra_bound("minimum-cost covering", ub41_primale, lb41, zlp41, zlp41r, z41)
 salva_dati(pd.DataFrame([riga41]), "cap04_copertura")
 
 # ---------- 2. A MAXIMISATION: THE ROLES SWAP ----------
-intestazione("4.2  A knapsack: the heuristic gives the lower bound, the dual the upper")
-p42 = [10, 7, 6, 4]                      # values
-w42 = [5, 4, 3, 3]                       # weights
-C42 = 9
+intestazione("4.2  A knapsack with several resources: the heuristic gives the lower bound")
+# Multidimensional knapsack: one capacity row per resource, not a single one. With
+# one resource only the dual would have a single variable and one term per
+# constraint, and the choice the recipe has to make would not show.
+p42 = [10, 9, 7, 6, 4]                   # values
+A42 = [[6, 4, 3, 3, 2],                  # steel used
+       [1, 3, 4, 2, 3],                  # lathe hours
+       [3, 2, 2, 4, 1]]                  # testing hours
+B42 = [10, 9, 8]                         # availability of the three resources
+NOMI42 = ["steel", "lathe", "testing"]
+no42, nr42 = len(p42), len(B42)
 
 
 def primale_42():
     m = nuovo_modello("knapsack")
-    x = m.addVars(4, vtype=GRB.BINARY, name="x")
-    m.setObjective(gp.quicksum(p42[j] * x[j] for j in R(4)), GRB.MAXIMIZE)
-    m.addConstr(gp.quicksum(w42[j] * x[j] for j in R(4)) <= C42, name="capacity")
+    x = m.addVars(no42, vtype=GRB.BINARY, name="x")
+    m.setObjective(gp.quicksum(p42[j] * x[j] for j in R(no42)), GRB.MAXIMIZE)
+    m.addConstrs((gp.quicksum(A42[i][j] * x[j] for j in R(no42)) <= B42[i]
+                  for i in R(nr42)), name="capacity")
     return m, x
 
 
 def duale_42():
-    """Dual of the relaxation without the bounds (x >= 0): min C v  s.t.  w_j v >= p_j, v >= 0."""
+    """Dual of the relaxation without the bounds (x >= 0):
+       min sum_i b_i v_i  s.t.  sum_i a_ij v_i >= p_j for every item,  v >= 0."""
     d = nuovo_modello("dual_knapsack")
-    v = d.addVar(name="v")
-    d.setObjective(C42 * v, GRB.MINIMIZE)
-    d.addConstrs((w42[j] * v >= p42[j] for j in R(4)), name="rc")
+    v = d.addVars(nr42, name="v")
+    d.setObjective(gp.quicksum(B42[i] * v[i] for i in R(nr42)), GRB.MINIMIZE)
+    d.addConstrs((gp.quicksum(A42[i][j] * v[i] for i in R(nr42)) >= p42[j]
+                  for j in R(no42)), name="rc")
     return d, v
 
 
 m42, x42 = primale_42()
 z42 = risolvi(m42)
-scelte42 = [j + 1 for j in R(4) if x42[j].X > 0.5]
-print(f"  Integer optimum: z(MILP) = {frazione(z42)}, items {scelte42}, "
-      f"weight {sum(w42[j] for j in R(4) if x42[j].X > 0.5)} out of {C42}")
-# constructive heuristic heuristic by value/weight ratio: gives a LOWER bound
-ordine = sorted(R(4), key=lambda j: -p42[j] / w42[j])
-carico, presi = 0, []
+scelte42 = [j + 1 for j in R(no42) if x42[j].X > 0.5]
+consumo = [sum(A42[i][j] for j in R(no42) if x42[j].X > 0.5) for i in R(nr42)]
+print(f"  Integer optimum: z(MILP) = {frazione(z42)}, items {scelte42}")
+print("  Consumption at the optimum: "
+      + ", ".join(f"{NOMI42[i]} {consumo[i]} out of {B42[i]}" for i in R(nr42))
+      + " --- all three resources are saturated.")
+# constructive heuristic by value / total consumption: it gives a LOWER bound
+ordine = sorted(R(no42), key=lambda j: -p42[j] / sum(A42[i][j] for i in R(nr42)))
+presi, carico = [], [0] * nr42
 for j in ordine:
-    if carico + w42[j] <= C42:
+    if all(carico[i] + A42[i][j] <= B42[i] for i in R(nr42)):
         presi.append(j)
-        carico += w42[j]
+        carico = [carico[i] + A42[i][j] for i in R(nr42)]
 lb42 = sum(p42[j] for j in presi)
 assert ammissibile(m42, {f"x[{j}]": 1 for j in presi})
-print(f"  Constructive heuristic by ratio p_j/w_j: takes {sorted(j + 1 for j in presi)}, "
-      f"lb = {frazione(lb42)}")
-# dual by hand: v = max_j p_j / w_j  (the best ratio) is feasible
-v_mano = max(p42[j] / w42[j] for j in R(4))
+print("  Constructive heuristic by value / total consumption: "
+      f"it takes {sorted(j + 1 for j in presi)}, lb = {frazione(lb42)}")
+# dual by hand: one pays a single resource, the one giving the lowest bound
 d42, v42 = duale_42()
-ub42, viol = valuta(d42, {"v": v_mano})
+candidati = {}
+for i in R(nr42):
+    vi = max(p42[j] / A42[i][j] for j in R(no42))
+    candidati[i] = B42[i] * vi
+i_scelta = min(candidati, key=candidati.get)
+v_scelta = max(p42[j] / A42[i_scelta][j] for j in R(no42))
+mano = {f"v[{i}]": (v_scelta if i == i_scelta else 0.0) for i in R(nr42)}
+ub42, viol = valuta(d42, mano)
 assert viol <= 1e-9, viol
-print(f"  Dual solution by hand: v = max_j p_j/w_j = {frazione(v_mano)}  ->  "
-      f"ub = C v = {frazione(ub42)}")
+print("  Dual solution by hand: one pays a single resource. "
+      + ", ".join(f"{NOMI42[i]} would give {frazione(candidati[i])}" for i in R(nr42)))
+print(f"  The cheapest is {NOMI42[i_scelta]}, with v = {frazione(v_scelta)}  ->  "
+      f"ub = {frazione(ub42)}")
 zlp42, zlp42r, _ = due_rilassamenti(m42, d42)
-print(f"  The maximisation sandwich: {frazione(lb42)} <= z(MILP) = {frazione(z42)} <= "
+print(f"  The sandwich of a maximisation: {frazione(lb42)} <= z(MILP) = {frazione(z42)} <= "
       f"z(LP) = {frazione(zlp42)} <= ub = {frazione(ub42)}")
 assert lb42 <= z42 <= zlp42 + 1e-9 <= ub42 + 1e-9
 riga42 = registra_bound("knapsack", ub42, lb42, zlp42, zlp42r, z42, senso="max")
 salva_dati(pd.DataFrame([riga42]), "cap04_zaino")
 
 # ---------- 3. A COVER CUT ----------
+# Cover cuts are read one constraint at a time: here we go back to a knapsack with
+# a single resource, smaller than the one of section 4.2.
+p43 = [10, 7, 6, 4]                      # values
+w43 = [5, 4, 3, 3]                       # weights
+C43 = 9
+
+
+def primale_43(C=C43):
+    m = nuovo_modello("knapsack_one_resource")
+    x = m.addVars(4, vtype=GRB.BINARY, name="x")
+    m.setObjective(gp.quicksum(p43[j] * x[j] for j in R(4)), GRB.MAXIMIZE)
+    m.addConstr(gp.quicksum(w43[j] * x[j] for j in R(4)) <= C, name="capacity")
+    return m, x
+
 intestazione("4.3  A valid inequality: the cover cut")
 from itertools import combinations
-tutte = [s for k in R(2, 5) for s in combinations(R(4), k) if sum(w42[j] for j in s) > C42]
+tutte = [s for k in R(2, 5) for s in combinations(R(4), k) if sum(w43[j] for j in s) > C43]
 coperture = [s for s in tutte                                   # only the minimal ones
-             if all(sum(w42[j] for j in t) <= C42
+             if all(sum(w43[j] for j in t) <= C43
                     for t in combinations(s, len(s) - 1))]
 print("  Minimal covers found: "
       + "; ".join("{" + ", ".join(str(j + 1) for j in s) + "}" for s in coperture))
-m43, x43 = primale_42()
+m43, x43 = primale_43()
+z43_prima = risolvi(m43)   # the integer optimum before the cuts
 zlp43_prima, sol43, _ = rilassamento(m43, rafforzato=True)
 print("  Optimal solution of the relaxation without cuts: "
       + ", ".join(f"x_{j+1} = {frazione(sol43[f'x[{j}]'])}" for j in R(4)))
@@ -162,7 +198,7 @@ z43 = risolvi(m43)
 zlp43_dopo, _, _ = rilassamento(m43, rafforzato=True)
 print(f"  z(LP+) without cuts = {frazione(zlp43_prima)}   with the cover cuts = "
       f"{frazione(zlp43_dopo)}   z(MILP) = {frazione(z43)}")
-assert z43 == z42, "the cuts must not change the integer optimum"
+assert z43 == z43_prima, "the cuts must not change the integer optimum"
 assert zlp43_dopo <= zlp43_prima + 1e-9
 salva_dati(pd.DataFrame([{"model": "knapsack", "z_lp_without_cuts": zlp43_prima,
                           "z_lp_with_cuts": zlp43_dopo, "z_milp": z43}]), "cap04_tagli")
@@ -204,10 +240,7 @@ salva_dati(pd.DataFrame([{"configuration": "default settings", "z": m44.ObjVal,
 intestazione("4.5  Why the LP duals are not the marginal prices of the MILP")
 righe = []
 for C in (8, 9, 10, 11, 12):
-    m = nuovo_modello("knapsack_C")
-    x = m.addVars(4, vtype=GRB.BINARY, name="x")
-    m.setObjective(gp.quicksum(p42[j] * x[j] for j in R(4)), GRB.MAXIMIZE)
-    con = m.addConstr(gp.quicksum(w42[j] * x[j] for j in R(4)) <= C, name="capacity")
+    m, x = primale_43(C)
     z = risolvi(m)
     zr, _, pi = rilassamento(m, rafforzato=True)
     righe.append({"capacity": C, "z_milp": z, "z_lp": zr, "lp_dual": pi["capacity"]})

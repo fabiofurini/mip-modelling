@@ -1,2 +1,2 @@
 problem,ub,lb,z_lp,z_lp_rafforzato,z_milp,senso,certificato
-EX 9 queens,8.0,5,8.0,8.0,8.0,max,
+EX 9 queens,4.0,3,4.0,4.0,4.0,max,

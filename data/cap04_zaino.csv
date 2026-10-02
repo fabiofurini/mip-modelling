@@ -1,2 +1,2 @@
 problem,ub,lb,z_lp,z_lp_rafforzato,z_milp,senso,certificato
-knapsack,18.0,16,18.0,17.75,17.0,max,
+knapsack,23.333333333333336,19,22.71428571428571,22.0,22.0,max,

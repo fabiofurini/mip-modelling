@@ -1,0 +1,6 @@
+type,steel,hours,profit,minimum,maximum
+compact car,2,30,200,10,66
+midsize car,3,25,250,10,80
+large car,5,40,300,10,50
+midsize minivan,6,45,550,5,44
+large minivan,8,55,700,5,36

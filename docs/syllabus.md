@@ -26,10 +26,10 @@ once.
 
 EX 2 [Bus lines](ex-02.md) ·
 EX 3 [Relay](ex-03.md) ·
-EX 6 [Hub-and-spoke](ex-06.md) ·
+EX 4 [Hub-and-spoke](ex-04.md) ·
 EX 8 [Seminars](ex-08.md) ·
 EX 10 [CNC tools](ex-10.md) ·
-EX 11 [Balancing](ex-11.md)
+EX 12 [Balancing](ex-12.md)
 
 *[Assignment and scheduling](scheduling.md)*
 

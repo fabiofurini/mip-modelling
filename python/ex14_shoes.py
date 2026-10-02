@@ -1,4 +1,4 @@
-"""EX 4 -- Shoe production and workforce over three months (family 9).
+"""EX 14 -- Shoe production and workforce over three months (family 9).
 
 Inventory balance, working hours proportional to production and workforce dynamics
 with hirings only. It is the numerical version of problem 9.2, with the same
@@ -17,7 +17,7 @@ from esteso import salva_modello
 R = range
 
 # ---------- 1. MODEL AND INSTANCE ----------
-intestazione("EX 4. Shoes: production, inventory and hirings over three months")
+intestazione("EX 14. Shoes: production, inventory and hirings over three months")
 d3 = [3000, 5000, 7000]      # monthly demand in pairs
 s0 = 500                     # initial inventory
 y0 = 100                     # workers on duty at the start
@@ -28,7 +28,7 @@ mat3 = 15                    # raw materials per pair
 ass3 = 100                   # cost of hiring a worker
 mag3 = 3                     # storage cost per pair at the end of the month
 T = len(d3)
-salva_dati(pd.DataFrame({"month": R(1, T + 1), "demand": d3}), "ex04_domanda")
+salva_dati(pd.DataFrame({"month": R(1, T + 1), "demand": d3}), "ex14_domanda")
 netta = [d3[0] - s0] + d3[1:]
 print(f"  Net demand of the first month: {d3[0]} - {s0} = {netta[0]} pairs; total to produce "
       f"{sum(netta)} pairs.")
@@ -79,7 +79,7 @@ def duale(d, s0, y0):
 
 
 m3, x3, s3, y3, z3 = modello(d3, s0, y0)
-salva_modello(m3, "ex04_primale")
+salva_modello(m3, "ex14_primale")
 
 # ---------- 2. CONSTRUCTIVE HEURISTIC (UPPER BOUND) ----------
 # "just in time" production: every month exactly the net demand is produced, with no
@@ -114,7 +114,7 @@ print(f"  Cost of the heuristic solution: ub = {frazione(ub3)}")
 
 # ---------- 3. LP RELAXATION AND DUAL (LOWER BOUND) ----------
 dl3 = duale(d3, s0, y0)
-salva_modello(dl3, "ex04_duale")
+salva_modello(dl3, "ex14_duale")
 # recipe: an hour of work is worth beta = w / hours (what it really costs), so a pair
 # is worth at most alpha = mat + ore_paio * beta; gamma = 0
 beta_v = w3 / ore3
@@ -135,12 +135,12 @@ for t in R(T):
     scorta = s3[t].X if t < T - 1 else 0.0
     print(f"    month {t + 1}: {frazione(x3[t].X)} pairs, {int(y3[t].X)} workers "
           f"({int(z3[t].X)} hired), inventory at the end of the month {frazione(scorta)}")
-riga = registra_bound("EX 4 shoes", ub3, lb3, zlp3, zlp3r, z3v)
-salva_dati(pd.DataFrame([riga]), "ex04_bound")
+riga = registra_bound("EX 14 shoes", ub3, lb3, zlp3, zlp3r, z3v)
+salva_dati(pd.DataFrame([riga]), "ex14_bound")
 assert lb3 <= zlp3 <= z3v <= ub3 + 1e-9
 
 # ---------- 5. WHY PRODUCING EARLY PAYS OFF ----------
-intestazione("EX 4. Storage against hiring")
+intestazione("EX 14. Storage against hiring")
 print(f"  Keeping a pair in stock for one month costs {mag3} euros; hiring a worker costs")
 print(f"  {ass3} euros once plus {w3} euros a month. The optimum produces early exactly to")
 print("  avoid hiring at the last moment.")
@@ -154,7 +154,7 @@ for nome, mag in [("storage at 3 euros", 3), ("storage at 20 euros", 20),
           + ", ".join(frazione(v) for v in scorte))
     prove.append({"variant": nome, "z": val,
                   "inventories": " ".join(str(int(v)) for v in scorte)})
-salva_dati(pd.DataFrame(prove), "ex04_varianti")
+salva_dati(pd.DataFrame(prove), "ex14_varianti")
 
 # ---------- 6. FIGURE ----------
 fig, ax = plt.subplots(figsize=(6.6, 3.0))
@@ -169,8 +169,8 @@ ax2.set_ylabel("workers")
 ax.set_xticks(idx)
 ax.set_xticklabels([f"month {t + 1}" for t in idx])
 ax.set_ylabel("pairs")
-ax.set_title(f"EX 4: optimal plan (cost {frazione(z3v)})")
+ax.set_title(f"EX 14: optimal plan (cost {frazione(z3v)})")
 ax.legend(fontsize=8, loc="upper left")
 ax2.legend(fontsize=8, loc="lower right")
-salva_figura(fig, "ex04_piano")
+salva_figura(fig, "ex14_piano")
 print("Done.")

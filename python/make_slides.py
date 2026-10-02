@@ -31,9 +31,9 @@ DISPENSE = sorted(BASE.glob("notes_*/capitoli"))
 ESERCIZI = BASE / "exercises" / "capitoli"
 
 NOME_EX = {
-    1: "ex01", 2: "ex02", 3: "ex03", 4: "ex04", 5: "ex05", 6: "ex06", 7: "ex07",
-    8: "ex08", 9: "ex09", 10: "ex10", 11: "ex11", 12: "ex12", 13: "ex13",
-    14: "ex14", 15: "ex15",
+    1: "ex01", 2: "ex02", 3: "ex03", 4: "ex14", 5: "ex06", 6: "ex04", 7: "ex07",
+    8: "ex08", 9: "ex09", 10: "ex10", 11: "ex12", 12: "ex11", 13: "ex05",
+    14: "ex13", 15: "ex15",
 }
 FAMIGLIE = ([(f"7.{i}", f"fam07_{i}") for i in range(1, 8)]
             + [(f"8.{i}", f"fam08_{i}") for i in range(1, 5)]

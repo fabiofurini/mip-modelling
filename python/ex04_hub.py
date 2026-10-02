@@ -1,4 +1,4 @@
-"""EX 6 -- Hub-and-spoke: the minimum number of hubs covering eight cities (family 8).
+"""EX 4 -- Hub-and-spoke: the minimum number of hubs covering eight cities (family 8).
 
 A pure set covering with all costs equal to 1: the number of hubs is minimised.
 The dual is the fractional packing of the customers, and the dual constructive heuristic on the
@@ -17,13 +17,13 @@ from esteso import salva_modello
 R = range
 
 # ---------- 1. MODEL AND INSTANCE ----------
-intestazione("EX 6. Hub-and-spoke: the fewest hubs within 1000 miles of every city")
+intestazione("EX 4. Hub-and-spoke: the fewest hubs within 1000 miles of every city")
 CITTA = ["Atlanta", "Chicago", "Denver", "Houston", "Los Angeles", "New York",
          "San Francisco", "Seattle"]
 copre = [[0, 1, 3, 5], [0, 1, 5], [2, 4], [0, 3], [2, 4, 6], [0, 1, 5], [4, 6, 7], [6, 7]]
 n = len(CITTA)
 salva_dati(pd.DataFrame([{"city": CITTA[i], "covered_by": ", ".join(CITTA[j] for j in copre[i])}
-                         for i in R(n)]), "ex06_copertura")
+                         for i in R(n)]), "ex04_copertura")
 
 
 def modello(copre):
@@ -39,7 +39,7 @@ def duale(copre):
     """max sum_i u_i;  sum_{i : j covers i} u_i <= 1 for every j;  u >= 0."""
     n = len(copre)
     d = nuovo_modello("dual_hub_spoke")
-    u = d.addVars(n, name="u")
+    u = d.addVars(n, name="pi")   # price of city i
     d.setObjective(u.sum(), GRB.MAXIMIZE)
     d.addConstrs((gp.quicksum(u[i] for i in R(n) if j in copre[i]) <= 1 for j in R(n)),
                  name="rc")
@@ -47,7 +47,7 @@ def duale(copre):
 
 
 m, y = modello(copre)
-salva_modello(m, "ex06_primale")
+salva_modello(m, "ex04_primale")
 
 # ---------- 2. CONSTRUCTIVE HEURISTIC (UPPER BOUND) ----------
 e = euristica_copertura([1] * n, copre)
@@ -60,12 +60,12 @@ print("  Heuristic solution: hubs in " + ", ".join(CITTA[j] for j in scelti)
 
 # ---------- 3. LP RELAXATION AND DUAL (LOWER BOUND) ----------
 d = duale(copre)
-salva_modello(d, "ex06_duale")
+salva_modello(d, "ex04_duale")
 residuo = [1.0] * n
 mano = {}
 for i in R(n):
     incremento = min(residuo[j] for j in copre[i])
-    mano[f"u[{i}]"] = incremento
+    mano[f"pi[{i}]"] = incremento
     for j in copre[i]:
         residuo[j] -= incremento
     print(f"  City {i + 1} ({CITTA[i]}): residuals of the hubs covering it "
@@ -83,8 +83,8 @@ print(f"  Optimal solution: {len(ott)} hubs in " + ", ".join(CITTA[j] for j in o
 for i in R(n):
     assert [CITTA[j] for j in copre[i] if j in ott], CITTA[i]
 print("  Every city is covered by at least one chosen hub: checked for all eight.")
-riga = registra_bound("EX 6 hub-and-spoke", ub, lb, zlp, zlpr, z)
-salva_dati(pd.DataFrame([riga]), "ex06_bound")
+riga = registra_bound("EX 4 hub-and-spoke", ub, lb, zlp, zlpr, z)
+salva_dati(pd.DataFrame([riga]), "ex04_bound")
 assert lb <= zlp <= z <= ub + 1e-9
 if abs(lb - z) < 1e-9:
     print("  Here the hand-built dual coincides with the integer optimum: the bound closes")
@@ -102,6 +102,6 @@ for j in R(n):
 ax.set_xticks(R(n))
 ax.set_xticklabels([c.replace(" ", "\n") for c in CITTA], fontsize=7.5)
 ax.set_ylabel("cities covered if chosen as hub")
-ax.set_title(f"EX 6: the {len(ott)} chosen hubs (teal) and how many cities each site covers")
-salva_figura(fig, "ex06_ottimo")
+ax.set_title(f"EX 4: the {len(ott)} chosen hubs (teal) and how many cities each site covers")
+salva_figura(fig, "ex04_ottimo")
 print("Done.")

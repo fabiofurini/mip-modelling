@@ -50,8 +50,8 @@ print("ch. 3: the fourteen techniques — optima and relaxations compared")
 cop = pd.read_csv(DATI / "cap04_copertura.csv").iloc[0]
 assert uguale(cop.ub, 10) and uguale(cop.lb, 7) and uguale(cop.z_lp, F("15/2")) and uguale(cop.z_milp, 10)
 zai = pd.read_csv(DATI / "cap04_zaino.csv").iloc[0]
-assert uguale(zai.lb, 16) and uguale(zai.ub, 18) and uguale(zai.z_lp, 18)
-assert uguale(zai.z_lp_rafforzato, F("71/4")) and uguale(zai.z_milp, 17)
+assert uguale(zai.lb, 19) and uguale(zai.ub, F("70/3")) and uguale(zai.z_lp, F("159/7"))
+assert uguale(zai.z_lp_rafforzato, 22) and uguale(zai.z_milp, 22)
 tag = pd.read_csv(DATI / "cap04_tagli.csv").iloc[0]
 assert uguale(tag.z_lp_without_cuts, F("71/4")) and uguale(tag.z_lp_with_cuts, F("69/4"))
 sol4 = pd.read_csv(DATI / "cap04_solver.csv").set_index("configuration")
@@ -156,10 +156,10 @@ print("ch. 8: the eight additional questions — optima match the texts")
 attesi_num = {   # NUM: (ub, lb, z(LP), z(LP+), z(MILP), senso)
     "02": (13, 7, 9, 9, 9, "min"),
     "03": (99, 93, 95, 95, 95, "min"),
-    "06": (3, 3, 3, 3, 3, "min"),
+    "04": (3, 3, 3, 3, 3, "min"),
     "08": (18, 18, 18, 18, 18, "max"),
     "10": (F("23000/3"), 2000, 5200, 5200, 2500, "max"),
-    "11": (9, 9, 9, 9, 9, "min"),
+    "12": (9, 9, 9, 9, 9, "min"),
 }
 for k, (ub, lb, zlp, zlpr, zmilp, senso) in attesi_num.items():
     r = pd.read_csv(DATI / f"ex{k}_bound.csv").iloc[0]
@@ -172,8 +172,8 @@ for k, (ub, lb, zlp, zlpr, zmilp, senso) in attesi_num.items():
         assert float(r.lb) <= float(r.z_milp) <= float(r.z_lp) + 1e-6 <= float(r.ub) + 1e-6, k
     else:
         assert float(r.lb) <= float(r.z_lp) <= float(r.z_milp) <= float(r.ub) + 1e-9, k
-# EX 11: i due obiettivi descrivono la stessa soluzione con numeri diversi
-ob = pd.read_csv(DATI / "ex11_obiettivi.csv").set_index("objective")["z"]
+# EX 12: i due obiettivi descrivono la stessa soluzione con numeri diversi
+ob = pd.read_csv(DATI / "ex12_obiettivi.csv").set_index("objective")["z"]
 assert uguale(ob["min-max"], 9) and uguale(ob["minimum range"], 0)
 assert uguale(ob["min-max"], 18 / 2 + ob["minimum range"] / 2)
 print("numerical models EX 2, 5, 7, 9, 10, 15 — bounds and optima match the texts")
@@ -236,14 +236,14 @@ print("ch. 9-10: the twenty-four additional questions — optima match the texts
 # ----------------------------------------------------------------------
 attesi_num2 = {
     "01": (160, 110, 160, 140, 120, "max"),
-    "04": (825000, 761250, 773500, 773500, 774180, "min"),
-    "05": (F("280000/11"), 25200, F("280000/11"), F("229000/9"), 25250, "max"),
+    "05": (F("100/3"), 16, F("700/27"), F("700/27"), 23, "max"),
+    "06": (F("280000/11"), 25200, F("280000/11"), F("229000/9"), 25250, "max"),
     "07": (5, 4, 5, 5, 5, "max"),
-    "09": (8, 5, 8, 8, 8, "max"),
-    "12": (24000, 24000, 24000, 24000, 24000, "max"),
-    "13": (F("50/3"), 16, F("50/3"), F("50/3"), 16, "max"),
-    "14": (8410, 6300, F("115970/17"), F("115970/17"), 7060, "min"),
-    "15": (0, 0, 0, 0, 0, "min"),
+    "09": (4, 3, 4, 4, 4, "max"),
+    "11": (24000, 24000, 24000, 24000, 24000, "max"),
+    "13": (8410, 6300, F("115970/17"), F("115970/17"), 7060, "min"),
+    "14": (825000, 761250, 773500, 773500, 774180, "min"),
+    "15": (2, 0, 0, 2, 2, "min"),
 }
 for k, (ub, lb, zlp, zlpr, zmilp, senso) in attesi_num2.items():
     r = pd.read_csv(DATI / f"ex{k}_bound.csv").iloc[0]

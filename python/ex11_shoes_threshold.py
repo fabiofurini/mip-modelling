@@ -1,4 +1,4 @@
-"""EX 12 -- Shoes with a minimum production threshold (family 9).
+"""EX 11 -- Shoes with a minimum production threshold (family 9).
 
 Three resources, three types of shoe and a threshold per type: either at least
 q_j pairs are produced, or none. It is the semicontinuous variable of technique
@@ -17,7 +17,7 @@ from esteso import salva_modello
 R = range
 
 # ---------- 1. MODEL AND INSTANCE ----------
-intestazione("EX 12. Shoes: three resources and a minimum production threshold")
+intestazione("EX 11. Shoes: three resources and a minimum production threshold")
 NOMI = ["hiking boots", "loafers", "walking shoes"]
 RISORSE = ["leather (g)", "machine hours", "nails"]
 a11 = [[850, 600, 700],       # leather per pair
@@ -29,7 +29,7 @@ q11 = [100, 200, 150]         # minimum threshold
 ns, nr = len(p11), len(b11)
 M11 = [min(int(b11[i] // a11[i][j]) for i in R(nr)) for j in R(ns)]
 salva_dati(pd.DataFrame({"type": NOMI, "leather": a11[0], "hours": a11[1], "nails": a11[2],
-                         "price": p11, "threshold": q11, "maximum": M11}), "ex12_dati")
+                         "price": p11, "threshold": q11, "maximum": M11}), "ex11_dati")
 print("  Largest producible amount of a single type (the natural big-M):")
 for j in R(ns):
     quale = min(R(nr), key=lambda i: b11[i] / a11[i][j])
@@ -70,7 +70,7 @@ def duale(a, b, p, q, M):
 
 
 m11, x11, y11 = modello(a11, b11, p11, q11, M11)
-salva_modello(m11, "ex12_primale")
+salva_modello(m11, "ex11_primale")
 
 # ---------- 2. CONSTRUCTIVE HEURISTIC (LOWER BOUND) ----------
 # constructive heuristic on the price per gram of leather (the tightest resource), respecting the
@@ -106,7 +106,7 @@ print("  Heuristic solution: " + ", ".join(f"{x_e[j]} {NOMI[j]}" for j in R(ns) 
 
 # ---------- 3. LP RELAXATION AND DUAL (UPPER BOUND) ----------
 d11 = duale(a11, b11, p11, q11, M11)
-salva_modello(d11, "ex12_duale")
+salva_modello(d11, "ex11_duale")
 migliore, mano, scelta = float("inf"), None, None
 for i in R(nr):
     prezzo = max(p11[j] / a11[i][j] for j in R(ns))
@@ -133,13 +133,13 @@ for i in R(nr):
     usato = sum(a11[i][j] * x11[j].X for j in R(ns))
     print(f"    {RISORSE[i]}: {frazione(usato)} out of {b11[i]} "
           f"({'saturated' if abs(usato - b11[i]) < 1e-6 else 'with slack'})")
-riga = registra_bound("EX 12 shoes with threshold", ub11, lb11, zlp11, zlp11r, z11,
+riga = registra_bound("EX 11 shoes with threshold", ub11, lb11, zlp11, zlp11r, z11,
                       senso="max")
-salva_dati(pd.DataFrame([riga]), "ex12_bound")
+salva_dati(pd.DataFrame([riga]), "ex11_bound")
 assert lb11 <= z11 <= zlp11 <= ub11 + 1e-9
 
 # ---------- 5. WHAT THE THRESHOLD COSTS ----------
-intestazione("EX 12. The price of the threshold and the price of integrality")
+intestazione("EX 11. The price of the threshold and the price of integrality")
 m, x, y = modello(a11, b11, p11, [0] * ns, M11)
 z_senza = risolvi(m)
 print(f"  ub = lb = z(LP) = z(LP+) = z(MILP) = {frazione(z11)}: on this instance the sandwich")
@@ -165,7 +165,7 @@ print(f"  11b. With 200000 g of leather: z = {frazione(z_b)}, that is "
 print(f"       The maximum producible grows with the resource: the big-Ms must be recomputed "
       f"({M_alt}).")
 salva_dati(pd.DataFrame({"variant": list(varianti), "z": list(varianti.values())}),
-           "ex12_varianti")
+           "ex11_varianti")
 
 # ---------- 6. FIGURE ----------
 fig, ax = plt.subplots(figsize=(6.8, 3.0))
@@ -180,7 +180,7 @@ ax.plot([], [], color=BLU, lw=1.2, ls=":", label="maximum producible")
 ax.set_xticks(idx)
 ax.set_xticklabels([n.replace(" ", "\n") for n in NOMI], fontsize=8)
 ax.set_ylabel("pairs produced")
-ax.set_title(f"EX 12: heuristic {frazione(lb11)} against optimum {frazione(z11)}")
+ax.set_title(f"EX 11: heuristic {frazione(lb11)} against optimum {frazione(z11)}")
 ax.legend(fontsize=8)
-salva_figura(fig, "ex12_produzione")
+salva_figura(fig, "ex11_produzione")
 print("Done.")

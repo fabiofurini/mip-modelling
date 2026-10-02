@@ -1,4 +1,4 @@
-"""EX 14 -- Shifts in an emergency department (family 12).
+"""EX 13 -- Shifts in an emergency department (family 12).
 
 Cyclic covering: seven shift patterns, one per starting day, each with four full
 days, one half-service day and two rest days. It is a set covering with
@@ -19,7 +19,7 @@ from esteso import salva_modello
 R = range
 
 # ---------- 1. DATA, COSTS AND COVERING MATRIX ----------
-intestazione("EX 14. Emergency department shifts: covering the demand at minimum cost")
+intestazione("EX 13. Emergency department shifts: covering the demand at minimum cost")
 GIORNI = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
 b13 = [10, 8, 12, 9, 9, 7, 8]          # full-time equivalents required
 costo_giorno = [100, 100, 100, 100, 100, 110, 130]
@@ -39,8 +39,8 @@ for j in R(ng):
     print(f"    pattern {j + 1} (starts {GIORNI[j]}): full {pieni}; half service "
           f"{GIORNI[(j + 4) % ng]}  ->  {frazione(c13[j])} euros")
 salva_dati(pd.DataFrame({"pattern": R(1, ng + 1), "start": GIORNI, "cost": c13}),
-           "ex14_schemi")
-salva_dati(pd.DataFrame({"day": GIORNI, "demand": b13}), "ex14_fabbisogno")
+           "ex13_schemi")
+salva_dati(pd.DataFrame({"day": GIORNI, "demand": b13}), "ex13_fabbisogno")
 
 
 def modello(a, b, c):
@@ -65,7 +65,7 @@ def duale(a, b, c):
 
 
 m13, x13 = modello(a13, b13, c13)
-salva_modello(m13, "ex14_primale")
+salva_modello(m13, "ex13_primale")
 print("  The model of the instance:")
 stampa_lp(m13)
 
@@ -106,7 +106,7 @@ print("  Heuristic solution: " + ", ".join(f"{x_eur[j]} of pattern {j + 1}" for 
 
 # ---------- 3. LP RELAXATION AND DUAL (LOWER BOUND) ----------
 d13 = duale(a13, b13, c13)
-salva_modello(d13, "ex14_duale")
+salva_modello(d13, "ex13_duale")
 # best-ratio recipe: the same price t on all the days. Every pattern covers
 # 4 + 1/2 = 9/2 person-days, so the dual constraint is (9/2) t <= c_j: the largest
 # feasible t is min_j c_j / (9/2).
@@ -132,12 +132,12 @@ print("  Optimal solution: " + ", ".join(f"{int(x13[j].X)} of pattern {j + 1}"
 copertura_ott = [sum(a13[i][j] * x13[j].X for j in R(ng)) for i in R(ng)]
 print("  Coverage per day: " + ", ".join(
     f"{GIORNI[i]} {frazione(copertura_ott[i])} out of {b13[i]}" for i in R(ng)))
-riga = registra_bound("EX 14 shifts", ub13, lb13, zlp13, zlp13r, z13)
-salva_dati(pd.DataFrame([riga]), "ex14_bound")
+riga = registra_bound("EX 13 shifts", ub13, lb13, zlp13, zlp13r, z13)
+salva_dati(pd.DataFrame([riga]), "ex13_bound")
 assert lb13 <= zlp13 <= z13 <= ub13 + 1e-9
 
 # ---------- 5. TWO READINGS OF THE RESULT ----------
-intestazione("EX 14. Two readings of the result")
+intestazione("EX 13. Two readings of the result")
 print(f"  z(LP) = {frazione(zlp13)} and z(MILP) = {frazione(z13)}: the difference "
       f"{frazione(z13 - zlp13)} is the price of integrality, that is of the fact that people")
 print("  are hired one at a time.")
@@ -160,7 +160,7 @@ print("  more than the extra coverage is worth.")
 assert z_senza < z13
 salva_dati(pd.DataFrame([{"variant": "pattern with half service", "z": z13},
                          {"variant": "pattern without half service", "z": z_senza}]),
-           "ex14_varianti")
+           "ex13_varianti")
 
 # ---------- 6. FIGURE ----------
 fig, ax = plt.subplots(figsize=(6.8, 3.0))
@@ -172,7 +172,7 @@ ax.plot(idx, [sum(a13[i][j] * x_eur[j] for j in R(ng)) for i in idx], marker="^"
 ax.set_xticks(idx)
 ax.set_xticklabels(GIORNI)
 ax.set_ylabel("full-time equivalents")
-ax.set_title(f"EX 14: cost {frazione(z13)} against heuristic {frazione(ub13)}")
+ax.set_title(f"EX 13: cost {frazione(z13)} against heuristic {frazione(ub13)}")
 ax.legend(fontsize=8)
-salva_figura(fig, "ex14_copertura")
+salva_figura(fig, "ex13_copertura")
 print("Done.")
