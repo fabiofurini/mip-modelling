@@ -1,0 +1,324 @@
+# EX 1 — The eight-seat van
+
+**Class:** BIP · **Links:** [if-then](links-09.md), capacity · **Script:** `python/ex01_van.py`<br>
+**Difficulty:** ★☆☆☆☆ · **Time:** 30–45 min
+{ .scheda }
+
+[![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/fabiofurini/mip-modelling/blob/main/notebooks/ex01_van.ipynb)
+
+One of the [fifteen numerical models](numerical.md): the smallest of the course,
+and the one that shows the whole path in two pages — model, primal bound, dual
+bound, optimum.
+
+!!! abstract "EX 1"
+    A tour operator rents an eight-seat van to take tourists to a scenic spot.
+    On a given day four groups show up, of $2$, $3$, $4$ and $5$ people. Since
+    the van cannot take them all at once, the operator asks each group (whose
+    members do not want to be split) to make an offer: the four groups offer
+    $30$, $50$, $80$ and $70$ euros. For organisational reasons at most two
+    groups can be accepted; moreover, **if group 2 is accepted then group 4 must
+    be accepted too**. The revenue is to be maximised.
+
+    | group $j$ | 1 | 2 | 3 | 4 |
+    |---|---:|---:|---:|---:|
+    | people | 2 | 3 | 4 | 5 |
+    | offer (€) | 30 | 50 | 80 | 70 |
+
+## Model
+
+There are four groups: one binary variable per group,
+
+$$
+x_j = \begin{cases} 1 & \text{if group } j \text{ is accepted},\\ 0 & \text{otherwise,}\end{cases}
+\qquad \forall j \in \{1, 2, 3, 4\}.
+$$
+
+The data are all specific to the instance — the sizes, the offers, and above all
+the implication "if 2, then 4", which links two *named* groups — so the model is
+written directly on the data, one column per variable:
+
+<!-- modello-esteso: ex01_primale -->
+
+<div class="modello-esteso" markdown>
+
+$$
+\begin{array}{rrrrr c l}
+\max & 30x_1 & +50x_2 & +80x_3 & +70x_4 &  & \\
+\text{subject to} & 2x_1 & +3x_2 & +4x_3 & +5x_4 & \le & 8\\
+ & x_1 & +x_2 & +x_3 & +x_4 & \le & 2\\
+ &  & x_2 &  & -x_4 & \le & 0\\
+ & x_1, & x_2, & x_3, & x_4 & \in & \{0, 1\}
+\end{array}
+$$
+
+</div>
+
+<!-- modello-esteso: fine -->
+
+The first constraint is the **capacity** of the van, the second the limit on the
+number of groups, the third is the implication $x_2 \Rightarrow x_4$ in the
+[if-then](links-09.md) form $x_2 - x_4 \le 0$. The last row defines the variables
+of the model.
+
+## Constructive heuristic: the primal bound
+
+This is a **maximisation**, so a feasible solution gives a *lower* bound. The
+groups are scanned by decreasing offer and a group is accepted only if all
+constraints remain satisfied, the implication included. The order is $3, 4, 2, 1$:
+
+- **group 3** (offer $80$): accepted — $4$ seats used, $1$ group;
+- **group 4** (offer $70$): rejected, it would need $9$ seats out of $8$;
+- **group 2** (offer $50$): rejected, it would force group 4 in as well, and the
+  groups would become three;
+- **group 1** (offer $30$): accepted — $6$ seats used, $2$ groups.
+
+The solution built is $\bar x = (1, 0, 1, 0)$, of value
+
+$$\mathit{LB} = 30 + 80 = 110.$$
+
+## LP relaxation and dual: the dual bound
+
+The LP relaxation replaces the binary domain with non-negativity alone. The dual
+attaches a non-negative variable to each of the three constraints: $\alpha$ to
+the seats, $\beta$ to the number of groups, $\gamma$ to the implication. The four
+columns of the primal give four dual constraints:
+
+<!-- modello-esteso: ex01_duale -->
+
+<div class="modello-esteso" markdown>
+
+$$
+\begin{array}{rrrr c l}
+\min & 8\alpha & +2\beta &  &  & \\
+\text{subject to} & 2\alpha & +\beta &  & \ge & 30\\
+ & 3\alpha & +\beta & +\gamma & \ge & 50\\
+ & 4\alpha & +\beta &  & \ge & 80\\
+ & 5\alpha & +\beta & -\gamma & \ge & 70\\
+ & \alpha &  &  & \ge & 0\\
+ &  & \beta &  & \ge & 0\\
+ &  &  & \gamma & \ge & 0
+\end{array}
+$$
+
+</div>
+
+<!-- modello-esteso: fine -->
+
+**A dual solution by hand.** Only the seats are priced and the other two
+multipliers are set to zero, $\bar\beta = 0$ and $\bar\gamma = 0$. The four dual
+constraints become
+
+$$2\alpha \ge 30, \qquad 3\alpha \ge 50, \qquad 4\alpha \ge 80, \qquad 5\alpha \ge 70,$$
+
+and the smallest $\alpha$ satisfying all of them is
+
+$$\bar\alpha = \max\Bigl(\frac{30}{2},\ \frac{50}{3},\ \frac{80}{4},\ \frac{70}{5}\Bigr) = 20,$$
+
+of value $\mathit{UB} = 8 \cdot 20 = 160$. The reading is "a seat is worth as
+much as the group that pays best for it".
+
+## Optimum and comparison
+
+The optimum accepts groups $2$ and $4$, filling exactly the eight seats:
+$\tilde x = (0, 1, 0, 1)$ and $z(\mathit{MILP}) = 50 + 70 = 120$.
+
+| | value | what it is |
+|---|---:|---|
+| $\mathit{LB}$ | 110 | heuristic solution |
+| $\mathit{UB}$ | 160 | dual bound by hand |
+| $z(\mathit{LP})$ | 160 | relaxation without the bounds |
+| $z(\mathit{LP}^+)$ | 140 | relaxation with the bounds |
+| $z(\mathit{MILP})$ | 120 | optimum of the MILP |
+
+The heuristic gap is $|110 - 120|/120 = 8.3\%$. The one certified by the two
+bounds is known *before* solving, and for that very reason it cannot have
+$z(\mathit{MILP})$ as its denominator: in absolute terms
+$\mathit{UB} - \mathit{LB} = 50$, as a percentage $|160 - 110|/160 = 31.3\%$ in
+the solver's convention. The dual solution built by hand is **optimal**
+for the relaxation without the bounds: adding $x_j \le 1$ brings the relaxation
+down to $140$, closer to the optimum.
+
+!!! tip "Which constraint really bites"
+    Removing one constraint at a time: without the limit on the number of groups
+    the optimum stays $120$ (groups 2 and 4), without the implication it rises to
+    $130$ (groups 2 and 3). It is the implication that costs $10$ euros, not the
+    limit on the number of groups — which in this instance the optimum already
+    satisfies.
+
+![The optimal solution](img/ex01_ottimo.png)
+
+## Code
+
+The full script is
+[`python/ex01_van.py`](https://github.com/fabiofurini/mip-modelling/blob/main/python/ex01_van.py);
+the notebook is
+[`notebooks/ex01_van.ipynb`](https://github.com/fabiofurini/mip-modelling/blob/main/notebooks/ex01_van.ipynb).
+
+<!-- embedded-script: begin (regenerated by python/embed_code.py) -->
+
+??? example "Show the complete script — `python/ex01_van.py` (160 lines)"
+
+    ```python
+    """EX 1 -- An eight-seat van: which group of tourists to accept (family 10).
+
+    A knapsack with two extra constraints: at most two groups accepted, and the
+    implication "if I accept group 2 I must also accept group 4". It is the chance to
+    see, on a tiny case, the three techniques of chapter 3 that are needed here:
+    capacity (3.1), counting (3.4) and logical precedence (3.9).
+    """
+    import gurobipy as gp
+    import pandas as pd
+    from gurobipy import GRB
+
+    from mip import (ammissibile, due_rilassamenti, frazione, nuovo_modello, registra_bound,
+                     risolvi, stampa_lp, valuta)
+    from stile import ARANCIO, GRIGIO, TEAL, intestazione, plt, salva_dati, salva_figura
+    from esteso import salva_modello
+
+    R = range
+
+    # ---------- 1. MODEL AND INSTANCE ----------
+    intestazione("EX 1. An eight-seat van: which groups to accept")
+    a0 = [2, 3, 4, 5]          # people in each group
+    p0 = [30, 50, 80, 70]      # offer in euros
+    K0 = 8                     # seats of the van
+    G0 = 2                     # at most two groups
+    IMP = (1, 3)               # accepting group 2 (index 1) forces group 4 (index 3)
+    n0 = len(a0)
+    salva_dati(pd.DataFrame({"group": R(1, n0 + 1), "people": a0, "offer": p0}), "ex01_dati")
+
+
+    def modello(a, p, K, G, imp):
+        n = len(a)
+        m = nuovo_modello("van")
+        x = m.addVars(n, vtype=GRB.BINARY, name="x")
+        m.setObjective(gp.quicksum(p[j] * x[j] for j in R(n)), GRB.MAXIMIZE)
+        m.addConstr(gp.quicksum(a[j] * x[j] for j in R(n)) <= K, name="seats")
+        m.addConstr(gp.quicksum(x[j] for j in R(n)) <= G, name="groups")
+        m.addConstr(x[imp[0]] - x[imp[1]] <= 0, name="implication")
+        return m, x
+
+
+    def duale(a, p, K, G, imp):
+        """min K alpha + G beta  s.t.  a_j alpha + beta (+gamma if j=2, -gamma if j=4) >= p_j."""
+        n = len(a)
+        d = nuovo_modello("dual_van")
+        alpha = d.addVar(name="alpha")     # seats
+        beta = d.addVar(name="beta")       # number of groups
+        gamma = d.addVar(name="gamma")     # implication
+        d.setObjective(K * alpha + G * beta, GRB.MINIMIZE)
+        for j in R(n):
+            segno = 1 if j == imp[0] else (-1 if j == imp[1] else 0)
+            d.addConstr(a[j] * alpha + beta + segno * gamma >= p[j], name=f"rc[{j}]")
+        return d
+
+
+    m0, x0 = modello(a0, p0, K0, G0, IMP)
+    salva_modello(m0, "ex01_primale")
+    print("  The model of the instance:")
+    stampa_lp(m0)
+
+    # ---------- 2. CONSTRUCTIVE HEURISTIC (LOWER BOUND) ----------
+    # constructive heuristic on the decreasing offer: a group is accepted only if all the constraints stay
+    # satisfied, the implication included (group 2 enters only with group 4 already in)
+    def euristica(a, p, K, G, imp):
+        n = len(a)
+        x = [0] * n
+        passi = []
+        for j in sorted(R(n), key=lambda j: (-p[j], j)):
+            x[j] = 1
+            posti = sum(a[k] * x[k] for k in R(n))
+            gruppi = sum(x)
+            ok_imp = x[imp[0]] <= x[imp[1]]
+            motivi = []
+            if posti > K:
+                motivi.append(f"{posti} seats would be needed out of {K}")
+            if gruppi > G:
+                motivi.append(f"there would be {gruppi} groups out of {G}")
+            if not ok_imp:
+                motivi.append(f"group {imp[0] + 1} forces accepting group {imp[1] + 1}")
+            if motivi:
+                x[j] = 0
+                passi.append(f"group {j + 1} (offer {p[j]}): rejected, " + "; ".join(motivi))
+            else:
+                passi.append(f"group {j + 1} (offer {p[j]}): accepted "
+                             f"({posti} seats taken, {gruppi} groups)")
+        return x, passi
+
+
+    x_eur, passi = euristica(a0, p0, K0, G0, IMP)
+    for k, riga in enumerate(passi, 1):
+        print(f"  Step {k}. {riga}")
+    lb0 = sum(p0[j] * x_eur[j] for j in R(n0))
+    sol_eur = {f"x[{j}]": x_eur[j] for j in R(n0)}
+    assert ammissibile(m0, sol_eur), sol_eur
+    print(f"  Heuristic solution: groups {[j + 1 for j in R(n0) if x_eur[j]]}   "
+          f"lb = {frazione(lb0)}")
+
+    # ---------- 3. LP RELAXATION AND DUAL (UPPER BOUND) ----------
+    d0 = duale(a0, p0, K0, G0, IMP)
+    salva_modello(d0, "ex01_duale")
+    # recipe: only the seats are priced (beta = gamma = 0), at the highest price per seat
+    alpha_min = max(p0[j] / a0[j] for j in R(n0))
+    mano = {"alpha": alpha_min, "beta": 0.0, "gamma": 0.0}
+    ub0, viol = valuta(d0, mano)
+    assert viol <= 1e-9, viol
+    print("  Hand-built dual: beta = gamma = 0 and alpha = max_j p_j / a_j (a seat is worth what")
+    print("  the group paying best pays for it), so every constraint a_j alpha >= p_j holds:")
+    for j in R(n0):
+        print(f"    group {j + 1}: {p0[j]} / {a0[j]} = {frazione(p0[j] / a0[j])}")
+    print(f"  alpha = {frazione(alpha_min)}  ->  ub = {K0} * alpha = {frazione(ub0)}")
+    zlp0, zlp0r, _ = due_rilassamenti(m0, d0)
+
+    # ---------- 4. OPTIMUM OF THE MILP AND BOUND TABLE ----------
+    z0 = risolvi(m0)
+    acc = [j + 1 for j in R(n0) if x0[j].X > 0.5]
+    print(f"  Optimal solution: groups {acc}, "
+          f"{int(sum(a0[j] * x0[j].X for j in R(n0)))} seats taken out of {K0}, revenue "
+          f"{frazione(z0)}")
+    riga = registra_bound("EX 1 van", ub0, lb0, zlp0, zlp0r, z0, senso="max")
+    salva_dati(pd.DataFrame([riga]), "ex01_bound")
+    assert lb0 <= z0 <= zlp0r <= zlp0 <= ub0 + 1e-9
+
+    # ---------- 5. WHAT EACH CONSTRAINT CONTRIBUTES ----------
+    intestazione("EX 1. The contribution of each constraint")
+    prove = []
+    for nome, togli in [("complete model", []), ("without the limit on groups", ["groups"]),
+                        ("without the implication", ["implication"]),
+                        ("without both", ["groups", "implication"])]:
+        m, x = modello(a0, p0, K0, G0, IMP)
+        m.update()
+        for c in list(m.getConstrs()):
+            if c.ConstrName in togli:
+                m.remove(c)
+        m.update()
+        z = risolvi(m)
+        scelti = [j + 1 for j in R(n0) if x[j].X > 0.5]
+        print(f"  {nome:32s} z = {frazione(z):>4}   groups {scelti}")
+        prove.append({"variant": nome, "z": z, "groups": " ".join(map(str, scelti))})
+    salva_dati(pd.DataFrame(prove), "ex01_vincoli")
+    assert prove[0]["z"] <= prove[1]["z"] and prove[0]["z"] <= prove[2]["z"]
+
+    # ---------- 6. FIGURE ----------
+    fig, ax = plt.subplots(figsize=(6.4, 2.9))
+    idx = list(R(n0))
+    colori = [TEAL if x0[j].X > 0.5 else GRIGIO for j in idx]
+    ax.bar(idx, p0, 0.55, color=colori)
+    for j in idx:
+        if x_eur[j]:
+            ax.plot(j, p0[j] + 3, marker="v", color=ARANCIO, ms=8)
+        ax.annotate(f"{a0[j]} seats", (j, 3), ha="center", fontsize=8, color="white")
+    ax.plot([], [], marker="v", ls="", color=ARANCIO, label="chosen by the heuristic")
+    ax.bar([], [], color=TEAL, label="accepted at the optimum")
+    ax.bar([], [], color=GRIGIO, label="rejected at the optimum")
+    ax.set_xticks(idx)
+    ax.set_xticklabels([f"group {j + 1}" for j in idx])
+    ax.set_ylabel("offer (euros)")
+    ax.set_title(f"EX 1: heuristic {frazione(lb0)} <= optimum {frazione(z0)} <= dual "
+                 f"{frazione(ub0)}")
+    ax.legend(fontsize=8, loc="upper left")
+    salva_figura(fig, "ex01_ottimo")
+    print("Done.")
+    ```
+
+<!-- embedded-script: end -->

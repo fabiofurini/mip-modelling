@@ -107,8 +107,10 @@ def missing_models() -> list[str]:
     talks about a dual the reader never sees.
     """
     fuori = []
-    for page in sorted(DOCS.glob("ex-*.md")):
-        n = page.stem.removeprefix("ex-")
+    # "ex-04.md" is the signpost at the old address, "ex-04-hub.md" the page:
+    # the number alone no longer identifies an exercise.
+    for page in sorted(DOCS.glob("ex-[0-9][0-9]-*.md")):
+        n = page.stem[3:5]
         text = page.read_text(encoding="utf-8")
         for side in ("primale", "duale"):
             nome = f"ex{n}_{side}"

@@ -24,12 +24,12 @@ once.
 
 *[Fifteen numerical models](numerical.md)* — from EX 1 to EX 15, with the online page for
 
-EX 2 [Bus lines](ex-02.md) ·
-EX 3 [Relay](ex-03.md) ·
-EX 4 [Hub-and-spoke](ex-04.md) ·
-EX 8 [Seminars](ex-08.md) ·
-EX 10 [CNC tools](ex-10.md) ·
-EX 12 [Balancing](ex-12.md)
+EX 2 [Bus lines](ex-02-buslines.md) ·
+EX 3 [Relay](ex-03-relay.md) ·
+EX 4 [Hub-and-spoke](ex-04-hub.md) ·
+EX 8 [Seminars](ex-08-seminars.md) ·
+EX 10 [CNC tools](ex-10-tools.md) ·
+EX 12 [Balancing](ex-12-balancing.md)
 
 *[Assignment and scheduling](scheduling.md)*
 

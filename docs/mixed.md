@@ -128,7 +128,7 @@ minimum lot, a packing and integer counts in lots.
 
 | Model | What it brings into play | $z(\mathit{MILP})$ |
 |---|---|---:|
-| [EX 1 — The eight-seat van](ex-01.md) | selection with a capacity and an implication between groups | 120 |
-| [EX 5 — Mutual funds bought in lots](ex-05.md) | integer counts in lots, with a proportion constraint | 16 |
-| [EX 6 — Vehicles with a minimum quantity](ex-06.md) | minimum lot: a minimum quantity if the type is produced | 25 250 |
-| [EX 9 — Queens on the chessboard](ex-09.md) | packing on a chessboard: rows, columns and diagonals | 4 |
+| [EX 1 — The eight-seat van](ex-01-van.md) | selection with a capacity and an implication between groups | 120 |
+| [EX 5 — Mutual funds bought in lots](ex-05-funds.md) | integer counts in lots, with a proportion constraint | 16 |
+| [EX 6 — Vehicles with a minimum quantity](ex-06-vehicles.md) | minimum lot: a minimum quantity if the type is produced | 25 250 |
+| [EX 9 — Queens on the chessboard](ex-09-queens.md) | packing on a chessboard: rows, columns and diagonals | 4 |
