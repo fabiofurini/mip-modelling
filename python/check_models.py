@@ -24,6 +24,14 @@ DOCS = BASE / "docs"
 PREAMBLE = BASE / "notes_1" / "preambolo.tex"
 MATHJAX = DOCS / "javascripts" / "mathjax.js"
 
+# The shorthands defined by the notes preamble. The list lives here, and is not
+# read from the `.tex`, because the notes are private and absent in CI; when the
+# preamble is at hand the two lists are checked against each other as well.
+MACRO_DEL_CORSO = frozenset({
+    "AND", "E", "NOT", "OR", "Prob", "Q", "R", "Z", "cvar", "false", "figdat",
+    "lb", "true", "ub", "var", "zdual", "zlp", "zlpp", "zlppp", "zmilp",
+})
+
 # un dominio: `\in \{0, 1\}`, `\ge 0`, `\le 0`, `\gtreqless 0`, `\in \Z_{\ge 0}`
 DOMINIO = re.compile(r"\\in\s*\\\{0|\\ge\s*0|\\le\s*0|\\gtreqless\s*0|\\in\s*\\(Z|Q|R)")
 RELAZIONE = re.compile(r"\\le|\\ge|\\in|\\gtreqless|(?<![<>!=])=(?!=)")
@@ -68,20 +76,24 @@ def problemi(riga: str) -> list[str]:
 
 
 def undefined_macros() -> list[str]:
-    """The preamble shorthands the pages use and MathJax does not know.
+    """The course shorthands the pages use and MathJax does not know.
 
     Without the definition the browser prints `\\Z` in place of Z, and the model
     looks wrong even when it is not.
     """
-    in_preamble = set(re.findall(r"\\newcommand\{\\([A-Za-z]+)\}",
-                                 PREAMBLE.read_text(encoding="utf-8")))
+    if PREAMBLE.exists():   # locally: the list above must stay in step with it
+        in_tex = set(re.findall(r"\\newcommand\{\\([A-Za-z]+)\}",
+                                PREAMBLE.read_text(encoding="utf-8")))
+        if in_tex != set(MACRO_DEL_CORSO):
+            return [f"MACRO_DEL_CORSO does not match {PREAMBLE.name}: "
+                    f"only in the tex {sorted(in_tex - MACRO_DEL_CORSO)}, "
+                    f"only here {sorted(MACRO_DEL_CORSO - in_tex)}"]
     for_mathjax = set(re.findall(r"^\s*([A-Za-z]+):\s*\"",
                                  MATHJAX.read_text(encoding="utf-8"), re.M))
-    missing = {}
+    missing: dict[str, list[str]] = {}
     for page in sorted(DOCS.glob("*.md")):
-        text = page.read_text(encoding="utf-8")
-        for name in set(re.findall(r"\\([A-Za-z]+)", text)):
-            if name in in_preamble and name not in for_mathjax:
+        for name in set(re.findall(r"\\([A-Za-z]+)", page.read_text(encoding="utf-8"))):
+            if name in MACRO_DEL_CORSO and name not in for_mathjax:
                 missing.setdefault(name, []).append(page.name)
     return [f"\\{n} used on {len(p)} pages ({', '.join(sorted(p)[:3])}...) "
             f"but not defined in {MATHJAX.name}" for n, p in sorted(missing.items())]
