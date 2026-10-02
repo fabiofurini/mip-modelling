@@ -48,7 +48,7 @@ assert uguale(tec.loc["3.14"].z_lp_1, F("117/4"))
 tre = pd.read_csv(DATI / "cap06_tre_problemi.csv").set_index("problem")
 assert uguale(tre.loc["bin packing"].z_milp, 3)      # = ceil(21/8), the count is tight
 assert uguale(tre.loc["makespan"].z_milp, 9)         # = 27/3, the machines share the load
-assert uguale(tre.loc["TSP"].z_milp, 18)             # the tour the heuristics chase
+assert uguale(tre.loc["TSP"].z_milp, 22)             # the tour the heuristics chase
 print("ch. 3: the fourteen techniques — optima and relaxations compared")
 
 cop = pd.read_csv(DATI / "cap04_copertura.csv").iloc[0]

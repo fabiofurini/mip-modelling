@@ -185,8 +185,8 @@ print("      the notes, the website and check_numbers.py read it from.")
 intestazione("8. Bin packing, makespan and TSP: the models the heuristics will use")
 
 # --- bin packing: how many containers are enough ---
-w_bpp = [5, 4, 4, 3, 3, 2]       # weight of the items
-c_bpp = 8                        # capacity of one container
+w_bpp = [5, 4, 3, 3]             # weight of the items
+c_bpp = 7                        # capacity of one container
 n_bpp = len(w_bpp)
 k_bpp = n_bpp                    # at most one container per item
 
@@ -223,15 +223,15 @@ def modello_cmax(d, k):
     n = len(d)
     m = nuovo_modello("makespan")
     x = m.addVars(n, k, vtype=GRB.BINARY, name="x")
-    cmax = m.addVar(name="cmax")
-    m.setObjective(cmax, GRB.MINIMIZE)
+    z = m.addVar(name="z")
+    m.setObjective(z, GRB.MINIMIZE)
     m.addConstrs((x.sum(j, "*") == 1 for j in R(n)), name="job")
-    m.addConstrs((gp.quicksum(d[j] * x[j, mm] for j in R(n)) <= cmax for mm in R(k)),
+    m.addConstrs((gp.quicksum(d[j] * x[j, mm] for j in R(n)) <= z for mm in R(k)),
                  name="load")
-    return m, x, cmax
+    return m, x, z
 
 
-m_cmax, x_cmax, v_cmax = modello_cmax(d_cmax, k_cmax)
+m_cmax, x_cmax, z_cmax_var = modello_cmax(d_cmax, k_cmax)
 z_cmax = risolvi(m_cmax)
 salva_modello(m_cmax, "cap06_cmax")
 print(f"  Makespan: durations {d_cmax} on {k_cmax} identical machines.")
@@ -239,11 +239,10 @@ print(f"  The total load is {sum(d_cmax)}: divided by {k_cmax} it gives "
       f"{frazione(sum(d_cmax) / k_cmax)}, and the optimum is {frazione(z_cmax)}.")
 
 # --- TSP with the MTZ formulation ---
-D_tsp = [[0, 5, 2, 2, 9],
-         [5, 0, 4, 3, 4],
-         [2, 4, 0, 4, 7],
-         [2, 3, 4, 0, 7],
-         [9, 4, 7, 7, 0]]
+D_tsp = [[0, 4, 5, 9],
+         [4, 0, 9, 9],
+         [5, 9, 0, 4],
+         [9, 9, 4, 0]]
 n_tsp = len(D_tsp)
 
 
