@@ -25,10 +25,10 @@ Data written out, as in the fifteen numerical models: one reads the statement, r
 
 !!! abstract "N2 — Three couriers, four deliveries"
 
-    Four deliveries must be given to three couriers. The time courier $i$ takes for
-    delivery $j$, in minutes, is
+    Four deliveries must be given to three couriers. The table gives, for every
+    courier and every delivery, the time needed in minutes:
 
-    |  | D1 | D2 | D3 | D4 |
+    |  | delivery 1 | delivery 2 | delivery 3 | delivery 4 |
     |---|---|---|---|---|
     | courier 1 | 20 | 35 | 25 | 40 |
     | courier 2 | 25 | 20 | 30 | 35 |
@@ -47,8 +47,8 @@ Data written out, as in the fifteen numerical models: one reads the statement, r
 !!! abstract "N4 — Four parcels in ten-kilo boxes"
 
     Four parcels weigh $6$, $5$, $4$ and $3$ kilos. Every box carries at most $10$
-    kilos and a parcel is not split. Two boxes are available. The minimum number of
-    boxes is wanted.
+    kilos and a parcel is not split. Three boxes are available. The minimum number
+    of boxes is wanted.
 
 !!! abstract "N5 — Two products, three departments"
 
@@ -84,10 +84,10 @@ Data written out, as in the fifteen numerical models: one reads the statement, r
 
     Three customers ask for $12$, $8$ and $15$ pallets. Three warehouses can be
     opened, with capacities $20$, $25$ and $18$ pallets and fixed opening costs
-    $100$, $90$ and $80$. The transport cost per pallet from warehouse $l$ to
-    customer $c$ is
+    $100$, $90$ and $80$. The table gives the transport cost per pallet from each
+    warehouse to each customer:
 
-    |  | c1 | c2 | c3 |
+    |  | customer 1 | customer 2 | customer 3 |
     |---|---|---|---|
     | warehouse 1 | 2 | 4 | 5 |
     | warehouse 2 | 3 | 2 | 4 |
@@ -113,7 +113,7 @@ Data written out, as in the fifteen numerical models: one reads the statement, r
 
     Four foods cost $2$, $3$, $1$ and $4$ euros a kilo. One kilo of each provides
 
-    |  | f1 | f2 | f3 | f4 |
+    |  | food 1 | food 2 | food 3 | food 4 |
     |---|---|---|---|---|
     | protein (g) | 20 | 35 | 10 | 40 |
     | iron (mg) | 3 | 2 | 5 | 4 |
@@ -145,12 +145,14 @@ Data written out, as in the fifteen numerical models: one reads the statement, r
     $1$ euro. The line makes at most $200$ pieces a month. Stock starts and ends
     empty. The minimum cost is wanted.
 
-!!! abstract "N16 — Two containers"
+!!! abstract "N16 — Three containers to choose from"
 
-    Two containers carry $20$ and $25$ tonnes. Five loads weigh $10$, $8$, $12$, $6$
-    and $9$ tonnes. Loads $1$ and $3$ are incompatible and do not travel in the same
-    container; load $5$ requires a refrigerated container, and only the second one
-    is. Every load must be shipped. Using a container costs $100$ euros. The minimum
+    Three containers are available: the first carries $20$ tonnes and costs $100$
+    euros, the second $25$ tonnes and costs $120$ euros, the third $15$ tonnes and
+    costs $80$ euros; only the ones actually used are paid for. Four loads weigh
+    $10$, $8$, $12$ and $6$ tonnes, and each must be shipped whole in a single
+    container. Loads $1$ and $3$ are incompatible and do not travel together; load
+    $4$ requires a refrigerated container, and only the second one is. The minimum
     cost is wanted.
 
 !!! abstract "N17 — Six activities and two crews"
