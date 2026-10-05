@@ -29,7 +29,7 @@ professor at [DIAG](https://www.diag.uniroma1.it/), Sapienza University of Rome.
 
     ---
 
-    Forty-four notebooks that run in the browser with nothing to install: the
+    Forty-five notebooks that run in the browser with nothing to install: the
     same code as the pages, cell by cell.
 
     [:octicons-arrow-right-24: The notebooks](notebooks.md)
@@ -73,7 +73,7 @@ professor at [DIAG](https://www.diag.uniroma1.it/), Sapienza University of Rome.
 - **Forty problems to model**, presented as they would arise in practice and with no model
   already written: twenty with explicit numerical data and twenty in symbolic
   form.
-- **Forty-four [notebooks](notebooks.md)** that run in Colab with nothing to
+- **Forty-five [notebooks](notebooks.md)** that run in Colab with nothing to
   install: the same code as the pages, cell by cell.
 - **No result transcribed by hand**: every number comes from a script you can
   re-run, and an automatic check verifies that text and code say the same thing.
@@ -119,7 +119,7 @@ professor at [DIAG](https://www.diag.uniroma1.it/), Sapienza University of Rome.
 
 ## The course at a glance
 
-**6 modelling chapters · 38 fully worked problems · 40 problems to model · 44
+**6 modelling chapters · 38 fully worked problems · 40 problems to model · 45
 Colab notebooks.** The full list, chapter by chapter, is in the
 [syllabus](syllabus.md).
 
