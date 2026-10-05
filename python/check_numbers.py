@@ -66,14 +66,14 @@ assert uguale(pr.loc[9].z_milp, 17) and uguale(pr.loc[10].z_milp, 17)   # the ju
 print("ch. 4: covering, knapsack, cover cuts, solver nodes and marginal prices")
 
 eur = pd.read_csv(DATI / "cap05_euristiche.csv").set_index("heuristic")
-attese5 = {"5.1 next-fit": (14, 11), "5.1 first-fit": (14, 11),
-           "5.1 best-fit (minimum cost)": (11, 11), "5.2 LPT (makespan)": (11, 9),
+attese5 = {"5.1 next-fit": (5, 3), "5.1 first-fit": (4, 3),
+           "5.1 best-fit (tightest fit)": (3, 3), "5.2 LPT (makespan)": (11, 9),
            "5.3 covering constructive heuristic": (10, 10), "5.4 constructive heuristic by ratio p/w": (16, 17),
-           "5.5 lot sizing (least unit cost)": (200, 170)}
+           "5.5 nearest neighbour (TSP)": (25, 18), "5.5 lot sizing (least unit cost)": (200, 170)}
 for k, (v, z) in attese5.items():
     assert uguale(eur.loc[k].heuristic_value, v), (k, eur.loc[k].heuristic_value, v)
     assert uguale(eur.loc[k].z_milp, z), (k, eur.loc[k].z_milp, z)
-print("ch. 5: the six heuristics — values and gaps match the texts")
+print("ch. 5: the eight heuristics — values and gaps match the texts")
 
 st = pd.read_csv(DATI / "cap06_stati.csv").set_index("case")
 assert int(st.loc["optimal"].status) == 2 and int(st.loc["infeasible"].status) == 3
