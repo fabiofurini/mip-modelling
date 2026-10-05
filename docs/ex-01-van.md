@@ -162,9 +162,9 @@ the notebook is
     """EX 1 -- An eight-seat van: which group of tourists to accept (family 10).
 
     A knapsack with two extra constraints: at most two groups accepted, and the
-    implication "if I accept group 2 I must also accept group 4". It is the chance to
-    see, on a tiny case, the three techniques of chapter 6 that are needed here:
-    capacity (6.1), counting (6.4) and logical precedence (6.9).
+    implication "if I accept group 2 I must also accept group 4". The van capacity and the
+    limit on the number of groups are two direct constraints, not techniques; the
+    only technique of chapter 6 needed here is logical precedence (6.9).
     """
     import gurobipy as gp
     import pandas as pd
