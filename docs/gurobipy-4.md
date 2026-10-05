@@ -333,4 +333,115 @@ $$
     print("Done.")
     ```
 
+??? example "Show the complete script — `python/cap06_cmax.py` (47 lines)"
+
+    ```python
+    """Makespan on identical machines (chapter 3).
+
+    The second of the three problems the heuristics chapter takes up again: there the
+    natural order is compared with LPT on the very same four jobs. The objective is a
+    single variable, z, and it is the load constraints that give it meaning: this is
+    the min-max technique.
+    """
+    import gurobipy as gp
+    import pandas as pd
+    from gurobipy import GRB
+
+    from esteso import salva_modello
+    from mip import frazione, nuovo_modello, risolvi
+    from stile import intestazione, salva_dati
+
+    R = range
+
+    intestazione("Makespan: the load of the busiest machine")
+    d_cmax = [3, 4, 5, 6]            # job durations
+    k_cmax = 2                       # identical machines
+
+
+    def modello_cmax(d, k):
+        n = len(d)
+        m = nuovo_modello("makespan")
+        x = m.addVars(n, k, vtype=GRB.BINARY, name="x")
+        z = m.addVar(name="z")
+        m.setObjective(z, GRB.MINIMIZE)
+        m.addConstrs((x.sum(j, "*") == 1 for j in R(n)), name="job")
+        m.addConstrs((gp.quicksum(d[j] * x[j, mm] for j in R(n)) <= z for mm in R(k)),
+                     name="load")
+        return m, x, z
+
+
+    m_cmax, x_cmax, z_var = modello_cmax(d_cmax, k_cmax)
+    z_cmax = risolvi(m_cmax)
+    salva_modello(m_cmax, "cap06_cmax")
+    print(f"  Durations {d_cmax} on {k_cmax} identical machines.")
+    print(f"  The total load is {sum(d_cmax)}: divided by {k_cmax} it gives "
+          f"{frazione(sum(d_cmax) / k_cmax)}, and the optimum is {frazione(z_cmax)}.")
+    for mm in R(k_cmax):
+        lavori = [j + 1 for j in R(len(d_cmax)) if x_cmax[j, mm].X > 0.5]
+        print(f"    machine {mm + 1}: jobs {lavori}, load "
+              f"{sum(d_cmax[j - 1] for j in lavori)}")
+    assert z_cmax == sum(d_cmax) / k_cmax
+    salva_dati(pd.DataFrame([{"problem": "makespan", "z_milp": z_cmax}]), "cap06_cmax")
+    print("Done.")
+    ```
+
+??? example "Show the complete script — `python/cap06_tsp.py` (54 lines)"
+
+    ```python
+    """Travelling salesman with the MTZ formulation (chapter 3).
+
+    The third of the three problems the heuristics chapter takes up again: there the
+    tour is built with nearest neighbour, here the optimum is found.
+
+    The u variables order the cities along the tour: the constraint
+    u_i - u_j + n x_ij <= n - 1 is true when x_ij = 0 and forces u_j >= u_i + 1 when
+    x_ij = 1. Subtours that miss city 1 are thereby excluded, because they would need
+    a chain of ever-growing u that closes on itself.
+    """
+    import gurobipy as gp
+    import pandas as pd
+    from gurobipy import GRB
+
+    from esteso import salva_modello
+    from mip import frazione, nuovo_modello, risolvi
+    from stile import intestazione, salva_dati
+
+    R = range
+
+    intestazione("Travelling salesman: the shortest tour")
+    D_tsp = [[0, 4, 5, 9],
+             [4, 0, 9, 9],
+             [5, 9, 0, 4],
+             [9, 9, 4, 0]]
+    n_tsp = len(D_tsp)
+
+
+    def modello_tsp(D):
+        n = len(D)
+        m = nuovo_modello("tsp")
+        x = m.addVars(((i, j) for i in R(n) for j in R(n) if i != j), vtype=GRB.BINARY, name="x")
+        u = m.addVars(R(1, n), lb=1, ub=n - 1, name="u")
+        m.setObjective(gp.quicksum(D[i][j] * x[i, j] for i, j in x), GRB.MINIMIZE)
+        m.addConstrs((gp.quicksum(x[i, j] for j in R(n) if j != i) == 1 for i in R(n)), name="out")
+        m.addConstrs((gp.quicksum(x[i, j] for i in R(n) if i != j) == 1 for j in R(n)), name="in")
+        m.addConstrs((u[i] - u[j] + n * x[i, j] <= n - 1
+                      for i in R(1, n) for j in R(1, n) if i != j), name="mtz")
+        return m, x, u
+
+
+    m_tsp, x_tsp, u_tsp = modello_tsp(D_tsp)
+    salva_modello(m_tsp, "cap06_tsp")
+    z_tsp = risolvi(m_tsp)
+    seguente = {i: j for (i, j) in x_tsp if x_tsp[i, j].X > 0.5}
+    giro, citta = [0], 0
+    while seguente[citta] != 0:
+        citta = seguente[citta]
+        giro.append(citta)
+    print(f"  {n_tsp} cities, symmetric and metric distances.")
+    print("  Optimal tour: " + " -> ".join(str(c + 1) for c in giro + [0])
+          + f", length {frazione(z_tsp)}.")
+    salva_dati(pd.DataFrame([{"problem": "TSP", "z_milp": z_tsp}]), "cap06_tsp")
+    print("Done.")
+    ```
+
 <!-- embedded-script: end -->
