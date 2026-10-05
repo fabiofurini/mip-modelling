@@ -9,27 +9,36 @@ once.
 
 1. [What is a MIP model](modelling-1.md) — data, variables, objective,
    constraints; relaxations, bounds and gaps
-2. [Logic and binary variables](modelling-5.md) — CNF, the three translation
-   rules, five exercises
-3. [Links between variables](links.md) — the fourteen techniques, one per
-   subpage, with the [map](links.md)
-4. [Relaxations, duality and bounds](modelling-2.md) — the conversion table,
+2. [Relaxations, duality and bounds](modelling-2.md) — the conversion table,
    three recipes for a hand-built dual solution
-5. [Constructive heuristics](modelling-4.md) — the six rules, and when they
+3. [From the model to Python/Gurobi](modelling-3.md) — the four classes of
+   variables, the tolerances, the course protocol, in five sections
+4. [Constructive heuristics](modelling-4.md) — the six rules, and when they
    fail
-6. [From the model to Python/Gurobi](modelling-3.md) — the four classes of
-   variables, the tolerances, the course protocol
+5. [Logic and binary variables](modelling-5.md) — CNF, the three translation
+   rules, five exercises
+6. [Links between variables](links.md) — the fourteen techniques, one per
+   subpage, with the [map](links.md)
 
 **[The problems](problems.md)**
 
-*[Fifteen numerical models](numerical.md)* — from EX 1 to EX 15, with the online page for
+*[Fifteen numerical models](numerical.md)* — from EX 1 to EX 15, each with its own page
 
+EX 1 [The eight-seat van](ex-01-van.md) ·
 EX 2 [Bus lines](ex-02-buslines.md) ·
 EX 3 [Relay](ex-03-relay.md) ·
 EX 4 [Hub-and-spoke](ex-04-hub.md) ·
+EX 5 [Funds in lots](ex-05-funds.md) ·
+EX 6 [Vehicles with a minimum quantity](ex-06-vehicles.md) ·
+EX 7 [Custom aircraft](ex-07-aircraft.md) ·
 EX 8 [Seminars](ex-08-seminars.md) ·
+EX 9 [The eight queens](ex-09-queens.md) ·
 EX 10 [CNC tools](ex-10-tools.md) ·
-EX 12 [Balancing](ex-12-balancing.md)
+EX 11 [Shoes with a threshold](ex-11-shoes-threshold.md) ·
+EX 12 [Balancing](ex-12-balancing.md) ·
+EX 13 [Emergency room shifts](ex-13-shifts.md) ·
+EX 14 [Shoes, production and hiring](ex-14-shoes.md) ·
+EX 15 [Music school timetable](ex-15-timetable.md)
 
 *[Assignment and scheduling](scheduling.md)*
 
