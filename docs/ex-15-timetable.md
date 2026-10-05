@@ -190,8 +190,8 @@ the notebook is
 
     Four afternoons of three hours each, twelve lesson hours to place: the timetable
     is a partition of the twelve slots. The model uses the count of the instruments
-    per day (technique 3.11), the precedences between consecutive hours (3.9) and the
-    soft constraints with penalties (3.13).
+    per day (technique 6.11), the precedences between consecutive hours (6.9) and the
+    soft constraints with penalties (6.13).
 
     The starting model contains an instructive mistake: the link between the lesson
     and the instrument indicator is written in one direction only, and the variety
@@ -320,7 +320,7 @@ the notebook is
     print(f"  There are days with a single instrument ({', '.join(poveri)}), and yet the")
     print("  constraint sum_i y_di >= 2 is satisfied: it is enough to set y_di = 1 without")
     print("  teaching. The link x_dti <= y_di says \"if there is a lesson then the indicator is")
-    print("  on\", not the converse. One also needs y_di <= sum_t x_dti, that is technique 3.10")
+    print("  on\", not the converse. One also needs y_di <= sum_t x_dti, that is technique 6.10")
     print("  (if and only if).")
     assert poveri, "the model without the second direction must allow single-instrument days"
     salva_dati(pd.DataFrame({"day": GIORNI, "instruments_wrong_model": strumenti_giorno}),

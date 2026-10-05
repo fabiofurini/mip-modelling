@@ -1,8 +1,8 @@
 """Problem 9.3 -- Vehicles: minimum lot and a bonus for variety.
 
-Three techniques together: the semi-integer variable of the minimum lot (3.3),
-the count of the active types (3.11) and a bonus paid "if and only if" at least
-two types are produced (3.10). The bonus is collected only if the count reaches
+Three techniques together: the semi-integer variable of the minimum lot (6.3),
+the count of the active types (6.11) and a bonus paid "if and only if" at least
+two types are produced (6.10). The bonus is collected only if the count reaches
 two: the missing direction follows from optimality, because the bonus is positive.
 """
 import gurobipy as gp

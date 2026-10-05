@@ -2,7 +2,7 @@
 
 The quantities shipped are a multi-product flow between plants and customers; on
 top of them there are the boxes, an integer count tied to the flow by the capacity
-(technique 3.4: y >= ceil(sum / w)). The linear relaxation only sees the ratio
+(technique 6.4: y >= ceil(sum / w)). The linear relaxation only sees the ratio
 between units and capacity, and completely misses the fact that a box cannot be
 split between two customers.
 """

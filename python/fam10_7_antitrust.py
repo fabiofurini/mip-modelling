@@ -1,8 +1,8 @@
 """Problem 10.7 -- Antitrust split: two companies as similar as possible.
 
 The branches must be divided into two groups minimising, over the worst product,
-the revenue difference between the two groups. It is technique 3.6 (min-max)
-applied to an absolute value (3.7): two inequalities per product around the same
+the revenue difference between the two groups. It is technique 6.6 (min-max)
+applied to an absolute value (6.7): two inequalities per product around the same
 variable z.
 
 The point of the problem is that the linear relaxation is worth zero: half a

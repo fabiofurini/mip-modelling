@@ -1,7 +1,7 @@
 """Problem 10.8 -- Songs on several CDs: minimising the difference between the
 longest and the shortest.
 
-Two auxiliary variables: y for the maximum (technique 3.5) and z for the minimum,
+Two auxiliary variables: y for the maximum (technique 6.5) and z for the minimum,
 with objective y - z. As in 11.2 the linear relaxation is worth zero, and the
 useful lower bound comes from a parity argument that settles optimality by itself.
 """

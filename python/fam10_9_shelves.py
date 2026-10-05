@@ -1,7 +1,7 @@
 """Problem 10.9 -- Books on shelves: minimising the sum of the heights.
 
 Assignment with a capacity (the width of the shelf) and a maximum variable per
-shelf (technique 3.5): the height of a shelf is that of the tallest book on it.
+shelf (technique 6.5): the height of a shelf is that of the tallest book on it.
 It also shows that the order in which the heuristic looks at the objects can lead
 it into a dead end.
 """

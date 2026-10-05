@@ -2,7 +2,7 @@
 
 Three resources, three types of shoe and a threshold per type: either at least
 q_j pairs are produced, or none. It is the semicontinuous variable of technique
-3.3, with the big-M chosen naturally as the largest producible amount of that type
+6.3, with the big-M chosen naturally as the largest producible amount of that type
 alone.
 """
 import gurobipy as gp

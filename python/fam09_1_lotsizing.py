@@ -1,7 +1,7 @@
 """Problem 9.1 -- Lot sizing with a fixed set-up cost.
 
 Inventory balance, activation of production with a big-M and storage. The link is
-the fixed cost of section 3.2, with the coefficient read off the data: M_t is the
+the fixed cost of section 6.2, with the coefficient read off the data: M_t is the
 residual demand, not a large number picked at random.
 """
 import gurobipy as gp

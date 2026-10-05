@@ -163,8 +163,8 @@ the notebook is
 
     A knapsack with two extra constraints: at most two groups accepted, and the
     implication "if I accept group 2 I must also accept group 4". It is the chance to
-    see, on a tiny case, the three techniques of chapter 3 that are needed here:
-    capacity (3.1), counting (3.4) and logical precedence (3.9).
+    see, on a tiny case, the three techniques of chapter 6 that are needed here:
+    capacity (6.1), counting (6.4) and logical precedence (6.9).
     """
     import gurobipy as gp
     import pandas as pd

@@ -4,7 +4,7 @@ Two integer decisions tied by an availability constraint: how many lights are
 needed (from the chosen configurations) and how many are bought (from the boxes).
 On top of that, the variety constraint "at least f different configurations",
 which needs an indicator per configuration and the link with the count
-(technique 3.11).
+(technique 6.11).
 """
 import gurobipy as gp
 import pandas as pd

@@ -1,7 +1,7 @@
 """EX 7 -- Custom aircraft with a fixed set-up cost (family 9).
 
 Three orders, each with a fixed set-up cost and a cap on the units. It is the
-fixed cost of technique 3.2 in pure form: the link x <= M y limits the quantity
+fixed cost of technique 6.2 in pure form: the link x <= M y limits the quantity
 and charges the set-up at the same time. The dual of the relaxation is built by
 hand in two lines and coincides with the optimum of the MILP.
 """

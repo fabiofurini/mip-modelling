@@ -311,8 +311,8 @@ Notebook —
     """Problem 10.3 -- Diet with a count of the foods and a minimum lot.
 
     A classic diet (continuous quantities, two-sided nutritional constraints) with
-    three integer techniques on top: activation (3.2), minimum lot (3.3) and counting
-    of the types (3.11). Without the minimum lot the count "at least t different
+    three integer techniques on top: activation (6.2), minimum lot (6.3) and counting
+    of the types (6.11). Without the minimum lot the count "at least t different
     foods" would be empty: indicators would switch on with zero quantity.
     """
     import gurobipy as gp
