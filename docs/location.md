@@ -80,12 +80,3 @@ depend on it, and how the budget on openings enters the model.
     [:octicons-arrow-right-24: MILP · activation, maximum](location-4.md)
 
 </div>
-
-## Numerical models of the family
-
-Two short models with explicit data on the covering and activation techniques.
-
-| Model | What it exercises | $z(\mathit{MILP})$ |
-|---|---|---:|
-| [EX 4 — Hub-and-spoke](ex-04-hub.md) | pure set covering; the hand-built dual closes the problem | 3 |
-| [EX 10 — CNC tools](ex-10-tools.md) | disaggregated activation reversed; an infeasible dual recipe, corrected | 2500 |
