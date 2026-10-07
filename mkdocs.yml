@@ -60,6 +60,9 @@ extra:
     - icon: material/chart-timeline-variant
       link: https://fabiofurini.github.io/operations-research-lab/
       name: Operations Research Lab
+    - icon: material/math-integral
+      link: https://fabiofurini.github.io/mathematical-analysis-1/
+      name: Mathematical Analysis 1
   alternate:
     - name: Italiano
       link: https://fabiofurini.github.io/modellazione-mip/

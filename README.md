@@ -56,6 +56,11 @@ The whole course is also available in Italian:
 **[fabiofurini.github.io/modellazione-mip](https://fabiofurini.github.io/modellazione-mip/)**
 ([repository](https://github.com/fabiofurini/modellazione-mip)).
 
+## Same series
+
+- [Operations Research Lab](https://fabiofurini.github.io/operations-research-lab/)
+- [Mathematical Analysis 1](https://fabiofurini.github.io/mathematical-analysis-1/)
+
 ---
 
 Teaching material by **[Fabio Furini](https://sites.google.com/view/fabiofurini/home-page)** — [DIAG](https://www.diag.uniroma1.it/), Sapienza University of Rome.
