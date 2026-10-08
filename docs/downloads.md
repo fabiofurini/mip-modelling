@@ -46,6 +46,40 @@ are the core of the material. What comes after is supplementary.
 
 </div>
 
+<!-- slide:inizio -->
+## Slides
+
+The lecture slides, one deck per chapter of the notes (PDF).
+
+<div class="grid cards" markdown>
+
+-   :material-presentation: **Modelling**
+
+    ---
+
+    - [What is a MIP model](pdf/slides-01-mip-models.pdf)
+    - [From the model to Python/Gurobi](pdf/slides-03-gurobi.pdf)
+    - [Logic and binary variables](pdf/slides-05-logic-binaries.pdf)
+    - [Links between variables](pdf/slides-06-links.pdf)
+
+-   :material-presentation: **Numerical problems**
+
+    ---
+
+    - [Numerical models: EX 1–5](pdf/slides-07-numerical-models-1.pdf)
+    - [Numerical models: EX 6–10](pdf/slides-07-numerical-models-2.pdf)
+    - [Numerical models: EX 11–15](pdf/slides-07-numerical-models-3.pdf)
+
+-   :material-presentation: **Problems with a symbolic model**
+
+    ---
+
+    - [The problem families](pdf/slides-08-problem-families.pdf)
+
+</div>
+
+<!-- slide:fine -->
+
 ## The other documents
 
 <div class="grid cards" markdown>
@@ -72,17 +106,6 @@ are the core of the material. What comes after is supplementary.
 
     [:octicons-download-24: exercises.pdf](pdf/exercises.pdf)
 
--   :material-presentation: **The slides**
-
-    ---
-
-    One hundred and fifty slides: the method and the fourteen links, the
-    sandwich of the bounds, and then **every model and every problem** --- one
-    slide for each of the fifteen numerical models, the statement and the model
-    of each of the twenty-three problems, and the forty problems to model. The
-    models are generated from the same sources as the notes.
-
-    [:octicons-download-24: mip-slides.pdf](pdf/mip-slides.pdf)
 
 -   :material-language-python: **The code**
 

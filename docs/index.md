@@ -1,6 +1,6 @@
 # MIP Modelling
 
-Teaching material designed and developed by **[Fabio Furini](https://sites.google.com/view/fabiofurini/home-page)**, associate
+Teaching material designed and developed by **[Fabio Furini](https://fabiofurini.github.io/)**, associate
 professor at [DIAG](https://www.diag.uniroma1.it/), Sapienza University of Rome.
 
 **Mixed-integer linear models for making optimal decisions.**
@@ -138,5 +138,5 @@ the lab module, with the same tools and the same style — and
 **[Mathematical Analysis 1](https://fabiofurini.github.io/mathematical-analysis-1/)** — the analysis lecture
 notes, with interactive graphs.
 
-Teaching material by **[Fabio Furini](https://sites.google.com/view/fabiofurini/home-page)** —
+Teaching material by **[Fabio Furini](https://fabiofurini.github.io/)** —
 [DIAG](https://www.diag.uniroma1.it/), Sapienza University of Rome.
