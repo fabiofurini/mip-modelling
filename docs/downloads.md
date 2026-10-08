@@ -77,6 +77,8 @@ The lecture slides, one deck per chapter of the notes (PDF).
     ---
 
     - [The problem families](pdf/slides-08-problem-families.pdf)
+    - [Assignment and scheduling: 7.1–7.4](pdf/slides-09-scheduling-1.pdf)
+    - [Assignment and scheduling: 7.5–7.7](pdf/slides-09-scheduling-2.pdf)
     - [Location and coverage](pdf/slides-10-location.pdf)
     - [Production planning](pdf/slides-11-production.pdf)
     - [Mixed problems: 10.1–10.3](pdf/slides-12-mixed-problems-1.pdf)
