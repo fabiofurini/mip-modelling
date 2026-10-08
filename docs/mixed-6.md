@@ -1,5 +1,7 @@
 # Children across summer camps
 
+[:material-file-pdf-box: Lecture notes (PDF)](pdf/notes-3-symbolic.pdf) · [:material-presentation: Slides (PDF)](pdf/slides-12-mixed-problems-2.pdf)
+
 **Class:** ILP · **Links:** integer counts, composition constraints · **Script:** `python/fam10_6_camps.py`<br>
 **Difficulty:** ★★★☆☆ · **Time:** 30–45 min
 { .scheda }

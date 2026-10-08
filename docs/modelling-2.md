@@ -1,5 +1,7 @@
 # 2. Relaxations, duality and bounds
 
+[:material-file-pdf-box: Lecture notes (PDF)](pdf/notes-1-modelling.pdf) · [:material-presentation: Slides (PDF)](pdf/slides-02-dual-bounds.pdf)
+
 **Class:** LP · MILP · **Script:** `python/cap04_bounds.py`
 { .scheda }
 

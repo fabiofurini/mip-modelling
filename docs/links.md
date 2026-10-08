@@ -1,5 +1,7 @@
 # 6. Links between variables
 
+[:material-file-pdf-box: Lecture notes (PDF)](pdf/notes-1-modelling.pdf) · [:material-presentation: Slides (PDF)](pdf/slides-06-links.pdf)
+
 **Class:** modelling techniques · **Script:** `python/cap03_links.py`
 { .scheda }
 

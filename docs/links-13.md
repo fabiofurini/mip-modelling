@@ -1,5 +1,7 @@
 # 6.13 Soft constraints, deviations and penalties
 
+[:material-file-pdf-box: Lecture notes (PDF)](pdf/notes-1-modelling.pdf) · [:material-presentation: Slides (PDF)](pdf/slides-06-links.pdf)
+
 **Technique:** continuous with continuous · **Script:** `python/cap03_links.py` · [All the techniques](links.md)
 
 ## The link in words

@@ -1,5 +1,7 @@
 # Diet with a count of the foods and a minimum lot
 
+[:material-file-pdf-box: Lecture notes (PDF)](pdf/notes-3-symbolic.pdf) · [:material-presentation: Slides (PDF)](pdf/slides-12-mixed-problems-1.pdf)
+
 **Class:** MILP · **Links:** minimum lot (semicontinuous), counting the types · **Script:** `python/fam10_3_diet.py`<br>
 **Difficulty:** ★★★☆☆ · **Time:** 30–45 min
 { .scheda }

@@ -1,5 +1,7 @@
 # 3.1 Writing a model in gurobipy
 
+[:material-file-pdf-box: Lecture notes (PDF)](pdf/notes-1-modelling.pdf) · [:material-presentation: Slides (PDF)](pdf/slides-03-gurobi.pdf)
+
 **Class:** implementation · **Script:** `python/cap06_gurobi.py`
 { .scheda }
 

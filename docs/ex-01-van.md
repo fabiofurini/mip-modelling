@@ -1,5 +1,7 @@
 # EX 1 — The eight-seat van
 
+[:material-file-pdf-box: Lecture notes (PDF)](pdf/notes-2-numerical.pdf) · [:material-presentation: Slides (PDF)](pdf/slides-07-numerical-models-1.pdf)
+
 **Class:** BIP · **Links:** [if-then](links-09.md), capacity · **Script:** `python/ex01_van.py`<br>
 **Difficulty:** ★☆☆☆☆ · **Time:** 30–45 min
 { .scheda }

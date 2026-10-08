@@ -1,5 +1,7 @@
 # EX 9 — Queens on the chessboard
 
+[:material-file-pdf-box: Lecture notes (PDF)](pdf/notes-2-numerical.pdf) · [:material-presentation: Slides (PDF)](pdf/slides-07-numerical-models-2.pdf)
+
 **Class:** BIP · **Links:** set packing, [alldiff](links-12.md) · **Script:** `python/ex09_queens.py`<br>
 **Difficulty:** ★★☆☆☆ · **Time:** 30–45 min
 { .scheda }

@@ -1,5 +1,7 @@
 # Lot sizing with a fixed setup cost
 
+[:material-file-pdf-box: Lecture notes (PDF)](pdf/notes-3-symbolic.pdf) · [:material-presentation: Slides (PDF)](pdf/slides-11-production.pdf)
+
 **Class:** MILP · **Links:** fixed cost (big-M read off the data) · **Script:** `python/fam09_1_lotsizing.py`<br>
 **Difficulty:** ★★★★☆ · **Time:** 45–60 min
 { .scheda }

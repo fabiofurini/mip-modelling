@@ -1,5 +1,7 @@
 # One machine, job classes with setup
 
+[:material-file-pdf-box: Lecture notes (PDF)](pdf/notes-3-symbolic.pdf) · [:material-presentation: Slides (PDF)](pdf/slides-09-scheduling-2.pdf)
+
 **Class:** BIP · **Links:** disaggregated activation, CNF · **Script:** `python/fam07_5_classessetup.py`<br>
 **Difficulty:** ★★★☆☆ · **Time:** 30–45 min
 { .scheda }

@@ -1,5 +1,7 @@
 # EX 4 — Hub-and-spoke
 
+[:material-file-pdf-box: Lecture notes (PDF)](pdf/notes-2-numerical.pdf) · [:material-presentation: Slides (PDF)](pdf/slides-07-numerical-models-1.pdf)
+
 **Class:** BIP · **Links:** covering · **Script:** `python/ex04_hub.py`<br>
 **Difficulty:** ★☆☆☆☆ · **Time:** 20–30 min
 { .scheda }

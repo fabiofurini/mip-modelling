@@ -1,5 +1,7 @@
 # Classes with completion bonus and "if and only if" reduction
 
+[:material-file-pdf-box: Lecture notes (PDF)](pdf/notes-3-symbolic.pdf) · [:material-presentation: Slides (PDF)](pdf/slides-09-scheduling-2.pdf)
+
 **Class:** BIP · **Links:** if and only if (two), CNF · **Script:** `python/fam07_6_classesbonus.py`<br>
 **Difficulty:** ★★★★☆ · **Time:** 45–60 min
 { .scheda }

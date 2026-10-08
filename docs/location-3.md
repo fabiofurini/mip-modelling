@@ -1,5 +1,7 @@
 # Signal coverage with interference
 
+[:material-file-pdf-box: Lecture notes (PDF)](pdf/notes-3-symbolic.pdf) · [:material-presentation: Slides (PDF)](pdf/slides-10-location.pdf)
+
 **Class:** BIP · **Links:** if and only if (threshold + interference) · **Script:** `python/fam08_3_coverage.py`<br>
 **Difficulty:** ★★★★☆ · **Time:** 30–45 min
 { .scheda }

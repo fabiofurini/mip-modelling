@@ -1,5 +1,7 @@
 # Shipments in boxes
 
+[:material-file-pdf-box: Lecture notes (PDF)](pdf/notes-3-symbolic.pdf) · [:material-presentation: Slides (PDF)](pdf/slides-12-mixed-problems-2.pdf)
+
 **Class:** MILP · **Links:** capacity with rounding up · **Script:** `python/fam10_5_shipments.py`<br>
 **Difficulty:** ★★★★☆ · **Time:** 45–60 min
 { .scheda }

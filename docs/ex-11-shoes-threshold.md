@@ -1,5 +1,7 @@
 # EX 11 — Shoes with a minimum production threshold
 
+[:material-file-pdf-box: Lecture notes (PDF)](pdf/notes-2-numerical.pdf) · [:material-presentation: Slides (PDF)](pdf/slides-07-numerical-models-3.pdf)
+
 **Class:** MILP · **Links:** [minimum lot](links-03.md), [activation](links-01.md) · **Script:** `python/ex11_shoes_threshold.py`<br>
 **Difficulty:** ★★☆☆☆ · **Time:** 30–45 min
 { .scheda }

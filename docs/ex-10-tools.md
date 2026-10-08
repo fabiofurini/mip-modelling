@@ -1,5 +1,7 @@
 # EX 10 — Tools of a CNC machine
 
+[:material-file-pdf-box: Lecture notes (PDF)](pdf/notes-2-numerical.pdf) · [:material-presentation: Slides (PDF)](pdf/slides-07-numerical-models-2.pdf)
+
 **Class:** BIP · **Links:** [disaggregated activation](links-01.md) · **Script:** `python/ex10_tools.py`<br>
 **Difficulty:** ★★☆☆☆ · **Time:** 30–45 min
 { .scheda }

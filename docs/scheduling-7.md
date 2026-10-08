@@ -1,5 +1,7 @@
 # Total tardiness on one machine: sequencing with big-M
 
+[:material-file-pdf-box: Lecture notes (PDF)](pdf/notes-3-symbolic.pdf) · [:material-presentation: Slides (PDF)](pdf/slides-09-scheduling-2.pdf)
+
 **Class:** MILP · **Links:** big-M and disjunctions, maximum variable · **Script:** `python/fam07_7_tardiness.py`<br>
 **Difficulty:** ★★★★★ · **Time:** 45–60 min
 { .scheda }

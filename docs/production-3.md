@@ -1,5 +1,7 @@
 # Vehicles: minimum lot and a bonus for variety
 
+[:material-file-pdf-box: Lecture notes (PDF)](pdf/notes-3-symbolic.pdf) · [:material-presentation: Slides (PDF)](pdf/slides-11-production.pdf)
+
 **Class:** MILP · **Links:** minimum lot (semi-integer), counting the types, if and only if · **Script:** `python/fam09_3_vehicles.py`<br>
 **Difficulty:** ★★★★☆ · **Time:** 45–60 min
 { .scheda }

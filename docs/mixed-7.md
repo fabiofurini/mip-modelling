@@ -1,5 +1,7 @@
 # Branches across two companies
 
+[:material-file-pdf-box: Lecture notes (PDF)](pdf/notes-3-symbolic.pdf) · [:material-presentation: Slides (PDF)](pdf/slides-12-mixed-problems-3.pdf)
+
 **Class:** BIP · **Links:** absolute value, min-max · **Script:** `python/fam10_7_antitrust.py`<br>
 **Difficulty:** ★★★☆☆ · **Time:** 45–60 min
 { .scheda }

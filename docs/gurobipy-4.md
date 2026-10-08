@@ -1,5 +1,7 @@
 # 3.4 Three classic models
 
+[:material-file-pdf-box: Lecture notes (PDF)](pdf/notes-1-modelling.pdf) · [:material-presentation: Slides (PDF)](pdf/slides-03-gurobi.pdf)
+
 **Class:** implementation · **Script:** `python/cap06_bpp.py`, `python/cap06_cmax.py`, `python/cap06_tsp.py`
 { .scheda }
 

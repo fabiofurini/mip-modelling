@@ -1,5 +1,7 @@
 # 4. Constructive heuristics
 
+[:material-file-pdf-box: Lecture notes (PDF)](pdf/notes-1-modelling.pdf) · [:material-presentation: Slides (PDF)](pdf/slides-04-heuristics.pdf)
+
 **Class:** algorithms · **Script:** `python/cap05_heuristics.py`, `python/euristiche.py`
 { .scheda }
 

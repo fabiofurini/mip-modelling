@@ -1,5 +1,7 @@
 # EX 8 — Seminars
 
+[:material-file-pdf-box: Lecture notes (PDF)](pdf/notes-2-numerical.pdf) · [:material-presentation: Slides (PDF)](pdf/slides-07-numerical-models-2.pdf)
+
 **Class:** BIP · **Links:** exact cardinality, non-adjacency · **Script:** `python/ex08_seminars.py`<br>
 **Difficulty:** ★★☆☆☆ · **Time:** 30–45 min
 { .scheda }

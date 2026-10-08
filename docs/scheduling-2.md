@@ -1,5 +1,7 @@
 # Machines with a fixed usage cost
 
+[:material-file-pdf-box: Lecture notes (PDF)](pdf/notes-3-symbolic.pdf) · [:material-presentation: Slides (PDF)](pdf/slides-09-scheduling-1.pdf)
+
 **Class:** BIP · **Links:** activation (aggregated) · **Script:** `python/fam07_2_fixedcost.py`<br>
 **Difficulty:** ★★☆☆☆ · **Time:** 30–45 min
 { .scheda }

@@ -1,5 +1,7 @@
 # EX 5 — Funds bought in lots
 
+[:material-file-pdf-box: Lecture notes (PDF)](pdf/notes-2-numerical.pdf) · [:material-presentation: Slides (PDF)](pdf/slides-07-numerical-models-1.pdf)
+
 **Class:** ILP · **Links:** [integer counts](links-04.md), proportion constraint · **Script:** `python/ex05_funds.py`<br>
 **Difficulty:** ★☆☆☆☆ · **Time:** 30–45 min
 { .scheda }

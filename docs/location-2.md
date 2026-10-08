@@ -1,5 +1,7 @@
 # p-median: at most $k$ locations
 
+[:material-file-pdf-box: Lecture notes (PDF)](pdf/notes-3-symbolic.pdf) · [:material-presentation: Slides (PDF)](pdf/slides-10-location.pdf)
+
 **Class:** BIP · **Links:** disaggregated activation · **Script:** `python/fam08_2_pmedian.py`<br>
 **Difficulty:** ★★☆☆☆ · **Time:** 30–45 min
 { .scheda }

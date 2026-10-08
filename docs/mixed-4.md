@@ -1,5 +1,7 @@
 # Christmas trees and boxes of lights
 
+[:material-file-pdf-box: Lecture notes (PDF)](pdf/notes-3-symbolic.pdf) · [:material-presentation: Slides (PDF)](pdf/slides-12-mixed-problems-2.pdf)
+
 **Class:** MILP · **Links:** availability across two levels, counting with an indicator · **Script:** `python/fam10_4_lights.py`<br>
 **Difficulty:** ★★★★☆ · **Time:** 45–60 min
 { .scheda }

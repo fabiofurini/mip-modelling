@@ -1,5 +1,7 @@
 # Parallel jobs: the processing time as a maximum
 
+[:material-file-pdf-box: Lecture notes (PDF)](pdf/notes-3-symbolic.pdf) · [:material-presentation: Slides (PDF)](pdf/slides-09-scheduling-1.pdf)
+
 **Class:** MILP · **Links:** maximum variable · **Script:** `python/fam07_4_parallel.py`<br>
 **Difficulty:** ★★★☆☆ · **Time:** 30–45 min
 { .scheda }

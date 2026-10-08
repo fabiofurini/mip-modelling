@@ -1,5 +1,7 @@
 # 5. Logic and binary variables
 
+[:material-file-pdf-box: Lecture notes (PDF)](pdf/notes-1-modelling.pdf) · [:material-presentation: Slides (PDF)](pdf/slides-05-logic-binaries.pdf)
+
 **Class:** BIP · **Links:** clauses and implications · **Script:** `python/cap02_logic.py`
 { .scheda }
 

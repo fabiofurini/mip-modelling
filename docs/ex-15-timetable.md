@@ -1,5 +1,7 @@
 # EX 15 — The music school timetable
 
+[:material-file-pdf-box: Lecture notes (PDF)](pdf/notes-2-numerical.pdf) · [:material-presentation: Slides (PDF)](pdf/slides-07-numerical-models-3.pdf)
+
 **Class:** BIP · **Links:** [if and only if](links-10.md), counts · **Script:** `python/ex15_timetable.py`<br>
 **Difficulty:** ★★★★☆ · **Time:** 45–60 min
 { .scheda }

@@ -1,5 +1,7 @@
 # EX 12 — Balancing between two workers
 
+[:material-file-pdf-box: Lecture notes (PDF)](pdf/notes-2-numerical.pdf) · [:material-presentation: Slides (PDF)](pdf/slides-07-numerical-models-3.pdf)
+
 **Class:** MILP · **Links:** [min-max](links-06.md), [absolute value](links-07.md) · **Script:** `python/ex12_balancing.py`<br>
 **Difficulty:** ★★★☆☆ · **Time:** 30–45 min
 { .scheda }

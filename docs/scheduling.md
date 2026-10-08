@@ -1,5 +1,7 @@
 # Assignment and scheduling
 
+[:material-file-pdf-box: Lecture notes (PDF)](pdf/notes-3-symbolic.pdf) · [:material-presentation: Slides (PDF)](pdf/slides-09-scheduling-1.pdf)
+
 **Class:** BIP / MILP · **Script:** one script and one notebook per problem
 (`python/fam07_1_assignment.py` … `fam07_7_tardiness.py`).
 { .scheda }

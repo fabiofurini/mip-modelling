@@ -1,5 +1,7 @@
 # Prizes obtainable in two ways
 
+[:material-file-pdf-box: Lecture notes (PDF)](pdf/notes-3-symbolic.pdf) · [:material-presentation: Slides (PDF)](pdf/slides-12-mixed-problems-1.pdf)
+
 **Class:** BIP · **Links:** mutual exclusion (set packing), a sum as an indicator · **Script:** `python/fam10_1_prizes.py`<br>
 **Difficulty:** ★★☆☆☆ · **Time:** 30–45 min
 { .scheda }

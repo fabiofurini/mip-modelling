@@ -1,5 +1,7 @@
 # EX 7 — Custom aircraft with a fixed cost
 
+[:material-file-pdf-box: Lecture notes (PDF)](pdf/notes-2-numerical.pdf) · [:material-presentation: Slides (PDF)](pdf/slides-07-numerical-models-2.pdf)
+
 **Class:** MILP · **Links:** [fixed cost](links-02.md), [activation](links-01.md) · **Script:** `python/ex07_aircraft.py`<br>
 **Difficulty:** ★★☆☆☆ · **Time:** 30–45 min
 { .scheda }

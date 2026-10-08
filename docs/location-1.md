@@ -1,5 +1,7 @@
 # Capacitated facility location
 
+[:material-file-pdf-box: Lecture notes (PDF)](pdf/notes-3-symbolic.pdf) · [:material-presentation: Slides (PDF)](pdf/slides-10-location.pdf)
+
 **Class:** MILP · **Links:** aggregated activation (also the capacity constraint) · **Script:** `python/fam08_1_capacitated.py`<br>
 **Difficulty:** ★★★☆☆ · **Time:** 30–45 min
 { .scheda }

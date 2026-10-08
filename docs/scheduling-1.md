@@ -1,5 +1,7 @@
 # Minimum-cost assignment with availability
 
+[:material-file-pdf-box: Lecture notes (PDF)](pdf/notes-3-symbolic.pdf) · [:material-presentation: Slides (PDF)](pdf/slides-09-scheduling-1.pdf)
+
 **Class:** BIP · **Links:** none — a single family of variables · **Script:** `python/fam07_1_assignment.py`<br>
 **Difficulty:** ★☆☆☆☆ · **Time:** 20–30 min
 { .scheda }

@@ -1,5 +1,7 @@
 # Books across shelves
 
+[:material-file-pdf-box: Lecture notes (PDF)](pdf/notes-3-symbolic.pdf) · [:material-presentation: Slides (PDF)](pdf/slides-12-mixed-problems-3.pdf)
+
 **Class:** MILP · **Links:** maximum variable (disaggregated form) · **Script:** `python/fam10_9_shelves.py`<br>
 **Difficulty:** ★★★★☆ · **Time:** 45–60 min
 { .scheda }

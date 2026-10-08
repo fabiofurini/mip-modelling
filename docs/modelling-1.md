@@ -1,5 +1,7 @@
 # 1. What is a MIP model
 
+[:material-file-pdf-box: Lecture notes (PDF)](pdf/notes-1-modelling.pdf) · [:material-presentation: Slides (PDF)](pdf/slides-01-mip-models.pdf)
+
 **Class:** LP · ILP · BIP · MILP · **Script:** `python/cap01_models.py`
 { .scheda }
 

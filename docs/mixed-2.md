@@ -1,5 +1,7 @@
 # Combinatorial auction
 
+[:material-file-pdf-box: Lecture notes (PDF)](pdf/notes-3-symbolic.pdf) · [:material-presentation: Slides (PDF)](pdf/slides-12-mixed-problems-1.pdf)
+
 **Class:** BIP · **Links:** set packing by rows · **Script:** `python/fam10_2_auction.py`<br>
 **Difficulty:** ★☆☆☆☆ · **Time:** 20–30 min
 { .scheda }

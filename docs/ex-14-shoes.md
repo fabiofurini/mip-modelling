@@ -1,5 +1,7 @@
 # EX 14 — Shoes: production, inventory and hiring
 
+[:material-file-pdf-box: Lecture notes (PDF)](pdf/notes-2-numerical.pdf) · [:material-presentation: Slides (PDF)](pdf/slides-07-numerical-models-3.pdf)
+
 **Class:** MILP · **Links:** inventory balance, [integer counts](links-04.md) · **Script:** `python/ex14_shoes.py`<br>
 **Difficulty:** ★★★★☆ · **Time:** 45–60 min
 { .scheda }

@@ -1,5 +1,7 @@
 # Songs across CDs
 
+[:material-file-pdf-box: Lecture notes (PDF)](pdf/notes-3-symbolic.pdf) · [:material-presentation: Slides (PDF)](pdf/slides-12-mixed-problems-3.pdf)
+
 **Class:** MILP · **Links:** maximum and minimum variables · **Script:** `python/fam10_8_cds.py`<br>
 **Difficulty:** ★★★☆☆ · **Time:** 45–60 min
 { .scheda }

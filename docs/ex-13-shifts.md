@@ -1,5 +1,7 @@
 # EX 13 — The emergency room shifts
 
+[:material-file-pdf-box: Lecture notes (PDF)](pdf/notes-2-numerical.pdf) · [:material-presentation: Slides (PDF)](pdf/slides-07-numerical-models-3.pdf)
+
 **Class:** ILP · **Links:** set covering, [integer counts](links-04.md) · **Script:** `python/ex13_shifts.py`<br>
 **Difficulty:** ★★★☆☆ · **Time:** 30–45 min
 { .scheda }

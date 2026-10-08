@@ -1,5 +1,7 @@
 # Hub location with maximum cost
 
+[:material-file-pdf-box: Lecture notes (PDF)](pdf/notes-3-symbolic.pdf) · [:material-presentation: Slides (PDF)](pdf/slides-10-location.pdf)
+
 **Class:** MILP · **Links:** aggregated activation, maximum variable · **Script:** `python/fam08_4_hub.py`<br>
 **Difficulty:** ★★★★☆ · **Time:** 45–60 min
 { .scheda }

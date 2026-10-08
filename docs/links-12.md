@@ -1,5 +1,7 @@
 # 6.12 Alldiff and binary expansion
 
+[:material-file-pdf-box: Lecture notes (PDF)](pdf/notes-1-modelling.pdf) · [:material-presentation: Slides (PDF)](pdf/slides-06-links.pdf)
+
 **Technique:** binaries with each other; integer with binaries · **Script:** `python/cap03_links.py` · [All the techniques](links.md)
 
 ## The link in words

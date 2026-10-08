@@ -1,5 +1,7 @@
 # Job selection with revenues and fixed-cost machines
 
+[:material-file-pdf-box: Lecture notes (PDF)](pdf/notes-3-symbolic.pdf) · [:material-presentation: Slides (PDF)](pdf/slides-09-scheduling-1.pdf)
+
 **Class:** BIP · **Links:** activation (aggregated), maximisation problem · **Script:** `python/fam07_3_selection.py`<br>
 **Difficulty:** ★★☆☆☆ · **Time:** 30–45 min
 { .scheda }

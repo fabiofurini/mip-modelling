@@ -1,5 +1,7 @@
 # Production and workforce: two equivalent formulations
 
+[:material-file-pdf-box: Lecture notes (PDF)](pdf/notes-3-symbolic.pdf) · [:material-presentation: Slides (PDF)](pdf/slides-11-production.pdf)
+
 **Class:** MILP · **Links:** integer counts, workforce balance · **Script:** `python/fam09_2_workforce.py`<br>
 **Difficulty:** ★★★★★ · **Time:** 45–60 min
 { .scheda }
