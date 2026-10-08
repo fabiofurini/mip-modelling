@@ -77,6 +77,6 @@ EX 15 [Music school timetable](ex-15-timetable.md)
 
 **The course**
 
-- [Organisation of the course](organization.md) — the path, the exam, the
-  mistakes to avoid
+- [Organisation of the course](organization.md) — the path, the format of the
+  exercises, the mistakes to avoid
 - [Notebooks in Colab](notebooks.md) — one per problem, they open in the browser

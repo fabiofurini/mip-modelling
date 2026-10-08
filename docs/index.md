@@ -78,7 +78,7 @@ professor at [DIAG](https://www.diag.uniroma1.it/), Sapienza University of Rome.
 - **No result transcribed by hand**: every number comes from a script you can
   re-run, and an automatic check verifies that text and code say the same thing.
 
-!!! tip "The format of every exercise (and of the exam)"
+!!! tip "The format of every exercise"
     Model → links between the variables → instance → heuristic (upper bound) →
     dual of the LP relaxation (lower bound) → solver → additional modelling
     questions.
@@ -111,7 +111,7 @@ professor at [DIAG](https://www.diag.uniroma1.it/), Sapienza University of Rome.
 
     ---
 
-    Organization, the exam format, the notes in PDF, the notebooks.
+    Organization, the format of the exercises, the notes in PDF, the notebooks.
 
     [:octicons-arrow-right-24: Organization](organization.md)
 

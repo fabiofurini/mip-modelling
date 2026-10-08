@@ -13,9 +13,9 @@ to the solver.
 | **Part I** | Modelling | recognise a link between variables (activation, maximum, big-M, if and only if…) and prove that the model really imposes it |
 | **Part II** | The problems | apply the links to three families of real problems and to the mixed problems, from the model to Gurobi code |
 
-## The format of every exercise (and of the exam)
+## The format of every exercise
 
-Every problem of the course — and every exam question — follows the same
+Every problem of the course follows the same
 four-question scheme:
 
 1. **Model.** Write the MILP: variables (with their count), objective,
@@ -39,25 +39,6 @@ one: **being able to build those two numbers by hand** is what makes it possible
 to understand where they come from, to judge whether the interval the solver
 reports is narrow because the model is good or wide because it is badly
 formulated, and to produce a bound even when the solver returns nothing useful.
-
-## Grading criteria
-
-| Dimension | Weight |
-|---|---|
-| Correctness of the model (variables, objective, constraints) | 35% |
-| Proof of the link between the variables (both directions) | 25% |
-| Constructive heuristic and correct execution | 20% |
-| Dual of the relaxation and feasible dual solution | 20% |
-
-## Typical discussion questions
-
-- Is the link constraint aggregated or disaggregated? What difference does it
-  make to the LP relaxation?
-- Is the opposite direction of the implication imposed by the constraint or
-  does it follow from the optimum? How is it proved?
-- What is the smallest big-M that can be justified from the data?
-- Does the heuristic find the optimum? How can one know without the solver?
-- Is the hand-built dual optimal for the relaxation, or only feasible?
 
 ## The most common mistakes
 

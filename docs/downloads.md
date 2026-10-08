@@ -58,6 +58,7 @@ The lecture slides, one deck per chapter of the notes (PDF).
     ---
 
     - [What is a MIP model](pdf/slides-01-mip-models.pdf)
+    - [Relaxations, duality and bounds](pdf/slides-02-dual-bounds.pdf)
     - [From the model to Python/Gurobi](pdf/slides-03-gurobi.pdf)
     - [Logic and binary variables](pdf/slides-05-logic-binaries.pdf)
     - [Links between variables](pdf/slides-06-links.pdf)
@@ -88,8 +89,7 @@ The lecture slides, one deck per chapter of the notes (PDF).
 
     ---
 
-    How the course is built, how every exercise is built and how the exam is
-    built: the path, the grading criteria, the typical discussion questions, the
+    How the course is built and how every exercise is built: the path, the
     most common mistakes, and the reproducibility of the numbers.
 
     [:octicons-download-24: course-organization.pdf](pdf/course-organization.pdf)
