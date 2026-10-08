@@ -79,6 +79,9 @@ The lecture slides, one deck per chapter of the notes (PDF).
     - [The problem families](pdf/slides-08-problem-families.pdf)
     - [Location and coverage](pdf/slides-10-location.pdf)
     - [Production planning](pdf/slides-11-production.pdf)
+    - [Mixed problems: 10.1–10.3](pdf/slides-12-mixed-problems-1.pdf)
+    - [Mixed problems: 10.4–10.6](pdf/slides-12-mixed-problems-2.pdf)
+    - [Mixed problems: 10.7–10.9](pdf/slides-12-mixed-problems-3.pdf)
 
 </div>
 
