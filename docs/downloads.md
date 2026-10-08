@@ -60,6 +60,7 @@ The lecture slides, one deck per chapter of the notes (PDF).
     - [What is a MIP model](pdf/slides-01-mip-models.pdf)
     - [Relaxations, duality and bounds](pdf/slides-02-dual-bounds.pdf)
     - [From the model to Python/Gurobi](pdf/slides-03-gurobi.pdf)
+    - [Constructive heuristics](pdf/slides-04-heuristics.pdf)
     - [Logic and binary variables](pdf/slides-05-logic-binaries.pdf)
     - [Links between variables](pdf/slides-06-links.pdf)
 
@@ -76,6 +77,8 @@ The lecture slides, one deck per chapter of the notes (PDF).
     ---
 
     - [The problem families](pdf/slides-08-problem-families.pdf)
+    - [Location and coverage](pdf/slides-10-location.pdf)
+    - [Production planning](pdf/slides-11-production.pdf)
 
 </div>
 
