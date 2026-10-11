@@ -85,6 +85,9 @@ extra:
 
 extra_css:
   - stylesheets/extra.css
+  # laboratorio interattivo (genera_laboratorio.py)
+  - https://cdn.jsdelivr.net/npm/jsxgraph@1.10.1/distrib/jsxgraph.css
+  - stylesheets/interattivi.css?v=efe04489cc
 
 markdown_extensions:
   - admonition
@@ -103,6 +106,18 @@ extra_javascript:
   - javascripts/cloudflare-analytics.js
   - javascripts/mathjax.js
   - https://unpkg.com/mathjax@3/es5/tex-mml-chtml.js
+  # laboratorio interattivo (genera_laboratorio.py): JSXGraph, il motore, gli helper comuni, poi le ricette
+  - https://cdn.jsdelivr.net/npm/jsxgraph@1.10.1/distrib/jsxgraphcore.js
+  - javascripts/interattivi.js?v=fb6fee175e
+  - javascripts/gi-comune.js?v=74d7bb93a0
+  - javascripts/gi-mip-a.js?v=5a94cccac6
+  - javascripts/gi-mip-b.js?v=07047576ba
+  - javascripts/gi-mip-c.js?v=2f09e62a88
+
+# the single app pages are not in the menu: the lab is one entry
+not_in_nav: |
+  /lab/*.md
+  !/lab/index.md
 
 nav:
   - Home: index.md
@@ -186,6 +201,7 @@ nav:
           - 10.8 Songs across CDs: mixed-8.md
           - 10.9 Books across shelves: mixed-9.md
       - Problems to model: to-model.md
+  - Lab: lab/index.md
   - Syllabus: syllabus.md
   - Downloads: downloads.md
   - The course:

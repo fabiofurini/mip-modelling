@@ -1,0 +1,149 @@
+/* Grafici interattivi (JSXGraph) — stesso aspetto del laboratorio di Analisi Matematica 1.
+ *
+ * Colori:
+ *   --gi-a … --gi-e    i cursori (e le parti della formula che controllano);
+ *   --gi-ammissibile   la regione ammissibile (rossa, come nelle figure delle dispense);
+ *   --gi-ottimo        gli ottimi globali (blu);
+ *   --gi-locale        i punti/ottimi locali (viola);
+ *   --gi-target        il bersaglio della sfida;
+ *   --gi-orig          curve di riferimento (grigie, tratteggiate).
+ * I cursori evitano rosso, blu e viola, che nel corso hanno un significato. */
+.gi {
+  --gi-a: #D9480F; --gi-b: #0E7490; --gi-c: #2B8A3E; --gi-d: #C2255C; --gi-e: #B08900;
+  --gi-ammissibile: #E03131; --gi-ottimo: #1971C2; --gi-locale: #9C36B5;
+  --gi-target: #F08C00; --gi-orig: #9aa5b1; --gi-line: #e3e8ef; --gi-board: #ffffff; --gi-card: #ffffff;
+  --gi-muted: #5b6675;
+  border: 1px solid var(--gi-line);
+  border-radius: 16px;
+  background: var(--gi-card);
+  box-shadow: 0 6px 24px rgba(22, 50, 74, .10);
+  margin: 1.4em 0;
+  overflow: hidden;
+  font-size: .8rem;
+}
+[data-md-color-scheme="slate"] .gi {
+  --gi-a: #FF8A4C; --gi-b: #3BC9DB; --gi-c: #63E6A0; --gi-d: #F783AC; --gi-e: #FFD43B;
+  --gi-ammissibile: #FF6B6B; --gi-ottimo: #4DABF7; --gi-locale: #DA77F2;
+  --gi-target: #FFA94D; --gi-orig: #6b7b8f; --gi-line: #2a3b52; --gi-board: #101b29; --gi-card: #152131;
+  --gi-muted: #9fb0c3;
+  box-shadow: none;
+}
+.gi-testa {
+  background: linear-gradient(120deg, #16324A, #0E7490 70%, #15AABF);
+  color: #fff;
+  padding: .7em 1.1em;
+  display: flex; align-items: center; justify-content: space-between; gap: .8em; flex-wrap: wrap;
+}
+.gi-testa .gi-titolo { font-weight: 700; font-size: 1.05em; }
+.gi-testa .gi-titolo small { font-weight: 400; opacity: .85; margin-left: .4em; }
+.gi-tabs { display: flex; gap: .4em; }
+.gi-tab { border: 0; background: rgba(255,255,255,.18); color: #fff; padding: .25em .9em; border-radius: 999px; cursor: pointer; font: inherit; font-weight: 600; }
+.gi-tab[aria-selected="true"] { background: #fff; color: #16324A; }
+.gi-corpo { display: grid; grid-template-columns: minmax(0, 1.6fr) minmax(240px, 1fr); gap: 1em; padding: 1em; }
+@media (max-width: 860px) { .gi-corpo { grid-template-columns: 1fr; } }
+.gi-formula { font-size: 1.2em; min-height: 2.4em; display: flex; align-items: center; justify-content: safe center; overflow-x: auto; overflow-y: hidden; padding: .2em 0 .5em; }
+.gi-formula:empty { min-height: 0; padding: 0; }
+.gi-board { width: 100%; aspect-ratio: 4 / 3; border-radius: 12px; border: 1px solid var(--gi-line); background: var(--gi-board); touch-action: none; }
+.gi-legenda { display: flex; flex-wrap: wrap; gap: .9em; justify-content: center; color: var(--gi-muted); margin-top: .5em; font-size: .92em; }
+.gi-legenda i { display: inline-block; width: 22px; border-top: 3px solid; vertical-align: middle; margin-right: .35em; }
+.gi-legenda i.gi-pieno { width: 14px; height: 10px; border: 2px solid; border-radius: 3px; }
+.gi-legenda i.gi-punto { width: 10px; height: 10px; border: 0; border-radius: 50%; }
+.gi-chips { display: flex; flex-wrap: wrap; gap: .35em; margin: .2em 0 .6em; }
+.gi-chip { border: 1px solid var(--gi-line); background: transparent; color: inherit; border-radius: 999px; padding: .2em .8em; cursor: pointer; font: inherit; }
+.gi-chip[aria-pressed="true"] { background: #16324A; color: #fff; border-color: #16324A; }
+[data-md-color-scheme="slate"] .gi-chip[aria-pressed="true"] { background: #0E7490; border-color: #0E7490; }
+.gi-ctrl { padding: .45em 0 .55em; border-top: 1px solid var(--gi-line); }
+.gi-ctrl:first-of-type { border-top: 0; }
+.gi-ctrl .gi-riga { display: flex; align-items: center; justify-content: space-between; gap: .5em; }
+.gi-nome { font-weight: 800; font-size: 1.15em; }
+.gi-val { font-family: "JetBrains Mono", monospace; min-width: 3.8em; text-align: right; }
+.gi-play { border: 0; background: transparent; color: var(--gi-muted); cursor: pointer; font-size: 1em; padding: .1em .4em; border-radius: 6px; }
+.gi-play:hover, .gi-play.on { background: var(--gi-line); color: inherit; }
+.gi-ctrl small { display: block; color: var(--gi-muted); line-height: 1.3; margin-top: .1em; }
+.gi input[type=range] { -webkit-appearance: none; appearance: none; width: 100%; height: 6px; border-radius: 6px; background: var(--gi-line); margin: .6em 0 .2em; }
+.gi input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; width: 20px; height: 20px; border-radius: 50%; background: var(--c); border: 3px solid var(--gi-card); box-shadow: 0 1px 6px rgba(0,0,0,.3); cursor: grab; }
+.gi input[type=range]::-moz-range-thumb { width: 16px; height: 16px; border-radius: 50%; background: var(--c); border: 3px solid var(--gi-card); cursor: grab; }
+.gi-btn { border: 0; border-radius: 10px; padding: .45em .9em; font: inherit; font-weight: 600; cursor: pointer; background: var(--gi-line); color: inherit; margin: .3em .3em 0 0; }
+.gi-btn.primario { background: #0E7490; color: #fff; }
+.gi-domanda { border-left: 4px solid #0E7490; padding: .5em .8em; background: color-mix(in srgb, #0E7490 8%, transparent); border-radius: 6px; margin-top: .8em; line-height: 1.4; }
+.gi-metro { height: 10px; background: var(--gi-line); border-radius: 6px; overflow: hidden; margin: .4em 0 .2em; }
+.gi-metro > div { height: 100%; width: 0; background: linear-gradient(90deg, #E03131, #F59F00, #2B8A3E); transition: width .25s; }
+.gi-vinto { font-weight: 800; color: #2B8A3E; min-height: 1.4em; }
+[data-md-color-scheme="slate"] .gi-vinto { color: #63E6A0; }
+.gi-punti { font-family: "JetBrains Mono", monospace; }
+.gi-letture { font-size: .95em; background: color-mix(in srgb, var(--gi-line) 50%, transparent); border-radius: 8px; padding: .5em .7em; margin-top: .6em; line-height: 1.6; }
+.gi [hidden] { display: none !important; }
+.gi .JXGtext { color: var(--gi-muted) !important; font-family: "Source Sans 3", sans-serif !important; }
+
+/* grafico la cui ricetta non c'è (ancora), o che non si è potuto disegnare */
+.gi.gi-assente { box-shadow: none; border-style: dashed; padding: .8em 1.1em; color: var(--gi-muted); font-size: .75rem; background: transparent; }
+
+/* galleria del laboratorio interattivo */
+.md-typeset .galleria { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 1em; }
+
+.md-typeset .gi table.gi-tabella { display: table; width: 100%; border-collapse: collapse; font-family: "JetBrains Mono", monospace; font-size: .85em; margin: 0; box-shadow: none; border: 0; }
+.md-typeset .gi table.gi-tabella th, .md-typeset .gi table.gi-tabella td { text-align: right; padding: .1em .35em; border: 0; border-bottom: 1px solid var(--gi-line); background: transparent; min-width: 0; }
+.md-typeset .gi table.gi-tabella th { font-weight: 700; }
+
+.md-typeset .gi-invito { margin: 1.6em 0 -.6em; color: var(--c-interattivo); font-size: .85em; }
+
+/* dentro i grafici le formule non hanno barre di scorrimento proprie (extra.css le dà a .arithmatex
+   per le formule lunghe del testo): se una formula è davvero più larga, scorre il riquadro .gi-formula */
+.md-typeset .gi .arithmatex, .md-typeset .gi mjx-container { overflow: visible !important; }
+
+/* ---------------------------------------------------------------- app a pagina intera
+   (pagine del laboratorio: <div class="gi gi-app-intera" data-grafico="…">)
+   Il contenitore occupa tutta la larghezza e circa l'altezza della finestra; il grafico
+   riempie lo spazio che resta, i controlli stanno nella colonna a destra (sotto, su telefono).
+   JSXGraph ridisegna da solo la board quando il suo contenitore cambia dimensione. */
+body:has(.gi-app-intera) .md-grid { max-width: none; }
+.gi.gi-app-intera {
+  display: flex; flex-direction: column;
+  height: calc(100vh - 260px); min-height: 480px;
+  margin: .8em 0;
+}
+.gi-app-intera .gi-corpo {
+  flex: 1 1 auto; min-height: 0;
+  grid-template-columns: minmax(0, 1fr) minmax(260px, 340px);
+}
+.gi-app-intera .gi-corpo > div { min-height: 0; }
+.gi-app-intera .gi-corpo > div:first-child { display: flex; flex-direction: column; }
+.gi-app-intera .gi-corpo > div:last-child { overflow-y: auto; }
+.gi-app-intera .gi-board { flex: 1 1 auto; min-height: 0; width: 100%; height: auto; }
+.gi-app-intera .gi-board:not([style*="aspect-ratio"]) { aspect-ratio: auto !important; }
+/* le ricette con un rapporto proprio (es. due board sovrapposte in un quadrato) lo mantengono:
+   il quadrato prende tutta l'altezza disponibile e sta al centro */
+.gi-app-intera .gi-board[style*="aspect-ratio"] { flex: 0 0 auto; height: max(320px, calc(100vh - 530px)); width: auto; max-width: 100%; align-self: center; }
+.gi-app-intera .gi-formula, .gi-app-intera .gi-legenda { flex: 0 0 auto; }
+@media (max-width: 860px) {
+  .gi.gi-app-intera { height: auto; min-height: 0; }
+  .gi-app-intera .gi-corpo { grid-template-columns: minmax(0, 1fr); }
+  .gi-app-intera .gi-corpo > div:first-child { display: block; }
+  .gi-app-intera .gi-corpo > div:last-child { overflow: visible; }
+  .gi-app-intera .gi-board { height: 70vh; min-height: 320px; flex: none; }
+  .gi-app-intera .gi-board[style*="aspect-ratio"] { width: 100%; height: auto; }
+}
+/* testata compatta sopra l'app, così il grafico sta nella prima schermata */
+body:has(.gi-app-intera) .md-content__inner { margin-top: 0; padding-top: .3rem; }
+body:has(.gi-app-intera) .md-content__inner::before { display: none; }
+body:has(.gi-app-intera) .md-typeset h1 { margin: 0 0 .2em; font-size: 1.6rem; line-height: 1.2; }
+body:has(.gi-app-intera) .md-typeset p { margin: .3em 0; font-size: .8rem; }
+body:has(.gi-app-intera) .md-main__inner { margin-top: .6rem; }
+
+/* pagine delle app: niente spazio bianco in alto, titolo compatto (l'altezza della board la calcola il JS) */
+body:has(.gi-app-intera) .md-main__inner { margin-top: 0; }
+body:has(.gi-app-intera) .md-content__inner { margin-top: 0; padding-top: .3rem; }
+body:has(.gi-app-intera) .md-content__inner::before { display: none; }
+body:has(.gi-app-intera) .md-content__inner > h1 { font-size: 1.45em; margin: .15em 0 .2em; }
+body:has(.gi-app-intera) .md-content__inner > p { margin: .2em 0 .4em; }
+body:has(.gi-app-intera) .gi-app-intera { margin-top: .4em; }
+
+/* pagine delle app: titolo e descrizione stanno nella testata della scatola */
+.gi-nascosto { position: absolute !important; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+.gi-app-intera .gi-testa { display: flex !important; }
+.gi-app-intera .gi-testa .gi-titolo { font-size: 1.25em; line-height: 1.3; }
+.gi-app-intera .gi-testa .gi-titolo small { display: block; margin: .2em 0 0; font-size: .72em; line-height: 1.4; opacity: .92; white-space: normal; }
+.gi-app-intera .gi-testa .gi-titolo small a { color: inherit; text-decoration: underline; }
+
+/* Modellazione MIP: schede dell'indice del laboratorio, il link «Apri l'app →» in evidenza */
+.md-typeset .grid.cards > ul > li > p:last-child a { font-weight: 700; }

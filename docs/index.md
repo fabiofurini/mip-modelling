@@ -34,6 +34,15 @@ professor at [DIAG](https://www.diag.uniroma1.it/), Sapienza University of Rome.
 
     [:octicons-arrow-right-24: The notebooks](notebooks.md)
 
+-   :material-flask-outline:{ .lg .middle } **I want to see the ideas in motion**
+
+    ---
+
+    Seven interactive apps that run in the browser: integer points and relaxation,
+    branch-and-bound, heuristics, big-M and formulations.
+
+    [:octicons-arrow-right-24: The lab](lab/index.md)
+
 </div>
 
 [:octicons-download-24: Download the course material](downloads.md){ .md-button .md-button--primary }
