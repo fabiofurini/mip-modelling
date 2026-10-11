@@ -111,7 +111,7 @@ extra_javascript:
   - javascripts/interattivi.js?v=fb6fee175e
   - javascripts/gi-comune.js?v=74d7bb93a0
   - javascripts/gi-mip-a.js?v=5a94cccac6
-  - javascripts/gi-mip-b.js?v=07047576ba
+  - javascripts/gi-mip-b.js?v=fc0e411f62
   - javascripts/gi-mip-c.js?v=2f09e62a88
 
 # the single app pages are not in the menu: the lab is one entry

@@ -32,6 +32,7 @@
   const DESCR_PASSO = T("◀ ▶ un passo alla volta, «Esegui» per vederli tutti",
     "◀ ▶ one step at a time, «Run» to watch all of them");
   const vaiAZero = (st) => { const i = M.inputDi(st, PASSO); if (i) i.value = 0; };
+  const vaiAUno = (st) => { const i = M.inputDi(st, PASSO); if (i) i.value = 1; };
   const pct = (x) => GI.num(100 * x, 1) + "\\,\\%";
   const qTxt = (q) => (q.d === 1 ? String(q.n) : `${q.n}/${q.d}`);
   const lista = (A) => A.join(", ");
@@ -710,7 +711,7 @@
     titolo: T("Bin packing e scheduling", "Bin packing and scheduling"),
     funzioni: BPP_FUNZ,
     etichettaFunzioni: T("Regola: bin packing (le prime quattro) · makespan", "Rule: bin packing (first four) · makespan"),
-    parametri: [parPasso(DESCR_PASSO)],
+    parametri: [Object.assign(parPasso(DESCR_PASSO), { val: 1 })],   // si parte dal primo oggetto già sistemato
     assi: false,
     opzioniBoard: M.OPZ,
     vista: [-1, 10, 20, -2],
@@ -734,18 +735,19 @@
     monta(board, st) {
       const D = st.dati;
       nuovaVoce(st);
+      if (M.inputDi(st, PASSO) && +M.inputDi(st, PASSO).value === 0) M.inputDi(st, PASSO).value = 1;
       const tipo = () => BPP_FUNZ[st.chiave()].tipo;
       const es = (q) => () => {
         if (tipo() === "bpp") D.bpp = { w: BPP_ES[q].w.slice(), C: BPP_ES[q].C, id: nuovoId() };
         else D.cmax = { t: CMAX_ES[q].t.slice(), k: CMAX_ES[q].k, id: nuovoId() };
-        vaiAZero(st); st.aggiorna();
+        vaiAUno(st); st.aggiorna();
       };
       M.comandi(st, [
         [T("Esempio 1", "Example 1"), T("bin packing: w = (4, 4, 5, 3, 2, 3), C = 7; makespan: t = (5, 5, 4, 4, 3, 3, 3), k = 3", "bin packing: w = (4, 4, 5, 3, 2, 3), C = 7; makespan: t = (5, 5, 4, 4, 3, 3, 3), k = 3"), es(0)],
         [T("Esempio 2", "Example 2"), T("bin packing: w = (3, 3, 2, 2, 2, 2), C = 7; makespan: t = (3, 4, 5, 6), k = 2", "bin packing: w = (3, 3, 2, 2, 2, 2), C = 7; makespan: t = (3, 4, 5, 6), k = 2"), es(1)],
         [T("Casuale", "Random"), T("dati casuali", "random data"), () => {
           if (tipo() === "bpp") D.bpp = bppCasuale(); else D.cmax = cmaxCasuale();
-          vaiAZero(st); st.aggiorna();
+          vaiAUno(st); st.aggiorna();
         }],
       ], { k: PASSO });
       osservaDimensioni(board, st);
