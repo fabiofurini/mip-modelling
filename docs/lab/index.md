@@ -21,14 +21,6 @@ the problems are small, so that every step can be seen.
 
     [Open the app →](integer-points.md)
 
--   :material-file-tree: **Branch-and-bound step by step**
-
-    ---
-
-    A two-variable problem solved by branch-and-bound: at each step a node, its relaxation and the two branches \(x_j \le \lfloor \tilde x_j \rfloor\) and \(x_j \ge \lceil \tilde x_j \rceil\), with the tree next to the plot.
-
-    [Open the app →](branch-and-bound.md)
-
 </div>
 
 ## 4. Constructive heuristics

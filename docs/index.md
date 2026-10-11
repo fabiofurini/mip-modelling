@@ -38,8 +38,8 @@ professor at [DIAG](https://www.diag.uniroma1.it/), Sapienza University of Rome.
 
     ---
 
-    Seven interactive apps that run in the browser: integer points and relaxation,
-    branch-and-bound, heuristics, big-M and formulations.
+    Six interactive apps that run in the browser: integer points and relaxation,
+    heuristics, big-M and formulations.
 
     [:octicons-arrow-right-24: The lab](lab/index.md)
 
