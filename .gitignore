@@ -29,3 +29,6 @@ slides/
 
 # the PDFs published on the site are versioned
 !docs/pdf/*.pdf
+
+# mai sorgenti LaTeX su GitHub (decisione di Fabio, 2026-10-11)
+*.tex
