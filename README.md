@@ -63,6 +63,7 @@ The whole course is also available in Italian:
 - [Linear Algebra](https://fabiofurini.github.io/linear-algebra/)
 - [Linear Programming](https://fabiofurini.github.io/linear-programming/)
 - [Convex Optimization](https://fabiofurini.github.io/convex-optimization/)
+- [Algorithms](https://fabiofurini.github.io/algorithms/)
 
 ---
 
