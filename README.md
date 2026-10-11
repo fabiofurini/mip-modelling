@@ -61,6 +61,8 @@ The whole course is also available in Italian:
 - [Operations Research Lab](https://fabiofurini.github.io/operations-research-lab/)
 - [Mathematical Analysis 1](https://fabiofurini.github.io/mathematical-analysis-1/)
 - [Linear Algebra](https://fabiofurini.github.io/linear-algebra/)
+- [Linear Programming](https://fabiofurini.github.io/linear-programming/)
+- [Convex Optimization](https://fabiofurini.github.io/convex-optimization/)
 
 ---
 
