@@ -21,7 +21,7 @@ from pathlib import Path
 
 BASE = Path(__file__).resolve().parent.parent
 DOCS = BASE / "docs"
-PREAMBLE = BASE / "notes_1" / "preambolo.tex"
+PREAMBLE = BASE / "volumes" / "lecture_notes" / "lecture_notes_1_modelling" / "preambolo.tex"
 MATHJAX = DOCS / "javascripts" / "mathjax.js"
 MODELLI = BASE / "data" / "models"
 

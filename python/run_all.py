@@ -1,7 +1,7 @@
 """Runs all the course scripts in sequence.
 
-Regenerates: data (data/*.csv), data for the pgfplots figures (notes/figure/dat/*.csv),
-matplotlib previews (notes/figure/*.pdf), site images (docs/img/*.png),
+Regenerates: data (data/*.csv), data for the pgfplots figures (volumes/lecture_notes/*/figure/dat/*.csv),
+matplotlib previews (volumes/lecture_notes/*/figure/*.pdf), site images (docs/img/*.png),
 the chapter notebooks (notebooks/*.ipynb) and the code blocks embedded in the
 website pages (docs/*.md).
 

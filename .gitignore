@@ -17,15 +17,19 @@ site/
 # misc
 .DS_Store
 
-# internal material, not published
+# internal material, not published (common module structure, REGOLE_MODULI_TEMATICI §1):
+# volumes/ = lecture notes, exercises, solutions and course organization (LaTeX sources and compiled PDFs)
 STYLE_AND_FORMAT.md
-notes_1/
-notes_2/
-notes_3/
+note/
+volumes/
+slides/
+build/
+*conflicted copy*
+# old names of the private folders, before volumes/
+notes_*/
 course_organization/
 exercises/
 solutions/
-slides/
 
 # the PDFs published on the site are versioned
 !docs/pdf/*.pdf

@@ -30,8 +30,10 @@ import matplotlib.pyplot as plt
 
 BASE = Path(__file__).resolve().parent.parent
 # the three sets of notes are independent: each keeps its own figures
-VOLUMI = {1: BASE / "notes_1" / "figure", 2: BASE / "notes_2" / "figure",
-          3: BASE / "notes_3" / "figure"}
+_DISPENSE = BASE / "volumes" / "lecture_notes"
+VOLUMI = {1: _DISPENSE / "lecture_notes_1_modelling" / "figure",
+          2: _DISPENSE / "lecture_notes_2_numerical" / "figure",
+          3: _DISPENSE / "lecture_notes_3_symbolic" / "figure"}
 
 
 def dir_figure(nome: str) -> Path:

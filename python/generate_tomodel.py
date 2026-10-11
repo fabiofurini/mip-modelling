@@ -11,7 +11,7 @@ import sys
 from pathlib import Path
 
 BASE = Path(__file__).resolve().parent.parent
-DIR_CAPITOLI = BASE / "exercises" / "capitoli"
+DIR_CAPITOLI = BASE / "volumes" / "exercises" / "exercises_1_modelling" / "capitoli"
 USCITA = BASE / "docs" / "to-model.md"
 
 CAPITOLI = [("cap20_numerical", "Twenty numerical problems",
