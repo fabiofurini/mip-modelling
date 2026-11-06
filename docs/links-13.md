@@ -41,12 +41,15 @@ and $s^- + s^+ = |a'x - \beta|$ in every optimum: the same thing as
 [technique 6.7](links-07.md), written with an equality instead of two
 inequalities.
 
-!!! warning "With a zero penalty the deviations lose their meaning"
-    If $\pi^- = 0$, the exchange argument is no longer strict and an optimal
-    solution may have both deviations positive: the reading "$s^-$ is the
-    shortfall" is no longer guaranteed. The same rule as everywhere in this
-    chapter: the strength of the conclusion depends on the sign of the
-    coefficient in the objective.
+!!! warning "With a zero penalty the deviation costs nothing"
+    The exchange argument only needs $\pi^- + \pi^+ > 0$. With $\pi^- = 0$ and
+    $\pi^+ > 0$ every optimum still has at least one deviation equal to zero, but
+    falling short of $\beta$ costs nothing: the soft constraint no longer pushes
+    $a'x$ up towards the target. Only if $\pi^- + \pi^+ \le 0$ may an optimal
+    solution have both deviations positive (with a negative sum the model is even
+    unbounded), and the reading "$s^-$ is the shortfall" is lost. The same rule as
+    everywhere in this chapter: the strength of the conclusion depends on the sign
+    of the coefficients in the objective.
 
 ## The example
 
