@@ -114,7 +114,7 @@ extra_javascript:
   - javascripts/gi-mip-a.js?v=5a94cccac6
   - javascripts/gi-mip-b.js?v=fc0e411f62
   - javascripts/gi-mip-c.js?v=2f09e62a88
-  - javascripts/quiz.js?v=3990768383
+  - javascripts/quiz.js?v=be7fae2b85
 
 # the single app pages are not in the menu: the lab is one entry
 not_in_nav: |
