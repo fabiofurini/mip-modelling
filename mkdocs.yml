@@ -88,6 +88,7 @@ extra_css:
   # laboratorio interattivo (genera_laboratorio.py)
   - https://cdn.jsdelivr.net/npm/jsxgraph@1.10.1/distrib/jsxgraph.css
   - stylesheets/interattivi.css?v=efe04489cc
+  - stylesheets/quiz.css?v=9e3792b41c
 
 markdown_extensions:
   - admonition
@@ -113,6 +114,7 @@ extra_javascript:
   - javascripts/gi-mip-a.js?v=5a94cccac6
   - javascripts/gi-mip-b.js?v=fc0e411f62
   - javascripts/gi-mip-c.js?v=2f09e62a88
+  - javascripts/quiz.js?v=3990768383
 
 # the single app pages are not in the menu: the lab is one entry
 not_in_nav: |
@@ -201,6 +203,7 @@ nav:
           - 10.8 Songs across CDs: mixed-8.md
           - 10.9 Books across shelves: mixed-9.md
       - Problems to model: to-model.md
+  - Quiz: self-assessment.md
   - Lab: lab/index.md
   - Syllabus: syllabus.md
   - Downloads: downloads.md

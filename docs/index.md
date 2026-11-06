@@ -43,9 +43,20 @@ professor at [DIAG](https://www.diag.uniroma1.it/), Sapienza University of Rome.
 
     [:octicons-arrow-right-24: The lab](lab/index.md)
 
+-   :material-clipboard-check-outline:{ .lg .middle } **Self-assessment**
+
+    ---
+
+    *Mock exam*
+
+    A new mock exam at every start: 13 questions, 33 points, with the solutions and links to the notes.
+
+    [:octicons-arrow-right-24: Test yourself](self-assessment.md)
+
 </div>
 
 [:octicons-download-24: Download the course material](downloads.md){ .md-button .md-button--primary }
+[:material-clipboard-check-outline: Test yourself](self-assessment.md){ .md-button }
 
 ## What you learn to do
 
