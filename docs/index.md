@@ -114,6 +114,14 @@ Weak and strong formulations: two models with the same integer points, overlaid.
 
     [:octicons-arrow-right-24: The notebooks](notebooks.md)
 
+-   :material-format-list-numbered: **Full index**
+
+    ---
+
+    All the chapters with their sections on one page, and how each chapter is organized.
+
+    [:octicons-arrow-right-24: The index](syllabus.md)
+
 </div>
 <!-- /collana-da-non-perdere -->
 

@@ -207,7 +207,7 @@ nav:
   - Quiz: self-assessment.md
   - Lab: lab/index.md
   - Downloads: downloads.md
-  - The course:
+  - Index:
+      - Syllabus: syllabus.md
       - How to work with the course: organization.md
       - Notebooks in Colab: notebooks.md
-  - Syllabus: syllabus.md
