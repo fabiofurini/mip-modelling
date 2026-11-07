@@ -28,9 +28,9 @@ professor at [DIAG](https://www.diag.uniroma1.it/), Sapienza University of Rome.
 <!-- collana-app -->
 ## Try it now
 
-Heuristics for the travelling salesman: compare the tours found with the bound and look at the gap.
+Bin packing and scheduling: Next Fit, First Fit, Best Fit and First Fit Decreasing fill the bins, List scheduling and LPT assign the jobs to the machines, step by step, with the bound next to the solution and the optimum at the end.
 
-<div class="gi" data-grafico="tsp"></div>
+<div class="gi" data-grafico="bpp-lpt"></div>
 
 [:material-gesture-tap: More apps in the lab](lab/index.md){ .md-button }
 <!-- /collana-app -->
