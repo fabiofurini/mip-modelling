@@ -1361,5 +1361,888 @@ window.QUIZ_GEN = window.QUIZ_GEN || {};
     }
   });
 
+  // ================================================================ generatori aggiunti il 7 novembre 2026 (copertura e ripetizioni)
+  function frCmp(a, b) { return a.n * b.d - b.n * a.d; }
+  function frMax(arr) { var m = arr[0]; arr.forEach(function (x) { if (frCmp(x, m) > 0) m = x; }); return m; }
+  function frFloor(a) { return Math.floor(a.n / a.d); }
+  function frCeil(a) { return Math.ceil(a.n / a.d); }
+  function insieme(S) { return "$\\{" + S.join(", ") + "\\}$"; }
+  /** soluzione del rilassamento dello zaino con 0 <= x <= 1 (Dantzig): valore e vettore (frazioni) */
+  function dantzig(p, w, C) {
+    var ord = p.map(function (_, j) { return j; });
+    ord.sort(function (a, b) { var c = p[b] * w[a] - p[a] * w[b]; return c !== 0 ? c : a - b; });
+    var res = C, val = fr(0, 1), x = p.map(function () { return fr(0, 1); });
+    for (var k = 0; k < ord.length && res > 0; k++) {
+      var j = ord[k];
+      if (w[j] <= res) { x[j] = fr(1, 1); res -= w[j]; val = frAdd(val, fr(p[j], 1)); }
+      else { x[j] = fr(res, w[j]); val = frAdd(val, fr(p[j] * res, w[j])); res = 0; }
+    }
+    return { v: val, x: x };
+  }
+  function zainoRapporto(p, w, C) {
+    var ord = p.map(function (_, j) { return j; });
+    ord.sort(function (a, b) { var c = p[b] * w[a] - p[a] * w[b]; return c !== 0 ? c : a - b; });
+    var res = C, v = 0;
+    ord.forEach(function (j) { if (w[j] <= res) { res -= w[j]; v += p[j]; } });
+    return v;
+  }
+  function zainoOrdine(p, w, C, ord) {
+    var res = C, v = 0;
+    ord.forEach(function (j) { if (w[j] <= res) { res -= w[j]; v += p[j]; } });
+    return v;
+  }
+  function zainoOttimo(p, w, C) {
+    var n = p.length, best = 0;
+    for (var m = 0; m < (1 << n); m++) {
+      var pw = 0, pv = 0;
+      for (var j = 0; j < n; j++) if (m >> j & 1) { pw += w[j]; pv += p[j]; }
+      if (pw <= C && pv > best) best = pv;
+    }
+    return best;
+  }
+  function idx1(S) { return S.map(function (j) { return j + 1; }); }
+
+  // ---------------------------------------------------------------- 1 il miglior bound intero dal rilassamento
+  G.push({
+    id: "mip-g-arrotonda-bound", livello: "facile", capitolo: "1-modelli-mip",
+    link: L("modellazione-1/#i-due-rilassamenti-e-da-che-parte-stanno", "modelling-1/#the-two-relaxations-and-which-side-they-are-on"),
+    genera: function (rng, l) {
+      var verso = rng() < 0.5 ? "min" : "max", z, d;
+      for (var tent = 0; tent < 100; tent++) {
+        d = pick(rng, [2, 3, 4, 5, 6]); var num = ri(rng, 20 * d, 90 * d);
+        z = fr(num, d); if (z.d !== 1) break;
+      }
+      var giusto = verso === "min" ? frCeil(z) : frFloor(z);
+      var altro = verso === "min" ? frFloor(z) : frCeil(z);
+      var oltre = verso === "min" ? giusto + 1 : giusto - 1;
+      var B = verso === "min" ? "\\lb" : "\\ub";
+      var opz = [math(B + " = " + giusto), math(B + " = " + altro), math(B + " = " + frTex(z)), math(B + " = " + oltre)];
+      var testo = T(l,
+        "MILP di **" + (verso === "min" ? "minimo" : "massimo") + "** con tutte le variabili intere e coefficienti dell'obiettivo interi, quindi ogni soluzione ammissibile ha valore intero. Il rilassamento lineare vale $\\zlp = " + frTex(z) +
+        "$. Qual è il bound più stretto sull'ottimo intero $\\zmilp$ che se ne deduce?",
+        "**" + (verso === "min" ? "Minimisation" : "Maximisation") + "** MILP with all variables integer and integer objective coefficients, so every feasible solution has an integer value. The linear relaxation is worth $\\zlp = " + frTex(z) +
+        "$. What is the tightest bound on the integer optimum $\\zmilp$ that follows?");
+      var spieg = T(l,
+        (verso === "min" ? "In un minimo $\\zlp \\le \\zmilp$; essendo $\\zmilp$ intero si arrotonda per eccesso: $\\lb = \\lceil " : "In un massimo $\\zmilp \\le \\zlp$; essendo $\\zmilp$ intero si arrotonda per difetto: $\\ub = \\lfloor ") + frTex(z) + (verso === "min" ? " \\rceil" : " \\rfloor") + " = " + giusto +
+        "$. L'arrotondamento nel verso opposto non è un bound; $\\zlp$ stesso è valido ma più debole.",
+        (verso === "min" ? "In a minimisation $\\zlp \\le \\zmilp$; since $\\zmilp$ is integer one rounds up: $\\lb = \\lceil " : "In a maximisation $\\zmilp \\le \\zlp$; since $\\zmilp$ is integer one rounds down: $\\ub = \\lfloor ") + frTex(z) + (verso === "min" ? " \\rceil" : " \\rfloor") + " = " + giusto +
+        "$. Rounding the other way is not a bound; $\\zlp$ itself is valid but weaker.");
+      return { testo: testo, opzioni: opz, corretta: 0, spiegazione: spieg, _v: { verso: verso, n: z.n, d: z.d } };
+    }
+  });
+
+  // ---------------------------------------------------------------- 2 valore di una soluzione duale
+  G.push({
+    id: "mip-g-duale-valore", livello: "facile", capitolo: "2-bound-duali",
+    link: L("modellazione-2/#un-problema-di-minimo-per-esteso", "modelling-2/#a-minimisation-problem-in-full"),
+    genera: function (rng, l) {
+      var A, b, c, pi, V, opz;
+      for (var tent = 0; tent < 300; tent++) {
+        A = [[ri(rng, 1, 4), ri(rng, 1, 4), ri(rng, 0, 3)], [ri(rng, 0, 3), ri(rng, 1, 4), ri(rng, 1, 4)]];
+        b = [ri(rng, 3, 12), ri(rng, 3, 12)]; pi = [ri(rng, 1, 4), ri(rng, 1, 4)];
+        c = [0, 1, 2].map(function (j) { return A[0][j] * pi[0] + A[1][j] * pi[1] + ri(rng, 0, 3); });
+        V = b[0] * pi[0] + b[1] * pi[1];
+        opz = [V, pi[0] + pi[1], b[0] * pi[1] + b[1] * pi[0], sum(c)];
+        if (distinct(opz)) break;
+      }
+      function riga(i) { return lin([[A[i][0], "x_1"], [A[i][1], "x_2"], [A[i][2], "x_3"]].filter(function (t) { return t[0] !== 0; }), "\\ge", b[i]); }
+      var prim = "\\min " + lin([[c[0], "x_1"], [c[1], "x_2"], [c[2], "x_3"]], "", "").replace(/  $/, "").trim();
+      var testo = T(l,
+        "Rilassamento lineare di un MILP di minimo: $" + prim + "$ con $" + riga(0) + "$, $" + riga(1) + "$, $x \\ge 0$. Il duale ha $\\pi_1, \\pi_2 \\ge 0$, un vincolo per variabile ($a_{1j}\\pi_1 + a_{2j}\\pi_2 \\le c_j$) e obiettivo $\\max " + b[0] + "\\pi_1 + " + b[1] + "\\pi_2$. La soluzione $\\bar\\pi = " + tupla(pi) +
+        "$ è ammissibile. Quale lower bound dà sull'ottimo intero?",
+        "Linear relaxation of a minimisation MILP: $" + prim + "$ with $" + riga(0) + "$, $" + riga(1) + "$, $x \\ge 0$. The dual has $\\pi_1, \\pi_2 \\ge 0$, one constraint per variable ($a_{1j}\\pi_1 + a_{2j}\\pi_2 \\le c_j$) and objective $\\max " + b[0] + "\\pi_1 + " + b[1] + "\\pi_2$. The solution $\\bar\\pi = " + tupla(pi) +
+        "$ is feasible. Which lower bound does it give on the integer optimum?");
+      var spieg = T(l,
+        "Per dualità debole il valore duale $" + b[0] + " \\cdot " + pi[0] + " + " + b[1] + " \\cdot " + pi[1] + " = " + V + "$ sta sotto $\\zlp \\le \\zmilp$. Sommare le componenti o scambiare i termini noti non dà il valore dell'obiettivo duale; $\\sum_j c_j$ non è un bound.",
+        "By weak duality the dual value $" + b[0] + " \\cdot " + pi[0] + " + " + b[1] + " \\cdot " + pi[1] + " = " + V + "$ lies below $\\zlp \\le \\zmilp$. Summing the components or swapping the right-hand sides does not give the dual objective; $\\sum_j c_j$ is not a bound.");
+      return { testo: testo, opzioni: opz.map(function (v) { return math("\\lb = " + v); }), corretta: 0, spiegazione: spieg, _v: { A: A, b: b, c: c, pi: pi } };
+    }
+  });
+
+  // ---------------------------------------------------------------- 2 (media) tabella di conversione: segni delle variabili duali
+  G.push({
+    id: "mip-g-tabella-duale", livello: "media", capitolo: "2-bound-duali",
+    link: L("modellazione-2/#la-tabella-di-conversione-primaleduale", "modelling-2/#the-primaldual-conversion-table"),
+    genera: function (rng, l) {
+      var verso, tipi, var_, g, opz;
+      for (var tent = 0; tent < 300; tent++) {
+        verso = rng() < 0.5 ? "min" : "max";
+        var m = ri(rng, 4, 6), n = ri(rng, 3, 5);
+        tipi = []; for (var i = 0; i < m; i++) tipi.push(pick(rng, ["ge", "le", "eq"]));
+        var_ = []; for (var j = 0; j < n; j++) var_.push(rng() < 0.7 ? "pos" : "lib");
+        var ge = tipi.filter(function (t) { return t === "ge"; }).length, le = tipi.filter(function (t) { return t === "le"; }).length, eq = m - ge - le;
+        var lib = var_.filter(function (t) { return t === "lib"; }).length;
+        g = verso === "min" ? [ge, le, eq] : [le, ge, eq];
+        var sw = [g[1], g[0], g[2]];
+        opz = [g, sw, [g[0], g[1], lib], [g[0] + g[2], g[1], 0]];
+        var keys = opz.map(function (o) { return o.join(","); });
+        if (distinct(keys) && ge > 0 && le > 0) break;
+      }
+      var S = { ge: "\\ge", le: "\\le", eq: "=" };
+      var elenco = tipi.map(function (t, i) { return "$" + (i + 1) + "$: $" + S[t] + "$"; }).join(", ");
+      var elV = var_.map(function (t, j) { return t === "pos" ? "$x_{" + (j + 1) + "} \\ge 0$" : "$x_{" + (j + 1) + "}$ " + T(l, "libera", "free"); }).join(", ");
+      var testo = T(l,
+        "Si scrive il duale di un programma lineare di **" + (verso === "min" ? "minimo" : "massimo") + "** con " + tipi.length + " vincoli, di verso " + elenco + ", e variabili " + elV +
+        ". Quante variabili duali sono, nell'ordine, $\\ge 0$, $\\le 0$ e libere?",
+        "One writes the dual of a **" + (verso === "min" ? "minimisation" : "maximisation") + "** linear programme with " + tipi.length + " constraints, of sense " + elenco + ", and variables " + elV +
+        ". How many dual variables are, in order, $\\ge 0$, $\\le 0$ and free?");
+      var spieg = T(l,
+        "Una variabile duale per vincolo. " + (verso === "min" ? "Primale di minimo: $\\ge \\to \\pi_i \\ge 0$, $\\le \\to \\pi_i \\le 0$, $= \\to$ libera." : "Primale di massimo (versi rovesciati): $\\le \\to \\pi_i \\ge 0$, $\\ge \\to \\pi_i \\le 0$, $= \\to$ libera.") +
+        " Le variabili primali libere decidono il verso dei vincoli duali (uguaglianze), non il segno delle variabili duali.",
+        "One dual variable per constraint. " + (verso === "min" ? "Minimisation primal: $\\ge \\to \\pi_i \\ge 0$, $\\le \\to \\pi_i \\le 0$, $= \\to$ free." : "Maximisation primal (senses flipped): $\\le \\to \\pi_i \\ge 0$, $\\ge \\to \\pi_i \\le 0$, $= \\to$ free.") +
+        " Free primal variables decide the sense of the dual constraints (equalities), not the sign of the dual variables.");
+      return { testo: testo, opzioni: opz.map(function (o) { return math("(" + o.join(", ") + ")"); }), corretta: 0, spiegazione: spieg, _v: { verso: verso, tipi: tipi, variabili: var_ } };
+    }
+  });
+
+  // ---------------------------------------------------------------- 1 i due rilassamenti dello zaino
+  G.push({
+    id: "mip-g-due-rilassamenti", livello: "facile", capitolo: "1-modelli-mip",
+    link: L("modellazione-1/#i-due-rilassamenti-e-da-che-parte-stanno", "modelling-1/#the-two-relaxations-and-which-side-they-are-on"),
+    genera: function (rng, l) {
+      var p, w, C, zl, zlp, opz;
+      for (var tent = 0; tent < 400; tent++) {
+        p = []; w = [];
+        for (var j = 0; j < 4; j++) { w.push(ri(rng, 2, 7)); p.push(ri(rng, 3, 15)); }
+        C = ri(rng, 8, 14);
+        if (sum(w) <= C || maxA(w) >= C) continue;
+        var r = frMax(p.map(function (pj, jj) { return fr(pj, w[jj]); }));
+        zl = frMul(r, fr(C, 1)); zlp = dantzig(p, w, C).v;
+        var h = fr(zainoRapporto(p, w, C), 1);
+        opz = [[zl, zlp], [zlp, zl], [zl, h], [fr(sum(p), 1), zlp]];
+        var keys = opz.map(function (o) { return frKey(o[0]) + "|" + frKey(o[1]); });
+        if (distinct(keys) && frCmp(zl, zlp) !== 0) break;
+      }
+      var testo = T(l,
+        "Zaino binario di massimo: valori $p = " + tupla(p) + "$, pesi $w = " + tupla(w) + "$, capacità $C = " + C + "$. $\\zlp$ è il rilassamento con le sole $x \\ge 0$, $\\zlpp$ quello con $0 \\le x \\le 1$. Quanto valgono $(\\zlp, \\zlpp)$?",
+        "Binary maximisation knapsack: values $p = " + tupla(p) + "$, weights $w = " + tupla(w) + "$, capacity $C = " + C + "$. $\\zlp$ is the relaxation with $x \\ge 0$ only, $\\zlpp$ the one with $0 \\le x \\le 1$. What are $(\\zlp, \\zlpp)$?");
+      var spieg = T(l,
+        "Senza bound conviene riempire lo zaino con l'oggetto di rapporto $p_j/w_j$ massimo, anche più volte: $\\zlp = C \\max_j p_j/w_j = " + frTex(zl) + "$. Con $x \\le 1$ si prendono gli oggetti per rapporto decrescente e l'ultimo in parte: $\\zlpp = " + frTex(zlp) +
+        "$. In un massimo $\\zlp \\ge \\zlpp \\ge \\zmilp$.",
+        "Without bounds it pays to fill the knapsack with the item of maximum ratio $p_j/w_j$, even several times: $\\zlp = C \\max_j p_j/w_j = " + frTex(zl) + "$. With $x \\le 1$ items are taken by decreasing ratio and the last one partially: $\\zlpp = " + frTex(zlp) +
+        "$. In a maximisation $\\zlp \\ge \\zlpp \\ge \\zmilp$.");
+      return { testo: testo, opzioni: opz.map(function (o) { return math("(" + frTex(o[0]) + ", " + frTex(o[1]) + ")"); }), corretta: 0, spiegazione: spieg, _v: { p: p, w: w, C: C } };
+    }
+  });
+
+  // ---------------------------------------------------------------- 2 (media) copertura minimale
+  function sottoinsiemi(n) { var out = []; for (var m = 1; m < (1 << n); m++) { var S = []; for (var j = 0; j < n; j++) if (m >> j & 1) S.push(j); out.push(S); } return out; }
+  function pesoS(S, w) { var s = 0; S.forEach(function (j) { s += w[j]; }); return s; }
+  function minimale(S, w, b) { return pesoS(S, w) > b && S.every(function (j) { return pesoS(S, w) - w[j] <= b; }); }
+  G.push({
+    id: "mip-g-copertura-minimale", livello: "media", capitolo: "2-bound-duali",
+    link: L("modellazione-2/#disuguaglianze-valide-e-vincoli-che-preservano-lottimalita", "modelling-2/#valid-inequalities-and-constraints-that-preserve-optimality"),
+    genera: function (rng, l) {
+      var w, b, opz;
+      for (var tent = 0; tent < 400; tent++) {
+        var n = ri(rng, 4, 5); w = []; for (var j = 0; j < n; j++) w.push(ri(rng, 2, 9));
+        b = ri(rng, Math.ceil(sum(w) / 3), sum(w) - 3);
+        var tutti = sottoinsiemi(n);
+        var mini = tutti.filter(function (S) { return minimale(S, w, b) && S.length >= 2; });
+        var nonmin = tutti.filter(function (S) { return pesoS(S, w) > b && !minimale(S, w, b) && S.length < n + 1; });
+        var noncop = tutti.filter(function (S) { return pesoS(S, w) <= b && S.length >= 2; });
+        if (!mini.length || !nonmin.length || noncop.length < 2) continue;
+        var nc = sample(rng, noncop, 2);
+        opz = [pick(rng, mini), pick(rng, nonmin), nc[0], nc[1]];
+        break;
+      }
+      var vinc = lin(w.map(function (c, j) { return [c, xv(j + 1)]; }), "\\le", b);
+      var testo = T(l,
+        "Zaino binario con vincolo $" + vinc + "$. Un insieme $S$ di oggetti è una **copertura** se $\\sum_{j \\in S} w_j > " + b + "$ (allora $\\sum_{j \\in S} x_j \\le |S| - 1$ è valida); è **minimale** se togliendo un oggetto qualsiasi non è più copertura. Quale insieme è una copertura minimale?",
+        "Binary knapsack with constraint $" + vinc + "$. A set $S$ of items is a **cover** if $\\sum_{j \\in S} w_j > " + b + "$ (then $\\sum_{j \\in S} x_j \\le |S| - 1$ is valid); it is **minimal** if removing any item it is no longer a cover. Which set is a minimal cover?");
+      var spieg = T(l,
+        insieme(idx1(opz[0])) + " pesa $" + pesoS(opz[0], w) + " > " + b + "$ e togliendo un oggetto scende a $" + b + "$ o meno. " + insieme(idx1(opz[1])) + " è una copertura ma non minimale; gli altri due pesano al più $" + b + "$.",
+        insieme(idx1(opz[0])) + " weighs $" + pesoS(opz[0], w) + " > " + b + "$ and removing any item it drops to $" + b + "$ or less. " + insieme(idx1(opz[1])) + " is a cover but not minimal; the other two weigh at most $" + b + "$.");
+      return { testo: testo, opzioni: opz.map(function (S) { return insieme(idx1(S)); }), corretta: 0, spiegazione: spieg, _v: { w: w, b: b, insiemi: opz.map(idx1) } };
+    }
+  });
+
+  // ---------------------------------------------------------------- 2 (media) quale taglio di copertura è violato
+  G.push({
+    id: "mip-g-taglio-violato", livello: "media", capitolo: "2-bound-duali",
+    link: L("modellazione-2/#disuguaglianze-valide-e-vincoli-che-preservano-lottimalita", "modelling-2/#valid-inequalities-and-constraints-that-preserve-optimality"),
+    genera: function (rng, l) {
+      var p, w, b, xt, opz;
+      for (var tent = 0; tent < 600; tent++) {
+        var n = 4; p = []; w = [];
+        for (var j = 0; j < n; j++) { w.push(ri(rng, 2, 8)); p.push(ri(rng, 3, 15)); }
+        b = ri(rng, 6, sum(w) - 3);
+        var D = dantzig(p, w, b); xt = D.x;
+        if (xt.every(function (x) { return x.d === 1; })) continue;
+        var mini = sottoinsiemi(n).filter(function (S) { return minimale(S, w, b); });
+        var viol = mini.filter(function (S) { var s = fr(0, 1); S.forEach(function (j) { s = frAdd(s, xt[j]); }); return frCmp(s, fr(S.length - 1, 1)) > 0; });
+        var ok = mini.filter(function (S) { return viol.indexOf(S) < 0; });
+        if (viol.length < 1 || ok.length < 3) continue;
+        opz = [pick(rng, viol)].concat(sample(rng, ok, 3));
+        break;
+      }
+      var vinc = lin(w.map(function (c, j) { return [c, xv(j + 1)]; }), "\\le", b);
+      var xs = "(" + xt.map(frTex).join(", ") + ")";
+      var testo = T(l,
+        "Zaino binario di massimo con valori $p = " + tupla(p) + "$ e vincolo $" + vinc + "$. Il rilassamento con $0 \\le x \\le 1$ ha soluzione ottima $\\tilde x = " + xs + "$. Per una copertura minimale $S$ ($\\sum_{j \\in S} w_j > " + b + "$) il taglio è $\\sum_{j \\in S} x_j \\le |S| - 1$. Quale di queste coperture minimali dà un taglio **violato** da $\\tilde x$?",
+        "Binary maximisation knapsack with values $p = " + tupla(p) + "$ and constraint $" + vinc + "$. The relaxation with $0 \\le x \\le 1$ has optimal solution $\\tilde x = " + xs + "$. For a minimal cover $S$ ($\\sum_{j \\in S} w_j > " + b + "$) the cut is $\\sum_{j \\in S} x_j \\le |S| - 1$. Which of these minimal covers gives a cut **violated** by $\\tilde x$?");
+      var spieg = T(l,
+        "Si somma $\\tilde x$ sugli oggetti di ciascuna copertura e si confronta con $|S| - 1$: solo per " + insieme(idx1(opz[0])) + " la somma supera il limite, quindi solo quel taglio separa $\\tilde x$ e rafforza il rilassamento.",
+        "Sum $\\tilde x$ over the items of each cover and compare with $|S| - 1$: only for " + insieme(idx1(opz[0])) + " does the sum exceed the limit, so only that cut separates $\\tilde x$ and strengthens the relaxation.");
+      return { testo: testo, opzioni: opz.map(function (S) { return insieme(idx1(S)); }), corretta: 0, spiegazione: spieg, _v: { p: p, w: w, b: b, insiemi: opz.map(idx1) } };
+    }
+  });
+
+  // ---------------------------------------------------------------- 1 (complessa) rilassamento e ottimo intero in due variabili
+  G.push({
+    id: "mip-g-ilp-due-var", livello: "complessa", capitolo: "1-modelli-mip",
+    link: L("modellazione-1/#perche-linterezza-conta", "modelling-1/#why-integrality-matters"),
+    genera: function (rng, l) {
+      var c, A, b, zl, zi, zr, opz;
+      function lp() {
+        var pts = [[fr(0, 1), fr(0, 1)]];
+        var righe = [[A[0][0], A[0][1], b[0]], [A[1][0], A[1][1], b[1]], [1, 0, 0], [0, 1, 0]];
+        for (var i = 0; i < 4; i++) for (var k = i + 1; k < 4; k++) {
+          var a1 = righe[i], a2 = righe[k], det = a1[0] * a2[1] - a1[1] * a2[0];
+          if (det === 0) continue;
+          var x1 = fr(a1[2] * a2[1] - a1[1] * a2[2], det), x2 = fr(a1[0] * a2[2] - a1[2] * a2[0], det);
+          if (x1.n < 0 || x2.n < 0) continue;
+          var ok = [0, 1].every(function (r) { return frCmp(frAdd(frMul(fr(A[r][0], 1), x1), frMul(fr(A[r][1], 1), x2)), fr(b[r], 1)) <= 0; });
+          if (ok) pts.push([x1, x2]);
+        }
+        var best = null, bp = null;
+        pts.forEach(function (q) { var v = frAdd(frMul(fr(c[0], 1), q[0]), frMul(fr(c[1], 1), q[1])); if (!best || frCmp(v, best) > 0) { best = v; bp = q; } });
+        return { v: best, x: bp };
+      }
+      for (var tent = 0; tent < 600; tent++) {
+        c = [ri(rng, 2, 9), ri(rng, 2, 9)]; A = [[ri(rng, 1, 6), ri(rng, 1, 6)], [ri(rng, 1, 6), ri(rng, 1, 6)]]; b = [ri(rng, 8, 30), ri(rng, 8, 30)];
+        var L_ = lp(); zl = L_.v;
+        if (zl.d === 1) continue;
+        zi = 0;
+        for (var x1 = 0; x1 <= 30; x1++) for (var x2 = 0; x2 <= 30; x2++)
+          if (A[0][0] * x1 + A[0][1] * x2 <= b[0] && A[1][0] * x1 + A[1][1] * x2 <= b[1]) zi = Math.max(zi, c[0] * x1 + c[1] * x2);
+        zr = c[0] * frFloor(L_.x[0]) + c[1] * frFloor(L_.x[1]);
+        opz = [[frTex(zl), zi], [frTex(zl), zr], [String(frFloor(zl)), zi], [String(zi), frTex(zl)]];
+        var keys = opz.map(function (o) { return o[0] + "|" + o[1]; });
+        if (distinct(keys) && zr < zi && frFloor(zl) !== zi) break;
+      }
+      var testo = T(l,
+        "ILP di massimo: $\\max " + c[0] + "x_1 + " + c[1] + "x_2$ con $" + lin([[A[0][0], "x_1"], [A[0][1], "x_2"]], "\\le", b[0]) + "$, $" + lin([[A[1][0], "x_1"], [A[1][1], "x_2"]], "\\le", b[1]) +
+        "$, $x_1, x_2 \\in \\mathbb{Z}_{\\ge 0}$. Quanto valgono $\\zlp$ (rilassamento con $x \\ge 0$ continue) e $\\zmilp$?",
+        "Maximisation ILP: $\\max " + c[0] + "x_1 + " + c[1] + "x_2$ with $" + lin([[A[0][0], "x_1"], [A[0][1], "x_2"]], "\\le", b[0]) + "$, $" + lin([[A[1][0], "x_1"], [A[1][1], "x_2"]], "\\le", b[1]) +
+        "$, $x_1, x_2 \\in \\mathbb{Z}_{\\ge 0}$. What are $\\zlp$ (relaxation with continuous $x \\ge 0$) and $\\zmilp$?");
+      var spieg = T(l,
+        "Il rilassamento ha l'ottimo in un vertice: $\\zlp = " + frTex(zl) + "$. Enumerando i punti interi ammissibili l'ottimo è $\\zmilp = " + zi + "$. Arrotondare per difetto il vertice ottimo dà solo $" + zr + "$, e $\\lfloor \\zlp \\rfloor$ è un bound, non l'ottimo.",
+        "The relaxation has its optimum at a vertex: $\\zlp = " + frTex(zl) + "$. Enumerating the feasible integer points the optimum is $\\zmilp = " + zi + "$. Rounding the optimal vertex down gives only $" + zr + "$, and $\\lfloor \\zlp \\rfloor$ is a bound, not the optimum.");
+      return { testo: testo, opzioni: opz.map(function (o) { return "$\\zlp = " + o[0] + "$, $\\zmilp = " + o[1] + "$"; }), corretta: 0, spiegazione: spieg, _v: { c: c, A: A, b: b } };
+    }
+  });
+
+  // ---------------------------------------------------------------- 2 (complessa) zaino: ottimo e divario certificato
+  G.push({
+    id: "mip-g-zaino-ottimo-gap", livello: "complessa", capitolo: "2-bound-duali",
+    link: L("modellazione-2/#un-problema-di-massimo-i-ruoli-si-scambiano", "modelling-2/#a-maximisation-problem-the-roles-swap"),
+    genera: function (rng, l) {
+      var p, w, C, lb, ub, z, opz, g1, g2, g3;
+      for (var tent = 0; tent < 500; tent++) {
+        p = []; w = []; for (var j = 0; j < 5; j++) { w.push(ri(rng, 2, 8)); p.push(ri(rng, 3, 20)); }
+        C = ri(rng, 9, 16); if (sum(w) <= C) continue;
+        lb = zainoRapporto(p, w, C); z = zainoOttimo(p, w, C);
+        ub = frMul(frMax(p.map(function (pj, jj) { return fr(pj, w[jj]); })), fr(C, 1));
+        g1 = frAdd(ub, fr(-lb, 1)); g1 = frMul(g1, fr(ub.d, ub.n));            // (UB - LB)/UB
+        g2 = fr(z - lb, z);                                                     // gap dell'euristica
+        g3 = frMul(frAdd(ub, fr(-lb, 1)), fr(1, lb));                           // diviso LB
+        if (z === lb || [g1, g2, g3].some(mezzoDecimale)) continue;
+        opz = [[z, g1], [z, g2], [lb, g1], [z, g3]];
+        var keys = opz.map(function (o) { return o[0] + "|" + pct(o[1], "it"); });
+        if (distinct(keys)) break;
+      }
+      var testo = T(l,
+        "Zaino binario di massimo: valori $p = " + tupla(p) + "$, pesi $w = " + tupla(w) + "$, capacità $C = " + C +
+        "$. L'euristica per $p_j/w_j$ decrescente (pareggi sull'indice più piccolo) dà $\\lb$; il duale del rilassamento con $\\bar v = \\max_j p_j/w_j$ dà $\\ub = C\\bar v$. Quanto valgono l'ottimo $\\zmilp$ e il divario certificato $(\\ub - \\lb)/\\ub$ (un decimale)?",
+        "Binary maximisation knapsack: values $p = " + tupla(p) + "$, weights $w = " + tupla(w) + "$, capacity $C = " + C +
+        "$. The heuristic by decreasing $p_j/w_j$ (ties: smallest index) gives $\\lb$; the dual of the relaxation with $\\bar v = \\max_j p_j/w_j$ gives $\\ub = C\\bar v$. What are the optimum $\\zmilp$ and the certified gap $(\\ub - \\lb)/\\ub$ (one decimal)?");
+      var spieg = T(l,
+        "$\\lb = " + lb + "$, $\\ub = " + frTex(ub) + "$, quindi il divario certificato è $\\approx " + pct(g1, "it") + "$; enumerando i sottoinsiemi $\\zmilp = " + z + "$. Il gap dell'euristica rispetto all'ottimo ($" + pct(g2, "it") + "$) è un'altra misura; dividere per $\\lb$ è un errore.",
+        "$\\lb = " + lb + "$, $\\ub = " + frTex(ub) + "$, so the certified gap is $\\approx " + pct(g1, "en") + "$; enumerating the subsets $\\zmilp = " + z + "$. The heuristic gap with respect to the optimum ($" + pct(g2, "en") + "$) is another measure; dividing by $\\lb$ is a mistake.");
+      return { testo: testo, opzioni: opz.map(function (o) { return "$\\zmilp = " + o[0] + "$, " + T(l, "divario ", "gap ") + "$" + pct(o[1], l) + "$"; }), corretta: 0, spiegazione: spieg, _v: { p: p, w: w, C: C } };
+    }
+  });
+
+  // ---------------------------------------------------------------- 4 zaino: regola del rapporto
+  G.push({
+    id: "mip-g-zaino-rapporto", livello: "facile", capitolo: "4-euristiche",
+    link: L("modellazione-4/#zaino-la-regola-del-rapporto-migliore", "modelling-4/#knapsack-the-best-ratio-rule"),
+    genera: function (rng, l) {
+      var p, w, C, v, opz;
+      for (var tent = 0; tent < 500; tent++) {
+        p = []; w = []; for (var j = 0; j < 5; j++) { w.push(ri(rng, 2, 9)); p.push(ri(rng, 3, 20)); }
+        C = ri(rng, 10, 18); if (sum(w) <= C) continue;
+        var ix = [0, 1, 2, 3, 4];
+        v = zainoRapporto(p, w, C);
+        var perP = ix.slice().sort(function (a, b) { return p[b] - p[a] || a - b; });
+        var perW = ix.slice().sort(function (a, b) { return w[a] - w[b] || a - b; });
+        var ordR = ix.slice().sort(function (a, b) { var c = p[b] * w[a] - p[a] * w[b]; return c !== 0 ? c : a - b; });
+        var stop = 0, res = C; for (var k = 0; k < 5; k++) { var jj = ordR[k]; if (w[jj] > res) break; res -= w[jj]; stop += p[jj]; }
+        opz = [v, zainoOrdine(p, w, C, perP), zainoOrdine(p, w, C, perW), stop];
+        if (distinct(opz)) break;
+      }
+      var testo = T(l,
+        "Zaino binario di massimo: valori $p = " + tupla(p) + "$, pesi $w = " + tupla(w) + "$, capacità $C = " + C +
+        "$. L'euristica scandisce gli oggetti per $p_j/w_j$ decrescente (pareggi sull'indice più piccolo) e prende **ogni** oggetto che entra nel residuo, continuando la scansione anche dopo uno scarto. Che valore ottiene?",
+        "Binary maximisation knapsack: values $p = " + tupla(p) + "$, weights $w = " + tupla(w) + "$, capacity $C = " + C +
+        "$. The heuristic scans the items by decreasing $p_j/w_j$ (ties: smallest index) and takes **every** item that fits in the residual, continuing the scan even after a rejection. What value does it obtain?");
+      var spieg = T(l,
+        "Con l'ordine per rapporto la regola ottiene $" + v + "$, un lower bound perché il problema è di massimo. Ordinare per valore o per peso dà altri risultati; fermarsi al primo oggetto che non entra dà $" + opz[3] + "$.",
+        "With the ratio order the rule obtains $" + v + "$, a lower bound because the problem is a maximisation. Sorting by value or by weight gives other results; stopping at the first item that does not fit gives $" + opz[3] + "$.");
+      return { testo: testo, opzioni: opz.map(function (x) { return math(String(x)); }), corretta: 0, spiegazione: spieg, _v: { p: p, w: w, C: C } };
+    }
+  });
+
+  // ---------------------------------------------------------------- 3 tolleranza MIPGap: quando si ferma il solver
+  G.push({
+    id: "mip-g-mipgap-soglia", livello: "facile", capitolo: "3-gurobi",
+    link: L("gurobipy-3/#le-tolleranze", "gurobipy-3/#tolerances"),
+    genera: function (rng, l) {
+      var verso = rng() < 0.5 ? "min" : "max", V = 200 * ri(rng, 3, 40), pm = pick(rng, [5, 10, 20, 50]);   // pm = MIPGap in millesimi
+      var dV = V * pm / 1000, abs = pm / 10;
+      var g = verso === "min" ? V - dV : V + dV;
+      var opz = verso === "min" ? [g, V - abs, V - 10 * dV, V + dV] : [g, V + abs, V + 10 * dV, V - dV];
+      var ptxt = T(l, String(pm / 10).replace(".", "{,}"), String(pm / 10)) + "\\%";
+      var testo = T(l,
+        "Gurobi, problema di **" + (verso === "min" ? "minimo" : "massimo") + "**, parametro `MIPGap` $= " + ptxt + "$: il solver si ferma con `OPTIMAL` appena $|\\text{ObjVal} - \\text{ObjBound}| / |\\text{ObjVal}| \\le$ `MIPGap`. La soluzione migliore vale `ObjVal` $= " + V +
+        "$. Qual è il valore di `ObjBound` " + (verso === "min" ? "più piccolo" : "più grande") + " con cui il solver si ferma?",
+        "Gurobi, **" + (verso === "min" ? "minimisation" : "maximisation") + "** problem, parameter `MIPGap` $= " + ptxt + "$: the solver stops with `OPTIMAL` as soon as $|\\text{ObjVal} - \\text{ObjBound}| / |\\text{ObjVal}| \\le$ `MIPGap`. The best solution is worth `ObjVal` $= " + V +
+        "$. What is the " + (verso === "min" ? "smallest" : "largest") + " value of `ObjBound` at which the solver stops?");
+      var spieg = T(l,
+        "Serve $|" + V + " - \\text{ObjBound}| \\le " + V + " \\cdot " + ptxt + " = " + String(dV).replace(".", "{,}") + "$; in un " + (verso === "min" ? "minimo il bound sta sotto la soluzione" : "massimo il bound sta sopra la soluzione") + ", quindi `ObjBound` $= " + String(g).replace(".", "{,}") +
+        "$. La percentuale non va sottratta come numero assoluto, e il bound non sta dal lato della soluzione.",
+        "One needs $|" + V + " - \\text{ObjBound}| \\le " + V + " \\cdot " + ptxt + " = " + dV + "$; in a " + (verso === "min" ? "minimisation the bound lies below the solution" : "maximisation the bound lies above the solution") + ", so `ObjBound` $= " + g +
+        "$. The percentage must not be subtracted as an absolute number, and the bound does not lie on the solution's side.");
+      return { testo: testo, opzioni: opz.map(function (x) { return math(T(l, String(x).replace(".", "{,}"), String(x))); }), corretta: 0, spiegazione: spieg, _v: { verso: verso, V: V, p: pm / 1000 } };
+    }
+  });
+
+  // ---------------------------------------------------------------- 3 makespan: i due bound elementari
+  G.push({
+    id: "mip-g-cmax-lb", livello: "facile", capitolo: "3-gurobi",
+    link: L("gurobipy-4/#makespan-il-carico-della-macchina-piu-carica", "gurobipy-4/#makespan-the-load-of-the-busiest-machine"),
+    genera: function (rng, l) {
+      var t, k, g, opz;
+      for (var tent = 0; tent < 400; tent++) {
+        var n = ri(rng, 5, 7); k = ri(rng, 2, 3); t = []; for (var j = 0; j < n; j++) t.push(ri(rng, 2, 12));
+        var media = fr(sum(t), k), mx = fr(maxA(t), 1);
+        g = frCmp(media, mx) > 0 ? media : mx;
+        var piccolo = frCmp(media, mx) > 0 ? mx : media;
+        opz = [g, piccolo, fr(sum(t), 1), fr(minA(t) * n, k)];
+        var keys = opz.map(frKey);
+        if (distinct(keys)) break;
+      }
+      var testo = T(l,
+        "Makespan su $k = " + k + "$ macchine identiche (minimo del carico della macchina più carica), lavori di durata $t = " + tupla(t) + "$. Qual è il migliore dei due lower bound elementari, $\\max_j t_j$ e $\\sum_j t_j / k$?",
+        "Makespan on $k = " + k + "$ identical machines (minimum load of the busiest machine), jobs of duration $t = " + tupla(t) + "$. What is the better of the two elementary lower bounds, $\\max_j t_j$ and $\\sum_j t_j / k$?");
+      var spieg = T(l,
+        "$\\max_j t_j = " + maxA(t) + "$ e $\\sum_j t_j / k = " + frTex(fr(sum(t), k)) + "$: in un minimo il bound migliore è il più grande, $" + frTex(g) + "$. $\\sum_j t_j$ è un upper bound (tutto su una macchina), non un lower bound.",
+        "$\\max_j t_j = " + maxA(t) + "$ and $\\sum_j t_j / k = " + frTex(fr(sum(t), k)) + "$: in a minimisation the better bound is the larger one, $" + frTex(g) + "$. $\\sum_j t_j$ is an upper bound (everything on one machine), not a lower bound.");
+      return { testo: testo, opzioni: opz.map(function (x) { return math(frTex(x)); }), corretta: 0, spiegazione: spieg, _v: { t: t, k: k } };
+    }
+  });
+
+  // ---------------------------------------------------------------- 4 (media) ricerca locale: la migliore mossa di spostamento
+  function cmaxDi(ass, t, k) { var Lm = []; for (var m = 0; m < k; m++) Lm.push(0); ass.forEach(function (m, j) { Lm[m] += t[j]; }); return maxA(Lm); }
+  function cmaxOttimo(t, k) {
+    var n = t.length, best = 1e9, ass = [];
+    (function rec(j) {
+      if (j === n) { best = Math.min(best, cmaxDi(ass, t, k)); return; }
+      for (var m = 0; m < k; m++) { ass[j] = m; rec(j + 1); }
+    })(0);
+    return best;
+  }
+  G.push({
+    id: "mip-g-ricerca-locale", livello: "media", capitolo: "4-euristiche",
+    link: L("modellazione-4/#ricerca-locale-e-che-cosa-non-da", "modelling-4/#local-search-and-what-it-does-not-give"),
+    genera: function (rng, l) {
+      var t, ass, k = 3, cur, best, opt, opz;
+      for (var tent = 0; tent < 500; tent++) {
+        var n = ri(rng, 6, 7); t = []; ass = [];
+        for (var j = 0; j < n; j++) { t.push(ri(rng, 2, 9)); ass.push(ri(rng, 0, k - 1)); }
+        cur = cmaxDi(ass, t, k); best = cur;
+        for (j = 0; j < n; j++) for (var m = 0; m < k; m++) if (m !== ass[j]) {
+          var a2 = ass.slice(); a2[j] = m; best = Math.min(best, cmaxDi(a2, t, k));
+        }
+        opt = cmaxOttimo(t, k);
+        var lbm = Math.ceil(sum(t) / k);
+        var cand = [best, cur, opt, lbm, best - 1].filter(function (v, i, a) { return a.indexOf(v) === i; });
+        if (cand.length >= 4 && cand[0] === best) { opz = cand.slice(0, 4); if (opz.indexOf(best) === 0 && distinct(opz)) break; }
+      }
+      var carichi = []; for (var m2 = 0; m2 < k; m2++) carichi.push(0); ass.forEach(function (m3, j3) { carichi[m3] += t[j3]; });
+      var assTxt = ass.map(function (m4) { return m4 + 1; });
+      var testo = T(l,
+        "Makespan su $3$ macchine identiche: lavori di durata $t = " + tupla(t) + "$, assegnati alle macchine $" + tupla(assTxt) + "$ (nell'ordine dei lavori), carichi $" + tupla(carichi) +
+        "$. Si valutano tutte le mosse «sposta un lavoro su un'altra macchina» e si applica la migliore, solo se riduce il makespan. Che makespan si ottiene dopo un passo (se nessuna mossa migliora, quello attuale)?",
+        "Makespan on $3$ identical machines: jobs of duration $t = " + tupla(t) + "$, assigned to machines $" + tupla(assTxt) + "$ (in job order), loads $" + tupla(carichi) +
+        "$. All moves «move one job to another machine» are evaluated and the best one is applied, only if it reduces the makespan. What makespan is obtained after one step (if no move improves, the current one)?");
+      var spieg = T(l,
+        "Il makespan attuale è $" + cur + "$; la migliore mossa di spostamento porta a $" + best + "$. L'ottimo vale $" + opt + "$ e il bound $\\lceil \\sum t / k \\rceil = " + Math.ceil(sum(t) / 3) + "$: una mossa locale non garantisce di raggiungerli.",
+        "The current makespan is $" + cur + "$; the best move leads to $" + best + "$. The optimum is $" + opt + "$ and the bound $\\lceil \\sum t / k \\rceil = " + Math.ceil(sum(t) / 3) + "$: a local move does not guarantee reaching them.");
+      return { testo: testo, opzioni: opz.map(function (x) { return math(String(x)); }), corretta: 0, spiegazione: spieg, _v: { t: t, ass: assTxt } };
+    }
+  });
+
+  // ---------------------------------------------------------------- 4 (complessa) LPT e lower bound
+  function lptMakespan(t, k) {
+    var ord = t.map(function (_, j) { return j; }).sort(function (a, b) { return t[b] - t[a] || a - b; });
+    return listSched(t, k, ord);
+  }
+  function listSched(t, k, ord) {
+    var Lm = []; for (var m = 0; m < k; m++) Lm.push(0);
+    ord.forEach(function (j) { var mm = 0; for (var m2 = 1; m2 < k; m2++) if (Lm[m2] < Lm[mm]) mm = m2; Lm[mm] += t[j]; });
+    return maxA(Lm);
+  }
+  G.push({
+    id: "mip-g-lpt-bound", livello: "complessa", capitolo: "4-euristiche",
+    link: L("modellazione-4/#pc_max-la-regola-del-meno-carico", "modelling-4/#pc_max-the-least-loaded-rule"),
+    genera: function (rng, l) {
+      var t, k, ub, lb, ls, opz;
+      for (var tent = 0; tent < 500; tent++) {
+        var n = ri(rng, 6, 8); k = ri(rng, 2, 3); t = []; for (var j = 0; j < n; j++) t.push(ri(rng, 2, 10));
+        ub = lptMakespan(t, k); lb = Math.max(maxA(t), Math.ceil(sum(t) / k));
+        ls = listSched(t, k, t.map(function (_, jj) { return jj; }));
+        opz = [[ub, lb], [lb, ub], [ls, lb], [ub, Math.floor(sum(t) / k)]];
+        var keys = opz.map(function (o) { return o.join("|"); });
+        if (distinct(keys) && ub !== lb) break;
+      }
+      var testo = T(l,
+        "Makespan su $k = " + k + "$ macchine identiche, lavori di durata $t = " + tupla(t) +
+        "$. LPT ordina i lavori per durata decrescente (pareggi sull'indice più piccolo) e mette ciascuno sulla macchina meno carica (pareggi sulla macchina di indice più piccolo). Il lower bound è $\\max\\{\\max_j t_j, \\lceil \\sum_j t_j / k \\rceil\\}$ (il makespan è intero). Quali sono $(\\ub, \\lb)$, con $\\ub$ il makespan di LPT?",
+        "Makespan on $k = " + k + "$ identical machines, jobs of duration $t = " + tupla(t) +
+        "$. LPT sorts the jobs by decreasing duration (ties: smallest index) and puts each on the least loaded machine (ties: machine of smallest index). The lower bound is $\\max\\{\\max_j t_j, \\lceil \\sum_j t_j / k \\rceil\\}$ (the makespan is integer). What are $(\\ub, \\lb)$, with $\\ub$ the LPT makespan?");
+      var spieg = T(l,
+        "LPT dà makespan $" + ub + "$, un upper bound (minimo); il bound vale $\\max\\{" + maxA(t) + ", \\lceil " + sum(t) + "/" + k + " \\rceil\\} = " + lb + "$. Senza ordinamento (list scheduling nell'ordine dato) si ottiene $" + ls + "$.",
+        "LPT gives makespan $" + ub + "$, an upper bound (minimisation); the bound is $\\max\\{" + maxA(t) + ", \\lceil " + sum(t) + "/" + k + " \\rceil\\} = " + lb + "$. Without sorting (list scheduling in the given order) one gets $" + ls + "$.");
+      return { testo: testo, opzioni: opz.map(function (o) { return "$(" + o[0] + ", " + o[1] + ")$"; }), corretta: 0, spiegazione: spieg, _v: { t: t, k: k } };
+    }
+  });
+
+  // ---------------------------------------------------------------- 3 (complessa) bin packing: first-fit decreasing e bound
+  function firstFit(w, C, ord) {
+    var res = [];
+    ord.forEach(function (j) { var b = -1; for (var i = 0; i < res.length; i++) if (res[i] >= w[j]) { b = i; break; } if (b < 0) res.push(C - w[j]); else res[b] -= w[j]; });
+    return res.length;
+  }
+  G.push({
+    id: "mip-g-bpp-ffd", livello: "complessa", capitolo: "3-gurobi",
+    link: L("gurobipy-4/#bin-packing-quanti-contenitori-bastano", "gurobipy-4/#bin-packing-how-many-containers-are-enough"),
+    genera: function (rng, l) {
+      var w, C, ffd, ff, lb, opz;
+      for (var tent = 0; tent < 500; tent++) {
+        var n = ri(rng, 7, 9); C = ri(rng, 10, 15); w = []; for (var j = 0; j < n; j++) w.push(ri(rng, 2, C - 2));
+        var ix = w.map(function (_, jj) { return jj; });
+        ffd = firstFit(w, C, ix.slice().sort(function (a, b) { return w[b] - w[a] || a - b; }));
+        ff = firstFit(w, C, ix); lb = Math.ceil(sum(w) / C);
+        opz = [[ffd, lb], [ff !== ffd ? ff : ffd + 1, lb], [ffd, lb - 1], ffd !== lb ? [lb, ffd] : [ffd, lb + 1]];
+        var keys = opz.map(function (o) { return o.join("|"); });
+        if (distinct(keys)) break;
+      }
+      var testo = T(l,
+        "Bin packing: oggetti di peso $w = " + tupla(w) + "$, contenitori di capacità $C = " + C +
+        "$. Il first-fit decreasing ordina gli oggetti per peso decrescente (pareggi sull'indice più piccolo) e mette ciascuno nel primo contenitore aperto in cui entra, altrimenti ne apre uno nuovo. Con $\\ub$ il numero di contenitori del first-fit decreasing e il lower bound $\\lb = \\lceil \\sum_j w_j / C \\rceil$, quali sono $(\\ub, \\lb)$?",
+        "Bin packing: items of weight $w = " + tupla(w) + "$, containers of capacity $C = " + C +
+        "$. First-fit decreasing sorts the items by decreasing weight (ties: smallest index) and puts each in the first open container where it fits, otherwise opens a new one. With $\\ub$ the number of containers of first-fit decreasing and the lower bound $\\lb = \\lceil \\sum_j w_j / C \\rceil$, what are $(\\ub, \\lb)$?");
+      var spieg = T(l,
+        "First-fit decreasing usa $" + ffd + "$ contenitori (upper bound); $\\sum_j w_j = " + sum(w) + "$, quindi $\\lb = \\lceil " + sum(w) + "/" + C + " \\rceil = " + lb + "$. Il first-fit nell'ordine dato usa $" + ff + "$ contenitori.",
+        "First-fit decreasing uses $" + ffd + "$ containers (upper bound); $\\sum_j w_j = " + sum(w) + "$, so $\\lb = \\lceil " + sum(w) + "/" + C + " \\rceil = " + lb + "$. First-fit in the given order uses $" + ff + "$ containers.");
+      return { testo: testo, opzioni: opz.map(function (o) { return "$(" + o[0] + ", " + o[1] + ")$"; }), corretta: 0, spiegazione: spieg, _v: { w: w, C: C } };
+    }
+  });
+
+  // ---------------------------------------------------------------- 5 (media) verificare una traduzione: contare le assegnazioni
+  var POOL5 = [[[1, 1, 0], "le", 1], [[1, -1, 0], "le", 0], [[1, 1, 1], "ge", 2], [[1, 1, -1], "le", 1], [[0, 1, 1], "ge", 1],
+    [[1, 0, -1], "ge", 0], [[1, 1, 1], "le", 2], [[-1, 1, 1], "ge", 0], [[1, -1, -1], "ge", -1], [[0, 1, -1], "le", 0]];
+  G.push({
+    id: "mip-g-verifica-conta", livello: "media", capitolo: "5-logica",
+    link: L("modellazione-5/#verificare-la-traduzione-non-fidarsene", "modelling-5/#checking-the-translation-not-trusting-it"),
+    genera: function (rng, l) {
+      var V, cnt, opz;
+      for (var tent = 0; tent < 300; tent++) {
+        V = sample(rng, POOL5, 2);
+        cnt = 0;
+        for (var m = 0; m < 8; m++) {
+          var x = [m & 1, m >> 1 & 1, m >> 2 & 1];
+          if (V.every(function (c) { var s = c[0][0] * x[0] + c[0][1] * x[1] + c[0][2] * x[2]; return c[1] === "le" ? s <= c[2] : s >= c[2]; })) cnt++;
+        }
+        opz = [cnt, 8 - cnt, cnt + 1, cnt - 1];
+        if (distinct(opz) && cnt >= 2 && cnt <= 6) break;
+      }
+      var vin = V.map(function (c) { return "$" + lin([[c[0][0], "x_1"], [c[0][1], "x_2"], [c[0][2], "x_3"]].filter(function (q) { return q[0] !== 0; }), REL[c[1]], c[2]) + "$"; }).join(T(l, " e ", " and "));
+      var testo = T(l,
+        "Un'espressione booleana in tre variabili binarie $x_1, x_2, x_3$ ($1$ = vero) è stata tradotta nei vincoli " + vin + ". Per verificare la traduzione si enumerano le $8$ assegnazioni. Quante di esse soddisfano entrambi i vincoli?",
+        "A Boolean expression in three binary variables $x_1, x_2, x_3$ ($1$ = true) has been translated into the constraints " + vin + ". To check the translation the $8$ assignments are enumerated. How many of them satisfy both constraints?");
+      var spieg = T(l,
+        "Enumerando le $8$ assegnazioni, quelle che soddisfano entrambi i vincoli sono $" + cnt + "$: devono coincidere con quelle che rendono vera l'espressione. $" + (8 - cnt) + "$ sono quelle escluse.",
+        "Enumerating the $8$ assignments, those satisfying both constraints are $" + cnt + "$: they must coincide with those making the expression true. $" + (8 - cnt) + "$ are the excluded ones.");
+      return { testo: testo, opzioni: opz.map(function (x) { return math(String(x)); }), corretta: 0, spiegazione: spieg, _v: { vincoli: JSON.stringify(V) } };
+    }
+  });
+
+  // ---------------------------------------------------------------- 6 (media) vincoli violabili: penalità di un piano
+  G.push({
+    id: "mip-g-deviazioni", livello: "media", capitolo: "6-legami",
+    link: L("legami-13/", "links-13/"),
+    genera: function (rng, l) {
+      var beta, a, pm, pp, P, opz;
+      for (var tent = 0; tent < 300; tent++) {
+        beta = []; a = [];
+        for (var i = 0; i < 3; i++) { beta.push(10 * ri(rng, 3, 9)); a.push(beta[i] + 5 * ri(rng, -3, 3)); }
+        pm = ri(rng, 2, 6); pp = ri(rng, 1, 5); if (pm === pp) continue;
+        P = 0; var Psw = 0, Pabs = 0, Pnet = 0;
+        for (i = 0; i < 3; i++) {
+          var sm = Math.max(0, beta[i] - a[i]), sp = Math.max(0, a[i] - beta[i]);
+          P += pm * sm + pp * sp; Psw += pp * sm + pm * sp; Pabs += Math.max(pm, pp) * (sm + sp); Pnet += pm * sm - pp * sp;
+        }
+        opz = [P, Psw, Pabs, Pnet];
+        if (distinct(opz) && a.some(function (x, ii) { return x < beta[ii]; }) && a.some(function (x, ii) { return x > beta[ii]; })) break;
+      }
+      var testo = T(l,
+        "Vincoli violabili: tre target $\\beta = " + tupla(beta) + "$ si scrivono $a_t'x + s_t^- - s_t^+ = \\beta_t$ con $s_t^-, s_t^+ \\ge 0$; si penalizza $\\pi^- = " + pm + "$ per unità sotto il target e $\\pi^+ = " + pp + "$ per unità sopra, in un obiettivo di minimo. Un piano dà $a'x = " + tupla(a) +
+        "$. Quanto vale la penalità totale, con le deviazioni al loro valore ottimo?",
+        "Soft constraints: three targets $\\beta = " + tupla(beta) + "$ are written $a_t'x + s_t^- - s_t^+ = \\beta_t$ with $s_t^-, s_t^+ \\ge 0$; a penalty $\\pi^- = " + pm + "$ per unit below the target and $\\pi^+ = " + pp + "$ per unit above, in a minimisation objective. A plan gives $a'x = " + tupla(a) +
+        "$. What is the total penalty, with the deviations at their optimal value?");
+      var spieg = T(l,
+        "Per ogni target si usa una sola deviazione: $s^- = \\max(0, \\beta - a'x)$ pagata $" + pm + "$, $s^+ = \\max(0, a'x - \\beta)$ pagata $" + pp + "$. Totale $" + P + "$. Scambiare le penalità, o compensare le deviazioni di segno opposto, dà valori sbagliati.",
+        "For each target only one deviation is used: $s^- = \\max(0, \\beta - a'x)$ paid $" + pm + "$, $s^+ = \\max(0, a'x - \\beta)$ paid $" + pp + "$. Total $" + P + "$. Swapping the penalties, or offsetting deviations of opposite sign, gives wrong values.");
+      return { testo: testo, opzioni: opz.map(function (x) { return math(String(x)); }), corretta: 0, spiegazione: spieg, _v: { beta: beta, a: a, pm: pm, pp: pp } };
+    }
+  });
+
+  // ---------------------------------------------------------------- 6 (complessa) costo fisso e vincoli violabili: ottimo
+  G.push({
+    id: "mip-g-violabili-ottimo", livello: "complessa", capitolo: "6-legami",
+    link: L("legami-13/", "links-13/"),
+    genera: function (rng, l) {
+      var f, c, D, K, pm, pp, U = 20, opt, qo, opz;
+      function costo(q) { return (q > 0 ? f : 0) + c * q + pm * Math.max(0, D - q) + pp * Math.max(0, q - K); }
+      for (var tent = 0; tent < 500; tent++) {
+        f = 10 * ri(rng, 2, 8); c = ri(rng, 2, 6); D = ri(rng, 8, 16); K = ri(rng, 5, D - 1); pm = ri(rng, c + 1, c + 8); pp = ri(rng, 1, 8);
+        opt = 1e9; qo = 0; for (var q = 0; q <= U; q++) if (costo(q) < opt) { opt = costo(q); qo = q; }
+        var noF = 1e9, noP = 1e9;                 // errori tipici: dimenticare il costo fisso, o lo straordinario
+        for (q = 0; q <= U; q++) { noF = Math.min(noF, costo(q) - (q > 0 ? f : 0)); noP = Math.min(noP, costo(q) - pp * Math.max(0, q - K)); }
+        var altri = [0, K, D].map(costo).filter(function (v) { return v !== opt; }).sort(function (x, y) { return x - y; });
+        opz = [opt, noF, noP].concat(altri.slice(0, 1));
+        if (distinct(opz) && opz.length === 4) break;
+      }
+      var testo = T(l,
+        "Si decide la produzione intera $q \\in \\{0, \\dots, " + U + "\\}$ di un periodo. Si paga un costo fisso $f = " + f + "$ se $q > 0$ (legame $q \\le " + U + "\\,y$, $y$ binaria) e $c = " + c + "$ per unità. La domanda $D = " + D + "$ è un vincolo violabile: ogni unità mancante costa $\\pi^- = " + pm +
+        "$; la capacità ordinaria $K = " + K + "$ è violabile con straordinari a $\\pi^+ = " + pp + "$ per unità oltre $K$. Quanto vale il costo minimo?",
+        "One decides the integer production $q \\in \\{0, \\dots, " + U + "\\}$ of a period. A fixed cost $f = " + f + "$ is paid if $q > 0$ (link $q \\le " + U + "\\,y$, $y$ binary) and $c = " + c + "$ per unit. The demand $D = " + D + "$ is a soft constraint: each missing unit costs $\\pi^- = " + pm +
+        "$; the regular capacity $K = " + K + "$ can be exceeded with overtime at $\\pi^+ = " + pp + "$ per unit beyond $K$. What is the minimum cost?");
+      var spieg = T(l,
+        "Il costo è $f[q > 0] + " + c + "q + " + pm + "\\max(0, " + D + " - q) + " + pp + "\\max(0, q - " + K + ")$; enumerando $q$ (basta guardare $q \\in \\{0, " + K + ", " + D + "\\}$, i punti di rottura) il minimo è $" + opt + "$, con $q = " + qo + "$. Dimenticare il costo fisso dà $" + opz[1] + "$, dimenticare lo straordinario $" + opz[2] + "$.",
+        "The cost is $f[q > 0] + " + c + "q + " + pm + "\\max(0, " + D + " - q) + " + pp + "\\max(0, q - " + K + ")$; enumerating $q$ (it suffices to look at $q \\in \\{0, " + K + ", " + D + "\\}$, the breakpoints) the minimum is $" + opt + "$, with $q = " + qo + "$. Forgetting the fixed cost gives $" + opz[1] + "$, forgetting overtime $" + opz[2] + "$.");
+      return { testo: testo, opzioni: opz.map(function (x) { return math(String(x)); }), corretta: 0, spiegazione: spieg, _v: { f: f, c: c, D: D, K: K, pm: pm, pp: pp, U: U } };
+    }
+  });
+
+  // ---------------------------------------------------------------- 8 localizzazione: costo di una soluzione
+  function uflCosto(I, Dm, T_, aperte) {
+    var c = 0; aperte.forEach(function (s) { c += I[s]; });
+    for (var k = 0; k < Dm.length; k++) { var b = 1e9; aperte.forEach(function (s) { b = Math.min(b, T_[s][k]); }); c += Dm[k] * b; }
+    return c;
+  }
+  G.push({
+    id: "mip-g-ufl-costo", livello: "facile", capitolo: "8-localizzazione",
+    link: L("localizzazione-1/#modello", "location-1/#model"),
+    genera: function (rng, l) {
+      var I, Dm, T_, ap, opz;
+      for (var tent = 0; tent < 300; tent++) {
+        I = [10 * ri(rng, 2, 9), 10 * ri(rng, 2, 9), 10 * ri(rng, 2, 9)]; Dm = [ri(rng, 2, 9), ri(rng, 2, 9), ri(rng, 2, 9), ri(rng, 2, 9)];
+        T_ = [0, 1, 2].map(function () { return [0, 1, 2, 3].map(function () { return ri(rng, 1, 6); }); });
+        ap = sample(rng, [0, 1, 2], 2).sort();
+        var g = uflCosto(I, Dm, T_, ap), sz = g - I[ap[0]] - I[ap[1]];
+        var mx = I[ap[0]] + I[ap[1]]; for (var k = 0; k < 4; k++) mx += Dm[k] * Math.max(T_[ap[0]][k], T_[ap[1]][k]);
+        var nod = I[ap[0]] + I[ap[1]]; for (k = 0; k < 4; k++) nod += Math.min(T_[ap[0]][k], T_[ap[1]][k]);
+        opz = [g, sz, mx, nod];
+        if (distinct(opz)) break;
+      }
+      var righe = T_.map(function (r, s) { return T(l, "sede ", "site ") + (s + 1) + " $(" + r.join(", ") + ")$"; }).join(", ");
+      var testo = T(l,
+        "Localizzazione (minimo costo): $3$ sedi candidate con costo di installazione $i = " + tupla(I) + "$, $4$ clienti con domanda $d = " + tupla(Dm) + "$ litri, costo di trasporto per litro $t_{lc}$ (righe per sede): " + righe +
+        ". Le capacità sono sufficienti e ogni cliente si rifornisce dalla sede aperta più economica. Si installano le sedi " + (ap[0] + 1) + " e " + (ap[1] + 1) + ". Quanto costa la soluzione?",
+        "Location (minimum cost): $3$ candidate sites with installation cost $i = " + tupla(I) + "$, $4$ customers with demand $d = " + tupla(Dm) + "$ litres, transport cost per litre $t_{lc}$ (rows per site): " + righe +
+        ". Capacities are sufficient and each customer is supplied by the cheapest open site. Sites " + (ap[0] + 1) + " and " + (ap[1] + 1) + " are installed. What does the solution cost?");
+      var spieg = T(l,
+        "Installazione $" + (I[ap[0]] + I[ap[1]]) + "$ più trasporto $\\sum_c d_c \\min_{l \\text{ aperta}} t_{lc} = " + opz[1] + "$: totale $" + opz[0] + "$. Dimenticare l'installazione, usare la sede più cara o non moltiplicare per la domanda sono gli errori tipici.",
+        "Installation $" + (I[ap[0]] + I[ap[1]]) + "$ plus transport $\\sum_c d_c \\min_{l \\text{ open}} t_{lc} = " + opz[1] + "$: total $" + opz[0] + "$. Forgetting installation, using the dearer site or not multiplying by demand are the typical mistakes.");
+      return { testo: testo, opzioni: opz.map(function (x) { return math(String(x)); }), corretta: 0, spiegazione: spieg, _v: { I: I, d: Dm, t: T_, aperte: [ap[0] + 1, ap[1] + 1] } };
+    }
+  });
+
+  // ---------------------------------------------------------------- 8 (complessa) localizzazione: ottimo
+  G.push({
+    id: "mip-g-ufl-ottimo", livello: "complessa", capitolo: "8-localizzazione",
+    link: L("localizzazione-1/", "location-1/"),
+    genera: function (rng, l) {
+      var I, Dm, T_, opt, opz;
+      for (var tent = 0; tent < 400; tent++) {
+        I = [10 * ri(rng, 2, 9), 10 * ri(rng, 2, 9), 10 * ri(rng, 2, 9)]; Dm = [ri(rng, 2, 9), ri(rng, 2, 9), ri(rng, 2, 9), ri(rng, 2, 9)];
+        T_ = [0, 1, 2].map(function () { return [0, 1, 2, 3].map(function () { return ri(rng, 1, 6); }); });
+        var sub = [[0], [1], [2], [0, 1], [0, 2], [1, 2], [0, 1, 2]];
+        var val = sub.map(function (S) { return uflCosto(I, Dm, T_, S); });
+        opt = minA(val);
+        var uno = minA(val.slice(0, 3)), tutte = val[6];
+        var tr = 0; for (var k = 0; k < 4; k++) tr += Dm[k] * Math.min(T_[0][k], T_[1][k], T_[2][k]);
+        opz = [opt, uno, tutte, tr];
+        if (distinct(opz) && opt !== uno) break;
+        if (distinct([opt, tutte, tr, opt + 10]) && opt === uno) { opz = [opt, tutte, tr, opt + 10]; break; }
+      }
+      var righe = T_.map(function (r, s) { return T(l, "sede ", "site ") + (s + 1) + " $(" + r.join(", ") + ")$"; }).join(", ");
+      var testo = T(l,
+        "Localizzazione (minimo costo): $3$ sedi candidate con costo di installazione $i = " + tupla(I) + "$, $4$ clienti con domanda $d = " + tupla(Dm) + "$ litri, costo di trasporto per litro $t_{lc}$ (righe per sede): " + righe +
+        ". Capacità sufficienti; almeno una sede va installata e ogni cliente si rifornisce da una sede installata. Quanto vale il costo minimo $\\zmilp$?",
+        "Location (minimum cost): $3$ candidate sites with installation cost $i = " + tupla(I) + "$, $4$ customers with demand $d = " + tupla(Dm) + "$ litres, transport cost per litre $t_{lc}$ (rows per site): " + righe +
+        ". Sufficient capacities; at least one site must be installed and each customer is supplied by an installed site. What is the minimum cost $\\zmilp$?");
+      var spieg = T(l,
+        "Si enumerano i $7$ sottoinsiemi non vuoti di sedi; per ciascuno il costo è installazione più $\\sum_c d_c \\min_l t_{lc}$ sulle sedi aperte. Il minimo è $" + opt + "$. Il solo trasporto con tutte le sedi gratis ($" + tr + "$) è un lower bound, non l'ottimo.",
+        "Enumerate the $7$ non-empty subsets of sites; for each the cost is installation plus $\\sum_c d_c \\min_l t_{lc}$ over the open sites. The minimum is $" + opt + "$. Transport alone with all sites free ($" + tr + "$) is a lower bound, not the optimum.");
+      return { testo: testo, opzioni: opz.map(function (x) { return math(String(x)); }), corretta: 0, spiegazione: spieg, _v: { I: I, d: Dm, t: T_ } };
+    }
+  });
+
+  // ---------------------------------------------------------------- 7 ritardo totale di una sequenza
+  G.push({
+    id: "mip-g-ritardo-sequenza", livello: "facile", capitolo: "7-scheduling",
+    link: L("scheduling-7/#modello", "scheduling-7/#model"),
+    genera: function (rng, l) {
+      var t, d, seq, tot, opz;
+      for (var tent = 0; tent < 300; tent++) {
+        t = []; d = []; for (var j = 0; j < 4; j++) { t.push(ri(rng, 2, 8)); d.push(ri(rng, 3, 16)); }
+        seq = sample(rng, [0, 1, 2, 3], 4);
+        var k = 0, s = 0; tot = 0; var lat = 0, mx = 0, st = 0;
+        seq.forEach(function (jj) { s = k; k += t[jj]; tot += Math.max(0, k - d[jj]); lat += k - d[jj]; mx = Math.max(mx, k - d[jj]); st += Math.max(0, s - d[jj]); });
+        opz = [tot, lat, Math.max(0, mx), st];
+        if (distinct(opz) && tot > 0) break;
+      }
+      var testo = T(l,
+        "Una macchina, quattro lavori con durate $t = " + tupla(t) + "$ e scadenze $d = " + tupla(d) + "$, eseguiti senza interruzioni da $0$ nell'ordine $" + seq.map(function (x) { return x + 1; }).join(", ") +
+        "$. Il ritardo del lavoro $j$ è $\\tau_j = \\max\\{0, \\kappa_j - d_j\\}$, con $\\kappa_j$ istante di completamento. Quanto vale il ritardo totale $\\sum_j \\tau_j$?",
+        "One machine, four jobs with durations $t = " + tupla(t) + "$ and due dates $d = " + tupla(d) + "$, processed without interruption from $0$ in the order $" + seq.map(function (x) { return x + 1; }).join(", ") +
+        "$. The tardiness of job $j$ is $\\tau_j = \\max\\{0, \\kappa_j - d_j\\}$, with $\\kappa_j$ the completion time. What is the total tardiness $\\sum_j \\tau_j$?");
+      var spieg = T(l,
+        "Si calcolano i completamenti nell'ordine dato e si sommano le sole parti positive di $\\kappa_j - d_j$: $" + tot + "$. Sommare anche gli anticipi (negativi) dà $" + opz[1] + "$; il ritardo massimo è un altro obiettivo; usare gli istanti di inizio invece dei completamenti è un errore.",
+        "Compute the completions in the given order and add only the positive parts of $\\kappa_j - d_j$: $" + tot + "$. Adding the (negative) earliness too gives $" + opz[1] + "$; the maximum tardiness is another objective; using start times instead of completions is a mistake.");
+      return { testo: testo, opzioni: opz.map(function (x) { return math(String(x)); }), corretta: 0, spiegazione: spieg, _v: { t: t, d: d, seq: seq.map(function (x) { return x + 1; }) } };
+    }
+  });
+
+  // ---------------------------------------------------------------- numerici (media) assegnamento con più risorse che compiti
+  G.push({
+    id: "mip-g-staffetta-ottimo", livello: "media", capitolo: "numerici",
+    link: L("ex-03-staffetta/", "ex-03-relay/"),
+    genera: function (rng, l) {
+      var C_, opt, lb, gr, opz;
+      for (var tent = 0; tent < 500; tent++) {
+        C_ = [0, 1, 2].map(function () { return [0, 1, 2, 3].map(function () { return ri(rng, 25, 45); }); });
+        opt = 1e9;
+        for (var a = 0; a < 4; a++) for (var b = 0; b < 4; b++) for (var c = 0; c < 4; c++)
+          if (a !== b && a !== c && b !== c) opt = Math.min(opt, C_[0][a] + C_[1][b] + C_[2][c]);
+        lb = minA(C_[0]) + minA(C_[1]) + minA(C_[2]);
+        var used = {}; gr = 0;
+        for (var s = 0; s < 3; s++) { var bi = -1; for (var n = 0; n < 4; n++) if (!used[n] && (bi < 0 || C_[s][n] < C_[s][bi])) bi = n; used[bi] = 1; gr += C_[s][bi]; }
+        opz = [[opt, lb], [lb, opt], [gr, lb], [opt, lb - 1]];
+        var keys = opz.map(function (o) { return o.join("|"); });
+        if (distinct(keys) && lb < opt && gr > opt) break;
+      }
+      var righe = C_.map(function (r) { return "$(" + r.join(", ") + ")$"; }).join(", ");
+      var testo = T(l,
+        "Tre compiti da affidare a tre risorse diverse scelte fra quattro, a tempo totale minimo (assegnamento con più risorse che compiti). Tempi, righe per compito: " + righe +
+        ". Il duale del rilassamento con le variabili delle risorse a zero dà a ogni compito il suo tempo minimo: il suo valore è $\\lb$. Quali sono $(\\zmilp, \\lb)$, con $\\zmilp$ il tempo totale ottimo?",
+        "Three tasks to be given to three different resources chosen among four, at minimum total time (assignment with more resources than tasks). Times, rows per task: " + righe +
+        ". The dual of the relaxation with the resource variables at zero gives each task its minimum time: its value is $\\lb$. What are $(\\zmilp, \\lb)$, with $\\zmilp$ the optimal total time?");
+      var spieg = T(l,
+        "Enumerando le assegnazioni con risorse distinte l'ottimo è $" + opt + "$; la somma dei minimi di riga dà $\\lb = " + lb + "$, più bassa quando due compiti hanno la stessa risorsa migliore. L'euristica compito per compito darebbe $" + gr + "$.",
+        "Enumerating the assignments with distinct resources the optimum is $" + opt + "$; the sum of the row minima gives $\\lb = " + lb + "$, lower when two tasks share the same best resource. The task-by-task heuristic would give $" + gr + "$.");
+      return { testo: testo, opzioni: opz.map(function (o) { return "$(" + o[0] + ", " + o[1] + ")$"; }), corretta: 0, spiegazione: spieg, _v: { C: C_ } };
+    }
+  });
+
+  // ---------------------------------------------------------------- 5 da clausola a vincolo: il termine noto
+  G.push({
+    id: "mip-g-clausola-rhs", livello: "facile", capitolo: "5-logica",
+    link: L("modellazione-5/#da-cnf-a-vincoli-lineari", "modelling-5/#from-cnf-to-linear-constraints"),
+    genera: function (rng, l) {
+      var k, idx, neg, nn, opz;
+      for (var tent = 0; tent < 200; tent++) {
+        k = ri(rng, 3, 5); idx = sample(rng, [1, 2, 3, 4, 5, 6, 7, 8, 9], k).sort(function (a, b) { return a - b; });
+        neg = idx.map(function () { return rng() < 0.5; }); nn = neg.filter(function (x) { return x; }).length;
+        opz = [1 - nn, 1, -nn, 1 + nn];
+        if (nn >= 1 && nn < k && distinct(opz)) break;
+      }
+      var cl = idx.map(function (i, j) { return (neg[j] ? "\\lnot " : "") + xv(i); }).join(" \\lor ");
+      var lhs = idx.map(function (i, j) { return [neg[j] ? -1 : 1, xv(i)]; });
+      var testo = T(l,
+        "Variabili binarie ($1$ = vero). La clausola $" + cl + "$ si traduce con la regola «letterale positivo $x$, negato $1 - x$, somma $\\ge 1$», portando poi le costanti a destra: $" + lin(lhs, "\\ge", "\\beta") + "$. Quanto vale $\\beta$?",
+        "Binary variables ($1$ = true). The clause $" + cl + "$ is translated with the rule «positive literal $x$, negated $1 - x$, sum $\\ge 1$», then moving the constants to the right: $" + lin(lhs, "\\ge", "\\beta") + "$. What is $\\beta$?");
+      var spieg = T(l,
+        "Ogni letterale negato porta un $1$ a sinistra: con $" + nn + "$ negati il termine noto diventa $1 - " + nn + " = " + (1 - nn) + "$. Così l'unica assegnazione esclusa è quella che rende falsi tutti i letterali.",
+        "Every negated literal brings a $1$ to the left: with $" + nn + "$ negated literals the right-hand side becomes $1 - " + nn + " = " + (1 - nn) + "$. Thus the only excluded assignment is the one making all literals false.");
+      return { testo: testo, opzioni: opz.map(function (v) { return math("\\beta = " + v); }), corretta: 0, spiegazione: spieg, _v: { clausola: cl } };
+    }
+  });
+
+  // ---------------------------------------------------------------- 5 cardinalità contro clausole
+  function binom(n, k) { var r = 1; for (var i = 1; i <= k; i++) r = r * (n - k + i) / i; return Math.round(r); }
+  G.push({
+    id: "mip-g-cardinalita-clausole", livello: "facile", capitolo: "5-logica",
+    link: L("modellazione-5/#contare-al-piu-uno-almeno-uno-esattamente-uno", "modelling-5/#counting-at-most-one-at-least-one-exactly-one"),
+    genera: function (rng, l) {
+      var n, p, tipo, g, opz;
+      for (var tent = 0; tent < 200; tent++) {
+        n = ri(rng, 4, 7); p = ri(rng, 1, n - 2); tipo = rng() < 0.5 ? "almeno" : "alpiu";
+        g = tipo === "almeno" ? binom(n, n - p + 1) : binom(n, p + 1);
+        var altro = tipo === "almeno" ? binom(n, p + 1) : binom(n, n - p + 1);
+        opz = [g, binom(n, p), altro === g ? g + n : altro, n];
+        if (distinct(opz) && p >= 2) break;
+      }
+      var cond = tipo === "almeno" ? T(l, "almeno ", "at least ") + p : T(l, "al più ", "at most ") + p;
+      var testo = T(l,
+        "Variabili binarie $x_1, \\dots, x_{" + n + "}$. La condizione «" + cond + " fra le " + n + "» si scrive con un solo vincolo di cardinalità $\\sum_i x_i " + (tipo === "almeno" ? "\\ge" : "\\le") + " " + p + "$. Quante clausole servirebbero per scriverla in CNF?",
+        "Binary variables $x_1, \\dots, x_{" + n + "}$. The condition «" + cond + " of the " + n + "» is written with a single cardinality constraint $\\sum_i x_i " + (tipo === "almeno" ? "\\ge" : "\\le") + " " + p + "$. How many clauses would be needed to write it in CNF?");
+      var spieg = T(l,
+        (tipo === "almeno" ? "«Almeno $p$» richiede che ogni gruppo di $n - p + 1$ variabili ne contenga una vera: $\\binom{" + n + "}{" + (n - p + 1) + "}" : "«Al più $p$» richiede che ogni gruppo di $p + 1$ variabili ne contenga una falsa: $\\binom{" + n + "}{" + (p + 1) + "}") +
+        " = " + g + "$ clausole, contro un solo vincolo di cardinalità (anche più forte nel rilassamento).",
+        (tipo === "almeno" ? "«At least $p$» requires every group of $n - p + 1$ variables to contain a true one: $\\binom{" + n + "}{" + (n - p + 1) + "}" : "«At most $p$» requires every group of $p + 1$ variables to contain a false one: $\\binom{" + n + "}{" + (p + 1) + "}") +
+        " = " + g + "$ clauses, against a single cardinality constraint (also stronger in the relaxation).");
+      return { testo: testo, opzioni: opz.map(function (v) { return math(String(v)); }), corretta: 0, spiegazione: spieg, _v: { n: n, p: p, tipo: tipo } };
+    }
+  });
+
+  // ---------------------------------------------------------------- 9 lot sizing: bilancio delle scorte
+  G.push({
+    id: "mip-g-lot-bilancio", livello: "facile", capitolo: "9-produzione",
+    link: L("produzione-1/#modello", "production-1/#model"),
+    genera: function (rng, l) {
+      var r0, x, d, s, opz;
+      for (var tent = 0; tent < 300; tent++) {
+        r0 = 5 * ri(rng, 0, 4); d = []; x = [];
+        for (var t = 0; t < 4; t++) { d.push(5 * ri(rng, 2, 8)); x.push(5 * ri(rng, 0, 10)); }
+        s = [r0]; var ok = true;
+        for (t = 0; t < 4; t++) { s.push(s[t] + x[t] - d[t]); if (s[t + 1] < 0) ok = false; }
+        if (!ok) continue;
+        opz = [s[3], s[3] + d[2], r0 + x[0] + x[1] + x[2], s[4]];
+        if (distinct(opz)) break;
+      }
+      var testo = T(l,
+        "Lot sizing su $4$ periodi: scorta iniziale $r_0 = " + r0 + "$, produzione $x = " + tupla(x) + "$, domanda $d = " + tupla(d) + "$. Il bilancio è $r_{t-1} + x_t = d_t + r_t$, con $r_t$ la scorta a fine periodo $t$. Quanto vale $r_3$?",
+        "Lot sizing over $4$ periods: initial stock $r_0 = " + r0 + "$, production $x = " + tupla(x) + "$, demand $d = " + tupla(d) + "$. The balance is $r_{t-1} + x_t = d_t + r_t$, with $r_t$ the stock at the end of period $t$. What is $r_3$?");
+      var spieg = T(l,
+        "$r_3 = r_0 + x_1 + x_2 + x_3 - d_1 - d_2 - d_3 = " + s[3] + "$. Dimenticare la domanda del periodo 3, o tutte le domande, sono gli errori tipici; $" + s[4] + "$ è la scorta a fine periodo 4.",
+        "$r_3 = r_0 + x_1 + x_2 + x_3 - d_1 - d_2 - d_3 = " + s[3] + "$. Forgetting the demand of period 3, or all demands, are the typical mistakes; $" + s[4] + "$ is the stock at the end of period 4.");
+      return { testo: testo, opzioni: opz.map(function (v) { return math(String(v)); }), corretta: 0, spiegazione: spieg, _v: { r0: r0, x: x, d: d } };
+    }
+  });
+
+  // ---------------------------------------------------------------- 9 lot sizing: costo di un piano
+  G.push({
+    id: "mip-g-lotto-costo", livello: "facile", capitolo: "9-produzione",
+    link: L("produzione-1/#modello", "production-1/#model"),
+    genera: function (rng, l) {
+      var d, x, f, h, c, opz;
+      for (var tent = 0; tent < 300; tent++) {
+        d = []; for (var t = 0; t < 4; t++) d.push(5 * ri(rng, 2, 8));
+        var lanci = [0].concat(sample(rng, [1, 2, 3], ri(rng, 0, 2))).sort();
+        x = [0, 0, 0, 0];
+        lanci.forEach(function (tt, i) { var fine = i + 1 < lanci.length ? lanci[i + 1] : 4; for (var u = tt; u < fine; u++) x[tt] += d[u]; });
+        f = 10 * ri(rng, 3, 9); h = ri(rng, 1, 3);
+        var r = 0, mag = 0; for (t = 0; t < 4; t++) { r += x[t] - d[t]; mag += r; }
+        c = f * lanci.length + h * mag;
+        opz = [c, f * lanci.length, c + f, f * lanci.length + h * mag * 2];
+        if (distinct(opz) && mag > 0) break;
+      }
+      var testo = T(l,
+        "Lot sizing senza capacità su $4$ periodi, nessuna scorta iniziale né finale: domanda $d = " + tupla(d) + "$, piano di produzione $x = " + tupla(x) + "$. Ogni periodo con $x_t > 0$ paga il lancio $f = " + f + "$ ($x_t \\le M y_t$) e ogni unità in scorta a fine periodo costa $h = " + h + "$. Quanto costa il piano?",
+        "Uncapacitated lot sizing over $4$ periods, no initial or final stock: demand $d = " + tupla(d) + "$, production plan $x = " + tupla(x) + "$. Every period with $x_t > 0$ pays the setup $f = " + f + "$ ($x_t \\le M y_t$) and each unit in stock at the end of a period costs $h = " + h + "$. What does the plan cost?");
+      var spieg = T(l,
+        "Lanci: $" + (opz[1] / f) + " \\cdot " + f + " = " + opz[1] + "$; scorte di fine periodo da $r_t = r_{t-1} + x_t - d_t$, sommate e moltiplicate per $" + h + "$: $" + (c - opz[1]) + "$. Totale $" + c + "$.",
+        "Setups: $" + (opz[1] / f) + " \\cdot " + f + " = " + opz[1] + "$; end-of-period stocks from $r_t = r_{t-1} + x_t - d_t$, summed and multiplied by $" + h + "$: $" + (c - opz[1]) + "$. Total $" + c + "$.");
+      return { testo: testo, opzioni: opz.map(function (v) { return math(String(v)); }), corretta: 0, spiegazione: spieg, _v: { d: d, x: x, f: f, h: h } };
+    }
+  });
+
+  // ---------------------------------------------------------------- 10 brani su due CD: differenza delle durate
+  G.push({
+    id: "mip-g-cd-differenza", livello: "facile", capitolo: "10-misti",
+    link: L("misti-8/#modello", "mixed-8/#model"),
+    genera: function (rng, l) {
+      var dur, ass, opz, L1, L2, best;
+      for (var tent = 0; tent < 300; tent++) {
+        var n = ri(rng, 5, 7); dur = []; ass = [];
+        for (var i = 0; i < n; i++) { dur.push(ri(rng, 2, 9)); ass.push(ri(rng, 1, 2)); }
+        L1 = 0; L2 = 0; dur.forEach(function (x, j) { if (ass[j] === 1) L1 += x; else L2 += x; });
+        if (!L1 || !L2) continue;
+        best = sum(dur) % 2;
+        opz = [Math.abs(L1 - L2), Math.max(L1, L2), best === Math.abs(L1 - L2) ? Math.abs(L1 - L2) + 2 : best, sum(dur)];
+        if (distinct(opz)) break;
+      }
+      var testo = T(l,
+        "Brani di durata $d = " + tupla(dur) + "$ minuti distribuiti su due CD (minimo della differenza fra la durata del CD più lungo e quella del più corto, $z_{\\max} - z_{\\min}$ con $z_{\\max} \\ge L_j$ e $z_{\\min} \\le L_j$). I brani vanno, nell'ordine, sui CD $" + tupla(ass) + "$. Quanto vale l'obiettivo per questa assegnazione?",
+        "Tracks of duration $d = " + tupla(dur) + "$ minutes distributed over two CDs (minimum difference between the duration of the longest and the shortest CD, $z_{\\max} - z_{\\min}$ with $z_{\\max} \\ge L_j$ and $z_{\\min} \\le L_j$). The tracks go, in order, onto CDs $" + tupla(ass) + "$. What is the objective for this assignment?");
+      var spieg = T(l,
+        "Le durate dei CD sono $" + L1 + "$ e $" + L2 + "$; all'ottimo per questa assegnazione $z_{\\max} = " + Math.max(L1, L2) + "$ e $z_{\\min} = " + Math.min(L1, L2) + "$, differenza $" + Math.abs(L1 - L2) + "$. Il solo $z_{\\max}$ è il makespan, non lo scarto.",
+        "The CD durations are $" + L1 + "$ and $" + L2 + "$; at the optimum for this assignment $z_{\\max} = " + Math.max(L1, L2) + "$ and $z_{\\min} = " + Math.min(L1, L2) + "$, difference $" + Math.abs(L1 - L2) + "$. $z_{\\max}$ alone is the makespan, not the spread.");
+      return { testo: testo, opzioni: opz.map(function (v) { return math(String(v)); }), corretta: 0, spiegazione: spieg, _v: { d: dur, ass: ass } };
+    }
+  });
+
+  // ---------------------------------------------------------------- 10 premi con due modalità: punti spesi
+  G.push({
+    id: "mip-g-premi-punti", livello: "facile", capitolo: "10-misti",
+    link: L("misti-1/#modello", "mixed-1/#model"),
+    genera: function (rng, l) {
+      var a, b, c, mod, P, E, opz;
+      for (var tent = 0; tent < 300; tent++) {
+        a = []; b = []; c = []; mod = [];
+        for (var i = 0; i < 5; i++) { a.push(10 * ri(rng, 3, 9)); b.push(a[i] - 10 * ri(rng, 1, 2)); c.push(ri(rng, 1, 6)); mod.push(ri(rng, 0, 2)); }
+        if (mod.indexOf(1) < 0 || mod.indexOf(2) < 0) continue;
+        P = 0; E = 0; var Pa = 0, Pb = 0;
+        mod.forEach(function (m, j) { if (m === 1) { P += a[j]; Pa += a[j]; Pb += b[j]; } if (m === 2) { P += b[j]; E += c[j]; Pa += a[j]; Pb += b[j]; } });
+        opz = [P, Pa, Pb, P + E];
+        if (distinct(opz)) break;
+      }
+      var modTxt = mod.map(function (m) { return m === 0 ? "–" : (m === 1 ? "A" : "B"); }).join(", ");
+      var testo = T(l,
+        "Programma fedeltà: il premio $i$ si ottiene in modalità A con $a_i$ punti, o in modalità B con $b_i$ punti più $c_i$ euro ($x_i + y_i \\le 1$). Dati $a = " + tupla(a) + "$, $b = " + tupla(b) + "$, $c = " + tupla(c) + "$. Il cliente sceglie, premio per premio, le modalità $(" + modTxt +
+        ")$ («–» = premio non preso). Quanti punti spende?",
+        "Loyalty programme: reward $i$ is obtained in mode A with $a_i$ points, or in mode B with $b_i$ points plus $c_i$ euro ($x_i + y_i \\le 1$). Data $a = " + tupla(a) + "$, $b = " + tupla(b) + "$, $c = " + tupla(c) + "$. The customer chooses, reward by reward, the modes $(" + modTxt +
+        ")$ («–» = reward not taken). How many points are spent?");
+      var spieg = T(l,
+        "Punti $\\sum_i (a_i x_i + b_i y_i) = " + P + "$; gli euro ($" + E + "$) non sono punti. Contare tutti i premi presi con $a_i$, o tutti con $b_i$, ignora la modalità scelta.",
+        "Points $\\sum_i (a_i x_i + b_i y_i) = " + P + "$; the euros ($" + E + "$) are not points. Counting all taken rewards with $a_i$, or all with $b_i$, ignores the chosen mode.");
+      return { testo: testo, opzioni: opz.map(function (v) { return math(String(v)); }), corretta: 0, spiegazione: spieg, _v: { a: a, b: b, c: c, modi: modTxt } };
+    }
+  });
+
+  // ---------------------------------------------------------------- numerici: rendimento di un portafoglio a lotti (EX 5)
+  G.push({
+    id: "mip-g-fondi-rendimento", livello: "facile", capitolo: "numerici",
+    link: L("ex-05-fondi/#modello", "ex-05-funds/#model"),
+    genera: function (rng, l) {
+      var cost = [12, 15, 18, 25], rend = [2, 5, 2, 4], x, R, opz;
+      for (var tent = 0; tent < 300; tent++) {
+        x = [ri(rng, 0, 3), ri(rng, 0, 2), ri(rng, 0, 2), ri(rng, 0, 2)];
+        var spesa = 0; for (var j = 0; j < 4; j++) spesa += cost[j] * x[j];
+        var tot = sum(x);
+        if (spesa > 100 || tot === 0 || 2 * x[1] > tot) continue;
+        R = 0; for (j = 0; j < 4; j++) R += rend[j] * x[j];
+        var tassi = fr(0, 1); [fr(1, 6), fr(1, 3), fr(1, 9), fr(4, 25)].forEach(function (q, jj) { tassi = frAdd(tassi, frMul(q, fr(x[jj], 1))); });
+        opz = [R, spesa, frTex(tassi), 100 - spesa + R];
+        if (distinct(opz.map(String)) && x[1] > 0) break;
+      }
+      var testo = T(l,
+        "Fondi a lotti (EX 5): lotti indivisibili da $12$, $15$, $18$, $25$ milioni con rendimento annuo $1/6$, $1/3$, $1/9$ e $16\\%$ del capitale investito; budget $100$; i lotti del secondo fondo non superano il $50\\%$ dei lotti totali. Il portafoglio $x = " + tupla(x) +
+        "$ (lotti per fondo) è ammissibile. Quanto rende in un anno, in milioni?",
+        "Funds in lots (EX 5): indivisible lots of $12$, $15$, $18$, $25$ million with annual return $1/6$, $1/3$, $1/9$ and $16\\%$ of the capital invested; budget $100$; the lots of the second fund do not exceed $50\\%$ of the total lots. The portfolio $x = " + tupla(x) +
+        "$ (lots per fund) is feasible. What is its annual return, in millions?");
+      var spieg = T(l,
+        "Un lotto rende $(2, 5, 2, 4)$ milioni: $" + R + "$. La spesa ($" + opz[1] + "$) non è il rendimento, e sommare i tassi per i lotti dimentica il capitale di ciascun lotto.",
+        "One lot yields $(2, 5, 2, 4)$ million: $" + R + "$. The expense ($" + opz[1] + "$) is not the return, and summing rates times lots forgets the capital of each lot.");
+      return { testo: testo, opzioni: opz.map(function (v) { return math(String(v)); }), corretta: 0, spiegazione: spieg, _v: { x: x } };
+    }
+  });
+
   G.forEach(function (g) { (QUIZ_GEN[MOD] = QUIZ_GEN[MOD] || []).push(g); });
 })();
