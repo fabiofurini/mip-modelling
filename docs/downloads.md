@@ -155,3 +155,10 @@ constraints): enough for every instance of this course. On startup the line
 3. run the `grbgetkey XXXXXXXX-...` command shown by the portal (it needs the
    university network or the VPN);
 4. the licence lands in `~/gurobi.lic` and from then on there is no size limit.
+
+<!-- banca-domande -->
+## Quiz question bank
+
+All the self-assessment questions, by part and chapter, with the correct answer and the explanation; for the generated questions, whose numbers change at every start, a few examples.
+
+[:material-format-list-checks: Question bank](quiz/question_list.html){ .md-button }
