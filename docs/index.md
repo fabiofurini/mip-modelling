@@ -28,9 +28,9 @@ professor at [DIAG](https://www.diag.uniroma1.it/), Sapienza University of Rome.
 <!-- collana-app -->
 ## Try it now
 
-Bin packing and scheduling: Next Fit, First Fit, Best Fit and First Fit Decreasing fill the bins, List scheduling and LPT assign the jobs to the machines, step by step, with the bound next to the solution and the optimum at the end.
+Weak and strong formulations: two models with the same integer points, overlaid. See how close each one gets to the convex hull and what changes in the bound of the relaxation.
 
-<div class="gi" data-grafico="bpp-lpt"></div>
+<div class="gi" data-grafico="formulazioni"></div>
 
 [:material-gesture-tap: More apps in the lab](lab/index.md){ .md-button }
 <!-- /collana-app -->
