@@ -17,6 +17,8 @@ professor at [DIAG](https://www.diag.uniroma1.it/), Sapienza University of Rome.
 
 **Mixed-integer linear models for making optimal decisions.**
 
+Prerequisites: [Integer Linear Programming](https://fabiofurini.github.io/integer-linear-programming/).
+
 [Start :material-arrow-right:](modelling.md){ .md-button .md-button--primary }
 [:material-pencil: Exercises](problems.md){ .md-button }
 [:material-gesture-tap: Lab](lab/index.md){ .md-button }
