@@ -7,6 +7,24 @@
 
 [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/fabiofurini/mip-modelling/blob/main/notebooks/cap05_heuristics.ipynb)
 
+!!! nota "Prerequisites"
+
+    - From this module, [Chapter 2 «Relaxations, duality and bounds»](https://fabiofurini.github.io/mip-modelling/modelling-2/): the dual bound, the bound from the other side to compare a heuristic with.
+
+    - From this module, [Chapter 3 «From the model to Python/Gurobi»](https://fabiofurini.github.io/mip-modelling/modelling-3/): the bin packing, makespan and TSP models.
+
+!!! chiave "Objectives"
+
+    At the end of this chapter you will be able to:
+
+    - describe a constructive heuristic by its three ingredients and say on which side its value is a bound;
+
+    - execute by hand next-fit, first-fit, best-fit, LPT, the covering, ratio and nearest-neighbour rules;
+
+    - compute the certified gap of a heuristic solution with a dual bound;
+
+    - recognise when a heuristic gets stuck and why it then gives no bound.
+
 A constructive heuristic builds **one** solution quickly, adding one element at a
 time and never backtracking. It proves nothing about the quality of that
 solution, and it is not even guaranteed to reach a feasible one: it can get stuck
@@ -306,6 +324,20 @@ between two machines is needed.
     apart only *afterwards*. This is why the course always asks for two bounds:
     a heuristic on its own says how much a solution one can actually implement
     costs, not how much is being lost.
+
+## In summary
+
+!!! chiave "In summary"
+
+    - A constructive heuristic adds one element at a time and never backtracks: it is fast, but it proves nothing about the quality.
+
+    - Its value is an upper bound in a minimisation and a lower bound in a maximisation; the side depends on the objective, not on the heuristic.
+
+    - How far the solution is from the optimum is known only with a bound from the other side: the certified gap uses the solution one holds as denominator.
+
+    - A heuristic can fail to find a feasible solution, and then it gives no bound at all: *not found* is not *does not exist*.
+
+    - Local search can improve the solution, but a local optimum is still only a primal bound.
 
 ## Code
 

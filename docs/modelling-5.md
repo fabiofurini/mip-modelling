@@ -7,6 +7,26 @@
 
 [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/fabiofurini/mip-modelling/blob/main/notebooks/cap02_logic.ipynb)
 
+!!! nota "Prerequisites"
+
+    - From the module *Mathematical Analysis 1*, the chapter [«Basics of logic and proof techniques»](https://fabiofurini.github.io/mathematical-analysis-1/logic/01-logic/): propositions, logical connectives and their truth tables.
+
+    - From this module, [Chapter 1 «What is a MIP model»](https://fabiofurini.github.io/mip-modelling/modelling-1/): binary variables and the set covering, packing and partitioning patterns.
+
+!!! chiave "Objectives"
+
+    At the end of this chapter you will be able to:
+
+    - bring a logical condition between binary decisions to conjunctive normal form;
+
+    - translate every clause into a linear inequality and prove that the translation is exact;
+
+    - write implications, their contrapositive and the *if and only if*, and say when an implication can be split;
+
+    - write cardinality constraints: at most one, at least one, exactly one;
+
+    - add logical constraints to an optimisation model and solve it in `gurobipy`.
+
 A binary variable is a "yes/no" answer. This chapter translates logical
 conditions between those answers into **linear constraints** and — above all —
 shows how to *prove* that the translation is exact.
@@ -261,20 +281,19 @@ for i, formula in enumerate(implications, 1):          # one clause, one constra
 m.optimize()
 ```
 
-## What this chapter has put in your hands
+## In summary
 
-A logical condition between yes/no decisions is always written the same way: one
-binary per elementary fact, the condition brought into conjunctive normal form —
-a conjunction of ORs — and every clause becomes a linear inequality. The AND
-costs nothing, because constraints are already in AND with each other; the OR
-becomes a sum $\ge 1$; the NOT becomes $1 - x$; the implication
-$x \Rightarrow y$ becomes $x \le y$; the "if and only if" asks for both
-inequalities.
+!!! chiave "In summary"
 
-Three shapes recur often enough to have a name: the **set covering**
-($\sum_{j \in S} x_j \ge 1$, at least one), the **set packing** ($\le 1$, at most
-one) and the **set partitioning** ($= 1$, exactly one). Recognising them in a
-statement is half of the modelling work.
+    - One binary variable per elementary fact; the condition is brought to CNF and every clause becomes a linear inequality.
+
+    - The AND costs nothing, the OR becomes a sum $\ge 1$, the NOT becomes $1-x$, the implication $x \Rightarrow y$ becomes $x \le y$.
+
+    - The *if and only if* needs both inequalities; an implication is not an equivalence.
+
+    - Set covering ($\ge 1$), set packing ($\le 1$) and set partitioning ($=1$) are the three forms to recognise in a statement.
+
+    - A translation is checked, not trusted: every combination of values must satisfy the constraints exactly when it satisfies the condition.
 
 ## Code
 

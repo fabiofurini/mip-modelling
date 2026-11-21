@@ -4,6 +4,26 @@
 (`python/fam10_1_prizes.py` … `fam10_9_shelves.py`).
 { .scheda }
 
+!!! nota "Prerequisites"
+
+    - From this module, [Chapter 5 «Logic and binary variables»](https://fabiofurini.github.io/mip-modelling/modelling-5/): logical constraints between binary variables.
+
+    - From this module, [Chapter 6 «Links between variables»](https://fabiofurini.github.io/mip-modelling/links/): minimum lot, maximum variable, min-max and max-min.
+
+    - From this module, [Chapter 9 «Production planning»](https://fabiofurini.github.io/mip-modelling/production/): the bound protocol applied to a family of problems.
+
+!!! chiave "Objectives"
+
+    At the end of this chapter you will be able to:
+
+    - recognise which modelling pieces a problem without a familiar structure combines;
+
+    - model selection with alternative modes, covering with packs and splitting with balancing;
+
+    - explain why the LP relaxation of a splitting problem is weak;
+
+    - find a dual bound with a combinatorial argument: parity, number of containers, dominance.
+
 The three preceding families have a recognisable structure: one assigns, one
 locates, one plans. The nine problems in this chapter do not have one, and none
 should be forced on them: each puts together different pieces, and the
@@ -120,3 +140,15 @@ and put one half in each container, levelling everything.
     [:octicons-arrow-right-24: MILP · maximum variable](mixed-9.md)
 
 </div>
+
+## In summary
+
+!!! chiave "In summary"
+
+    - The nine problems have no common structure: the modelling work is recognising which pieces they put together.
+
+    - Selection with alternative modes, counts with a minimum lot, covering with containers, splitting and balancing.
+
+    - In four problems the LP relaxation is weak, in two exactly zero: a fractional solution splits every object in half.
+
+    - The useful dual bound then comes from integrality, with combinatorial arguments that the dual of the relaxation cannot see.

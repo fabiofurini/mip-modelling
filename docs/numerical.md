@@ -4,6 +4,26 @@
 `python/ex01_van.py` … `python/ex15_timetable.py`
 { .scheda }
 
+!!! nota "Prerequisites"
+
+    - From this module, [Chapter 2 «Relaxations, duality and bounds»](https://fabiofurini.github.io/mip-modelling/modelling-2/): the dual of the LP relaxation and the dual solution built by hand.
+
+    - From this module, [Chapter 4 «Constructive heuristics»](https://fabiofurini.github.io/mip-modelling/modelling-4/): constructive heuristics and the primal bound.
+
+    - From this module, [Chapter 6 «Links between variables»](https://fabiofurini.github.io/mip-modelling/links/): the links between variables (activation, minimum lot, integer counts, min-max).
+
+!!! chiave "Objectives"
+
+    At the end of this chapter you will be able to:
+
+    - write the variables and the model of an instance with explicit data, primal and dual;
+
+    - build by hand a feasible solution and a dual solution, and close the sandwich $\lb \le \zmilp \le \ub$;
+
+    - recognise in each statement the technique that the model needs;
+
+    - compare the hand-built bounds with the optimum given by the solver.
+
 The fifteen numerical models of the course, from EX 1 to EX 15. Explicit data,
 few variables, one technique per model: they are the easiest ones, and they come
 before the three families of problems and the mixed problems.
@@ -36,3 +56,15 @@ Every model has its own page, its own script and its own notebook.
 | [EX 13 — Emergency department shifts](ex-13-shifts.md) | covering the daily requirements with weekly shifts | [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/fabiofurini/mip-modelling/blob/main/notebooks/ex13_shifts.ipynb) |
 | [EX 14 — Shoes: production, inventory and hirings](ex-14-shoes.md) | inventory balance and workforce over three months | [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/fabiofurini/mip-modelling/blob/main/notebooks/ex14_shoes.ipynb) |
 | [EX 15 — The music school timetable](ex-15-timetable.md) | conflicts, non-adjacency and preferences to avoid | [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/fabiofurini/mip-modelling/blob/main/notebooks/ex15_timetable.ipynb) |
+
+## In summary
+
+!!! chiave "In summary"
+
+    - Every numerical model has five parts: statement, variables, model of the instance, primal bound and dual bound.
+
+    - One technique per model, in increasing order of difficulty: selection, assignment, covering, lots, minimum quantities, balancing, shifts.
+
+    - The primal bound comes from a constructive heuristic, the dual bound from a feasible solution of the dual of the relaxation.
+
+    - The solver optimum is always inside the sandwich: when it is not, the model or a bound contains a mistake.

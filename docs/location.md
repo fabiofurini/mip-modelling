@@ -4,6 +4,24 @@
 (`python/fam08_1_capacitated.py` … `fam08_4_hub.py`).
 { .scheda }
 
+!!! nota "Prerequisites"
+
+    - From this module, [Chapter 6 «Links between variables»](https://fabiofurini.github.io/mip-modelling/links/): aggregated and disaggregated activation, the maximum variable, the *if and only if*.
+
+    - From this module, [Chapter 7 «Assignment and scheduling»](https://fabiofurini.github.io/mip-modelling/scheduling/): problems 7.4 and 7.5, whose links are reused here.
+
+!!! chiave "Objectives"
+
+    At the end of this chapter you will be able to:
+
+    - model the opening of a facility and the variables that depend on it;
+
+    - choose between aggregated and disaggregated activation and justify the choice;
+
+    - add a budget on the number of open locations;
+
+    - build the primal and dual bounds of a location problem by hand.
+
 Four problems in which we decide **where** to open a facility — a location,
 a hub — and how this constrains the variables that depend on that decision:
 where to ship goods, which clients to serve, which clients to cover, which
@@ -80,3 +98,15 @@ depend on it, and how the budget on openings enters the model.
     [:octicons-arrow-right-24: MILP · activation, maximum](location-4.md)
 
 </div>
+
+## In summary
+
+!!! chiave "In summary"
+
+    - In the four problems one decides where to open a facility and how this constrains shipments, clients served, coverage and connections.
+
+    - Aggregated activation acts as link and capacity together; the disaggregated one gives a stronger relaxation.
+
+    - The *if and only if* of the coverage problem has one direction imposed by the constraints and one by the objective.
+
+    - The budget on openings enters the model as a cardinality constraint on the location variables.

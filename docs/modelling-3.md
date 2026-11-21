@@ -7,6 +7,26 @@
 
 [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/fabiofurini/mip-modelling/blob/main/notebooks/cap06_gurobi.ipynb)
 
+!!! nota "Prerequisites"
+
+    - From this module, [Chapter 1 «What is a MIP model»](https://fabiofurini.github.io/mip-modelling/modelling-1/): the classes of variables and the structure of a model.
+
+    - From this module, [Chapter 2 «Relaxations, duality and bounds»](https://fabiofurini.github.io/mip-modelling/modelling-2/): the LP relaxation, its dual and the solver attributes `ObjVal` and `ObjBound`.
+
+!!! chiave "Objectives"
+
+    At the end of this chapter you will be able to:
+
+    - write a model in `gurobipy`, one family of variables and constraints per block;
+
+    - declare the four classes of variables, remembering the default bounds;
+
+    - read the results in the right order: `Status`, `SolCount`, `ObjVal` and `ObjBound`;
+
+    - use tolerances correctly when reading integer values;
+
+    - solve the LP relaxation with `relax()` and read its duals.
+
 The course uses **one solver only**, Gurobi from Python. The chapter shows how a
 model is **written** — one family of constraints per block, with the names of the
 mathematical model — how the results are **read**, including the case where the
@@ -64,3 +84,17 @@ Every number on these pages comes from a single script,
     [:octicons-arrow-right-24: The section](gurobipy-5.md)
 
 </div>
+
+## In summary
+
+!!! chiave "In summary"
+
+    - A `gurobipy` model is written block by block, one `addConstrs` per family, with the name of the constraint label.
+
+    - The results are read always in the same order; with `SolCount` $=0$ there is no `ObjVal` to read.
+
+    - *Integer* means integer within a tolerance: one tests `x.X > 0.5`, never `x.X == 1`.
+
+    - `relax()` gives the LP relaxation and its duals `Pi`, the numbers that the notes compare with the hand-built dual.
+
+    - Bin packing, makespan and the TSP (MTZ formulation) are the three models that the rest of the course reuses.

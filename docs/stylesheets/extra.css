@@ -144,3 +144,19 @@
   font-size: .9em;
   background-color: var(--md-code-bg-color);
 }
+
+/* ---------------- riquadri Prerequisiti / Obiettivi / In sintesi (stesso aspetto di PLI e OC) */
+:root { --c-chiave: #2b8a3e; --c-nota: #6c757d; }
+[data-md-color-scheme="slate"] { --c-chiave: #51cf66; --c-nota: #adb5bd; }
+.md-typeset .admonition.chiave, .md-typeset details.chiave,
+.md-typeset .admonition.nota, .md-typeset details.nota {
+  border-width: 0 0 0 4px; border-radius: 10px; box-shadow: 0 2px 10px rgba(22, 50, 74, .07); font-size: .8rem;
+}
+[data-md-color-scheme="slate"] .md-typeset .admonition.chiave,
+[data-md-color-scheme="slate"] .md-typeset .admonition.nota { box-shadow: none; }
+.md-typeset .admonition.chiave, .md-typeset details.chiave { border-color: var(--c-chiave); background: color-mix(in srgb, var(--c-chiave) 7%, transparent); }
+.md-typeset .chiave > .admonition-title, .md-typeset .chiave > summary { background: color-mix(in srgb, var(--c-chiave) 14%, transparent); }
+.md-typeset .chiave > .admonition-title::before, .md-typeset .chiave > summary::before { background-color: var(--c-chiave); -webkit-mask-image: var(--md-admonition-icon--tip); mask-image: var(--md-admonition-icon--tip); }
+.md-typeset .admonition.nota, .md-typeset details.nota { border-color: var(--c-nota); background: color-mix(in srgb, var(--c-nota) 5%, transparent); }
+.md-typeset .nota > .admonition-title, .md-typeset .nota > summary { background: color-mix(in srgb, var(--c-nota) 12%, transparent); }
+.md-typeset .nota > .admonition-title::before, .md-typeset .nota > summary::before { background-color: var(--c-nota); -webkit-mask-image: var(--md-admonition-icon--note); mask-image: var(--md-admonition-icon--note); }

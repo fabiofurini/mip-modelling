@@ -4,6 +4,26 @@
 (`python/fam09_1_lotsizing.py` … `fam09_3_vehicles.py`).
 { .scheda }
 
+!!! nota "Prerequisites"
+
+    - From this module, [Chapter 6 «Links between variables»](https://fabiofurini.github.io/mip-modelling/links/): fixed cost, minimum lot, integer counts and counting the types.
+
+    - From this module, [Chapter 4 «Constructive heuristics»](https://fabiofurini.github.io/mip-modelling/modelling-4/): the least unit cost heuristic for lot sizing.
+
+    - From the module *Combinatorial Optimization Problems*, the page [«Uncapacitated lot sizing problem (ULS)»](https://fabiofurini.github.io/combinatorial-optimization/catalogue/uncapacitated-lot-sizing-problem/): the single-item lot sizing problem.
+
+!!! chiave "Objectives"
+
+    At the end of this chapter you will be able to:
+
+    - write inventory and workforce balances as equality constraints;
+
+    - link quantities and binaries with a fixed cost and a big-M read off the data;
+
+    - model a minimum lot and a bonus for variety;
+
+    - write the dual of the relaxation with free variables for the balances.
+
 Three problems in which one decides **how much** to produce, not merely
 *whether* to do something. The quantity variables are continuous or integer,
 and on top of them sit binaries that switch on, limit or reward: the production
@@ -78,3 +98,15 @@ systematically.
     [:octicons-arrow-right-24: MILP · minimum lot](production-3.md)
 
 </div>
+
+## In summary
+
+!!! chiave "In summary"
+
+    - Here one decides how much to produce: continuous or integer quantities, with binaries that switch on, limit or reward.
+
+    - The common feature is the balance $x_t + s_{t-1} - s_t = d_t$; its duals are free variables.
+
+    - The fixed cost uses $x_t \le M_t\, y_t$ with $M_t$ equal to the residual demand, not an arbitrary number.
+
+    - The minimum lot makes a quantity either zero or at least $q_j$; the variety bonus uses the count of active types.

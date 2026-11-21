@@ -5,6 +5,26 @@
 **Class:** LP · ILP · BIP · MILP · **Script:** `python/cap01_models.py`
 { .scheda }
 
+!!! nota "Prerequisites"
+
+    - From the module *Integer Linear Programming*, [Chapter 1 «Integer linear programming»](https://fabiofurini.github.io/integer-linear-programming/models-and-bounds/ilp/): integer linear programming problems, their integer feasible points and the LP relaxation.
+
+    - From the module *Linear Programming*, [Chapter 4 «Linear Programming problems»](https://fabiofurini.github.io/linear-programming/lp-problems/04-lp-problems/): the form of a Linear Programming problem: objective function, linear constraints and domains of the variables.
+
+!!! chiave "Objectives"
+
+    At the end of this chapter you will be able to:
+
+    - write a model with its data, variables, objective function, constraints and domains;
+
+    - tell the classes LP, ILP, BIP and MILP apart from the domains of the variables;
+
+    - explain with an example why rounding the LP optimum does not solve an ILP;
+
+    - say on which side of $\zmilp$ a feasible solution and a relaxation lie, and compute the gap;
+
+    - recognise set partitioning, set packing and set covering constraints.
+
 ## Data, variables, objective, constraints
 
 A *mathematical programming* model translates a decision into four ingredients,
@@ -240,20 +260,19 @@ own heuristics and relaxations.
 The gap between the two is what the solver reports as `MIPGap`, and it is also
 the only thing one can claim with certainty when the optimum is not reached.
 
-## What this chapter has put in your hands
+## In summary
 
-A MIP model is always written with the same five objects: the **data**, which are
-known and not decided; the **variables**, one per decision, with their domain;
-the **objective function**, which says what is maximised or minimised; the
-**constraints**, one for every sentence of the statement; and the **domain** of
-the variables, which is a constraint too, and the easiest to forget.
+!!! chiave "In summary"
 
-On a written model one then distinguishes a **feasible solution**, which
-satisfies every constraint, and the **optimal solution**, which among the
-feasible ones has the best value. Relaxing integrality gives the **linear
-relaxation**, an easier problem whose optimum is a **bound**: pessimistic if it
-comes from a feasible solution, optimistic if it comes from a relaxation. The
-distance between the two is the **gap**.
+    - A MIP model always has five objects: data, variables, objective function, constraints and the domain of the variables, which is a constraint too.
+
+    - The domains decide the class: LP (continuous), ILP (integer), BIP (binary), MILP (mixed).
+
+    - Rounding the optimum of the LP relaxation can give an infeasible or a poor solution: integrality must be handled by the model.
+
+    - A feasible solution gives a pessimistic bound, a relaxation an optimistic one; the gap measures the distance between the two.
+
+    - Partitioning ($=1$), packing ($\le 1$) and covering ($\ge 1$) are the three patterns that come back in almost every model.
 
 ## Code
 

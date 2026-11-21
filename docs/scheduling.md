@@ -6,6 +6,26 @@
 (`python/fam07_1_assignment.py` … `fam07_7_tardiness.py`).
 { .scheda }
 
+!!! nota "Prerequisites"
+
+    - From this module, [Chapter 6 «Links between variables»](https://fabiofurini.github.io/mip-modelling/links/): activation, the maximum variable, the *if and only if*, big-M and precedences.
+
+    - From this module, [Chapter 2 «Relaxations, duality and bounds»](https://fabiofurini.github.io/mip-modelling/modelling-2/): the bound protocol and the dual of the LP relaxation.
+
+    - From the module *Combinatorial Optimization Problems*, the page [«Scheduling on identical parallel machines ($P\|C_{\max}$)»](https://fabiofurini.github.io/combinatorial-optimization/catalogue/scheduling-on-identical-parallel-machines/): the scheduling problem $P\|C_{\max}$ and the LPT rule.
+
+!!! chiave "Objectives"
+
+    At the end of this chapter you will be able to:
+
+    - write the symbolic model of an assignment or scheduling problem from its statement;
+
+    - prove the links between machine, class and assignment variables;
+
+    - model sequencing on one machine with binary precedences and a big-M computed from the data;
+
+    - close the sandwich of bounds with a constructive heuristic and a hand-built dual solution.
+
 Seven problems with the same skeleton: some **jobs** must be assigned to some
 **machines** with limited availability. What changes from problem to problem is
 what is paid and what is decided: the cost of the assignment, the fixed cost of
@@ -111,3 +131,15 @@ due dates when the jobs follow one another on a single machine.
     [:octicons-arrow-right-24: MILP · big-M](scheduling-7.md)
 
 </div>
+
+## In summary
+
+!!! chiave "In summary"
+
+    - The seven problems share the same skeleton: jobs assigned to machines with limited availability.
+
+    - What changes is what is paid and what is decided: assignment cost, fixed cost, revenue, parallel time, setup, bonus, tardiness.
+
+    - The links that come back: activation, maximum variable, *if and only if* and big-M with disjunctions.
+
+    - For each problem: model, proof of the links, instance, heuristic, hand-built dual solution and comparison with the solver.

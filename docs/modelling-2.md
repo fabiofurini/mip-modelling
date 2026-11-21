@@ -5,6 +5,28 @@
 **Class:** LP · MILP · **Script:** `python/cap04_bounds.py`
 { .scheda }
 
+!!! nota "Prerequisites"
+
+    - From this module, [Chapter 1 «What is a MIP model»](https://fabiofurini.github.io/mip-modelling/modelling-1/): the LP relaxation, the two kinds of bounds and the gap.
+
+    - From the module *Linear Programming*, [Chapter 9 «Duality theory»](https://fabiofurini.github.io/linear-programming/duality/09-duality/): the construction of the dual of a Linear Programming problem, weak and strong duality.
+
+    - From the module *Integer Linear Programming*, [Chapter 2 «Primal and dual bounds»](https://fabiofurini.github.io/integer-linear-programming/models-and-bounds/lp-relaxation/): primal and dual bounds of an ILP problem.
+
+!!! chiave "Objectives"
+
+    At the end of this chapter you will be able to:
+
+    - write the dual of the LP relaxation of a model with the primal/dual conversion table;
+
+    - build by hand a feasible dual solution and use its value as a bound on $\zmilp$;
+
+    - tell a valid inequality from a constraint that only preserves optimality;
+
+    - compare two formulations by the strength of their LP relaxations;
+
+    - read `ObjVal`, `ObjBound` and `MIPGap` without mistaking LP duals for marginal prices of the MILP.
+
 This chapter teaches how to produce, **by hand**, a number that certainly lies
 on one side of the integer optimum. It serves three purposes: understanding how
 good a model is, how good a heuristic is, and how to read the numbers a solver
@@ -281,6 +303,20 @@ $\mathit{UB} \cdot \mathit{LB} \cdot z(\mathit{LP}) \cdot z(\mathit{LP}^+) \cdot
 
 Every number in the table exists in a CSV produced by the problem's script, and
 an `assert` in `check_numbers.py` compares it with the value quoted in the text.
+
+## In summary
+
+!!! chiave "In summary"
+
+    - By weak duality, the value of any feasible solution of the dual of the LP relaxation is a bound on $\zmilp$, on the side opposite to the heuristic.
+
+    - A dual solution can be built by hand with a stated recipe, checked feasible and evaluated: no solver is needed.
+
+    - In a minimisation the dual bound is a lower bound, in a maximisation an upper bound: the roles of $\lb$ and $\ub$ swap.
+
+    - Valid inequalities and stronger formulations raise the dual bound; stronger does not always mean faster.
+
+    - The bound protocol: feasible solution, dual of the relaxation, dual solution by hand, relaxations, optimum and the table with the gap.
 
 ## Code
 

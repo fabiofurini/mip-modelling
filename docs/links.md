@@ -7,6 +7,28 @@
 
 [![Open in Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/fabiofurini/mip-modelling/blob/main/notebooks/cap03_links.ipynb)
 
+!!! nota "Prerequisites"
+
+    - From this module, [Chapter 5 «Logic and binary variables»](https://fabiofurini.github.io/mip-modelling/modelling-5/): linear constraints for implications between binary variables and their proofs.
+
+    - From this module, [Chapter 2 «Relaxations, duality and bounds»](https://fabiofurini.github.io/mip-modelling/modelling-2/): the comparison of formulations through their LP relaxations.
+
+    - From the module *Integer Linear Programming*, [Chapter 3 «Ideal formulations»](https://fabiofurini.github.io/integer-linear-programming/formulations/ideal-formulations/): stronger formulations and the convex hull of the integer points.
+
+!!! chiave "Objectives"
+
+    At the end of this chapter you will be able to:
+
+    - link binary, integer and continuous variables with the fourteen techniques of the chapter;
+
+    - prove which direction of a link is imposed by the constraints and which follows from optimality;
+
+    - choose the smallest valid big-M from the data;
+
+    - compare the aggregated and disaggregated forms by the strength of the relaxation;
+
+    - use the map of techniques to model a new link.
+
 [chapter 5](modelling-5.md) links variables that are **all binary**. Here we
 link **different** families: binary with continuous, binary with integer,
 continuous with each other. There are fourteen techniques, and they are the real
@@ -194,6 +216,20 @@ used.
        $z(\mathit{LP}^+)$ with $z(\mathit{MILP})$ on a small instance and, when
        there are two formulations, by comparing them with each other — after
        proving them equivalent on integer points.
+
+## In summary
+
+!!! chiave "In summary"
+
+    - Every technique is presented in five steps: the link in words, the constraints, the proof, the strength of the relaxation and the `gurobipy` line.
+
+    - A property imposed by the constraints holds in every feasible solution; one of optimality is proved with an exchange argument.
+
+    - *In every optimum* needs a strictly positive coefficient; with a non-negative one only *there exists an optimum*.
+
+    - The big-M is computed from the data: too small cuts feasible solutions, too large weakens the relaxation.
+
+    - The disaggregated activation gives a stronger relaxation than the aggregated one, at the price of more constraints.
 
 ## Code
 
