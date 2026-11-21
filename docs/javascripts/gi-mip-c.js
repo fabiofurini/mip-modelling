@@ -276,7 +276,8 @@
     },
     formula(p, st) {
       const A = analisiBM(st), E = A.E;
-      return `\\max\\ ${lin(A.c, varsBM(E))}\\quad ${vincoliBM(E, st.col("a", String(A.m)))},\\ \\ ${domTex(E)}`;
+      // su due righe: la formula intera non entra nella larghezza dell'app (barra di scorrimento)
+      return `\\begin{gathered}\\max\\ ${lin(A.c, varsBM(E))}\\quad ${vincoliBM(E, st.col("a", String(A.m)))},\\\\ ${domTex(E)}\\end{gathered}`;
     },
     letture(p, st) {
       const A = analisiBM(st), E = A.E, C = M.COL(st);
