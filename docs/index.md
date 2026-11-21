@@ -30,9 +30,9 @@ Prerequisites: [Integer Linear Programming](https://fabiofurini.github.io/intege
 <!-- collana-app -->
 ## Try it now
 
-Weak and strong formulations: two models with the same integer points, overlaid. See how close each one gets to the convex hull and what changes in the bound of the relaxation.
+A conditional constraint written with big-M and a binary variable: move M and watch the continuous relaxation grow when M exceeds the minimum, and the feasible set lose pieces when M is too small.
 
-<div class="gi" data-grafico="formulazioni"></div>
+<div class="gi" data-grafico="big-m"></div>
 
 [:material-gesture-tap: More apps in the lab](lab/index.md){ .md-button }
 <!-- /collana-app -->
