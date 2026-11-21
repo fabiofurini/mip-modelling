@@ -30,9 +30,9 @@ Prerequisites: [Integer Linear Programming](https://fabiofurini.github.io/intege
 <!-- collana-app -->
 ## Try it now
 
-A conditional constraint written with big-M and a binary variable: move M and watch the continuous relaxation grow when M exceeds the minimum, and the feasible set lose pieces when M is too small.
+Three models of the course solved to optimality in the browser: capacitated facility location, lot sizing with a setup cost and projects with logical constraints. Choose the model at the top right, change the data with the sliders and watch the optimal solution, the binaries at 1, the continuous relaxation and the gap.
 
-<div class="gi" data-grafico="big-m"></div>
+<div class="gi" data-grafico="modelli-ottimi"></div>
 
 [:material-gesture-tap: More apps in the lab](lab/index.md){ .md-button }
 <!-- /collana-app -->

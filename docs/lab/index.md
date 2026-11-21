@@ -9,6 +9,20 @@ The ideas of the course, hands on: relaxations, bounds, heuristics and formulati
 Pick an app: it opens full page. Everything runs in the browser, without Gurobi;
 the problems are small, so that every step can be seen.
 
+## Models solved to optimality
+
+<div class="grid cards" markdown>
+
+-   :material-check-decagram: **Three models solved to optimality**
+
+    ---
+
+    Capacitated facility location, lot sizing with a setup cost and project selection with logical constraints, solved to optimality at every change of the data: the solution drawn, the binaries at 1, the continuous relaxation and the gap.
+
+    [Open the app →](optimal-models.md)
+
+</div>
+
 ## 2. Relaxations, duality and bounds
 
 <div class="grid cards" markdown>
