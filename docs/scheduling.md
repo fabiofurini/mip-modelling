@@ -12,7 +12,7 @@
 
     - From this module, [Chapter 2 «Relaxations, duality and bounds»](https://fabiofurini.github.io/mip-modelling/modelling-2/): the bound protocol and the dual of the LP relaxation.
 
-    - From the module *Combinatorial Optimization Problems*, the page [«Scheduling on identical parallel machines ($P\|C_{\max}$)»](https://fabiofurini.github.io/combinatorial-optimization/catalogue/scheduling-on-identical-parallel-machines/): the scheduling problem $P\|C_{\max}$ and the LPT rule.
+    - From the module *Combinatorial Optimization Problems*, the page [«Scheduling on identical parallel machines ($P\|C_{\max}$)»](https://fabiofurini.github.io/combinatorial-optimization/combinatorial-optimization-problems/pcmax/scheduling-on-identical-parallel-machines/#box-1-defPCmax): the scheduling problem $P\|C_{\max}$ and the LPT rule.
 
 !!! chiave "Objectives"
 

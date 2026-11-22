@@ -10,7 +10,7 @@
 
     - From this module, [Chapter 4 «Constructive heuristics»](https://fabiofurini.github.io/mip-modelling/modelling-4/): the least unit cost heuristic for lot sizing.
 
-    - From the module *Combinatorial Optimization Problems*, the page [«Uncapacitated lot sizing problem (ULS)»](https://fabiofurini.github.io/combinatorial-optimization/catalogue/uncapacitated-lot-sizing-problem/): the single-item lot sizing problem.
+    - From the module *Combinatorial Optimization Problems*, the page [«Uncapacitated lot sizing problem (ULS)»](https://fabiofurini.github.io/combinatorial-optimization/combinatorial-optimization-problems/lot-sizing/variants/#box-7-defULS): the single-item lot sizing problem.
 
 !!! chiave "Objectives"
 
