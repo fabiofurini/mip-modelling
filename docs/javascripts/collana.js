@@ -39,6 +39,32 @@
       span.appendChild(b);
     }
   }
-  if (typeof document$ !== "undefined") document$.subscribe(collega);
-  else document.addEventListener("DOMContentLoaded", collega);
+  // riquadri dei capitoli (e delle schede): si apre il link principale toccando il riquadro intero,
+  // non solo la piccola scritta «Leggi il capitolo» (Fabio, 22/11/2026: da telefono è difficile centrarla)
+  function riquadri() {
+    var carte = document.querySelectorAll(".md-typeset .grid.cards > ul > li, .md-typeset .grid > .card");
+    for (var i = 0; i < carte.length; i++) {
+      var c = carte[i];
+      if (c.dataset.collana) continue;
+      if (c.querySelector(".gi, .la-tool, canvas, iframe, .jxgbox")) continue;   // un'app dentro il riquadro: niente
+      // il link principale: l'unico con l'icona (la freccia di «Leggi il capitolo»), o l'unico link del riquadro;
+      // con più link a icona (per esempio più PDF) il riquadro resta com'è
+      var conIcona = [], tutti = c.querySelectorAll("a[href]");
+      for (var j = 0; j < tutti.length; j++) if (tutti[j].querySelector(".twemoji")) conIcona.push(tutti[j]);
+      var link = conIcona.length === 1 ? conIcona[0] : (conIcona.length === 0 && tutti.length === 1 ? tutti[0] : null);
+      if (!link) continue;
+      c.dataset.collana = "1";
+      c.classList.add("collana-carta");
+      (function (l) {
+        c.addEventListener("click", function (ev) {
+          if (ev.target.closest("a, button, input, select, textarea, summary, label")) return;
+          if (window.getSelection && String(window.getSelection())) return;   // chi seleziona del testo non viene portato via
+          l.click();
+        });
+      })(link);
+    }
+  }
+  function tutto() { collega(); riquadri(); }
+  if (typeof document$ !== "undefined") document$.subscribe(tutto);
+  else document.addEventListener("DOMContentLoaded", tutto);
 })();

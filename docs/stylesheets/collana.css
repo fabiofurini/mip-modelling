@@ -20,3 +20,6 @@
 .md-header__title a.collana-titolo { color: inherit; text-decoration: none; }
 .md-header__title a.collana-titolo:hover { text-decoration: underline; text-underline-offset: 3px; }
 .md-header__title[data-collana] { cursor: pointer; }
+
+/* riquadri dei capitoli cliccabili per intero (collana.js) */
+.md-typeset .collana-carta { cursor: pointer; }
