@@ -15,7 +15,10 @@ hide:
 Teaching material designed and developed by **[Fabio Furini](https://fabiofurini.github.io/)**, associate
 professor at [DIAG](https://www.diag.uniroma1.it/), Sapienza University of Rome.
 
-**Mixed-integer linear models for making optimal decisions.**
+The course presents modelling with integer linear programming: what a MIP model is, relaxations,
+duality and bounds, the implementation in Python/Gurobi, constructive heuristics, logic with binary
+variables and links between variables, and models of assignment, scheduling, location, covering and
+production planning problems.
 
 Prerequisites: [Integer Linear Programming](https://fabiofurini.github.io/integer-linear-programming/).
 
