@@ -234,7 +234,7 @@
         [C.grigio, T("tagliato da un \\(M\\) troppo piccolo", "cut off by a too small \\(M\\)"), "dashed"],
         [C.rosso, T("ottimo del rilassamento", "relaxation optimum"), "punto"],
         [C.blu, T("ottimo del MILP", "MILP optimum"), "punto"],
-        [st.colore("b"), "\\(\\boldsymbol c\\)", ""],
+        [C.blu, "\\(\\boldsymbol c\\)", ""],
       ];
     },
     monta(board, st) {
@@ -249,7 +249,7 @@
       M.ridisegna(board, st, [A.firma, M.scuro(), U.W, U.H].join("|"), (crea) => {
         // rilassamento
         const P = poligono(relaxBM(E, A.m));
-        M.area(crea, P, { strokeColor: C.rosso, fillColor: C.rosso, fillOpacity: 0.16, strokeWidth: 2 });
+        M.area(crea, P, { strokeColor: C.rosso, fillColor: C.rosso, fillOpacity: 0.2, strokeWidth: 3 });
         // insieme vero (con M valido) tratteggiato grigio se M non è valido
         if (A.m < A.mm) for (const f of formeBM(E, A.mm)) {
           if (f.P && f.P.length === 2) M.linea(crea, f.P[0][0], f.P[0][1], f.P[1][0], f.P[1][1], { strokeColor: C.grigio, strokeWidth: 6, dash: 2 });
@@ -268,7 +268,7 @@
         // rette di livello e ottimi
         if (A.lp.stato === "ottimo") livello(crea, A.c, Qv(A.lp.z), C.rosso);
         if (A.ip) livello(crea, A.c, Qv(A.ip.z), C.blu);
-        frecciaC(crea, [0, 0], A.c, U, st.colore("b"));
+        frecciaC(crea, [0, 0], A.c, U, C.blu);
         if (A.lp.stato === "ottimo") M.pallino(crea, Qv(A.lp.x[0]), Qv(A.lp.x[1]), { size: 6, fillColor: C.rosso, strokeColor: C.rosso });
         if (A.ip) M.pallino(crea, Qv(A.ip.x[0]), Qv(A.ip.x[1]), { size: 5, fillColor: C.blu, strokeColor: "#ffffff", strokeWidth: 1.5 });
         nomiAssi(crea, board, nomiBM(E), C);
@@ -398,7 +398,7 @@
         [C.rosso, T("ottimo su \\(X_A\\)", "optimum over \\(X_A\\)"), "punto"],
         [C.viola, T("ottimo su \\(X_B\\)", "optimum over \\(X_B\\)"), "punto"],
         [C.blu, T("ottimo intero", "integer optimum"), "punto"],
-        [st.colore("b"), "\\(\\boldsymbol c\\)", ""],
+        [C.blu, "\\(\\boldsymbol c\\)", ""],
       ];
     },
     monta(board, st) {
@@ -410,14 +410,14 @@
       const A = analisiF(st), E = A.E, C = M.COL(st);
       const U = inquadra(board, E.box, E.r);
       M.ridisegna(board, st, [A.firma, M.scuro(), U.W, U.H].join("|"), (crea) => {
-        M.area(crea, poligono(E.A), { strokeColor: C.rosso, fillColor: C.rosso, fillOpacity: 0.14, strokeWidth: 2 });
+        M.area(crea, poligono(E.A), { strokeColor: C.rosso, fillColor: C.rosso, fillOpacity: 0.2, strokeWidth: 3 });
         M.area(crea, poligono(E.B), { strokeColor: C.viola, fillColor: C.viola, fillOpacity: 0.2, strokeWidth: 2.5 });
         M.area(crea, E._H, { strokeColor: C.verde, fillColor: "none", fillOpacity: 0, strokeWidth: 2.4, dash: 2 });
         for (const p of E._S) M.pallino(crea, p[0], p[1], { size: 3, fillColor: C.verde, strokeColor: C.verde });
         livello(crea, A.c, Qv(A.a.z), C.rosso);
         livello(crea, A.c, Qv(A.b.z), C.viola);
         livello(crea, A.c, Qv(A.ip.z), C.blu);
-        frecciaC(crea, [0, 0], A.c, U, st.colore("b"));
+        frecciaC(crea, [0, 0], A.c, U, C.blu);
         M.pallino(crea, Qv(A.a.x[0]), Qv(A.a.x[1]), { size: 6, fillColor: C.rosso, strokeColor: C.rosso });
         M.pallino(crea, Qv(A.b.x[0]), Qv(A.b.x[1]), { size: 5.5, fillColor: C.viola, strokeColor: C.viola });
         M.pallino(crea, Qv(A.ip.x[0]), Qv(A.ip.x[1]), { size: 5, fillColor: C.blu, strokeColor: "#ffffff", strokeWidth: 1.5 });

@@ -3,14 +3,18 @@
  * Colori:
  *   --gi-a … --gi-e    i cursori (e le parti della formula che controllano);
  *   --gi-ammissibile   la regione ammissibile (rossa, come nelle figure delle dispense);
- *   --gi-ottimo        gli ottimi globali (blu);
+ *   --gi-ottimo        gli ottimi globali, il gradiente c (blu);
+ *   --gi-livello       le rette di livello c'x = k (blu tratteggiate, come nelle dispense) e il
+ *                      cursore z che fa scorrere c'x = z: è lo stesso blu di --gi-ottimo;
  *   --gi-locale        i punti/ottimi locali (viola);
  *   --gi-target        il bersaglio della sfida;
  *   --gi-orig          curve di riferimento (grigie, tratteggiate).
- * I cursori evitano rosso, blu e viola, che nel corso hanno un significato. */
+ * Rette dei vincoli rosse continue, come nelle figure TikZ delle dispense.
+ * I cursori evitano rosso, blu e viola, che nel corso hanno un significato; unica eccezione
+ * il cursore z della retta di livello, blu come la retta che muove (--gi-livello). */
 .gi {
   --gi-a: #D9480F; --gi-b: #0E7490; --gi-c: #2B8A3E; --gi-d: #C2255C; --gi-e: #B08900;
-  --gi-ammissibile: #E03131; --gi-ottimo: #1971C2; --gi-locale: #9C36B5;
+  --gi-ammissibile: #E03131; --gi-ottimo: #1971C2; --gi-livello: #1971C2; --gi-locale: #9C36B5;
   --gi-target: #F08C00; --gi-orig: #9aa5b1; --gi-line: #e3e8ef; --gi-board: #ffffff; --gi-card: #ffffff;
   --gi-muted: #5b6675;
   border: 1px solid var(--gi-line);
@@ -23,7 +27,7 @@
 }
 [data-md-color-scheme="slate"] .gi {
   --gi-a: #FF8A4C; --gi-b: #3BC9DB; --gi-c: #63E6A0; --gi-d: #F783AC; --gi-e: #FFD43B;
-  --gi-ammissibile: #FF6B6B; --gi-ottimo: #4DABF7; --gi-locale: #DA77F2;
+  --gi-ammissibile: #FF6B6B; --gi-ottimo: #4DABF7; --gi-livello: #4DABF7; --gi-locale: #DA77F2;
   --gi-target: #FFA94D; --gi-orig: #6b7b8f; --gi-line: #2a3b52; --gi-board: #101b29; --gi-card: #152131;
   --gi-muted: #9fb0c3;
   box-shadow: none;
