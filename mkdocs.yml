@@ -205,7 +205,7 @@ nav:
       - 7.5 Classes with setup: scheduling-5.md
       - 7.6 Classes with bonus: scheduling-6.md
       - 7.7 Total tardiness: scheduling-7.md
-  - Location and covering:
+  - Location and coverage:
       - location.md
       - 8.1 Capacitated location: location-1.md
       - 8.2 p-median: location-2.md
