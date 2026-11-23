@@ -18,6 +18,7 @@ side and from its dual; the solver, with the classical models written in Python;
 the constructive heuristics, which give the bound from the other side; the logic
 of binary variables; and the fourteen links between variables, which are the
 heart of modelling and come when every tool to judge them is already in hand.
+Fifteen worked numerical models, one per technique, close the part.
 
 Every chapter has a **script** producing all the numbers quoted and a
 **notebook** that opens in Colab. No value appears on these pages unless it
@@ -85,5 +86,15 @@ comes out of a reproducible run.
     functions. Plus the map.
 
     [:octicons-arrow-right-24: The fourteen techniques](links.md)
+
+-   :material-numeric: **Fifteen numerical models**
+
+    ---
+
+    The easiest examples, with explicit data and few variables: one per
+    technique, from EX 1 to EX 15, with both bounds built by hand and the
+    solver's optimum.
+
+    [:octicons-arrow-right-24: The fifteen models](numerical.md)
 
 </div>

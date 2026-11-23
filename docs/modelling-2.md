@@ -293,7 +293,7 @@ the integer optimum comes in jumps: from $b = 9$ to $b = 10$ it does not change
 
 ## The bound protocol of the course
 
-Every [problem of the course](problems.md) produces: (1) a feasible **and
+Every [problem of the course](scheduling.md) produces: (1) a feasible **and
 integer** solution from a heuristic, checked on constraints, bounds and
 integrality; (2) the dual of the relaxation without the bounds, in general form and for the
 instance; (3) a feasible dual solution built by hand, with the recipe declared;

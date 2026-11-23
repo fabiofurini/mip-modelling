@@ -2,7 +2,8 @@
 
 The full list of what the course contains, chapter by chapter and problem by
 problem. To find your way, start from [Modelling](modelling.md) and
-[The problems](problems.md); this page is for whoever wants to see everything at
+the pages of the four problem parts, starting from
+[Assignment and scheduling](scheduling.md); this page is for whoever wants to see everything at
 once.
 
 **[Modelling](modelling.md)**
@@ -19,8 +20,6 @@ once.
    rules, five exercises
 6. [Links between variables](links.md) — the fourteen techniques, one per
    subpage, with the [map](links.md)
-
-**[The problems](problems.md)**
 
 *[Fifteen numerical models](numerical.md)* — from EX 1 to EX 15, each with its own page
 
@@ -40,7 +39,7 @@ EX 13 [Emergency room shifts](ex-13-shifts.md) ·
 EX 14 [Shoes, production and hiring](ex-14-shoes.md) ·
 EX 15 [Music school timetable](ex-15-timetable.md)
 
-*[Assignment and scheduling](scheduling.md)*
+**[Assignment and scheduling](scheduling.md)**
 
 7.1 [Minimum-cost assignment](scheduling-1.md) ·
 7.2 [Machines with fixed cost](scheduling-2.md) ·
@@ -50,20 +49,20 @@ EX 15 [Music school timetable](ex-15-timetable.md)
 7.6 [Classes with bonus](scheduling-6.md) ·
 7.7 [Total tardiness](scheduling-7.md)
 
-*[Location and coverage](location.md)*
+**[Location and covering](location.md)**
 
 8.1 [Capacitated location](location-1.md) ·
 8.2 [p-median](location-2.md) ·
 8.3 [Coverage with interference](location-3.md) ·
 8.4 [Hub with maximum cost](location-4.md)
 
-*[Production planning](production.md)*
+**[Production planning](production.md)**
 
 9.1 [Lot sizing with fixed cost](production-1.md) ·
 9.2 [Production and workforce](production-2.md) ·
 9.3 [Vehicles with a minimum lot](production-3.md)
 
-*[Mixed problems](mixed.md)*
+**[Mixed problems](mixed.md)**
 
 10.1 [Prizes in two ways](mixed-1.md) ·
 10.2 [Combinatorial auction](mixed-2.md) ·
@@ -74,6 +73,9 @@ EX 15 [Music school timetable](ex-15-timetable.md)
 10.7 [Branches across two companies](mixed-7.md) ·
 10.8 [Songs across CDs](mixed-8.md) ·
 10.9 [Books across shelves](mixed-9.md)
+
+**[Exercises](to-model.md)** — forty problems to model,
+twenty numerical and twenty symbolic
 
 **The course**
 

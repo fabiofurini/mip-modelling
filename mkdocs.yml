@@ -45,6 +45,9 @@ theme:
 
 plugins:
   - search
+  - redirects:
+      redirect_maps:
+        problems.md: scheduling.md
 
 extra:
   social:
@@ -176,8 +179,6 @@ nav:
           - 6.12 Alldiff and expansion: links-12.md
           - 6.13 Soft constraints: links-13.md
           - 6.14 Piecewise functions: links-14.md
-  - The problems:
-      - problems.md
       - Numerical models:
           - numerical.md
           - EX 1 The eight-seat van: ex-01-van.md
@@ -195,38 +196,38 @@ nav:
           - EX 13 Emergency room shifts: ex-13-shifts.md
           - EX 14 Shoes, production and hiring: ex-14-shoes.md
           - EX 15 Music school timetable: ex-15-timetable.md
-      - Assignment and scheduling:
-          - scheduling.md
-          - 7.1 Minimum-cost assignment: scheduling-1.md
-          - 7.2 Machines with fixed cost: scheduling-2.md
-          - 7.3 Job selection: scheduling-3.md
-          - 7.4 Parallel jobs: scheduling-4.md
-          - 7.5 Classes with setup: scheduling-5.md
-          - 7.6 Classes with bonus: scheduling-6.md
-          - 7.7 Total tardiness: scheduling-7.md
-      - Location and coverage:
-          - location.md
-          - 8.1 Capacitated location: location-1.md
-          - 8.2 p-median: location-2.md
-          - 8.3 Coverage with interference: location-3.md
-          - 8.4 Hub with maximum cost: location-4.md
-      - Production planning:
-          - production.md
-          - 9.1 Lot sizing with fixed cost: production-1.md
-          - 9.2 Production and workforce: production-2.md
-          - 9.3 Vehicles with a minimum lot: production-3.md
-      - Mixed problems:
-          - mixed.md
-          - 10.1 Prizes in two ways: mixed-1.md
-          - 10.2 Combinatorial auction: mixed-2.md
-          - 10.3 Diet with a minimum lot: mixed-3.md
-          - 10.4 Trees and boxes of lights: mixed-4.md
-          - 10.5 Shipments in boxes: mixed-5.md
-          - 10.6 Children across summer camps: mixed-6.md
-          - 10.7 Branches across two companies: mixed-7.md
-          - 10.8 Songs across CDs: mixed-8.md
-          - 10.9 Books across shelves: mixed-9.md
-      - Problems to model: to-model.md
+  - Assignment and scheduling:
+      - scheduling.md
+      - 7.1 Minimum-cost assignment: scheduling-1.md
+      - 7.2 Machines with fixed cost: scheduling-2.md
+      - 7.3 Job selection: scheduling-3.md
+      - 7.4 Parallel jobs: scheduling-4.md
+      - 7.5 Classes with setup: scheduling-5.md
+      - 7.6 Classes with bonus: scheduling-6.md
+      - 7.7 Total tardiness: scheduling-7.md
+  - Location and covering:
+      - location.md
+      - 8.1 Capacitated location: location-1.md
+      - 8.2 p-median: location-2.md
+      - 8.3 Coverage with interference: location-3.md
+      - 8.4 Hub with maximum cost: location-4.md
+  - Production planning:
+      - production.md
+      - 9.1 Lot sizing with fixed cost: production-1.md
+      - 9.2 Production and workforce: production-2.md
+      - 9.3 Vehicles with a minimum lot: production-3.md
+  - Mixed problems:
+      - mixed.md
+      - 10.1 Prizes in two ways: mixed-1.md
+      - 10.2 Combinatorial auction: mixed-2.md
+      - 10.3 Diet with a minimum lot: mixed-3.md
+      - 10.4 Trees and boxes of lights: mixed-4.md
+      - 10.5 Shipments in boxes: mixed-5.md
+      - 10.6 Children across summer camps: mixed-6.md
+      - 10.7 Branches across two companies: mixed-7.md
+      - 10.8 Songs across CDs: mixed-8.md
+      - 10.9 Books across shelves: mixed-9.md
+  - Exercises: to-model.md
   - Quiz: self-assessment.md
   - Lab: lab/index.md
   - Downloads: downloads.md

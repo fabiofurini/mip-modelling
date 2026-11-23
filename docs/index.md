@@ -23,7 +23,7 @@ production planning problems.
 Prerequisites: [Integer Linear Programming](https://fabiofurini.github.io/integer-linear-programming/).
 
 [Start :material-arrow-right:](modelling.md){ .md-button .md-button--primary }
-[:material-pencil: Exercises](problems.md){ .md-button }
+[:material-pencil: Exercises](to-model.md){ .md-button }
 [:material-gesture-tap: Lab](lab/index.md){ .md-button }
 [:material-clipboard-check-outline: Quiz](self-assessment.md){ .md-button }
 [:material-download: Downloads](downloads.md){ .md-button }
@@ -50,19 +50,45 @@ Three models of the course solved to optimality in the browser: capacitated faci
 
     What a MIP is, logic and binary variables, the links between variables
     (activation, minimum lot, big-M, maxima, if and only if…), lower and
-    upper bounds, the solver.
+    upper bounds, the solver, and fifteen worked numerical models.
 
     [:octicons-arrow-right-24: The six chapters](modelling.md)
 
--   :material-puzzle: **The problems**
+-   :material-timer-sand: **Assignment and scheduling**
 
     ---
 
-    Three families — assignment and scheduling, location and coverage,
-    production planning — plus a chapter of mixed problems, for the problems that
-    have no family. Solved exercises and additional questions.
+    Jobs on machines with limited availability: fixed costs, selection, parallel
+    jobs, setups, "if and only if" prizes, sequencing with a big-M.
 
-    [:octicons-arrow-right-24: The problems](problems.md)
+    [:octicons-arrow-right-24: The seven problems](scheduling.md)
+
+-   :material-map-marker-radius: **Location and covering**
+
+    ---
+
+    Where to open sites and hubs: aggregated and disaggregated activation, "if
+    and only if", maximum variable.
+
+    [:octicons-arrow-right-24: The four problems](location.md)
+
+-   :material-factory: **Production planning**
+
+    ---
+
+    How much to produce, not only whether: inventories, fixed setup cost,
+    workforce and hiring, minimum lot.
+
+    [:octicons-arrow-right-24: The three problems](production.md)
+
+-   :material-shape-outline: **Mixed problems**
+
+    ---
+
+    The problems without a family: alternative modes, containers, division and
+    balancing, dual bounds from combinatorial arguments.
+
+    [:octicons-arrow-right-24: The nine problems](mixed.md)
 
 -   :material-school: **The course**
 
@@ -85,7 +111,7 @@ Three models of the course solved to optimality in the browser: capacitated faci
 
     Modelling exercises for every chapter, at exam level, on the case studies of the course.
 
-    [:octicons-arrow-right-24: The exercises](problems.md)
+    [:octicons-arrow-right-24: The exercises](to-model.md)
 
 -   :material-clipboard-check-outline: **Self-assessment quiz**
 

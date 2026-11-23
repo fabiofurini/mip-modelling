@@ -72,7 +72,16 @@ to the solver.
 | | Content | Learning objectives |
 |---|---|---|
 | **Part I** | Modelling | recognise a link between variables (activation, maximum, big-M, if and only if…) and prove that the model really imposes it |
-| **Part II** | The problems | apply the links to three families of real problems and to the mixed problems, from the model to Gurobi code |
+| **Part II** | The problems: [assignment and scheduling](scheduling.md), [location and covering](location.md), [production planning](production.md), [mixed problems](mixed.md) | apply the links to three families of real problems and to the mixed problems, from the model to Gurobi code |
+
+!!! note "The difficulty stars"
+    Every problem carries a difficulty from ★☆☆☆☆ to ★★★★★. It measures how hard
+    it is to **build the model**: how many families of variables are needed,
+    which links must be recognised, whether there is a time structure, a big-M, a
+    disjunction, a min-max, brackets, an "if and only if". It does not measure
+    the size of the instance, the solver time or the length of the page: a
+    problem with an elementary model stays at one star even when its dual is
+    laborious.
 
 ## The format of every exercise
 
