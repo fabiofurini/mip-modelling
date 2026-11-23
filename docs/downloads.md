@@ -7,7 +7,7 @@ scripts under the
 [MIT](https://github.com/fabiofurini/mip-modelling/blob/main/LICENSE-CODE)
 licence.
 
-## The three sets of notes
+## Lecture notes
 
 If you want the whole course to read offline, start from these three PDFs: they
 are the core of the material. What comes after is supplementary.
@@ -46,61 +46,9 @@ are the core of the material. What comes after is supplementary.
 
 </div>
 
-<!-- slide:inizio -->
-## Slides
-
-The lecture slides, one deck per chapter of the notes (PDF).
+## Exercises
 
 <div class="grid cards" markdown>
-
--   :material-presentation: **Modelling**
-
-    ---
-
-    - [What is a MIP model](pdf/slides-01-mip-models.pdf)
-    - [Relaxations, duality and bounds](pdf/slides-02-dual-bounds.pdf)
-    - [From the model to Python/Gurobi](pdf/slides-03-gurobi.pdf)
-    - [Constructive heuristics](pdf/slides-04-heuristics.pdf)
-    - [Logic and binary variables](pdf/slides-05-logic-binaries.pdf)
-    - [Links between variables](pdf/slides-06-links.pdf)
-
--   :material-presentation: **Numerical problems**
-
-    ---
-
-    - [Numerical models: EX 1–5](pdf/slides-07-numerical-models-1.pdf)
-    - [Numerical models: EX 6–10](pdf/slides-07-numerical-models-2.pdf)
-    - [Numerical models: EX 11–15](pdf/slides-07-numerical-models-3.pdf)
-
--   :material-presentation: **Problems with a symbolic model**
-
-    ---
-
-    - [The problem families](pdf/slides-08-problem-families.pdf)
-    - [Assignment and scheduling: 7.1–7.4](pdf/slides-09-scheduling-1.pdf)
-    - [Assignment and scheduling: 7.5–7.7](pdf/slides-09-scheduling-2.pdf)
-    - [Location and coverage](pdf/slides-10-location.pdf)
-    - [Production planning](pdf/slides-11-production.pdf)
-    - [Mixed problems: 10.1–10.3](pdf/slides-12-mixed-problems-1.pdf)
-    - [Mixed problems: 10.4–10.6](pdf/slides-12-mixed-problems-2.pdf)
-    - [Mixed problems: 10.7–10.9](pdf/slides-12-mixed-problems-3.pdf)
-
-</div>
-
-<!-- slide:fine -->
-
-## The other documents
-
-<div class="grid cards" markdown>
-
--   :material-school-outline: **How to work with the course**
-
-    ---
-
-    How the course is built and how every exercise is built: the path, the
-    most common mistakes, and the reproducibility of the numbers.
-
-    [:octicons-download-24: course-organization.pdf](pdf/course-organization.pdf)
 
 -   :material-help-circle-outline: **Problems to model**
 
@@ -114,6 +62,53 @@ The lecture slides, one deck per chapter of the notes (PDF).
 
     [:octicons-download-24: exercises.pdf](pdf/exercises.pdf)
 
+</div>
+
+<!-- slide:inizio -->
+## Slides
+
+The lecture slides, one deck per chapter of the notes (PDF).
+
+### Modelling
+
+- :material-presentation: [What is a MIP model](pdf/slides-01-mip-models.pdf)
+- :material-presentation: [Relaxations, duality and bounds](pdf/slides-02-dual-bounds.pdf)
+- :material-presentation: [From the model to Python/Gurobi](pdf/slides-03-gurobi.pdf)
+- :material-presentation: [Constructive heuristics](pdf/slides-04-heuristics.pdf)
+- :material-presentation: [Logic and binary variables](pdf/slides-05-logic-binaries.pdf)
+- :material-presentation: [Links between variables](pdf/slides-06-links.pdf)
+
+### Numerical problems
+
+- :material-presentation: [Numerical models: EX 1–5](pdf/slides-07-numerical-models-1.pdf)
+- :material-presentation: [Numerical models: EX 6–10](pdf/slides-07-numerical-models-2.pdf)
+- :material-presentation: [Numerical models: EX 11–15](pdf/slides-07-numerical-models-3.pdf)
+
+### Problems with a symbolic model
+
+- :material-presentation: [The problem families](pdf/slides-08-problem-families.pdf)
+- :material-presentation: [Assignment and scheduling: 7.1–7.4](pdf/slides-09-scheduling-1.pdf)
+- :material-presentation: [Assignment and scheduling: 7.5–7.7](pdf/slides-09-scheduling-2.pdf)
+- :material-presentation: [Location and coverage](pdf/slides-10-location.pdf)
+- :material-presentation: [Production planning](pdf/slides-11-production.pdf)
+- :material-presentation: [Mixed problems: 10.1–10.3](pdf/slides-12-mixed-problems-1.pdf)
+- :material-presentation: [Mixed problems: 10.4–10.6](pdf/slides-12-mixed-problems-2.pdf)
+- :material-presentation: [Mixed problems: 10.7–10.9](pdf/slides-12-mixed-problems-3.pdf)
+
+<!-- slide:fine -->
+
+## Other documents
+
+<div class="grid cards" markdown>
+
+-   :material-school-outline: **How to work with the course**
+
+    ---
+
+    How the course is built and how every exercise is built: the path, the
+    most common mistakes, and the reproducibility of the numbers.
+
+    [:octicons-download-24: course-organization.pdf](pdf/course-organization.pdf)
 
 -   :material-language-python: **The code**
 
