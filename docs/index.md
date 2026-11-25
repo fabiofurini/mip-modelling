@@ -33,9 +33,9 @@ Prerequisites: [Integer Linear Programming](https://fabiofurini.github.io/intege
 <!-- collana-app -->
 ## Try it now
 
-The integer points inside the polyhedron, the optimum of the continuous relaxation and the integer optimum: move the constraints and the objective function with the sliders and see how wide the gap between the two is.
+The lot sizing model with a fixed setup cost, solved to optimality in the browser: change the setup cost, the holding cost and the demand of the last day with the sliders and the optimum recomputes the setup days, the cost and the continuous relaxation.
 
-<div class="gi" data-grafico="punti-interi"></div>
+<div class="gi" data-grafico="mip-lotti"></div>
 
 [:material-gesture-tap: More apps in the lab](lab/index.md){ .md-button }
 <!-- /collana-app -->

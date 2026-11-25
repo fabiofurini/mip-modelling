@@ -151,3 +151,69 @@ body:has(.gi-app-intera) .gi-app-intera { margin-top: .4em; }
 
 /* Modellazione MIP: schede dell'indice del laboratorio, il link «Apri l'app →» in evidenza */
 .md-typeset .grid.cards > ul > li > p:last-child a { font-weight: 700; }
+
+
+/* ================================================================ app di copertina «mip-lotti» (gi-mip-lotti.js)
+   Stesso formato dell'app di copertina di Modellazione PL: righe copiate da CORSO_MODELLAZIONE_PL/it/docs/stylesheets/extra.css
+   (classi .plm-*): problema e modello sopra il grafico, «Soluzione ottima» sotto, modello numerico in fondo al riquadro. */
+@media (max-width: 860px) { .gi[data-grafico="mip-lotti"] .gi-corpo { grid-template-columns: minmax(0, 1fr); } }
+/* app del laboratorio: problema, modello simbolico e modello numerico sopra il grafico (gi-mip-lotti.js) */
+.gi-formula:has(.plm) { display: block; font-size: 1em; min-height: 0; overflow: visible; padding: .1em 0 .5em; }
+.md-typeset .plm-testo { margin: 0 0 .5em; font-size: .78rem; line-height: 1.45; }
+.md-typeset .plm-cap { margin: -.2em 0 .5em; font-size: .76rem; }
+.md-typeset .plm-evid { margin: 0 0 .5em; padding: .35em .6em; font-size: .76rem; line-height: 1.45;
+  border-left: 4px solid #CA6F1E; background: color-mix(in srgb, #CA6F1E 9%, transparent); border-radius: 0 4px 4px 0; }
+/* con il problema e il modello sopra (gi-mip-lotti.js) il grafico non si schiaccia: altezza fissa di 540px (tre pannelli nella produzione) */
+@media (min-width: 860px) {
+  .gi.gi-app-intera:has(.plm) { height: auto; }
+  .gi-app-intera:has(.plm) .gi-board { flex: 0 0 auto; height: 540px !important; }
+}
+.plm-sim { overflow-x: auto; overflow-y: hidden; text-align: center; font-size: .95em; padding: .2em 0 .3em; }
+.md-typeset details.plm-num { margin: .3em 0 0; font-size: .74rem; }
+.md-typeset details.plm-num > summary { font-weight: 600; }
+/* il modello numerico (un solo array, GI_PL_NUM in gi-mip-lotti.js) sta in fondo al riquadro dell'app, largo quanto il riquadro (FONDO) */
+.plm-fondo { padding: 0 1em .8em; }
+/* in fondo il modello numerico usa tutta la larghezza: testo normale e matrice centrata, ingrandita da adatta() */
+.md-typeset .plm-fondo details.plm-num { font-size: .82rem; }
+.plm-fondo .plm-riga.plm-array { text-align: center; }
+.plm-fondo .plm-array mjx-math, .plm-fondo .plm-array mjx-mtable { width: auto !important; min-width: 0 !important; }
+.plm-fondo:empty { display: none; }
+.plm-num-corpo { padding: .2em 0 .4em; }
+.plm-riga.plm-array { font-size: .92em; }
+/* forma matriciale (Fabio): una colonna per variabile, colonne vicine (al posto dei 2 x 5pt di \arraycolsep) */
+.plm-array mjx-mtd { padding-left: .2em !important; padding-right: .2em !important; }
+.plm-array mjx-mtd:first-child { padding-right: .7em !important; }
+.plm-array mjx-mtd:nth-last-child(2) { padding-left: .5em !important; }
+.plm-riga { text-align: left; margin: .1em 0 .5em; white-space: nowrap; overflow-x: auto; overflow-y: hidden; }
+.md-typeset .plm-tit { margin: .6em 0 .1em; font-weight: 600; font-size: .95em; }
+.md-typeset .plm-num-corpo > .plm-tit:first-child { margin-top: .2em; }
+.md-typeset .plm-nota { margin: .4em 0 0; font-size: .95em; opacity: .85; white-space: normal; }
+.plm-stretto { font-size: .8em; }
+
+/* l'app in fondo al capitolo (sezione «Laboratorio interattivo», genera_laboratorio.py): una colonna, grafico a tutta
+   larghezza e alto 600px, comandi e letture sotto; così i pannelli nello stile delle figure non si schiacciano */
+.gi.gi-capitolo .gi-corpo { grid-template-columns: minmax(0, 1fr); }
+@media (min-width: 860px) {
+  .gi.gi-capitolo .gi-board { aspect-ratio: auto !important; height: 600px !important; }
+  .gi.gi-capitolo .gi-corpo > div:last-child { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: .4em 1.2em; align-items: start; }
+}
+
+/* pl-legenda-sotto: le app di Modellazione PL hanno la legenda dentro ogni grafico; quella ripetuta sotto non serve (Fabio, 25/11/2026) */
+.gi[data-grafico="mip-lotti"] .gi-legenda { display: none; }
+/* al suo posto il blocco «Soluzione ottima» (GI_PL_SOL in gi-mip-lotti.js): valore ottimo e valori delle variabili, aggiornati con i cursori */
+.md-typeset .plm-sol { margin: .5em 0 0; padding: .45em .7em .3em; font-size: .76rem; line-height: 1.5; overflow-x: auto;
+  background: color-mix(in srgb, var(--gi-line) 50%, transparent); border-radius: 8px; }
+.md-typeset .plm-sol-tit { margin: 0 0 .15em; font-weight: 700; }
+.md-typeset .plm-sol-val { margin: 0 0 .25em; }
+.plm-sol-tabs { display: flex; flex-wrap: wrap; gap: .2em 1.8em; align-items: flex-start; }
+.md-typeset .plm-sol-t > p { margin: .1em 0 0; font-weight: 600; }
+.md-typeset .gi .plm-sol table.gi-tabella { width: auto; margin: 0 0 .3em; }
+.md-typeset .gi .plm-sol table.gi-tabella td, .md-typeset .gi .plm-sol table.gi-tabella th { min-width: 2.8em; padding: .1em .45em; }
+.md-typeset .gi .plm-sol table.gi-tabella td:first-child, .md-typeset .gi .plm-sol table.gi-tabella th:first-child { text-align: left; }
+.md-typeset .plm-sol-nota { margin: .1em 0 .2em; opacity: .85; }
+/* valori dei dati: tabelline subito sotto la riga «Dati:» (GI_PL_DV in gi-mip-lotti.js; Fabio, 25/11/2026) */
+.md-typeset .plm-testo:empty { display: none; }
+.md-typeset .plm-dati { display: flex; flex-wrap: wrap; gap: .2em 1.6em; align-items: flex-start; margin: -.2em 0 .5em; font-size: .72rem; line-height: 1.4; overflow-x: auto; }
+.md-typeset .gi .plm-dati table.gi-tabella { width: auto; margin: 0 0 .2em; }
+.md-typeset .gi .plm-dati table.gi-tabella td, .md-typeset .gi .plm-dati table.gi-tabella th { min-width: 2.2em; padding: .05em .4em; }
+.md-typeset .gi .plm-dati table.gi-tabella td:first-child, .md-typeset .gi .plm-dati table.gi-tabella th:first-child { text-align: left; }

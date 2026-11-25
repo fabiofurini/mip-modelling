@@ -21,6 +21,14 @@ the problems are small, so that every step can be seen.
 
     [Open the app →](optimal-models.md)
 
+-   :material-factory: **Lot sizing with a fixed setup cost**
+
+    ---
+
+    The lot sizing model with a fixed setup cost (problem 9.1), solved to optimality in the browser: the problem, the data, the symbolic and the numerical model, the optimal plan with its cost, the continuous relaxation and the gap.
+
+    [Open the app →](lot-sizing-setup.md)
+
 </div>
 
 ## 2. Relaxations, duality and bounds
