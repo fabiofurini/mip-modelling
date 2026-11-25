@@ -13,7 +13,7 @@ the problems are small, so that every step can be seen.
 
 <div class="grid cards" markdown>
 
--   :material-city-variant-outline: **Five projects, two funds**
+-   :material-city-variant-outline: **Projects and funds**
 
     ---
 

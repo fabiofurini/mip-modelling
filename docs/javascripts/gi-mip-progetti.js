@@ -67,11 +67,11 @@
       const TAB = H.DV.tabelle(H.DV.tab(T("Progetti", "Projects"), [T("progetto \\(i\\)", "project \\(i\\)"), T("beneficio \\(p_i\\) (punti)", "benefit \\(p_i\\) (points)"), T("costo \\(c_i\\) (M€)", "cost \\(c_i\\) (M€)")],
         NOMI().map((s, i) => [`${i + 1}. ${s}`, String(DATI.p[i]), String(R.costo[i])])));
       const testo = T(
-        "<b>Il problema.</b> Un comune ha cinque progetti e due fondi di finanziamento, uno regionale e uno europeo, ciascuno con il suo budget. " +
+        "<b>Il problema.</b> Un comune ha alcuni progetti e alcuni fondi di finanziamento, ciascuno con il suo budget. " +
         "Ogni progetto ha un costo e un beneficio stimato, e può essere finanziato da un solo fondo. Quali progetti finanziare, e con quale fondo, per massimizzare il beneficio totale senza superare i budget?" +
         "<br><b>Variabili:</b> \\(x_{ik} \\in \\{0,1\\}\\): vale 1 se il progetto \\(i\\) è finanziato dal fondo \\(k\\)." +
         `<br><b>Dati:</b> \\(n = ${N}\\) progetti, \\(m = ${K}\\) fondi; \\(p_i\\): beneficio del progetto \\(i\\); \\(c_i\\): costo del progetto \\(i\\); \\(b_k\\): budget del fondo \\(k\\), \\(b_1 = ${R.b[0]}\\) M€ (regionale) e \\(b_2 = ${R.b[1]}\\) M€ (europeo).` + TAB,
-        "<b>The problem.</b> A town has five projects and two funding sources, a regional fund and a European fund, each with its own budget. " +
+        "<b>The problem.</b> A town has some projects and some funding sources, each with its own budget. " +
         "Each project has a cost and an estimated benefit, and can be financed by one fund only. Which projects should be financed, and by which fund, to maximize the total benefit without exceeding the budgets?" +
         "<br><b>Variables:</b> \\(x_{ik} \\in \\{0,1\\}\\): equals 1 if project \\(i\\) is financed by fund \\(k\\)." +
         `<br><b>Data:</b> \\(n = ${N}\\) projects, \\(m = ${K}\\) funds; \\(p_i\\): benefit of project \\(i\\); \\(c_i\\): cost of project \\(i\\); \\(b_k\\): budget of fund \\(k\\), \\(b_1 = ${R.b[0]}\\) M€ (regional) and \\(b_2 = ${R.b[1]}\\) M€ (European).` + TAB);
@@ -131,7 +131,7 @@
       "Set \\(b_1\\) to 12: the gap drops to zero. Set \\(c_5\\) to 7: only the library and the LED lighting are financed."),
   };
 
-  window.GI_RICETTE["mip-progetti-fondi"] = () => L().ricettaVoce({ titolo: T("Cinque progetti, due fondi", "Five projects, two funds") }, vProgetti);
+  window.GI_RICETTE["mip-progetti-fondi"] = () => L().ricettaVoce({ titolo: T("Progetti e fondi", "Projects and funds") }, vProgetti);
   // per le prove automatiche: solo il calcolo
   window.GI_MIP_PROGETTI = { calcola, DATI };
 })();
