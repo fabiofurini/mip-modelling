@@ -21,21 +21,29 @@ the problems are small, so that every step can be seen.
 
     [Open the app →](projects-funds.md)
 
--   :material-check-decagram: **Three models solved to optimality**
-
-    ---
-
-    Capacitated facility location, lot sizing with a setup cost and project selection with logical constraints, solved to optimality at every change of the data: the solution drawn, the binaries at 1, the continuous relaxation and the gap.
-
-    [Open the app →](optimal-models.md)
-
 -   :material-factory: **Lot sizing with a fixed setup cost**
 
     ---
 
-    The lot sizing model with a fixed setup cost (problem 9.1), solved to optimality in the browser: the problem, the data, the symbolic and the numerical model, the optimal plan with its cost, the continuous relaxation and the gap.
+    The app solves a mixed integer linear programming model to optimality in the browser: the data, the symbolic model, the numerical model of the instance, the optimal solution with its figure, the continuous relaxation and the gap.
 
     [Open the app →](lot-sizing-setup.md)
+
+-   :material-warehouse: **Capacitated facility location**
+
+    ---
+
+    The app solves a mixed integer linear programming model to optimality in the browser: the data, the symbolic model, the numerical model of the instance, the optimal solution with its figure, the continuous relaxation and the gap.
+
+    [Open the app →](capacitated-location.md)
+
+-   :material-sitemap-outline: **Projects with logical constraints**
+
+    ---
+
+    The app solves an integer linear programming model to optimality in the browser: the data, the symbolic model, the numerical model of the instance, the optimal solution with its figure, the continuous relaxation and the gap.
+
+    [Open the app →](projects-logical-constraints.md)
 
 </div>
 

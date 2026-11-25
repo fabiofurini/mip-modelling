@@ -9,6 +9,6 @@ title: "Lot sizing with a fixed setup cost"
 
 # Lot sizing with a fixed setup cost
 
-The lot sizing model with a fixed setup cost (problem 9.1), solved to optimality in the browser: the problem, the data, the symbolic and the numerical model, the optimal plan with its cost, the continuous relaxation and the gap. Move the setup cost, the holding cost and the demand of day 5: the setup days change.
+The app solves a mixed integer linear programming model to optimality in the browser: the data, the symbolic model, the numerical model of the instance, the optimal solution with its figure, the continuous relaxation and the gap. The sliders change the data and the solution is recomputed.
 
 <div class="gi gi-app-intera" data-grafico="mip-lotti"></div>

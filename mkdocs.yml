@@ -140,7 +140,9 @@ extra_javascript:
   - javascripts/gi-mip-a.js?v=abe79b0aa1
   - javascripts/gi-mip-b.js?v=fc0e411f62
   - javascripts/gi-mip-c.js?v=c52603b50f
-  - javascripts/gi-mip-d.js?v=e7ce3a295b
+  - javascripts/gi-mip-d.js?v=4f2ac4bb63
+  - javascripts/gi-mip-localizzazione.js?v=ab8ab9e805
+  - javascripts/gi-mip-logica.js?v=38050eb4d3
   - javascripts/gi-mip-lotti.js?v=fed2381924
   - javascripts/gi-mip-progetti.js?v=456a27af27
   - javascripts/quiz.js?v=be7fae2b85
