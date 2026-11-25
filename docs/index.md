@@ -35,7 +35,7 @@ Prerequisites: [Integer Linear Programming](https://fabiofurini.github.io/intege
 
 The app solves an integer linear programming model to optimality in the browser: the data, the symbolic model, the numerical model of the instance, the optimal solution with its figure, the continuous relaxation and the gap. The sliders change the data and the solution is recomputed.
 
-<div class="gi" data-grafico="mip-progetti-fondi"></div>
+<div class="gi" data-grafico="mip-progetti-fondi" data-vetrina="compatta"></div>
 
 [:material-gesture-tap: More apps in the lab](lab/index.md){ .md-button }
 <!-- /collana-app -->

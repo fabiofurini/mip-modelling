@@ -28,6 +28,14 @@
   const N = 5, K = 2;
   const ix = (i, k) => i * K + k;   // colonne x_11, x_12, x_21, ..., x_52
 
+  // home (data-vetrina): la soluzione va nella colonna dei cursori, sopra il «Prova tu», come nell'app di Modellazione PNL
+  function solDestra(st) {
+    const sol = st.el.querySelector(".plm-sol"), ctrl = st.el.querySelector(".gi-ctrl");
+    if (!sol || !ctrl) return;
+    const dx = ctrl.parentElement, prova = dx.querySelector(".gi-domanda");
+    if (sol.parentElement !== dx || (prova && sol.nextElementSibling !== prova)) dx.insertBefore(sol, prova || null);
+  }
+
   function calcola(v) {
     const costo = DATI.c.slice(), b = DATI.b.slice();
     b[0] = v[0]; costo[4] = v[1];
@@ -75,9 +83,11 @@
         "Each project has a cost and an estimated benefit, and can be financed by one fund only. Which projects should be financed, and by which fund, to maximize the total benefit without exceeding the budgets?" +
         "<br><b>Variables:</b> \\(x_{ik} \\in \\{0,1\\}\\): equals 1 if project \\(i\\) is financed by fund \\(k\\)." +
         `<br><b>Data:</b> \\(n = ${N}\\) projects, \\(m = ${K}\\) funds; \\(p_i\\): benefit of project \\(i\\); \\(c_i\\): cost of project \\(i\\); \\(b_k\\): budget of fund \\(k\\), \\(b_1 = ${R.b[0]}\\) M€ (regional) and \\(b_2 = ${R.b[1]}\\) M€ (European).` + TAB);
-      const html = `<div class="plm"><p class="plm-testo">${testo}</p>` +
+      const V = !!st.el.dataset.vetrina;
+      if (V) setTimeout(() => solDestra(st), 0);
+      const html = `<div class="plm"><p class="plm-testo">${V ? testo.split(TAB).join("") : testo}</p>` +
         `<div class="plm-sim">\\(\\displaystyle \\begin{aligned} ${sim} \\end{aligned}\\)</div>` +
-        `<details class="plm-num" open><summary>${T("Modello numerico con i dati attuali", "Numerical model with the current data")}</summary>` +
+        `<details class="plm-num"${V ? "" : " open"}><summary>${T("Modello numerico con i dati attuali", "Numerical model with the current data")}</summary>` +
         `<div class="plm-num-corpo">${num}</div></details></div>`;
       return H.FONDO.sposta(st, html);
     },

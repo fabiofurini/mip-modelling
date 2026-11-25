@@ -217,3 +217,7 @@ body:has(.gi-app-intera) .gi-app-intera { margin-top: .4em; }
 .md-typeset .gi .plm-dati table.gi-tabella { width: auto; margin: 0 0 .2em; }
 .md-typeset .gi .plm-dati table.gi-tabella td, .md-typeset .gi .plm-dati table.gi-tabella th { min-width: 2.2em; padding: .05em .4em; }
 .md-typeset .gi .plm-dati table.gi-tabella td:first-child, .md-typeset .gi .plm-dati table.gi-tabella th:first-child { text-align: left; }
+
+/* home (data-vetrina): app compatta in una schermata, come in Modellazione PNL (Fabio, 26/11/2026) */
+.gi[data-vetrina] .gi-board { aspect-ratio: 5 / 2; }
+.gi[data-vetrina] .plm-sol { margin-top: .6em; }
