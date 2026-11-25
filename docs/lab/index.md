@@ -5,7 +5,7 @@ hide:
 
 # Interactive lab
 
-The ideas of the course, hands on: relaxations, bounds, heuristics and formulations.
+The apps show relaxations, bounds, heuristics and formulations of the course.
 Pick an app: it opens full page. Everything runs in the browser, without Gurobi;
 the problems are small, so that every step can be seen.
 
