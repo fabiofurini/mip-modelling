@@ -2,7 +2,7 @@
  *
  *   mip-lotti   problema 9.1 (lotti con costo fisso di lancio), istanza del capitolo: 5 giorni,
  *               d = 20, 10, 30, 40, 10; p = 2, 3, 2, 3, 2; q = 50; h = 1; r_0 = r_n = 0;
- *               M_t = domanda residua (110, 90, 80, 50, 10). Ottimo z = 390, z(LP+) = 353,64.
+ *               M_t = domanda residua (110, 90, 80, 50, 10). Ottimo z = 390, z(LP+) = 3890/11 (numeri non interi come frazioni, FR).
  *               Cursori: costo di lancio q, costo di giacenza h, domanda del giorno 5.
  *
  * Stesso formato dell'app di copertina di Modellazione PL (gi-pl-app.js, ricetta «pl-produzione»):
@@ -23,8 +23,57 @@
   const D = () => window.GI_MIP_D;
   window.GI_RICETTE = window.GI_RICETTE || {};
   const n = (x, c = 2) => GI.num(x, c), nt = (x, c = 2) => GI.numTxt(x, c);
-  const euro = (x, c = 2) => nt(x, c) + " €";
   const tx = (s) => `\\(${s}\\)`;
+
+  // ================================================================ numeri non interi come frazioni
+  /* Fabio, 25/11/2026: niente numeri con la virgola, frazioni. Un valore in virgola mobile del simplesso diventa la
+   * frazione p/q delle frazioni continue, con q <= maxDen e |p/q - x| < tol; se non ce n'è una, resta il decimale. */
+  const razionale = (x, maxDen = 1000, tol = 1e-9) => {
+    if (!isFinite(x)) return null;
+    const s = x < 0 ? -1 : 1, a0 = Math.abs(x);
+    let h1 = 1, h2 = 0, k1 = 0, k2 = 1, v = a0;
+    for (let i = 0; i < 40; i++) {
+      const a = Math.floor(v), h = a * h1 + h2, k = a * k1 + k2;
+      if (k > maxDen) break;
+      if (Math.abs(h / k - a0) < tol) return [s * h, k];
+      h2 = h1; h1 = h; k2 = k1; k1 = k;
+      if (v - a < 1e-15) break;
+      v = 1 / (v - a);
+    }
+    return null;
+  };
+  const mcd = (a, b) => { a = Math.abs(a); b = Math.abs(b); while (b) [a, b] = [b, a % b]; return a || 1; };
+  const FR = {
+    /** per il TeX: intero, \frac{p}{q}, oppure il decimale con c cifre */
+    tex(x, c = 2) {
+      const r = razionale(x);
+      if (!r) return n(x, c);
+      if (r[1] === 1) return n(r[0], 0);
+      return `${r[0] < 0 ? "-" : ""}\\frac{${Math.abs(r[0])}}{${r[1]}}`;
+    },
+    /** per il testo semplice (grafici, celle): «3/11» */
+    txt(x, c = 2) {
+      const r = razionale(x);
+      if (!r) return nt(x, c);
+      if (r[1] === 1) return nt(r[0], 0);
+      return `${r[0] < 0 ? "−" : ""}${Math.abs(r[0])}/${r[1]}`;
+    },
+    /** importo in euro, come TeX in linea */
+    euro: (x) => `\\(${FR.tex(x)}\\) €`,
+    /** importo in euro, testo semplice */
+    euroTxt: (x) => `${FR.txt(x)} €`,
+    /** gap (a - b)/a come frazione esatta (da a e b razionali) e percentuale intera: «\frac{40}{429} \approx 9\,\%» */
+    gap(a, b) {
+      const ra = razionale(a), rb = razionale(b), pct = `${Math.round(100 * (a - b) / a)}\\,\\%`;
+      if (!ra || !rb) return `\\approx ${pct}`;
+      // (pa/qa - pb/qb) / (pa/qa) = (pa qb - pb qa) / (pa qb)
+      let p = ra[0] * rb[1] - rb[0] * ra[1], q = ra[0] * rb[1];
+      if (p === 0) return "0";
+      const g = mcd(p, q); p /= g; q /= g;
+      if (q < 0) { p = -p; q = -q; }
+      return q === 1 ? `${p}` : q <= 10000 ? `\\frac{${p}}{${q}} \\approx ${pct}` : `\\approx ${pct}`;
+    },
+  };
 
   // ================================================================ lo stile delle figure dei capitoli
   const FIG = () => (M.scuro()
@@ -202,7 +251,7 @@
       b.innerHTML = GI.mj(testo);
       if (html) GI.typeset(b);
     },
-    z: (x, c = 2) => (Math.abs(x) < 0.5 * Math.pow(10, -c) ? "—" : GI.numTxt(x, c)),
+    z: (x, c = 2) => (Math.abs(x) < 0.5 * Math.pow(10, -c) ? "—" : FR.txt(x, c)),
     tab: (titolo, intest, righe) => `<div class="plm-sol-t">${titolo ? `<p>${titolo}</p>` : ""}${M.tab(intest, righe)}</div>`,
     blocco: (valore, tabelle = [], nota = "") => `<div class="plm-sol-val">${valore}</div>` +
       (tabelle.length ? `<div class="plm-sol-tabs">${tabelle.join("")}</div>` : "") + (nota ? `<p class="plm-sol-nota">${nota}</p>` : ""),
@@ -289,8 +338,8 @@
       { nome: T("\\text{lancio}\\ q_t", "\\text{setup}\\ q_t"), min: 10, max: 250, step: 10, val: 50,
         fmt: (x) => T(`${nt(x, 0)} € per lancio`, `${nt(x, 0)} € per setup`),
         descr: T("costo fisso di lancio, uguale in tutti i giorni", "fixed setup cost, the same on every day") },
-      { nome: T("\\text{giacenza}\\ h_t", "\\text{holding}\\ h_t"), min: 0.5, max: 5, step: 0.5, val: 1,
-        fmt: (x) => T(`${nt(x, 1)} € per unità e giorno`, `${nt(x, 1)} € per unit and day`),
+      { nome: T("\\text{giacenza}\\ h_t", "\\text{holding}\\ h_t"), min: 1, max: 5, step: 1, val: 1,
+        fmt: (x) => T(`${nt(x, 0)} € per unità e giorno`, `${nt(x, 0)} € per unit and day`),
         descr: T("costo di tenere un'unità in magazzino a fine giorno, uguale nei giorni 1–4", "cost of keeping one unit in stock at the end of a day, the same on days 1–4") },
       { nome: T("\\text{domanda}\\ d_5", "\\text{demand}\\ d_5"), min: 5, max: 60, step: 5, val: 10,
         fmt: (x) => T(`${nt(x, 0)} unità`, `${nt(x, 0)} units`),
@@ -320,7 +369,7 @@
           { cols: col(Mo.Y, nG), rel: "\\in", rhs: "\\{0, 1\\}" }] },
         T(`Il modello MILP dell'istanza: ${nv} variabili, ${nc} vincoli.`, `The MILP model of the instance: ${nv} variables, ${nc} constraints.`));
       const giorni = ["\\(t\\)", ...Mo.d.map((_, t) => String(t + 1))];
-      const riga = (nome, a) => [nome, ...a.map((x) => (x === null ? "—" : nt(x, 2)))];
+      const riga = (nome, a) => [nome, ...a.map((x) => (x === null ? "—" : FR.txt(x)))];
       const TABS = DV.tabelle(DV.tab(T("Dati per giorno", "Data by day"), giorni, [
         riga(T("\\(d_t\\) (unità)", "\\(d_t\\) (units)"), Mo.d),
         riga("\\(p_t\\) (€)", LOT.p),
@@ -331,11 +380,11 @@
       const testo = T(`<b>Il problema.</b> Decidiamo quanto produrre in ogni giorno di un orizzonte di ${nG} giorni, e di conseguenza quanto resta in magazzino. ` +
         "L'obiettivo è minimizzare il costo totale di produzione, di lancio e di magazzino. I vincoli: la domanda di ogni giorno è servita per intero, e non si produce in un giorno senza pagarne il costo fisso di lancio." +
         "<br><b>Variabili:</b> \\(x_t \\ge 0\\): unità prodotte nel giorno \\(t\\); \\(s_t \\ge 0\\): unità a scorta alla fine del giorno \\(t\\), per \\(t \\le n-1\\); \\(y_t \\in \\{0,1\\}\\): vale 1 se nel giorno \\(t\\) si lancia la produzione." +
-        `<br><b>Dati:</b> \\(n = ${nG}\\): numero di giorni; \\(d_t\\): domanda del giorno \\(t\\) (unità); \\(p_t\\): costo di produzione di un'unità nel giorno \\(t\\) (€); \\(q_t\\): costo fisso di lancio del giorno \\(t\\), uguale in tutti i giorni: \\(${DV.f(Mo.q)}\\) €; \\(h_t\\): costo di tenere un'unità in magazzino alla fine del giorno \\(t\\), per \\(t \\le n-1\\): \\(${DV.f(Mo.h)}\\) €; \\(M_t\\): big-M del giorno \\(t\\), la domanda che resta da coprire dal giorno \\(t\\) in poi, \\(M_t = d_t + \\dots + d_n + r_n\\) (unità); \\(r_0 = ${LOT.r0}\\): scorta iniziale (unità); \\(r_n = ${LOT.rn}\\): scorta finale richiesta (unità). I valori per giorno sono nella tabella.` + TABS,
+        `<br><b>Dati:</b> \\(n = ${nG}\\): numero di giorni; \\(d_t\\): domanda del giorno \\(t\\) (unità); \\(p_t\\): costo di produzione di un'unità nel giorno \\(t\\) (€); \\(q_t\\): costo fisso di lancio del giorno \\(t\\), uguale in tutti i giorni: \\(${FR.tex(Mo.q)}\\) €; \\(h_t\\): costo di tenere un'unità in magazzino alla fine del giorno \\(t\\), per \\(t \\le n-1\\): \\(${FR.tex(Mo.h)}\\) €; \\(M_t\\): big-M del giorno \\(t\\), la domanda che resta da coprire dal giorno \\(t\\) in poi, \\(M_t = d_t + \\dots + d_n + r_n\\) (unità); \\(r_0 = ${LOT.r0}\\): scorta iniziale (unità); \\(r_n = ${LOT.rn}\\): scorta finale richiesta (unità). I valori per giorno sono nella tabella.` + TABS,
       `<b>The problem.</b> We decide how much to produce on each day of a ${nG}-day horizon, and consequently how much is left in stock. ` +
         "The objective is to minimize the total cost of production, setups and stock. The constraints: the demand of every day is served in full, and nothing is produced on a day without paying its fixed setup cost." +
         "<br><b>Variables:</b> \\(x_t \\ge 0\\): units produced on day \\(t\\); \\(s_t \\ge 0\\): units in stock at the end of day \\(t\\), for \\(t \\le n-1\\); \\(y_t \\in \\{0,1\\}\\): equals 1 if production is set up on day \\(t\\)." +
-        `<br><b>Data:</b> \\(n = ${nG}\\): number of days; \\(d_t\\): demand of day \\(t\\) (units); \\(p_t\\): production cost of one unit on day \\(t\\) (€); \\(q_t\\): fixed setup cost of day \\(t\\), the same on every day: \\(${DV.f(Mo.q)}\\) €; \\(h_t\\): cost of keeping one unit in stock at the end of day \\(t\\), for \\(t \\le n-1\\): \\(${DV.f(Mo.h)}\\) €; \\(M_t\\): big-M of day \\(t\\), the demand still to be covered from day \\(t\\) on, \\(M_t = d_t + \\dots + d_n + r_n\\) (units); \\(r_0 = ${LOT.r0}\\): initial stock (units); \\(r_n = ${LOT.rn}\\): required final stock (units). The values by day are in the table.` + TABS);
+        `<br><b>Data:</b> \\(n = ${nG}\\): number of days; \\(d_t\\): demand of day \\(t\\) (units); \\(p_t\\): production cost of one unit on day \\(t\\) (€); \\(q_t\\): fixed setup cost of day \\(t\\), the same on every day: \\(${FR.tex(Mo.q)}\\) €; \\(h_t\\): cost of keeping one unit in stock at the end of day \\(t\\), for \\(t \\le n-1\\): \\(${FR.tex(Mo.h)}\\) €; \\(M_t\\): big-M of day \\(t\\), the demand still to be covered from day \\(t\\) on, \\(M_t = d_t + \\dots + d_n + r_n\\) (units); \\(r_0 = ${LOT.r0}\\): initial stock (units); \\(r_n = ${LOT.rn}\\): required final stock (units). The values by day are in the table.` + TABS);
       return FONDO.sposta(st, modello(testo, sim, num, "lotti"));
     },
     disegna(crea, R, v, C, S) {
@@ -346,7 +395,7 @@
       // 1. produzione, domanda, scorte e giorni con lancio
       const vmax = Math.max(...R.x, ...Mo.d, ...R.s, 10);
       const A = figura(crea, { X0: MF.sx, X1: S.W - MF.dx, Y0: S.H - MF.alto - hTop, Y1: S.H - MF.alto, xa: 0.4, xb: nG + 0.6, ya: 0, yb: vmax * 1.6,
-        titolo: T(`Piano ottimo: produzione, domanda e scorte (z = ${euro(R.z)})`, `Optimal plan: production, demand and stock (z = ${euro(R.z)})`),
+        titolo: T(`Piano ottimo: produzione, domanda e scorte (z = ${FR.euroTxt(R.z)})`, `Optimal plan: production, demand and stock (z = ${FR.euroTxt(R.z)})`),
         ny: T("unità", "units") }, C, { nTy: 5, fx, ymax: vmax * 1.12 });
       giorni.forEach((g, t) => {
         if (!R.y[t]) return;
@@ -359,7 +408,7 @@
         M.rett(crea, A.X(g - 0.26), A.Y(0), A.X(g + 0.26), A.Y(q), { fillColor: F.teal, fillOpacity: 1, strokeColor: F.teal, strokeWidth: 0.5 });
         // il valore dentro la barra, in cima (sopra la barra coprirebbe i pallini della domanda); fuori se la barra è bassa
         const dentro = A.Y(q) - A.Y(0) > 20;
-        M.scritta(crea, A.X(g), A.Y(q) + (dentro ? -4 : 3), nt(q, 1), { anchorY: dentro ? "top" : "bottom", fontSize: 11.5,
+        M.scritta(crea, A.X(g), A.Y(q) + (dentro ? -4 : 3), FR.txt(q, 1), { anchorY: dentro ? "top" : "bottom", fontSize: 11.5,
           strokeColor: dentro ? "#ffffff" : F.teal, cssStyle: "font-weight:700" });
       });
       lineaPunti(crea, A, giorni, Mo.d, F.rosso, { dash: 2, spessore: 1.8 });
@@ -375,10 +424,10 @@
         if (R.y[t]) M.rett(crea, B.X(g - L - 0.02), B.Y(0), B.X(g - 0.02), B.Y(1), { fillColor: F.navy, fillOpacity: 1, strokeColor: F.navy, strokeWidth: 0.5 });
         const yl = R.yLP ? R.yLP[t] : 0;
         if (yl > 1e-9) M.rett(crea, B.X(g + 0.02), B.Y(0), B.X(g + L + 0.02), B.Y(yl), { fillColor: F.rosso, fillOpacity: 1, strokeColor: F.rosso, strokeWidth: 0.5 });
-        if (yl > 1e-9) M.scritta(crea, B.X(g + L / 2 + 0.02), B.Y(yl) + 3, nt(yl, 2), { anchorY: "bottom", fontSize: 11, strokeColor: F.rosso });
+        if (yl > 1e-9) M.scritta(crea, B.X(g + L / 2 + 0.02), B.Y(yl) + 3, FR.txt(yl, 2), { anchorY: "bottom", fontSize: 11, strokeColor: F.rosso });
       });
       legendaRiga(crea, B, [[F.navy, T("yₜ nell'ottimo intero", "yₜ in the integer optimum"), "barra"],
-        [F.rosso, T(`ỹₜ nel rilassamento (z(LP⁺) = ${R.zLP === null ? "—" : euro(R.zLP)})`, `ỹₜ in the relaxation (z(LP⁺) = ${R.zLP === null ? "—" : euro(R.zLP)})`), "barra"]], C);
+        [F.rosso, T(`ỹₜ nel rilassamento (z(LP⁺) = ${R.zLP === null ? "—" : FR.euroTxt(R.zLP)})`, `ỹₜ in the relaxation (z(LP⁺) = ${R.zLP === null ? "—" : FR.euroTxt(R.zLP)})`), "barra"]], C);
     },
     legenda: () => [],
     letture(R, v, st, C) {
@@ -403,14 +452,13 @@
         [T("\\(\\tilde s_t\\) (unità)", "\\(\\tilde s_t\\) (units)"), ...R.s.map((x) => SOL.z(x)), ""],
         ["\\(\\tilde y_t\\)", ...R.y.map(String)],
       ];
-      const g = R.gap === null ? "—" : nt(100 * R.gap, 1) + " %";
-      const nota = T(`«—»: valore nullo; \\(s_${nG}\\) non è una variabile (a fine orizzonte la scorta è il dato \\(r_n = ${LOT.rn}\\)).`,
-        `«—»: zero value; \\(s_${nG}\\) is not a variable (at the end of the horizon the stock is the datum \\(r_n = ${LOT.rn}\\)).`) +
+      const g = R.gap === null ? "—" : tx(FR.gap(R.z, R.zLP));
+      const nota = T("«—»: valore nullo.", "«—»: zero value.") +
         (R.nOtt > 1 ? " " + T(`Ci sono ${R.nOtt} piani ottimi con lo stesso costo: si mostra quello con meno lanci.`, `There are ${R.nOtt} optimal plans with the same cost: the one with fewer setups is shown.`) : "");
       return SOL.blocco(
-        `${T("Costo ottimo", "Optimal cost")} \\(z(\\mathrm{MILP})\\): <b>${euro(R.z)}</b> = ${T("produzione", "production")} ${euro(R.prod)} + ` +
-        `${T("lanci", "setups")} ${nL} × ${euro(Mo.q, 0)} = ${euro(R.lanci)} + ${T("magazzino", "holding")} ${euro(R.mag)}<br>` +
-        `${T("Rilassamento continuo", "Continuous relaxation")} \\(z(\\mathrm{LP}^+)\\): <b>${R.zLP === null ? "—" : euro(R.zLP)}</b> · gap \\((z(\\mathrm{MILP}) - z(\\mathrm{LP}^+))/z(\\mathrm{MILP})\\) = <b>${g}</b>`,
+        `${T("Costo ottimo", "Optimal cost")} \\(z(\\mathrm{MILP})\\): <b>${FR.euro(R.z)}</b> = ${T("produzione", "production")} ${FR.euro(R.prod)} + ` +
+        `${T("lanci", "setups")} ${nL} × ${FR.euro(Mo.q)} = ${FR.euro(R.lanci)} + ${T("magazzino", "holding")} ${FR.euro(R.mag)}<br>` +
+        `${T("Rilassamento continuo", "Continuous relaxation")} \\(z(\\mathrm{LP}^+)\\): <b>${R.zLP === null ? "—" : FR.euro(R.zLP)}</b> · gap \\((z(\\mathrm{MILP}) - z(\\mathrm{LP}^+))/z(\\mathrm{MILP})\\) = <b>${g}</b>`,
         [SOL.tab(T("Piano ottimo per giorno", "Optimal plan by day"), intest, righe)], nota);
     },
     domanda: T("Alza il costo di lancio \\(q_t\\): da quale valore conviene un solo lancio, il primo giorno? Abbassalo a 10 €: quale giorno guadagna un lancio? Porta la giacenza \\(h_t\\) oltre 2 €: perché il lancio in più cade proprio nel giorno 4? Con \\(d_5\\) oltre 25 unità anche il giorno 5 ha il suo lancio: perché la soglia è \\(q_t/(2 h_t)\\)? Guarda il gap: quando il rilassamento si avvicina all'ottimo intero?",
@@ -501,5 +549,5 @@
 
   window.GI_RICETTE["mip-lotti"] = () => ricettaVoce({ titolo: T("Lotti con costo fisso di lancio", "Lot sizing with a fixed setup cost") }, vLotti);
   // per le prove automatiche: solo il calcolo
-  window.GI_MIP_LOTTI = { modelloLotti, calcola };
+  window.GI_MIP_LOTTI = { modelloLotti, calcola, FR };
 })();
