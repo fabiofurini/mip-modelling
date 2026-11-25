@@ -33,9 +33,9 @@ Prerequisites: [Integer Linear Programming](https://fabiofurini.github.io/intege
 <!-- collana-app -->
 ## Try it now
 
-Three models of the course solved to optimality in the browser: capacitated facility location, lot sizing with a setup cost and projects with logical constraints. Choose the model at the top right, change the data with the sliders and watch the optimal solution, the binaries at 1, the continuous relaxation and the gap.
+The integer points inside the polyhedron, the optimum of the continuous relaxation and the integer optimum: move the constraints and the objective function with the sliders and see how wide the gap between the two is.
 
-<div class="gi" data-grafico="modelli-ottimi"></div>
+<div class="gi" data-grafico="punti-interi"></div>
 
 [:material-gesture-tap: More apps in the lab](lab/index.md){ .md-button }
 <!-- /collana-app -->
