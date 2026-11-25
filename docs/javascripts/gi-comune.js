@@ -291,6 +291,46 @@
   /** TeX di un vincolo {a, b}: "2x_1 + 3x_2 \le 12" (rel per scegliere \ge con i segni cambiati) */
   const vincoloTex = (v, vars) => `${lin(v.a, vars)} \\le ${v.b}`;
 
+  /** modello di PL come nelle dispense (stesso codice in PL gi-cap1-5.js, PLI e MIP gi-comune.js):
+   *  ogni x_j nella sua colonna, coefficienti allineati a destra (1 non si scrive, 0 lascia la
+   *  colonna vuota), segni + − e relazioni ≤ = ≥ in colonna, termini noti allineati a destra.
+   *  M = { senso: "max" | "min", c: [...], A: [[...], ...], b: [...],
+   *        rel: ["<=" | "=" | ">=", ...] (assente: tutti <=), x: nomi TeX (assente: x_1 … x_n),
+   *        dominio: "nonneg" (assente: riga x_1, …, x_n ≥ 0) | "interi" (x_1, …, x_n ∈ Z_+) | TeX | null }
+   *  Coefficienti: numeri, oppure { s: segno (-1, 0, 1), t: TeX del valore assoluto } (frazioni,
+   *  colori); termini noti: numeri o TeX. Restituisce un alignedat (senza \( \)). */
+  const modelloPL = (M) => {
+    const n = M.c.length, x = M.x || Array.from({ length: n }, (_, j) => `x_${j + 1}`);
+    const co = (v) => (typeof v === "number" ? { s: Math.sign(v), t: String(Math.abs(v)) } : v);
+    const REL = { "<=": "\\le", ">=": "\\ge", "=": "=" };
+    // colonne: etichetta (r) | spazio (l) | x_1 (r) | segno (l) | x_2 (r) | … | x_n (r) | relazione (l) | termine noto (r)
+    const termini = (riga) => {
+      const out = [];
+      let primo = true;
+      riga.forEach((v, j) => {
+        const q = co(v);
+        if (!q.s) { if (j) out.push(""); out.push(""); return; }
+        const t = (q.t === "1" ? "" : q.t) + x[j];
+        if (j) out.push(primo ? "" : q.s < 0 ? "{}-{}" : "{}+{}");
+        out.push((primo && q.s < 0 ? "{-}" : "") + t);   // {-}: meno unario, attaccato
+        primo = false;
+      });
+      return out;
+    };
+    const righe = [[`\\${M.senso || "max"}`, "\\quad", ...termini(M.c)].join(" & ")];
+    M.A.forEach((r, i) => {
+      const rel = REL[(M.rel || [])[i] || "<="];
+      righe.push(["", "", ...termini(r), `{}${rel}{}`, String(M.b[i])].join(" & "));
+    });
+    const dom = M.dominio === undefined ? "nonneg" : M.dominio;
+    if (dom === "nonneg" || dom === "interi") {
+      const cel = [];
+      x.forEach((v, j) => { if (j) cel.push(""); cel.push(j < n - 1 ? `${v},` : v); });
+      righe.push(["", "", ...cel, dom === "interi" ? "{}\\in{}" : "{}\\ge{}", dom === "interi" ? "\\mathbb{Z}_+" : "0"].join(" & "));
+    } else if (dom) righe.push(`& \\rlap{${dom}}`);
+    return `\\begin{alignedat}{${n + 2}}${righe.join(" \\\\ ")}\\end{alignedat}`;
+  };
+
   window.GI_MIP = {
     T, scuro, COL, tinta, fondo, OPZ,
     inputDi, ctrlDi, intervallo, intero, passoK, pannello,
@@ -298,6 +338,6 @@
     ridisegna, rett, linea, scritta, area, pallino, adatta, tab,
     casuale, mescola, seme,
     gcd, Q, Qs, Qv, Qeq, Qadd, Qsub, Qmul, Qfloor, Qceil, Qintero, Qtex, SEP, coppia, coppiaQ, lin,
-    nonneg, verticiEsatti, taglia, poligono, puntiInteri, lp2, ip2, involucro, vincoloTex,
+    nonneg, verticiEsatti, taglia, poligono, puntiInteri, lp2, ip2, involucro, vincoloTex, modelloPL,
   };
 })();
