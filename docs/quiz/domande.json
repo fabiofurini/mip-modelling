@@ -1541,14 +1541,14 @@
    },
    "corretta": 1,
    "it": {
-    "testo": "Lot sizing senza capacità (decidere in quali periodi produrre per coprire la domanda, con costo di lancio e di magazzino). Che rapporto c'è fra la regola «least unit cost» e la procedura di Wagner–Whitin?",
+    "testo": "Lot sizing senza capacità (decidere in quali periodi produrre per coprire la domanda, con costo di setup e di magazzino). Che rapporto c'è fra la regola «least unit cost» e la procedura di Wagner–Whitin?",
     "opzioni": [
      "Wagner–Whitin è il duale costruito a mano della least unit cost, e ne dà un lower bound",
      "La least unit cost è un'euristica, e il suo valore è solo un bound; Wagner–Whitin è un algoritmo esatto",
-     "Sono due nomi della stessa euristica, che sceglie i lanci al costo medio per unità più basso",
+     "Sono due nomi della stessa euristica, che sceglie i setup al costo medio per unità più basso",
      "La least unit cost è esatta su questo modello, Wagner–Whitin è un'euristica di miglioramento"
     ],
-    "spiegazione": "Wagner–Whitin risolve all'ottimo il lot sizing senza capacità con la programmazione dinamica, in tempo polinomiale; la least unit cost decide un lancio alla volta e può fermarsi sopra l'ottimo."
+    "spiegazione": "Wagner–Whitin risolve all'ottimo il lot sizing senza capacità con la programmazione dinamica, in tempo polinomiale; la least unit cost decide un setup alla volta e può fermarsi sopra l'ottimo."
    },
    "en": {
     "testo": "Uncapacitated lot sizing (choose in which periods to produce to cover the demand, with setup and holding costs). What is the relation between the \"least unit cost\" rule and the Wagner–Whitin procedure?",
@@ -1871,7 +1871,7 @@
    },
    "corretta": 2,
    "it": {
-    "testo": "Lot sizing con lancio $f = 50$ e magazzino $h = 1$ per unità e periodo; domande $d = (20, 10, 30)$. La regola least unit cost, partendo dal periodo 1, calcola il costo medio per unità coprendo $1$, $2$ o $3$ periodi. Quanto vale coprendo i primi **due** periodi?",
+    "testo": "Lot sizing con setup $f = 50$ e magazzino $h = 1$ per unità e periodo; domande $d = (20, 10, 30)$. La regola least unit cost, partendo dal periodo 1, calcola il costo medio per unità coprendo $1$, $2$ o $3$ periodi. Quanto vale coprendo i primi **due** periodi?",
     "opzioni": [
      "$60$",
      "$5/3$",
@@ -4841,7 +4841,7 @@
    },
    "corretta": 3,
    "it": {
-    "testo": "Lot sizing con costo fisso su $4$ periodi: domande $d = (30, 20, 40, 10)$, scorta iniziale $r_0 = 0$, scorta finale richiesta $r_n = 0$; $x_t$ è la produzione e $y_t = 1$ se si lancia la produzione nel periodo $t$. Quanto vale il più piccolo $M_3$ nel vincolo $x_3 \\le M_3\\, y_3$ che non taglia soluzioni ottime?",
+    "testo": "Lot sizing con costo fisso su $4$ periodi: domande $d = (30, 20, 40, 10)$, scorta iniziale $r_0 = 0$, scorta finale richiesta $r_n = 0$; $x_t$ è la produzione e $y_t = 1$ se si attiva la produzione nel periodo $t$. Quanto vale il più piccolo $M_3$ nel vincolo $x_3 \\le M_3\\, y_3$ che non taglia soluzioni ottime?",
     "opzioni": [
      "$100$",
      "$40$",
@@ -4878,7 +4878,7 @@
      "Entrambi i versi sono imposti dal vincolo $x_t \\le M_t\\, y_t$",
      "$y_t = 0 \\Rightarrow x_t = 0$ è imposto; $x_t = 0 \\Rightarrow y_t = 0$ vale solo in qualche ottimo"
     ],
-    "spiegazione": "Il vincolo dice «senza lancio non si produce»; il verso opposto viene dall'ottimalità, perché porre $y_t = 0$ fa risparmiare $q_t > 0$. Con $q_t = 0$ si direbbe solo «esiste un ottimo»."
+    "spiegazione": "Il vincolo dice «senza setup non si produce»; il verso opposto viene dall'ottimalità, perché porre $y_t = 0$ fa risparmiare $q_t > 0$. Con $q_t = 0$ si direbbe solo «esiste un ottimo»."
    },
    "en": {
     "testo": "Lot sizing: $x_t \\ge 0$ is the production of period $t$, $y_t = 1$ if set up (fixed cost $q_t > 0$), with the constraint $x_t \\le M_t\\, y_t$, minimisation problem. What holds?",
@@ -5111,14 +5111,14 @@
    },
    "corretta": 3,
    "it": {
-    "testo": "Lot sizing con lancio $f = 50$ e magazzino $h = 1$ per unità e periodo, domande $d = (20, 10)$, nessuna scorta iniziale. Piano A: un lancio nel periodo 1 che copre entrambi i periodi. Piano B: un lancio per periodo. Qual è il costo dei due piani (escluso il costo unitario di produzione, uguale per entrambi)?",
+    "testo": "Lot sizing con setup $f = 50$ e magazzino $h = 1$ per unità e periodo, domande $d = (20, 10)$, nessuna scorta iniziale. Piano A: un setup nel periodo 1 che copre entrambi i periodi. Piano B: un setup per periodo. Qual è il costo dei due piani (escluso il costo unitario di produzione, uguale per entrambi)?",
     "opzioni": [
      "A $70$, B $100$",
      "A $50$, B $100$",
      "A $60$, B $50$",
      "A $60$, B $100$"
     ],
-    "spiegazione": "A paga un lancio ($50$) e tiene $10$ unità un periodo in magazzino ($10$): $60$. B paga due lanci: $100$. $50$ dimentica il magazzino, $70$ conta il magazzino su $20$ unità invece che sulle $10$ del periodo 2."
+    "spiegazione": "A paga un setup ($50$) e tiene $10$ unità un periodo in magazzino ($10$): $60$. B paga due setup: $100$. $50$ dimentica il magazzino, $70$ conta il magazzino su $20$ unità invece che sulle $10$ del periodo 2."
    },
    "en": {
     "testo": "Lot sizing with setup $f = 50$ and holding $h = 1$ per unit and period, demands $d = (20, 10)$, no initial stock. Plan A: one setup in period 1 covering both periods. Plan B: one setup per period. What do the two plans cost (excluding the unit production cost, equal for both)?",
@@ -9011,7 +9011,7 @@
    },
    "corretta": 2,
    "it": {
-    "testo": "Lot sizing senza capacità: domande $d = (20, 10, 30, 40, 10)$, costo di lancio $f = 50$, costo di magazzino $h = 1$ per unità e periodo. La regola least unit cost, dal periodo 1, confronta il costo medio per unità di coprire $1$ periodo ($50/20$) o $2$ periodi ($(50 + 10)/30$). Quale sceglie, e con che costo medio?",
+    "testo": "Lot sizing senza capacità: domande $d = (20, 10, 30, 40, 10)$, costo di setup $f = 50$, costo di magazzino $h = 1$ per unità e periodo. La regola least unit cost, dal periodo 1, confronta il costo medio per unità di coprire $1$ periodo ($50/20$) o $2$ periodi ($(50 + 10)/30$). Quale sceglie, e con che costo medio?",
     "opzioni": [
      "$3$ periodi, costo medio $1{,}5$",
      "$1$ periodo, costo medio $2{,}5$",
@@ -9048,7 +9048,7 @@
      "Wagner–Whitin dà un lower bound, least unit cost un upper bound",
      "Wagner–Whitin è un'euristica più veloce; least unit cost è esatta"
     ],
-    "spiegazione": "Wagner–Whitin risolve all'ottimo il lot sizing senza capacità in tempo polinomiale; la regola least unit cost guarda un lancio alla volta e può sbagliare (sull'esempio del corso $200$ contro $170$)."
+    "spiegazione": "Wagner–Whitin risolve all'ottimo il lot sizing senza capacità in tempo polinomiale; la regola least unit cost guarda un setup alla volta e può sbagliare (sull'esempio del corso $200$ contro $170$)."
    },
    "en": {
     "testo": "Uncapacitated lot sizing. What is the difference between the least unit cost rule and the Wagner–Whitin procedure?",
@@ -9058,7 +9058,7 @@
      "Wagner–Whitin gives a lower bound, least unit cost an upper bound",
      "Wagner–Whitin is a faster heuristic; least unit cost is exact"
     ],
-    "spiegazione": "Wagner–Whitin solves uncapacitated lot sizing to optimality in polynomial time; the least unit cost rule looks at one launch at a time and may fail (on the course example $200$ against $170$)."
+    "spiegazione": "Wagner–Whitin solves uncapacitated lot sizing to optimality in polynomial time; the least unit cost rule looks at one setup at a time and may fail (on the course example $200$ against $170$)."
    }
   },
   {

@@ -953,8 +953,8 @@ window.QUIZ_GEN = window.QUIZ_GEN || {};
         if (dd.length === 3) { opz = [M].concat(dd); break; }
       }
       var testo = T(l,
-        "Lot sizing con costo fisso di lancio su $n = " + n + "$ periodi: domande $d = " + tupla(d) + "$, scorta iniziale $r_0 = " + r0 +
-        "$, scorta finale richiesta $r_n = " + rn + "$, costi di magazzino positivi. $x_t$ è la produzione del periodo $t$, $y_t = 1$ se nel periodo si lancia la produzione, e il lancio si modella con $x_t \\le M_t\\, y_t$. Qual è il più piccolo $M_{" + t + "}$, letto dai dati, che non taglia soluzioni ottime?",
+        "Lot sizing con costo fisso di setup su $n = " + n + "$ periodi: domande $d = " + tupla(d) + "$, scorta iniziale $r_0 = " + r0 +
+        "$, scorta finale richiesta $r_n = " + rn + "$, costi di magazzino positivi. $x_t$ è la produzione del periodo $t$, $y_t = 1$ se nel periodo si attiva la produzione, e il setup si modella con $x_t \\le M_t\\, y_t$. Qual è il più piccolo $M_{" + t + "}$, letto dai dati, che non taglia soluzioni ottime?",
         "Lot sizing with a fixed setup cost over $n = " + n + "$ periods: demands $d = " + tupla(d) + "$, initial stock $r_0 = " + r0 +
         "$, required final stock $r_n = " + rn + "$, positive holding costs. $x_t$ is the production of period $t$, $y_t = 1$ if production is launched in the period, and the setup is modelled with $x_t \\le M_t\\, y_t$. What is the smallest $M_{" + t + "}$, read from the data, that cuts off no optimal solution?");
       var spieg = T(l,
@@ -1268,7 +1268,7 @@ window.QUIZ_GEN = window.QUIZ_GEN || {};
 
   // ================================================================ (media) 9.1 lot sizing: least unit cost
   function luc(d, f, h) {
-    var n = d.length, t = 0, cost = 0, lanci = [];
+    var n = d.length, t = 0, cost = 0, periodiSetup = [];
     while (t < n) {
       var bestL = 1, bestN = 0, bestD = 1;
       for (var L = 1; t + L <= n; L++) {
@@ -1276,9 +1276,9 @@ window.QUIZ_GEN = window.QUIZ_GEN || {};
         for (var i = 0; i < L; i++) { num += h * i * d[t + i]; den += d[t + i]; }
         if (L === 1 || num * bestD < bestN * den) { bestL = L; bestN = num; bestD = den; }
       }
-      cost += bestN; lanci.push(t + 1); t += bestL;
+      cost += bestN; periodiSetup.push(t + 1); t += bestL;
     }
-    return { cost: cost, lanci: lanci };
+    return { cost: cost, setup: setup };
   }
   function wagnerWhitin(d, f, h) {
     var n = d.length, F = [0];
@@ -1305,14 +1305,14 @@ window.QUIZ_GEN = window.QUIZ_GEN || {};
         if (dd.length === 3 && ww < r.cost) { opz = [r.cost].concat(dd); break; }
       }
       var testo = T(l,
-        "Lot sizing senza capacità su $4$ periodi: domande $d = " + tupla(d) + "$, nessuna scorta iniziale, costo di lancio $f = " + f + "$ per ogni periodo in cui si produce, costo di magazzino $h = " + h +
-        "$ per unità e periodo. La regola least unit cost parte dal primo periodo scoperto, sceglie di coprire $1, 2, \\dots$ periodi con il costo medio per unità (lancio più magazzino, diviso le unità) più basso — a parità il numero più piccolo — e riparte dal periodo successivo. Che costo totale di lanci e magazzino ottiene?",
+        "Lot sizing senza capacità su $4$ periodi: domande $d = " + tupla(d) + "$, nessuna scorta iniziale, costo di setup $f = " + f + "$ per ogni periodo in cui si produce, costo di magazzino $h = " + h +
+        "$ per unità e periodo. La regola least unit cost parte dal primo periodo scoperto, sceglie di coprire $1, 2, \\dots$ periodi con il costo medio per unità (setup più magazzino, diviso le unità) più basso — a parità il numero più piccolo — e riparte dal periodo successivo. Che costo totale di setup e magazzino ottiene?",
         "Uncapacitated lot sizing over $4$ periods: demands $d = " + tupla(d) + "$, no initial stock, setup cost $f = " + f + "$ for every period with production, holding cost $h = " + h +
         "$ per unit and period. The least unit cost rule starts from the first uncovered period, chooses to cover $1, 2, \\dots$ periods with the lowest average cost per unit (setup plus holding, divided by the units) — ties: the smallest number — and restarts from the next period. What total setup and holding cost does it obtain?");
       var spieg = T(l,
-        "La regola lancia nei periodi " + r.lanci.join(", ") + " e costa $" + r.cost + "$: è un upper bound. L'ottimo (Wagner–Whitin) vale $" + wagnerWhitin(d, f, h) + "$, quindi l'euristica qui non è ottima: guarda un lancio alla volta e non torna indietro.",
-        "The rule launches in periods " + r.lanci.join(", ") + " and costs $" + r.cost + "$: it is an upper bound. The optimum (Wagner–Whitin) is $" + wagnerWhitin(d, f, h) +
-        "$, so here the heuristic is not optimal: it looks at one launch at a time and never goes back.");
+        "La regola fa il setup nei periodi " + r.periodiSetup.join(", ") + " e costa $" + r.cost + "$: è un upper bound. L'ottimo (Wagner–Whitin) vale $" + wagnerWhitin(d, f, h) + "$, quindi l'euristica qui non è ottima: guarda un setup alla volta e non torna indietro.",
+        "The rule sets up in periods " + r.periodiSetup.join(", ") + " and costs $" + r.cost + "$: it is an upper bound. The optimum (Wagner–Whitin) is $" + wagnerWhitin(d, f, h) +
+        "$, so here the heuristic is not optimal: it looks at one setup at a time and never goes back.");
       return { testo: testo, opzioni: opz.map(function (v) { return math(String(v)); }), corretta: 0, spiegazione: spieg, _v: { d: d, f: f, h: h } };
     }
   });
@@ -2144,20 +2144,20 @@ window.QUIZ_GEN = window.QUIZ_GEN || {};
       var d, x, f, h, c, opz;
       for (var tent = 0; tent < 300; tent++) {
         d = []; for (var t = 0; t < 4; t++) d.push(5 * ri(rng, 2, 8));
-        var lanci = [0].concat(sample(rng, [1, 2, 3], ri(rng, 0, 2))).sort();
+        var periodiSetup = [0].concat(sample(rng, [1, 2, 3], ri(rng, 0, 2))).sort();
         x = [0, 0, 0, 0];
-        lanci.forEach(function (tt, i) { var fine = i + 1 < lanci.length ? lanci[i + 1] : 4; for (var u = tt; u < fine; u++) x[tt] += d[u]; });
+        periodiSetup.forEach(function (tt, i) { var fine = i + 1 < periodiSetup.length ? periodiSetup[i + 1] : 4; for (var u = tt; u < fine; u++) x[tt] += d[u]; });
         f = 10 * ri(rng, 3, 9); h = ri(rng, 1, 3);
         var r = 0, mag = 0; for (t = 0; t < 4; t++) { r += x[t] - d[t]; mag += r; }
-        c = f * lanci.length + h * mag;
-        opz = [c, f * lanci.length, c + f, f * lanci.length + h * mag * 2];
+        c = f * periodiSetup.length + h * mag;
+        opz = [c, f * periodiSetup.length, c + f, f * periodiSetup.length + h * mag * 2];
         if (distinct(opz) && mag > 0) break;
       }
       var testo = T(l,
-        "Lot sizing senza capacità su $4$ periodi, nessuna scorta iniziale né finale: domanda $d = " + tupla(d) + "$, piano di produzione $x = " + tupla(x) + "$. Ogni periodo con $x_t > 0$ paga il lancio $f = " + f + "$ ($x_t \\le M y_t$) e ogni unità in scorta a fine periodo costa $h = " + h + "$. Quanto costa il piano?",
+        "Lot sizing senza capacità su $4$ periodi, nessuna scorta iniziale né finale: domanda $d = " + tupla(d) + "$, piano di produzione $x = " + tupla(x) + "$. Ogni periodo con $x_t > 0$ paga il setup $f = " + f + "$ ($x_t \\le M y_t$) e ogni unità in scorta a fine periodo costa $h = " + h + "$. Quanto costa il piano?",
         "Uncapacitated lot sizing over $4$ periods, no initial or final stock: demand $d = " + tupla(d) + "$, production plan $x = " + tupla(x) + "$. Every period with $x_t > 0$ pays the setup $f = " + f + "$ ($x_t \\le M y_t$) and each unit in stock at the end of a period costs $h = " + h + "$. What does the plan cost?");
       var spieg = T(l,
-        "Lanci: $" + (opz[1] / f) + " \\cdot " + f + " = " + opz[1] + "$; scorte di fine periodo da $r_t = r_{t-1} + x_t - d_t$, sommate e moltiplicate per $" + h + "$: $" + (c - opz[1]) + "$. Totale $" + c + "$.",
+        "Setup: $" + (opz[1] / f) + " \\cdot " + f + " = " + opz[1] + "$; scorte di fine periodo da $r_t = r_{t-1} + x_t - d_t$, sommate e moltiplicate per $" + h + "$: $" + (c - opz[1]) + "$. Totale $" + c + "$.",
         "Setups: $" + (opz[1] / f) + " \\cdot " + f + " = " + opz[1] + "$; end-of-period stocks from $r_t = r_{t-1} + x_t - d_t$, summed and multiplied by $" + h + "$: $" + (c - opz[1]) + "$. Total $" + c + "$.");
       return { testo: testo, opzioni: opz.map(function (v) { return math(String(v)); }), corretta: 0, spiegazione: spieg, _v: { d: d, x: x, f: f, h: h } };
     }

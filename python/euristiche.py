@@ -38,7 +38,7 @@ class Esito:
     makespan: float = None       # maximum of the loads (LPT)
     valore: float = None         # value of the constructed solution
     residuo: float = None        # residual capacity (knapsack)
-    lanci: dict = None           # {period: quantity produced} (lot sizing)
+    setup: dict = None           # {period: quantity produced} (lot sizing)
 
     def assegnazione(self, j: int):
         """Machine (0-based) job j is assigned to, or None."""
@@ -286,7 +286,7 @@ def euristica_zaino(p, w, C) -> Esito:
 def euristica_lotti(domanda, setup, magazzino) -> Esito:
     """Least unit cost period covering for lot sizing.
 
-    At every production launch one covers the number of consecutive periods that
+    At every production setup one covers the number of consecutive periods that
     minimises the average cost per unit produced, then restarts from the first
     uncovered period. This is NOT the Wagner-Whitin algorithm: that is an exact
     dynamic-programming method for the uncapacitated lot-sizing model, and on
@@ -295,7 +295,7 @@ def euristica_lotti(domanda, setup, magazzino) -> Esito:
     """
     T = len(domanda)
     e = Esito(x={}, y=[0] * T)
-    lanci = {}
+    periodi_setup = {}
     t = 0
     while t < T:
         while t < T and domanda[t] == 0:
@@ -317,12 +317,12 @@ def euristica_lotti(domanda, setup, magazzino) -> Esito:
             f"{'period ' + str(t + 1) + ' alone' if quanti == 1 else str(quanti) + ' periods (' + str(t + 1) + '-' + str(t + quanti) + ')'}"
             f", quantity {quantita:g}, unit cost {migliore:.4g} "
             f"(the smallest among the possible coverings).")
-        lanci[t] = quantita
+        periodi_setup[t] = quantita
         e.y[t] = 1
         t += quanti
-    e.lanci = lanci
-    e.valore = sum(setup for t in lanci) + sum(
-        magazzino * max(0, sum(lanci[s] for s in lanci if s <= t) - sum(domanda[:t + 1]))
+    e.periodi_setup = setup
+    e.valore = sum(setup for t in periodi_setup) + sum(
+        magazzino * max(0, sum(periodi_setup[s] for s in periodi_setup if s <= t) - sum(domanda[:t + 1]))
         for t in range(T))
     return e
 

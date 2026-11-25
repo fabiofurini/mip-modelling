@@ -140,8 +140,8 @@ extra_javascript:
   - javascripts/gi-mip-a.js?v=abe79b0aa1
   - javascripts/gi-mip-b.js?v=fc0e411f62
   - javascripts/gi-mip-c.js?v=c52603b50f
-  - javascripts/gi-mip-d.js?v=840a29e463
-  - javascripts/gi-mip-lotti.js?v=8dbd935dac
+  - javascripts/gi-mip-d.js?v=e7ce3a295b
+  - javascripts/gi-mip-lotti.js?v=75b64475b7
   - javascripts/quiz.js?v=be7fae2b85
 
 # the single app pages are not in the menu: the lab is one entry

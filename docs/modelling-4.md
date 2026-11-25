@@ -541,15 +541,15 @@ the notebook is
     z55 = risolvi(m55)
     sol55 = {}
     for t in R(T55):
-        sol55[f"q[{t}]"] = e55.lanci.get(t, 0)
-        sol55[f"y[{t}]"] = 1 if t in e55.lanci else 0
+        sol55[f"q[{t}]"] = e55.periodi_setup.get(t, 0)
+        sol55[f"y[{t}]"] = 1 if t in e55.periodi_setup else 0
     scorta = 0
     for t in R(T55):
         scorta += sol55[f"q[{t}]"] - d55[t]
         sol55[f"I[{t}]"] = scorta
     assert ammissibile(m55, sol55)
     confronta("5.5 lot sizing (least unit cost)", "min", e55.valore, z55,
-              f"runs in periods {[t + 1 for t in sorted(e55.lanci)]}")
+              f"runs in periods {[t + 1 for t in sorted(e55.periodi_setup)]}")
     print("  Wagner-Whitin solves this very model *to optimality* by dynamic programming:")
     print(f"  its value is {frazione(z55)}, not the heuristic one.")
 
@@ -671,7 +671,7 @@ the notebook is
         makespan: float = None       # maximum of the loads (LPT)
         valore: float = None         # value of the constructed solution
         residuo: float = None        # residual capacity (knapsack)
-        lanci: dict = None           # {period: quantity produced} (lot sizing)
+        setup: dict = None           # {period: quantity produced} (lot sizing)
 
         def assegnazione(self, j: int):
             """Machine (0-based) job j is assigned to, or None."""
@@ -919,7 +919,7 @@ the notebook is
     def euristica_lotti(domanda, setup, magazzino) -> Esito:
         """Least unit cost period covering for lot sizing.
 
-        At every production launch one covers the number of consecutive periods that
+        At every production setup one covers the number of consecutive periods that
         minimises the average cost per unit produced, then restarts from the first
         uncovered period. This is NOT the Wagner-Whitin algorithm: that is an exact
         dynamic-programming method for the uncapacitated lot-sizing model, and on
@@ -928,7 +928,7 @@ the notebook is
         """
         T = len(domanda)
         e = Esito(x={}, y=[0] * T)
-        lanci = {}
+        periodi_setup = {}
         t = 0
         while t < T:
             while t < T and domanda[t] == 0:
@@ -950,12 +950,12 @@ the notebook is
                 f"{'period ' + str(t + 1) + ' alone' if quanti == 1 else str(quanti) + ' periods (' + str(t + 1) + '-' + str(t + quanti) + ')'}"
                 f", quantity {quantita:g}, unit cost {migliore:.4g} "
                 f"(the smallest among the possible coverings).")
-            lanci[t] = quantita
+            periodi_setup[t] = quantita
             e.y[t] = 1
             t += quanti
-        e.lanci = lanci
-        e.valore = sum(setup for t in lanci) + sum(
-            magazzino * max(0, sum(lanci[s] for s in lanci if s <= t) - sum(domanda[:t + 1]))
+        e.periodi_setup = setup
+        e.valore = sum(setup for t in periodi_setup) + sum(
+            magazzino * max(0, sum(periodi_setup[s] for s in periodi_setup if s <= t) - sum(domanda[:t + 1]))
             for t in range(T))
         return e
 

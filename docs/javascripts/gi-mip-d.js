@@ -4,8 +4,8 @@
  *   modelli-ottimi   tre voci, ognuna con la sua formula, il suo disegno e i suoi cursori:
  *     localizzazione   problema 8.1 (localizzazione capacitata): 2 sedi, 3 clienti;
  *                      cursori sui costi di installazione i_l e sulle capacità u_l
- *     lotti            problema 9.1 (lotti con costo fisso di lancio): 5 giorni;
- *                      cursori sul costo di lancio q, sul costo di magazzino h e sulla
+ *     lotti            problema 9.1 (lotti con costo fisso di setup): 5 giorni;
+ *                      cursori sul costo di setup q, sul costo di magazzino h e sulla
  *                      domanda del giorno 4
  *     progetti         capitolo 5 (selezione di progetti con vincoli logici): 10 progetti,
  *                      budget b e le sei implicazioni dell'esercizio 2.1 accese e spente
@@ -110,7 +110,7 @@
   function milp(P, bin, piu) {
     const n = P.c.length, cont = n - bin.length, s = P.senso === "max" ? -1 : 1;
     let best = null, nOtt = 0;
-    // a parità di valore: meno binarie a 1 (niente lanci o sedi inutili) o, con piu, di più
+    // a parità di valore: meno binarie a 1 (niente setup o sedi inutili) o, con piu, di più
     const pc = (x) => { let c = 0; while (x) { c += x & 1; x >>= 1; } return c; };
     const maschere = [...Array(1 << bin.length).keys()].sort((a, b) => (piu ? pc(b) - pc(a) : pc(a) - pc(b)) || a - b);
     for (const mask of maschere) {
@@ -237,7 +237,7 @@
       modello: (p) => modelloLoc(p),
     },
     lotti: {
-      etichetta: T("Lotti con lancio", "Lot sizing"),
+      etichetta: T("Lotti con setup", "Lot sizing"),
       cursori: ["q", "h", "d_4"],
       modello: (p) => modelloLot(p),
     },
@@ -274,7 +274,7 @@
     { k: "i2", nome: "i_2", min: 0, max: 150, step: 5, val: 90, colore: "a", cifre: 0 },
     { k: "u1", nome: "u_1", min: 0, max: 80, step: 5, val: 50, colore: "c", cifre: 0 },
     { k: "u2", nome: "u_2", min: 0, max: 80, step: 5, val: 50, colore: "c", cifre: 0 },
-    { k: "q", nome: "q", min: 0, max: 150, step: 5, val: 50, colore: "a", cifre: 0, descr: T("costo fisso di lancio, uguale ogni giorno", "fixed setup cost, the same every day") },
+    { k: "q", nome: "q", min: 0, max: 150, step: 5, val: 50, colore: "a", cifre: 0, descr: T("costo fisso di setup, uguale ogni giorno", "fixed setup cost, the same every day") },
     { k: "h", nome: "h", min: 0, max: 4, step: 0.5, val: 1, colore: "b", cifre: 1, descr: T("costo di magazzino per unità e giorno", "holding cost per unit and day") },
     { k: "d4", nome: "d_4", min: 0, max: 80, step: 5, val: 40, colore: "c", cifre: 0, descr: T("domanda del giorno 4", "demand on day 4") },
     { k: "b", nome: "b", min: 0, max: 30, step: 1, val: 14, colore: "a", cifre: 0, descr: T("budget per i progetti", "budget for the projects") },
@@ -332,7 +332,7 @@
   const DOMANDE = {
     localizzazione: T("Con \\(u_1 = u_2 = 50\\) la domanda totale (60 litri) obbliga ad aprire tutte e due le sedi. Porta \\(u_1\\) a 60 o più: per quali valori di \\(i_1\\) e \\(i_2\\) conviene chiudere una sede? Perché il rilassamento apre le sedi solo «in parte», e il gap cresce con i costi di installazione?",
       "With \\(u_1 = u_2 = 50\\) the total demand (60 litres) forces both sites to open. Move \\(u_1\\) to 60 or more: for which values of \\(i_1\\) and \\(i_2\\) is it better to close one site? Why does the relaxation open the sites only «in part», and why does the gap grow with the opening costs?"),
-    lotti: T("Porta \\(q\\) a 0: quanti lanci fa l'ottimo, e perché il gap sparisce? Poi alza \\(q\\): da quale valore conviene produrre tutto il primo giorno? Con \\(h\\) alto, che cosa succede alle scorte? Nel rilassamento \\(\\tilde y_t = x_t / M_t\\): perché paga solo una frazione del lancio?",
+    lotti: T("Porta \\(q\\) a 0: quanti setup fa l'ottimo, e perché il gap sparisce? Poi alza \\(q\\): da quale valore conviene produrre tutto il primo giorno? Con \\(h\\) alto, che cosa succede alle scorte? Nel rilassamento \\(\\tilde y_t = x_t / M_t\\): perché paga solo una frazione del setup?",
       "Move \\(q\\) to 0: how many setups does the optimum make, and why does the gap vanish? Then raise \\(q\\): from which value is it better to produce everything on day 1? With a high \\(h\\), what happens to the stock? In the relaxation \\(\\tilde y_t = x_t / M_t\\): why does it pay only a fraction of the setup?"),
     progetti: T("Spegni tutte le implicazioni: l'ottimo sale a 30. Quali implicazioni, riaccese una alla volta, lo fanno scendere, e perché le altre non contano? Muovi \\(b\\): per quali budget il rilassamento dà già l'ottimo intero?",
       "Switch off all the implications: the optimum rises to 30. Which implications, switched on one at a time, make it go down, and why do the others not matter? Move \\(b\\): for which budgets does the relaxation already give the integer optimum?"),
@@ -425,7 +425,7 @@
     M.scritta(crea, xc, fs * 0.9, T("clienti", "customers"), { fontSize: fs, strokeColor: C.muted, cssStyle: "font-style:italic" });
   }
 
-  /** 9.1: per ogni giorno domanda e produzione, i lanci sotto l'asse, le scorte fra un giorno e l'altro */
+  /** 9.1: per ogni giorno domanda e produzione, i setup sotto l'asse, le scorte fra un giorno e l'altro */
   function disegnaLot(crea, A, W, H, C) {
     const Mo = A.Mo, o = A.ott, lp = A.lp, d = Mo.d, n = d.length;
     const fs = clamp(Math.min(W, H) / 28, 10, 16);
@@ -454,11 +454,11 @@
         M.rett(crea, xm + 2, y0, xm + bw + 2, y0 + prod[t] * ky, { strokeColor: C.blu, fillColor: C.blu, fillOpacity: 0.5, strokeWidth: 2 });
         M.scritta(crea, xm + bw / 2 + 2, y0 + prod[t] * ky + fs * 0.7, nmT(prod[t]), { fontSize: fs * 0.9, strokeColor: C.blu, cssStyle: "font-weight:700" });
       }
-      // righe sotto l'asse: giorno, lancio, rilassamento
+      // righe sotto l'asse: giorno, setup, rilassamento
       M.scritta(crea, xm, y0 - fs * 1.0, W < 500 ? `t=${t + 1}` : T(`giorno ${t + 1}`, `day ${t + 1}`), { fontSize: fs * 0.9, strokeColor: C.testo });
-      const lancio = o.x[Mo.Yv(t)] > 0.5;
-      M.scritta(crea, xm, y0 - fs * 2.4, `y=${lancio ? 1 : 0}`, { fontSize: fs, strokeColor: lancio ? C.blu : C.muted, cssStyle: lancio ? "font-weight:700" : "" });
-      if (lancio) M.rett(crea, xm - fs * 1.7, y0 - fs * 3.05, xm + fs * 1.7, y0 - fs * 1.75, { strokeColor: C.blu, strokeWidth: 1.5 });
+      const attivo = o.x[Mo.Yv(t)] > 0.5;
+      M.scritta(crea, xm, y0 - fs * 2.4, `y=${setup ? 1 : 0}`, { fontSize: fs, strokeColor: setup ? C.blu : C.muted, cssStyle: setup ? "font-weight:700" : "" });
+      if (attivo) M.rett(crea, xm - fs * 1.7, y0 - fs * 3.05, xm + fs * 1.7, y0 - fs * 1.75, { strokeColor: C.blu, strokeWidth: 1.5 });
       if (lp.stato === "ottimo") M.scritta(crea, xm, y0 - fs * 3.9, `ỹ=${fraz(lp.x[Mo.Yv(t)])}`, { fontSize: fs * 0.88, strokeColor: C.rosso });
     }
     // scorte: frecce arancioni dal giorno t al giorno t + 1
@@ -468,7 +468,7 @@
       M.scritta(crea, (xa + xb) / 2, yy + fs * 0.75, (W < 500 ? "" : "s=") + nmT(sc[t]), { fontSize: fs * 0.85, strokeColor: C.target, cssStyle: "font-weight:700" });
     }
     if (W >= 420) {
-      M.scritta(crea, sx - 8, y0 - fs * 2.4, T("lancio", "setup"), { anchorX: "right", fontSize: fs * 0.82, strokeColor: C.muted });
+      M.scritta(crea, sx - 8, y0 - fs * 2.4, T("setup", "setup"), { anchorX: "right", fontSize: fs * 0.82, strokeColor: C.muted });
       M.scritta(crea, sx - 8, y0 - fs * 3.9, "LP", { anchorX: "right", fontSize: fs * 0.82, strokeColor: C.rosso });
     }
   }
@@ -535,9 +535,9 @@
       uno = pedici("x", uno);
     } else if (k === "lotti") {
       const gi = Mo.d.map((_, t) => t).filter((t) => o.x[Mo.Yv(t)] > 0.5);
-      const lanci = gi.length * A.p.q, mag = Mo.d.slice(0, -1).reduce((s, _, t) => s + A.p.h * o.x[Mo.S(t)], 0);
-      extra = T(`Lanci \\(${gi.length} \\cdot ${A.p.q} = ${nm(lanci)}\\), produzione \\(${nm(o.z - lanci - mag)}\\), magazzino \\(${nm(mag)}\\). Big-M: \\(M_t = d_t + \\dots + d_5\\) = ${Mo.Mt.join(", ")}.`,
-        `Setups \\(${gi.length} \\cdot ${A.p.q} = ${nm(lanci)}\\), production \\(${nm(o.z - lanci - mag)}\\), holding \\(${nm(mag)}\\). Big-M: \\(M_t = d_t + \\dots + d_5\\) = ${Mo.Mt.join(", ")}.`);
+      const costoSetup = gi.length * A.p.q, mag = Mo.d.slice(0, -1).reduce((s, _, t) => s + A.p.h * o.x[Mo.S(t)], 0);
+      extra = T(`Setup \\(${gi.length} \\cdot ${A.p.q} = ${nm(costoSetup)}\\), produzione \\(${nm(o.z - costoSetup - mag)}\\), magazzino \\(${nm(mag)}\\). Big-M: \\(M_t = d_t + \\dots + d_5\\) = ${Mo.Mt.join(", ")}.`,
+        `Setups \\(${gi.length} \\cdot ${A.p.q} = ${nm(costoSetup)}\\), production \\(${nm(o.z - costoSetup - mag)}\\), holding \\(${nm(mag)}\\). Big-M: \\(M_t = d_t + \\dots + d_5\\) = ${Mo.Mt.join(", ")}.`);
       uno = pedici("y", gi.map((t) => t + 1));
     } else {
       const pr = o.x.map((v, j) => (v > 0.5 ? j + 1 : 0)).filter(Boolean);
@@ -604,7 +604,7 @@
       ];
       if (k === "lotti") return [
         [C.grigio, T("domanda \\(d_t\\)", "demand \\(d_t\\)"), "pieno"],
-        [C.blu, T("produzione \\(x_t\\) e lanci \\(y_t = 1\\) dell'ottimo", "optimal production \\(x_t\\) and setups \\(y_t = 1\\)"), "pieno"],
+        [C.blu, T("produzione \\(x_t\\) e setup \\(y_t = 1\\) dell'ottimo", "optimal production \\(x_t\\) and setups \\(y_t = 1\\)"), "pieno"],
         [C.target, T("scorta \\(s_t\\) a fine giorno", "end-of-day stock \\(s_t\\)"), ""],
         [C.rosso, T("\\(\\tilde y_t\\): rilassamento continuo", "\\(\\tilde y_t\\): continuous relaxation"), ""],
       ];

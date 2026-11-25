@@ -408,16 +408,16 @@ folder). Notebook —
     # (b) least unit cost: cover the number of days that minimises the average cost per unit
     e = euristica_lotti(d1, q1[0], h1[0])
     e.traccia.stampa()
-    sol_luc = {f"x[{t}]": e.lanci.get(t, 0) for t in R(n1)} \
-        | {f"y[{t}]": 1 if t in e.lanci else 0 for t in R(n1)}
+    sol_luc = {f"x[{t}]": e.periodi_setup.get(t, 0) for t in R(n1)} \
+        | {f"y[{t}]": 1 if t in e.periodi_setup else 0 for t in R(n1)}
     scorta = 0
     for t in R(n1 - 1):
         scorta += sol_luc[f"x[{t}]"] - d1[t]
         sol_luc[f"s[{t}]"] = scorta
     assert ammissibile(m1, sol_luc)
-    luc = sum(p1[t] * sol_luc[f"x[{t}]"] for t in R(n1)) + sum(q1[t] for t in e.lanci) \
+    luc = sum(p1[t] * sol_luc[f"x[{t}]"] for t in R(n1)) + sum(q1[t] for t in e.periodi_setup) \
         + sum(h1[t] * sol_luc[f"s[{t}]"] for t in R(n1 - 1))
-    print(f"  (b) least unit cost: runs on days {[t + 1 for t in sorted(e.lanci)]}, cost {luc}")
+    print(f"  (b) least unit cost: runs on days {[t + 1 for t in sorted(e.periodi_setup)]}, cost {luc}")
     ub1 = min(lot_per_lot, luc)
     print(f"  The better of the two: ub = {frazione(ub1)}")
 
