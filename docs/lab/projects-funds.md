@@ -9,6 +9,6 @@ title: "Projects and funds"
 
 # Projects and funds
 
-A town chooses which projects to finance with a regional and a European fund. The model is solved to optimality in the browser: the problem, the data, the symbolic and the numerical model, the projects financed by each fund, the continuous relaxation and the gap. Move the budget of the regional fund and the cost of the LED lighting: the financed projects change.
+The app solves an integer linear programming model to optimality in the browser: the data, the symbolic model, the numerical model of the instance, the optimal solution with its figure, the continuous relaxation and the gap. The sliders change the data and the solution is recomputed.
 
 <div class="gi gi-app-intera" data-grafico="mip-progetti-fondi"></div>

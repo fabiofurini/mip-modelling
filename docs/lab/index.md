@@ -17,7 +17,7 @@ the problems are small, so that every step can be seen.
 
     ---
 
-    A town chooses which projects to finance with a regional and a European fund. The model is solved to optimality in the browser: the problem, the data, the symbolic and the numerical model, the projects financed by each fund, the continuous relaxation and the gap.
+    The app solves an integer linear programming model to optimality in the browser: the data, the symbolic model, the numerical model of the instance, the optimal solution with its figure, the continuous relaxation and the gap.
 
     [Open the app →](projects-funds.md)
 

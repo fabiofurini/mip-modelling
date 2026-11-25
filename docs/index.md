@@ -33,7 +33,7 @@ Prerequisites: [Integer Linear Programming](https://fabiofurini.github.io/intege
 <!-- collana-app -->
 ## Try it now
 
-A town chooses which projects to finance with a regional and a European fund, each with its own budget. The model is solved to optimality in the browser: change the budget of one fund and the cost of one project with the sliders and the optimum recomputes the financed projects, the benefit, the continuous relaxation and the gap.
+The app solves an integer linear programming model to optimality in the browser: the data, the symbolic model, the numerical model of the instance, the optimal solution with its figure, the continuous relaxation and the gap. The sliders change the data and the solution is recomputed.
 
 <div class="gi" data-grafico="mip-progetti-fondi"></div>
 
