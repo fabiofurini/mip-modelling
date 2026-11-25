@@ -548,6 +548,6 @@
   }
 
   window.GI_RICETTE["mip-lotti"] = () => ricettaVoce({ titolo: T("Lotti con costo fisso di setup", "Lot sizing with a fixed setup cost") }, vLotti);
-  // per le prove automatiche: solo il calcolo
-  window.GI_MIP_LOTTI = { modelloLotti, calcola, FR };
+  // per le prove automatiche: solo il calcolo; gli helper di formato li usa anche gi-mip-zaino.js (app della home)
+  window.GI_MIP_LOTTI = { modelloLotti, calcola, FR, SOL, FONDO, DV, numLP, ricettaVoce };
 })();

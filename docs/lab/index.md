@@ -13,6 +13,14 @@ the problems are small, so that every step can be seen.
 
 <div class="grid cards" markdown>
 
+-   :material-bag-personal-outline: **Multiple knapsack**
+
+    ---
+
+    The multiple knapsack with five items and two knapsacks, solved to optimality in the browser: the problem, the data, the symbolic and the numerical model, the items in each knapsack, the continuous relaxation and the gap.
+
+    [Open the app →](multiple-knapsack.md)
+
 -   :material-check-decagram: **Three models solved to optimality**
 
     ---

@@ -33,9 +33,9 @@ Prerequisites: [Integer Linear Programming](https://fabiofurini.github.io/intege
 <!-- collana-app -->
 ## Try it now
 
-The lot sizing model with a fixed setup cost, solved to optimality in the browser: change the setup cost, the holding cost and the demand of the last day with the sliders and the optimum recomputes the setup days, the cost and the continuous relaxation.
+The multiple knapsack with five items and two knapsacks, solved to optimality in the browser: change the capacity of one knapsack and the weight of one item with the sliders and the optimum recomputes the items loaded, the value, the continuous relaxation and the gap.
 
-<div class="gi" data-grafico="mip-lotti"></div>
+<div class="gi" data-grafico="mip-zaino-multiplo"></div>
 
 [:material-gesture-tap: More apps in the lab](lab/index.md){ .md-button }
 <!-- /collana-app -->
