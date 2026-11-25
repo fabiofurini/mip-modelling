@@ -13,13 +13,13 @@ the problems are small, so that every step can be seen.
 
 <div class="grid cards" markdown>
 
--   :material-bag-personal-outline: **Multiple knapsack**
+-   :material-city-variant-outline: **Five projects, two funds**
 
     ---
 
-    The multiple knapsack with five items and two knapsacks, solved to optimality in the browser: the problem, the data, the symbolic and the numerical model, the items in each knapsack, the continuous relaxation and the gap.
+    A town chooses which projects to finance with a regional and a European fund. The model is solved to optimality in the browser: the problem, the data, the symbolic and the numerical model, the projects financed by each fund, the continuous relaxation and the gap.
 
-    [Open the app →](multiple-knapsack.md)
+    [Open the app →](projects-funds.md)
 
 -   :material-check-decagram: **Three models solved to optimality**
 
