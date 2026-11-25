@@ -38,7 +38,7 @@ class Esito:
     makespan: float = None       # maximum of the loads (LPT)
     valore: float = None         # value of the constructed solution
     residuo: float = None        # residual capacity (knapsack)
-    setup: dict = None           # {period: quantity produced} (lot sizing)
+    periodi_setup: dict = None   # {period: quantity produced} (lot sizing)
 
     def assegnazione(self, j: int):
         """Machine (0-based) job j is assigned to, or None."""
@@ -320,7 +320,7 @@ def euristica_lotti(domanda, setup, magazzino) -> Esito:
         periodi_setup[t] = quantita
         e.y[t] = 1
         t += quanti
-    e.periodi_setup = setup
+    e.periodi_setup = periodi_setup
     e.valore = sum(setup for t in periodi_setup) + sum(
         magazzino * max(0, sum(periodi_setup[s] for s in periodi_setup if s <= t) - sum(domanda[:t + 1]))
         for t in range(T))
