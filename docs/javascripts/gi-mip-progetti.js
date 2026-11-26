@@ -28,14 +28,13 @@
   const N = 5, K = 2;
   const ix = (i, k) => i * K + k;   // colonne x_11, x_12, x_21, ..., x_52
 
-  // home (data-vetrina): la soluzione va nella colonna dei cursori, sopra il «Prova tu», come nell'app di Modellazione PNL
-  function solDestra(st) {
-    const sol = st.el.querySelector(".plm-sol"), ctrl = st.el.querySelector(".gi-ctrl");
-    if (!sol || !ctrl) return;
-    const dx = ctrl.parentElement, prova = dx.querySelector(".gi-domanda");
-    const dati = st.el.querySelector(".plm .plm-dati");   // il riquadro «Dati» appena ridisegnato: sopra i cursori
+  // home (data-vetrina): il riquadro «Dati» va nella colonna dei cursori, sopra i cursori, come nell'app di Modellazione PNL
+  // (la «Soluzione ottima» va sotto i cursori in tutte le app: SOL.mostra di gi-mip-lotti.js)
+  function datiDestra(st) {
+    const ctrl = st.el.querySelector(".gi-ctrl");
+    if (!ctrl) return;
+    const dx = ctrl.parentElement, dati = st.el.querySelector(".plm .plm-dati");   // il riquadro appena ridisegnato
     if (dati) { dx.querySelectorAll(":scope > .plm-dati").forEach((e) => e.remove()); dx.insertBefore(dati, ctrl); }
-    if (sol.parentElement !== dx || (prova && sol.nextElementSibling !== prova)) dx.insertBefore(sol, prova || null);
   }
 
   function calcola(v) {
@@ -74,22 +73,24 @@
       const num = H.numLP({ senso: "max", vars, c: R.P.c, cifre: 0, righe: R.P.A.map((a, q) => ({ a, rel: R.P.rel[q], rhs: R.P.b[q] })),
         dominio: [{ cols: [...vars.keys()], rel: "\\in", rhs: "\\{0, 1\\}" }] },
         T(`Il modello MILP dell'istanza: ${vars.length} variabili binarie, ${R.P.b.length} vincoli.`, `The MILP model of the instance: ${vars.length} binary variables, ${R.P.b.length} constraints.`));
-      const TAB = H.DV.tabelle(H.DV.tab(T("Progetti", "Projects"), [T("progetto \\(i\\)", "project \\(i\\)"), T("beneficio \\(p_i\\) (punti)", "benefit \\(p_i\\) (points)"), T("costo \\(c_i\\) (M€)", "cost \\(c_i\\) (M€)")],
-        NOMI().map((s, i) => [`${i + 1}. ${s}`, String(DATI.p[i]), String(R.costo[i])])));
+      // tabelle per riga (un progetto, un fondo per colonna): il riquadro resta basso e l'app della home sta in una schermata
+      const TAB = H.DV.tabelle(H.DV.tab(T("Progetti", "Projects"), [T("progetto \\(i\\)", "project \\(i\\)"), ...NOMI().map((_, i) => String(i + 1))],
+        [[T("\\(p_i\\) (punti)", "\\(p_i\\) (points)"), ...DATI.p.map(String)], ["\\(c_i\\) (M€)", ...R.costo.map(String)]]),
+        H.DV.tab(T("Fondi", "Funds"), [T("fondo \\(k\\)", "fund \\(k\\)"), "1", "2"], [["\\(b_k\\) (M€)", ...R.b.map(String)]]));
       const testo = T(
         "<b>Il problema.</b> Un comune ha alcuni progetti e alcuni fondi di finanziamento, ciascuno con il suo budget. " +
         "Ogni progetto ha un costo e un beneficio stimato, e può essere finanziato da un solo fondo. Quali progetti finanziare, e con quale fondo, per massimizzare il beneficio totale senza superare i budget?" +
         "<br><b>Variabili:</b> \\(x_{ik} \\in \\{0,1\\}\\): vale 1 se il progetto \\(i\\) è finanziato dal fondo \\(k\\)." +
-        `<br><b>Dati:</b> \\(n = ${N}\\) progetti, \\(m = ${K}\\) fondi; \\(p_i\\): beneficio del progetto \\(i\\); \\(c_i\\): costo del progetto \\(i\\); \\(b_k\\): budget del fondo \\(k\\), \\(b_1 = ${R.b[0]}\\) M€ (regionale) e \\(b_2 = ${R.b[1]}\\) M€ (europeo).` + TAB,
+        "<br><b>Dati:</b> \\(p_i\\), \\(c_i\\): beneficio e costo del progetto \\(i\\), con \\(i \\le n\\); \\(b_k\\): budget del fondo \\(k \\le m\\) (1 regionale, 2 europeo)." + TAB,
         "<b>The problem.</b> A town has some projects and some funding sources, each with its own budget. " +
         "Each project has a cost and an estimated benefit, and can be financed by one fund only. Which projects should be financed, and by which fund, to maximize the total benefit without exceeding the budgets?" +
         "<br><b>Variables:</b> \\(x_{ik} \\in \\{0,1\\}\\): equals 1 if project \\(i\\) is financed by fund \\(k\\)." +
-        `<br><b>Data:</b> \\(n = ${N}\\) projects, \\(m = ${K}\\) funds; \\(p_i\\): benefit of project \\(i\\); \\(c_i\\): cost of project \\(i\\); \\(b_k\\): budget of fund \\(k\\), \\(b_1 = ${R.b[0]}\\) M€ (regional) and \\(b_2 = ${R.b[1]}\\) M€ (European).` + TAB);
+        "<br><b>Data:</b> \\(p_i\\), \\(c_i\\): benefit and cost of project \\(i\\), with \\(i \\le n\\); \\(b_k\\): budget of fund \\(k \\le m\\) (1 regional, 2 European)." + TAB);
       const V = !!st.el.dataset.vetrina;
-      if (V) setTimeout(() => solDestra(st), 0);
+      if (V) setTimeout(() => datiDestra(st), 0);
       const html = `<div class="plm"><p class="plm-testo">${testo}</p>` +
         `<div class="plm-sim">\\(\\displaystyle \\begin{aligned} ${sim} \\end{aligned}\\)</div>` +
-        `<details class="plm-num"${V ? "" : " open"}><summary>${T("Modello numerico con i dati attuali", "Numerical model with the current data")}</summary>` +
+        `<details class="plm-num"><summary>${T("Modello numerico con i dati attuali", "Numerical model with the current data")}</summary>` +
         `<div class="plm-num-corpo">${num}</div></details></div>`;
       return H.FONDO.sposta(st, html);
     },
@@ -129,18 +130,15 @@
     letture: () => "",
     soluzione(R) {
       if (R.stato !== "ottimo") return "";
-      const H = L(), FR = H.FR, g = R.zLP === null ? "—" : tx(FR.gap(R.zLP, R.z)), fondi = FONDI();
+      const H = L(), FR = H.FR;
       const pt = (z) => `${FR.euro(z).replace(" €", "")} ${T("punti", "points")}`;
       return H.SOL.blocco(
-        `${T("Beneficio ottimo", "Optimal benefit")} \\(z(\\mathrm{MILP})\\): <b>${pt(R.z)}</b><br>` +
-        `${T("Rilassamento continuo", "Continuous relaxation")} \\(z(\\mathrm{LP}^+)\\): <b>${R.zLP === null ? "—" : pt(R.zLP)}</b> · ` +
-        `gap \\((z(\\mathrm{LP}^+) - z(\\mathrm{MILP}))/z(\\mathrm{LP}^+)\\) = <b>${g}</b>`,
-        [H.SOL.tab(T("Fondo di ogni progetto", "Fund of each project"), [T("progetto", "project"), T("fondo", "fund")],
-          NOMI().map((s, i) => [`${i + 1}. ${s}`, R.fondo[i] ? fondi[R.fondo[i] - 1] : "—"]))],
-        T("«—»: progetto non finanziato.", "«—»: project not financed."));
+        H.SOL.valore(T("Beneficio ottimo", "Optimal benefit"), pt(R.z), R.zLP === null ? null : pt(R.zLP), R.zLP === null ? null : FR.gap(R.zLP, R.z)),
+        [H.SOL.tab("", [T("progetto \\(i\\)", "project \\(i\\)"), ...R.fondo.map((_, i) => String(i + 1))],
+          [[T("fondo \\(k\\)", "fund \\(k\\)"), ...R.fondo.map((k) => (k ? String(k) : T("no", "no")))]])]);
     },
-    domanda: T("Porta \\(b_1\\) a 12: il gap va a zero. Porta \\(c_5\\) a 7: si finanziano solo la biblioteca e l'illuminazione LED.",
-      "Set \\(b_1\\) to 12: the gap drops to zero. Set \\(c_5\\) to 7: only the library and the LED lighting are financed."),
+    domanda: T("Porta \\(b_1\\) a 12: il gap va a zero. Porta \\(c_5\\) a 7: si finanziano solo i progetti 2 e 5, biblioteca e illuminazione LED.",
+      "Set \\(b_1\\) to 12: the gap drops to zero. Set \\(c_5\\) to 7: only projects 2 and 5, library and LED lighting, are financed."),
   };
 
   window.GI_RICETTE["mip-progetti-fondi"] = () => L().ricettaVoce({ titolo: T("Progetti e fondi", "Projects and funds") }, vProgetti);

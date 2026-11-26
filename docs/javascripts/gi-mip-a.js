@@ -327,8 +327,8 @@
       righe.push(`${tinta(zc, T("Retta", "Line"))} \\(k = ${zs}\\): ` + r);
       return righe.join("<br>");
     },
-    domanda: T("Nell'esempio 1 premi ▶ su \\(k\\): fra quali valori la retta taglia il poliedro senza toccare punti interi? Nell'esempio 2 arrotonda \\(\\tilde{\\boldsymbol x}\\): il punto è ammissibile? E arrotondando per difetto, quanto perdi rispetto a \\(\\zmilp\\)? Riesci a portare il divario a zero muovendo \\(b_1\\) e \\(b_2\\)?",
-      "In example 1 press ▶ on \\(k\\): for which values does the line cut the polyhedron without touching integer points? In example 2 round \\(\\tilde{\\boldsymbol x}\\): is the point feasible? And rounding down, how much do you lose with respect to \\(\\zmilp\\)? Can you bring the gap to zero by moving \\(b_1\\) and \\(b_2\\)?"),
+    domanda: T("Porta \\(b_1\\) a 14: l'ottimo intero diventa \\((1; 4)\\), con \\(\\zmilp = 5\\). Riporta \\(b_1\\) a 12 e porta \\(b_2\\) a 8: arrotondare \\(\\tilde{\\boldsymbol x}\\) dà \\((1; 3)\\), ottimo.",
+      "Set \\(b_1\\) to 14: the integer optimum becomes \\((1, 4)\\), with \\(\\zmilp = 5\\). Set \\(b_1\\) back to 12 and \\(b_2\\) to 8: rounding \\(\\tilde{\\boldsymbol x}\\) gives \\((1, 3)\\), optimal."),
   };
 
   // ================================================================

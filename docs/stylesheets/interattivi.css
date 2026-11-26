@@ -230,5 +230,37 @@ body:has(.gi-app-intera) .gi-app-intera { margin-top: .4em; }
 .md-typeset .gi .plm-dati table.gi-tabella td:first-child, .md-typeset .gi .plm-dati table.gi-tabella th:first-child { text-align: left; }
 
 /* home (data-vetrina): app compatta in una schermata, come in Modellazione PNL (Fabio, 26/11/2026) */
-.gi[data-vetrina] .gi-board { aspect-ratio: 5 / 2; }
+.gi[data-vetrina] .gi-board { aspect-ratio: 3 / 1; }
 .gi[data-vetrina] .plm-sol { margin-top: .6em; }
+
+/* ================================================================ parti riconoscibili e blocchi richiudibili (Fabio, 26/11/2026)
+   Ogni app: «Il problema», «Dati», «Modello» (variabili e modello simbolico, richiudibile), la figura, a destra i cursori,
+   «Soluzione ottima» e «Prova tu» (richiudibile); in fondo il modello numerico, chiuso. Stesse classi di Modellazione PL
+   (details.plm-box > summary.plm-box-tit). */
+.md-typeset details.plm-box { display: block; overflow: visible; box-shadow: none; font-size: inherit; }
+.md-typeset details.plm-box > summary.plm-box-tit { margin: 0; padding: 0; font-size: .76rem; font-weight: 700; cursor: pointer;
+  list-style: none; display: flex; align-items: center; gap: .35em; background: none; }
+.md-typeset details.plm-box > summary.plm-box-tit::-webkit-details-marker { display: none; }
+.md-typeset details.plm-box > summary.plm-box-tit::before { content: ""; position: static; width: .45em; height: .45em; flex: 0 0 auto;
+  border-right: 2px solid currentColor; border-bottom: 2px solid currentColor; transform: rotate(-45deg); transition: transform .15s;
+  background: none; -webkit-mask: none; mask: none; margin-right: .1em; }
+.md-typeset details.plm-box[open] > summary.plm-box-tit::before { transform: rotate(45deg); }
+.md-typeset details.plm-box > summary.plm-box-tit::after { display: none; }
+.md-typeset details.plm-box > .plm-box-corpo { margin-top: .2em; }
+.md-typeset details.plm-box > .plm-box-corpo > p { margin: 0 0 .2em; }
+.md-typeset .plm-mod-var { font-size: .78rem; line-height: 1.45; }
+/* «Prova tu»: lo stesso riquadro, con il bordo sinistro colorato che lo distingueva */
+.md-typeset .gi-domanda.plm-prova-host { border: 0; background: none; padding: 0; margin-top: .6em; }
+.md-typeset details.plm-box-prova { margin: 0; border-left: 4px solid #0E7490; background: color-mix(in srgb, #0E7490 7%, transparent); line-height: 1.4; }
+/* «Soluzione ottima» nella colonna di destra: riquadro come gli altri, prima le tabelle e sotto il valore ottimo */
+.md-typeset .gi .plm-sol.plm-box { margin: .6em 0 0; background: color-mix(in srgb, var(--gi-line) 40%, transparent); }
+.md-typeset .plm-sol-z { margin: .2em 0 0; }
+.md-typeset .plm-sol-lp { margin: 0; font-size: .92em; opacity: .85; }
+/* la riga «Il modello è spiegato nel capitolo …» in fondo al riquadro, dopo la figura */
+.md-typeset .plm-cap-fondo { margin: .4em 0 0; font-size: .76rem; }
+.md-typeset .plm-cap-fondo .plm-cap { margin: 0; }
+/* le letture delle altre app del laboratorio: lo stesso bordo dei riquadri */
+.md-typeset .gi-letture { border: 1px solid color-mix(in srgb, var(--gi-line) 90%, transparent); }
+/* home: cursori un po' più fitti, così l'app sta in una schermata 1440×900 */
+.gi[data-vetrina] .gi-ctrl { padding: .3em 0 .35em; }
+.md-typeset .plm-nowrap { white-space: nowrap; }

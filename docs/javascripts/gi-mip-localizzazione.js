@@ -104,16 +104,16 @@
         "<b>Il problema.</b> Un'azienda deve servire alcuni clienti e ha individuato alcune sedi candidate. Decidiamo quali sedi installare e quanti litri spedire da ogni sede a ogni cliente. " +
         "L'obiettivo è minimizzare il costo totale, di installazione e di trasporto. I vincoli: la domanda di ogni cliente è soddisfatta esattamente, da una sede non installata non parte nulla e una sede installata non supera la sua capacità." +
         "<br><b>Variabili:</b> \\(x_l \\in \\{0,1\\}\\): vale 1 se si installa la sede \\(l\\); \\(y_{lc} \\ge 0\\): litri spediti dalla sede \\(l\\) al cliente \\(c\\)." +
-        `<br><b>Dati:</b> \\(m = ${NS}\\): numero di sedi; \\(n = ${NC}\\): numero di clienti; \\(i_l\\): costo di installazione della sede \\(l\\) (€); \\(u_l\\): capacità della sede \\(l\\) (litri); ` +
-        "\\(t_{lc}\\): costo di trasporto di un litro dalla sede \\(l\\) al cliente \\(c\\) (€); \\(d_c\\): domanda del cliente \\(c\\) (litri). I valori sono nelle tabelle." + TAB,
+        "<br><b>Dati:</b> \\(m\\): numero di sedi; \\(n\\): numero di clienti; \\(i_l\\): costo di installazione della sede \\(l\\) (€); \\(u_l\\): capacità della sede \\(l\\) (litri); " +
+        "\\(t_{lc}\\): costo di trasporto di un litro dalla sede \\(l\\) al cliente \\(c\\) (€); \\(d_c\\): domanda del cliente \\(c\\) (litri)." + TAB,
         "<b>The problem.</b> A company has to serve some customers and has identified some candidate sites. We decide which sites to open and how many litres to ship from each site to each customer. " +
         "The objective is to minimize the total cost, of opening and of transport. The constraints: the demand of every customer is met exactly, nothing leaves a site that is not open, and an open site does not exceed its capacity." +
         "<br><b>Variables:</b> \\(x_l \\in \\{0,1\\}\\): equals 1 if site \\(l\\) is opened; \\(y_{lc} \\ge 0\\): litres shipped from site \\(l\\) to customer \\(c\\)." +
-        `<br><b>Data:</b> \\(m = ${NS}\\): number of sites; \\(n = ${NC}\\): number of customers; \\(i_l\\): opening cost of site \\(l\\) (€); \\(u_l\\): capacity of site \\(l\\) (litres); ` +
-        "\\(t_{lc}\\): cost of transporting one litre from site \\(l\\) to customer \\(c\\) (€); \\(d_c\\): demand of customer \\(c\\) (litres). The values are in the tables." + TAB);
+        "<br><b>Data:</b> \\(m\\): number of sites; \\(n\\): number of customers; \\(i_l\\): opening cost of site \\(l\\) (€); \\(u_l\\): capacity of site \\(l\\) (litres); " +
+        "\\(t_{lc}\\): cost of transporting one litre from site \\(l\\) to customer \\(c\\) (€); \\(d_c\\): demand of customer \\(c\\) (litres)." + TAB);
       const html = `<div class="plm"><p class="plm-testo">${testo}</p>${rigaCapitolo()}` +
         `<div class="plm-sim">\\(\\displaystyle \\begin{aligned} ${sim} \\end{aligned}\\)</div>` +
-        `<details class="plm-num" open><summary>${T("Modello numerico con i dati attuali", "Numerical model with the current data")}</summary>` +
+        `<details class="plm-num"><summary>${T("Modello numerico con i dati attuali", "Numerical model with the current data")}</summary>` +
         `<div class="plm-num-corpo">${num}</div></details></div>`;
       return H.FONDO.sposta(st, html);
     },
@@ -166,12 +166,10 @@
     letture: () => "",
     soluzione(R) {
       if (R.stato !== "ottimo") return "";
-      const H = L(), FR = H.FR, g = R.zLP === null ? "—" : tx(FR.gap(R.z, R.zLP));
+      const H = L(), FR = H.FR;
       return H.SOL.blocco(
-        `${T("Costo ottimo", "Optimal cost")} \\(z(\\mathrm{MILP})\\): <b>${FR.euro(R.z)}</b> = ${T("installazione", "opening")} ${FR.euro(R.costoInst)} + ${T("trasporto", "transport")} ${FR.euro(R.z - R.costoInst)}<br>` +
-        `${T("Rilassamento continuo", "Continuous relaxation")} \\(z(\\mathrm{LP}^+)\\): <b>${R.zLP === null ? "—" : FR.euro(R.zLP)}</b> · ` +
-        `gap \\((z(\\mathrm{MILP}) - z(\\mathrm{LP}^+))/z(\\mathrm{MILP})\\) = <b>${g}</b>`,
-        [H.SOL.tab(T("Sedi aperte \\(\\tilde x_l\\) e litri spediti \\(\\tilde y_{lc}\\): sede per riga, cliente per colonna", "Open sites \\(\\tilde x_l\\) and litres shipped \\(\\tilde y_{lc}\\): site by row, customer by column"),
+        H.SOL.valore(T("Costo ottimo", "Optimal cost"), FR.euro(R.z), R.zLP === null ? null : FR.euro(R.zLP), R.zLP === null ? null : FR.gap(R.z, R.zLP)),
+        [H.SOL.tab(T("Sedi aperte \\(\\tilde x_l\\) e litri spediti \\(\\tilde y_{lc}\\)", "Open sites \\(\\tilde x_l\\) and litres shipped \\(\\tilde y_{lc}\\)"),
           [T("sede \\(l\\)", "site \\(l\\)"), "\\(\\tilde x_l\\)", ...[1, 2, 3, 4].map((k) => `\\(c = ${k}\\)`)],
           [0, 1, 2].map((l) => [String(l + 1), String(R.x[l]), ...R.y[l].map((q) => H.SOL.z(q))]))],
         T("«—»: nessuna spedizione.", "«—»: no shipment."));

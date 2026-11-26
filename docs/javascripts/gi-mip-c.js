@@ -315,8 +315,8 @@
       }
       return r + `<div style="margin-top:.3em">${stato}</div><div style="margin-top:.3em">${spieg}</div>`;
     },
-    domanda: T("Premi ▶ accanto a \\(M\\) partendo da \\(0\\): finché \\(M\\) è sotto il minimo, quali soluzioni spariscono e che cosa succede a \\(\\zmilp\\)? Al valore minimo, il rilassamento coincide con l'involucro convesso? Poi \\(\\zlpp\\) cresce: fino a quando? Nel terzo esempio, perché un solo \\(M\\) non basta per arrivare all'involucro?",
-      "Press ▶ next to \\(M\\) starting from \\(0\\): while \\(M\\) is below the minimum, which solutions disappear and what happens to \\(\\zmilp\\)? At the minimum value, does the relaxation coincide with the convex hull? Then \\(\\zlpp\\) grows: up to when? In the third example, why is a single \\(M\\) not enough to reach the hull?"),
+    domanda: T("Porta \\(M\\) a 3, il minimo valido: \\(\\zlpp\\) scende da 9 a 7, uguale a \\(\\zmilp\\). Porta \\(M\\) a 2: il vincolo taglia soluzioni ammissibili e \\(\\zmilp\\) scende a 6.",
+      "Set \\(M\\) to 3, the smallest valid value: \\(\\zlpp\\) drops from 9 to 7, equal to \\(\\zmilp\\). Set \\(M\\) to 2: the constraint cuts off feasible solutions and \\(\\zmilp\\) drops to 6."),
   };
 
   // ================================================================
@@ -448,7 +448,7 @@
           "\\(X_B \\subseteq X_A\\) and \\(X_B = \\mathrm{conv}(S)\\): the vertices of B are integer, the bound is \\(\\zmilp\\) for every \\(\\boldsymbol c\\).")) + "</div>";
       return r + `<div style="margin-top:.35em">${E.nota}</div>`;
     },
-    domanda: T("Premi ▶ e fai ruotare \\(\\boldsymbol c\\): per quali direzioni il bound di A coincide con \\(\\zmilp\\)? Nel terzo esempio trova una direzione in cui anche B lascia un divario: quale vertice di \\(X_B\\) è responsabile, e quale disuguaglianza lo taglierebbe?",
-      "Press ▶ and rotate \\(\\boldsymbol c\\): for which directions does the bound of A coincide with \\(\\zmilp\\)? In the third example find a direction in which B also leaves a gap: which vertex of \\(X_B\\) is responsible, and which inequality would cut it off?"),
+    domanda: T("Porta \\(d\\) a 4: anche il bound di A coincide con \\(\\zmilp\\). Nel terzo esempio il bound di B, \\(29/4\\), resta sopra \\(\\zmilp = 7\\).",
+      "Set \\(d\\) to 4: the bound of A also equals \\(\\zmilp\\). In the third example the bound of B, \\(29/4\\), stays above \\(\\zmilp = 7\\)."),
   };
 })();

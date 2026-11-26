@@ -251,8 +251,8 @@
       ];
       return nota + M.tab([T("bound", "bound"), T("valore", "value")], righe, E.fine ? 0 : -1, C.a);
     },
-    domanda: T("Nell'esempio del corso, quale oggetto lascia un residuo che non serve più a niente? Prima dell'ultimo passo prevedi \\(\\zlp\\) (l'oggetto frazionario è il primo che non entra) e controlla che \\(\\lb \\le \\zmilp \\le \\zlp\\). Con «Nuova istanza» cerca un caso in cui il gap supera il 20 %.",
-      "In the course example, which item leaves a residual capacity that is no longer useful? Before the last step predict \\(\\zlp\\) (the fractional item is the first one that does not fit) and check that \\(\\lb \\le \\zmilp \\le \\zlp\\). With «New instance» look for a case where the gap exceeds 20 %."),
+    domanda: T("Premi «Esegui» sull'esempio del corso: l'euristica si ferma a 16, l'ottimo vale 17 e \\(\\zlp = 71/4\\).",
+      "Press “Run” on the course example: the heuristic stops at 16, the optimum is 17 and \\(\\zlp = 71/4\\)."),
   };
 
   // =================================================================
@@ -499,8 +499,8 @@
         `Over all ${R.tutte.length} starting cities nearest neighbour ranges from \\(${nf(mi)}\\) (city ${da}) to \\(${nf(ma)}\\).`);
       return nota + M.tab(["", T("lunghezza", "length"), "gap"], righe, -1, C.a) + `<div style="margin-top:.3em">${multi}</div>`;
     },
-    domanda: T("Cambia la città di partenza \\(s\\): quali partenze trovano il giro ottimo? Poi trascina una città in modo che il nearest neighbour da \\(s = 1\\) sbagli di più del 30 %: di solito è l'ultimo arco, il ritorno, a costare caro. Il 2-opt chiude sempre il gap?",
-      "Change the starting city \\(s\\): which starts find the optimal tour? Then drag a city so that nearest neighbour from \\(s = 1\\) is more than 30 % off: usually it is the last edge, the way back, that costs a lot. Does 2-opt always close the gap?"),
+    domanda: T("Porta la partenza \\(s\\) a 2 o a 6: il nearest neighbour trova il giro ottimo. Con «NN + 2-opt» si arriva all'ottimo da ogni partenza.",
+      "Set the start \\(s\\) to 2 or 6: nearest neighbour finds the optimal tour. With “NN + 2-opt” the optimum is reached from every start."),
   };
 
   // =================================================================
@@ -825,8 +825,8 @@
       }
       return nota + M.tab([T("bound", "bound"), T("valore", "value")], righe, -1, C.a);
     },
-    domanda: T("Sull'esempio 1 confronta Next Fit, First Fit e Best Fit: su quale oggetto si separano? Poi First Fit Decreasing sull'esempio 2: arriva al bound \\(\\lb\\)? Nel makespan, confronta List scheduling e LPT sull'esempio 2 e spiega perché conviene mettere per ultimi i lavori corti.",
-      "On example 1 compare Next Fit, First Fit and Best Fit: on which item do they part ways? Then First Fit Decreasing on example 2: does it reach the bound \\(\\lb\\)? For the makespan, compare List scheduling and LPT on example 2 and explain why the short jobs should come last."),
+    domanda: T("Nell'esempio 1 Next Fit usa 5 contenitori, Best Fit 3, l'ottimo. Nell'esempio 2 LPT chiude in 9, l'ottimo, contro 10 di List scheduling.",
+      "In example 1 Next Fit uses 5 bins, Best Fit 3, the optimum. In example 2 LPT finishes in 9, the optimum, against 10 for List scheduling."),
   };
 
   // funzioni di calcolo, per le prove (nessun effetto sul disegno)

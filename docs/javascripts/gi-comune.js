@@ -331,6 +331,26 @@
     return `\\begin{alignedat}{${n + 2}}${righe.join(" \\\\ ")}\\end{alignedat}`;
   };
 
+  // ------------------------------------------------------------ «Prova tu» in un blocco richiudibile, in tutte le app
+  /* Fabio, 26/11/2026: stesse parti riconoscibili in ogni app. Il «Prova tu» del motore (div.gi-domanda con
+   * <strong>Prova tu.</strong>) diventa un <details class="plm-box plm-box-prova"> aperto, con il titolo sempre
+   * visibile; il div resta (il motore lo nasconde nella scheda «Sfida»). Stile in interattivi.css. */
+  const provaTu = () => document.querySelectorAll(".gi-corpo .gi-domanda:not([data-plm])").forEach((d) => {
+    const s = d.firstElementChild;
+    if (!s || s.tagName !== "STRONG") return;
+    d.dataset.plm = "1";
+    const tit = s.textContent.replace(/[.:]\s*$/, "");
+    s.remove();
+    const box = document.createElement("details");
+    box.className = "plm-box plm-box-prova";
+    box.open = true;
+    box.innerHTML = `<summary class="plm-box-tit">${tit}</summary><div class="plm-box-corpo"></div>`;
+    box.lastChild.append(...d.childNodes);
+    d.append(box);
+    d.classList.add("plm-prova-host");
+  });
+  new MutationObserver(provaTu).observe(document.documentElement, { childList: true, subtree: true });
+
   window.GI_MIP = {
     T, scuro, COL, tinta, fondo, OPZ,
     inputDi, ctrlDi, intervallo, intero, passoK, pannello,

@@ -3,13 +3,14 @@
  *   mip-lotti   problema 9.1 (lotti con costo fisso di setup), istanza del capitolo: 5 giorni,
  *               d = 20, 10, 30, 40, 10; p = 2, 3, 2, 3, 2; q = 50; h = 1; r_0 = r_n = 0;
  *               M_t = domanda residua (110, 90, 80, 50, 10). Ottimo z = 390, z(LP+) = 3890/11 (numeri non interi come frazioni, FR).
- *               Cursori: costo di setup q, costo di giacenza h, domanda del giorno 5.
+ *               Cursori (al massimo due): costo di setup q e costo di giacenza h. Una sola figura: il piano ottimo.
  *
- * Stesso formato dell'app di copertina di Modellazione PL (gi-pl-app.js, ricetta «pl-produzione»):
- * sopra il grafico il problema a parole, variabili, dati con i valori, il rimando al capitolo e il
- * modello simbolico del capitolo; sotto il grafico il blocco «Soluzione ottima» (al posto della
- * legenda ripetuta); in fondo al riquadro, a tutta larghezza, il blocco richiudibile «Modello numerico
- * con i dati attuali» in forma matriciale stretta (una colonna per variabile, una riga per vincolo),
+ * Riquadri standard di tutte le app (Fabio, 26/11/2026; RIQ, SOL, CAP qui sotto, usati anche da gi-mip-progetti.js,
+ * gi-mip-localizzazione.js, gi-mip-logica.js): a sinistra «Il problema», «Dati» (significati e tabelle, sempre
+ * visibile), «Modello» (variabili e modello simbolico, richiudibile: aperto nella home, chiuso nel laboratorio), la
+ * figura e la riga del capitolo; a destra i cursori, «Soluzione ottima» (tabelle, poi valore ottimo, rilassamento
+ * continuo e gap) e «Prova tu» (richiudibile, gi-comune.js); in fondo al riquadro, a tutta larghezza, il blocco
+ * richiudibile «Modello numerico con i dati attuali» in forma matriciale stretta (una colonna per variabile, una riga per vincolo),
  * con il corpo del carattere che si adatta alla larghezza. Gli helper (figure nello stile dei capitoli,
  * arrayLP, SOL, FONDO, DV, ricetta a voci) sono copiati da gi-pl-app.js e gi-ott.js di Modellazione PL.
  *
@@ -239,12 +240,14 @@
 
   // ================================================================ «Soluzione ottima» sotto il grafico (GI_PL_SOL)
   const SOL = {
+    /** il riquadro va nella colonna di destra, sotto i cursori e «Azzera», sopra il «Prova tu» (Fabio, 26/11/2026) */
     mostra(st, html) {
-      const leg = st.el.querySelector(".gi-legenda");
-      if (!leg) return;
+      const dx = st.el.querySelector(".gi-corpo > div:last-child"), lett = dx && dx.querySelector(":scope > .gi-letture");
+      if (!dx) return;
       let b = st.el.querySelector(".plm-sol");
-      if (!b) { b = GI.h("div", { class: "plm-sol" }); leg.after(b); }
-      const testo = html ? `<p class="plm-sol-tit">${T("Soluzione ottima", "Optimal solution")}</p>${html}` : "";
+      if (!b) b = GI.h("div", { class: "plm-sol plm-box" });
+      if (b.parentElement !== dx) { if (lett) lett.before(b); else dx.append(b); }
+      const testo = html ? `<p class="plm-box-tit">${T("Soluzione ottima", "Optimal solution")}</p>${html}` : "";
       if (b.dataset.html === testo) return;
       b.dataset.html = testo;
       b.hidden = !html;
@@ -256,6 +259,11 @@
     blocco: (valore, tabelle = [], nota = "") =>   // prima i valori delle variabili, sotto il valore ottimo (Fabio, 26/11/2026)
       (tabelle.length ? `<div class="plm-sol-tabs">${tabelle.join("")}</div>` : "") + (nota ? `<p class="plm-sol-nota">${nota}</p>` : "") +
       `<div class="plm-sol-val">${valore}</div>`,
+    /** il valore ottimo e, sotto, in breve, il rilassamento continuo e il gap
+     *  nome: «Costo ottimo»…; z, zLP: testi già formattati; gap: testo TeX del gap (o null) */
+    valore: (nome, z, zLP, gap) =>
+      `<p class="plm-sol-z">${nome} \\(z(\\mathrm{MILP})\\) = <b>${z}</b></p>` +
+      `<p class="plm-sol-lp">${T("Rilassamento continuo", "Continuous relaxation")} \\(z(\\mathrm{LP}^+)\\) = ${zLP === null ? "—" : zLP} · <span class="plm-nowrap">gap ${gap === null ? "—" : `\\(${gap}\\)`}</span></p>`,
   };
 
   // ================================================================ il modello numerico in fondo al riquadro (GI_PL_FONDO)
@@ -275,12 +283,24 @@
       return null;
     },
     box(cls, tit, corpo) { return `<div class="plm-box ${cls}"><p class="plm-box-tit">${tit}</p>${corpo}</div>`; },
-    applica(html) {
+    /** blocco richiudibile con lo stesso aspetto dei riquadri (Fabio, 26/11/2026): il titolo resta sempre visibile */
+    scatola(cls, tit, corpo, aperto) {
+      return `<details class="plm-box ${cls}"${aperto ? " open" : ""}><summary class="plm-box-tit">${tit}</summary><div class="plm-box-corpo">${corpo}</div></details>`;
+    },
+    /** il «Modello» è aperto all'avvio nella home (data-vetrina), chiuso nelle pagine del laboratorio; poi resta come lo lascia chi legge */
+    modelloAperto(st) {
+      const d = st && st.el ? st.el.dataset.plmMod : undefined;
+      return d !== undefined ? d === "1" : !!(st && st.el && st.el.dataset.vetrina);
+    },
+    applica(html, st) {
       if (typeof html !== "string" || html.indexOf('class="plm-testo"') < 0 || html.indexOf("plm-box") >= 0) return html;
       const tpl = document.createElement("div");
       tpl.innerHTML = html;
       const plm = tpl.querySelector(".plm");
       if (!plm) return html;
+      // la riga «Il modello è spiegato nel capitolo …» va in fondo al riquadro, dopo la figura
+      const cap = plm.querySelector(":scope > .plm-cap");
+      if (cap) { if (st) CAP.mostra(st, cap.outerHTML); cap.remove(); } else if (st) CAP.mostra(st, "");
       const sez = { problema: [], variabili: [], dati: [] };
       let cur = "problema", tabelle = null;
       for (const n of Array.from(plm.children)) {
@@ -299,7 +319,6 @@
       }
       let out = "";
       if (sez.problema.length) out += RIQ.box("plm-box-problema", T("Il problema", "The problem"), `<p>${sez.problema.join("<br>")}</p>`);
-      if (sez.variabili.length) out += RIQ.box("plm-box-var", T("Variabili", "Variables"), `<p>${sez.variabili.join("<br>")}</p>`);
       if (sez.dati.length || tabelle) {
         const sig = sez.dati.length ? `<p class="plm-dati-sig">${sez.dati.join("<br>")}</p>` : "";
         if (tabelle) {
@@ -310,16 +329,40 @@
         } else out += `<div class="plm-dati plm-box"><p class="plm-dati-tit">${T("Dati", "Data")}</p>${sig}</div>`;
       }
       plm.insertAdjacentHTML("afterbegin", out);
+      // «Modello»: variabili e modello simbolico in un blocco richiudibile
       const sim = plm.querySelector(":scope > .plm-sim");
-      if (sim) sim.outerHTML = RIQ.box("plm-box-mod", T("Modello", "Model"), sim.outerHTML);
+      const vv = sez.variabili.length ? `<p class="plm-mod-var"><b>${T("Variabili", "Variables")}:</b> ${sez.variabili.join("<br>")}</p>` : "";
+      if (sim) sim.outerHTML = RIQ.scatola("plm-box-mod", T("Modello", "Model"), vv + sim.outerHTML, RIQ.modelloAperto(st));
       return tpl.innerHTML;
+    },
+  };
+  // il blocco «Modello» resta aperto o chiuso come lo lascia chi legge, anche quando i cursori ridisegnano il riquadro
+  document.addEventListener("toggle", (e) => {
+    const d = e.target;
+    if (!d || !d.classList || !d.classList.contains("plm-box-mod")) return;
+    const g = d.closest(".gi");
+    if (g) g.dataset.plmMod = d.open ? "1" : "0";
+    window.dispatchEvent(new Event("resize"));
+  }, true);
+
+  // ================================================================ la riga del capitolo in fondo al riquadro, dopo la figura
+  const CAP = {
+    mostra(st, html) {
+      const leg = st.el.querySelector(".gi-legenda");
+      if (!leg) return;
+      let b = st.el.querySelector(".plm-cap-fondo");
+      if (!b) { b = GI.h("div", { class: "plm-cap-fondo" }); leg.after(b); }
+      if (b.dataset.html === html) return;
+      b.dataset.html = html;
+      b.hidden = !html;
+      b.innerHTML = html;
     },
   };
 
   const FONDO = {
     sposta(st, html) {
       if (typeof html !== "string" || !st || !st.el) return html;
-      html = RIQ.applica(html);
+      html = RIQ.applica(html, st);
       const i = html.indexOf('<details class="plm-num"');
       if (i < 0) return html;
       const j = html.indexOf("</details>", i) + "</details>".length;
@@ -372,7 +415,7 @@
   }
   /** ottimo (enumerazione delle 32 assegnazioni delle binarie + simplesso) e rilassamento continuo */
   function calcola(v) {
-    const Mo = modelloLotti(v[0], v[1], v[2]);
+    const Mo = modelloLotti(v[0], v[1], v[2] ?? LOT.d[4]);   // due cursori (q, h): d_5 resta quella dell'istanza
     const o = D().milp(Mo.P, Mo.bin), r = D().rilassamento(Mo.P, Mo.bin);
     const R = { Mo, stato: o.stato, nOtt: o.nOtt, zLP: r.stato === "ottimo" ? r.z : null };
     if (o.stato !== "ottimo") return R;
@@ -400,9 +443,6 @@
       { nome: T("\\text{giacenza}\\ h_t", "\\text{holding}\\ h_t"), min: 1, max: 5, step: 1, val: 1,
         fmt: (x) => T(`${nt(x, 0)} € per unità e giorno`, `${nt(x, 0)} € per unit and day`),
         descr: T("costo di tenere un'unità in magazzino a fine giorno, uguale nei giorni 1–4", "cost of keeping one unit in stock at the end of a day, the same on days 1–4") },
-      { nome: T("\\text{domanda}\\ d_5", "\\text{demand}\\ d_5"), min: 5, max: 60, step: 5, val: 10,
-        fmt: (x) => T(`${nt(x, 0)} unità`, `${nt(x, 0)} units`),
-        descr: T("domanda dell'ultimo giorno; cambia anche i big-M \\(M_t\\)", "demand of the last day; it also changes the big-Ms \\(M_t\\)") },
     ],
     calcola,
     formula(R, v, st) {
@@ -410,7 +450,7 @@
       const sim = `\\min ~~ \\sum_{t=1}^{n} p_t\\, x_t + \\sum_{t=1}^{n} ${st.col("a", "q_t")}\\, y_t + \\sum_{t=1}^{n-1} ${st.col("b", "h_t")}\\, s_t & & \\\\
         ${SA()} \\quad x_1 - s_1 &= d_1 - r_0, & \\\\
         x_t + s_{t-1} - s_t &= d_t, & \\forall t \\in \\{2, 3, \\dots, n-1\\}, \\\\
-        x_n + s_{n-1} &= ${st.col("c", "d_n")} + r_n, & \\\\
+        x_n + s_{n-1} &= d_n + r_n, & \\\\
         -x_t + M_t\\, y_t &\\ge 0, & \\forall t \\in \\{1, 2, \\dots, n\\}, \\\\
         x_t &\\ge 0, & \\forall t \\in \\{1, 2, \\dots, n\\}, \\\\
         s_t &\\ge 0, & \\forall t \\in \\{1, 2, \\dots, n-1\\}, \\\\
@@ -436,30 +476,30 @@
         riga("\\(h_t\\) (€)", Mo.d.map((_, t) => (t < nG - 1 ? Mo.h : null))),
         riga(T("\\(M_t\\) (unità)", "\\(M_t\\) (units)"), Mo.Mt),
       ]));
-      const testo = T(`<b>Il problema.</b> Decidiamo quanto produrre in ogni giorno di un orizzonte di ${nG} giorni, e di conseguenza quanto resta in magazzino. ` +
+      const testo = T(`<b>Il problema.</b> Decidiamo quanto produrre in ogni giorno di un orizzonte di più giorni, e di conseguenza quanto resta in magazzino. ` +
         "L'obiettivo è minimizzare il costo totale di produzione, di setup e di magazzino. I vincoli: la domanda di ogni giorno è servita per intero, e non si produce in un giorno senza pagarne il costo fisso di setup." +
         "<br><b>Variabili:</b> \\(x_t \\ge 0\\): unità prodotte nel giorno \\(t\\); \\(s_t \\ge 0\\): unità a scorta alla fine del giorno \\(t\\), per \\(t \\le n-1\\); \\(y_t \\in \\{0,1\\}\\): vale 1 se nel giorno \\(t\\) si attiva la produzione." +
-        `<br><b>Dati:</b> \\(n = ${nG}\\): numero di giorni; \\(d_t\\): domanda del giorno \\(t\\) (unità); \\(p_t\\): costo di produzione di un'unità nel giorno \\(t\\) (€); \\(q_t\\): costo fisso di setup del giorno \\(t\\), uguale in tutti i giorni: \\(${FR.tex(Mo.q)}\\) €; \\(h_t\\): costo di tenere un'unità in magazzino alla fine del giorno \\(t\\), per \\(t \\le n-1\\): \\(${FR.tex(Mo.h)}\\) €; \\(M_t\\): big-M del giorno \\(t\\), la domanda che resta da coprire dal giorno \\(t\\) in poi, \\(M_t = d_t + \\dots + d_n + r_n\\) (unità); \\(r_0 = ${LOT.r0}\\): scorta iniziale (unità); \\(r_n = ${LOT.rn}\\): scorta finale richiesta (unità). I valori per giorno sono nella tabella.` + TABS,
-      `<b>The problem.</b> We decide how much to produce on each day of a ${nG}-day horizon, and consequently how much is left in stock. ` +
+        `<br><b>Dati:</b> \\(n\\): numero di giorni; \\(d_t\\): domanda del giorno \\(t\\) (unità); \\(p_t\\): costo di produzione di un'unità nel giorno \\(t\\) (€); \\(q_t\\): costo fisso di setup del giorno \\(t\\) (€); \\(h_t\\): costo di tenere un'unità in magazzino alla fine del giorno \\(t\\), per \\(t \\le n-1\\) (€); \\(M_t = d_t + \\dots + d_n + r_n\\): big-M del giorno \\(t\\), la domanda che resta da coprire (unità); \\(r_0 = r_n = 0\\): scorte iniziale e finale (unità).` + TABS,
+      `<b>The problem.</b> We decide how much to produce on each day of a horizon of several days, and consequently how much is left in stock. ` +
         "The objective is to minimize the total cost of production, setups and stock. The constraints: the demand of every day is served in full, and nothing is produced on a day without paying its fixed setup cost." +
         "<br><b>Variables:</b> \\(x_t \\ge 0\\): units produced on day \\(t\\); \\(s_t \\ge 0\\): units in stock at the end of day \\(t\\), for \\(t \\le n-1\\); \\(y_t \\in \\{0,1\\}\\): equals 1 if production is set up on day \\(t\\)." +
-        `<br><b>Data:</b> \\(n = ${nG}\\): number of days; \\(d_t\\): demand of day \\(t\\) (units); \\(p_t\\): production cost of one unit on day \\(t\\) (€); \\(q_t\\): fixed setup cost of day \\(t\\), the same on every day: \\(${FR.tex(Mo.q)}\\) €; \\(h_t\\): cost of keeping one unit in stock at the end of day \\(t\\), for \\(t \\le n-1\\): \\(${FR.tex(Mo.h)}\\) €; \\(M_t\\): big-M of day \\(t\\), the demand still to be covered from day \\(t\\) on, \\(M_t = d_t + \\dots + d_n + r_n\\) (units); \\(r_0 = ${LOT.r0}\\): initial stock (units); \\(r_n = ${LOT.rn}\\): required final stock (units). The values by day are in the table.` + TABS);
+        `<br><b>Data:</b> \\(n\\): number of days; \\(d_t\\): demand of day \\(t\\) (units); \\(p_t\\): production cost of one unit on day \\(t\\) (€); \\(q_t\\): fixed setup cost of day \\(t\\) (€); \\(h_t\\): cost of keeping one unit in stock at the end of day \\(t\\), for \\(t \\le n-1\\) (€); \\(M_t = d_t + \\dots + d_n + r_n\\): big-M of day \\(t\\), the demand still to be covered (units); \\(r_0 = r_n = 0\\): initial and final stock (units).` + TABS);
       return FONDO.sposta(st, modello(testo, sim, num, "lotti"));
     },
     disegna(crea, R, v, C, S) {
       if (R.stato !== "ottimo") return M.scritta(crea, S.W / 2, S.H / 2, T("Nessun piano ammissibile", "No feasible plan"), { fontSize: 15, strokeColor: C.rosso });
       const F = FIG(), Mo = R.Mo, nG = Mo.nG, giorni = Mo.d.map((_, t) => t + 1);
       const fx = (u) => (Number.isInteger(u) && u >= 1 && u <= nG ? String(u) : "");
-      const gapV = 78, hTot = S.H - MF.basso - MF.alto - gapV, hTop = hTot * 0.66;
+      const hTop = S.H - MF.basso - MF.alto;   // una sola figura, la più significativa (Fabio, 26/11/2026)
       // 1. produzione, domanda, scorte e giorni con setup
       const vmax = Math.max(...R.x, ...Mo.d, ...R.s, 10);
-      const A = figura(crea, { X0: MF.sx, X1: S.W - MF.dx, Y0: S.H - MF.alto - hTop, Y1: S.H - MF.alto, xa: 0.4, xb: nG + 0.6, ya: 0, yb: vmax * 1.6,
+      const A = figura(crea, { X0: MF.sx, X1: S.W - MF.dx, Y0: S.H - MF.alto - hTop, Y1: S.H - MF.alto, xa: 0.4, xb: nG + 0.6, ya: 0, yb: vmax * 1.32,
         titolo: T(`Piano ottimo: produzione, domanda e scorte (z = ${FR.euroTxt(R.z)})`, `Optimal plan: production, demand and stock (z = ${FR.euroTxt(R.z)})`),
-        ny: T("unità", "units") }, C, { nTy: 5, fx, ymax: vmax * 1.12 });
+        ny: T("unità", "units"), nx: T("giorno", "day") }, C, { nTy: 5, fx, ymax: vmax * 1.12 });
       giorni.forEach((g, t) => {
         if (!R.y[t]) return;
-        M.rett(crea, A.X(g - 0.46), A.Y(0), A.X(g + 0.46), A.Y(vmax * 1.3), { fillColor: F.fascia, fillOpacity: M.scuro() ? 0.16 : 0.09, strokeColor: "none" });
-        M.scritta(crea, A.X(g), A.Y(vmax * 1.3) - 9, T("setup", "setup"), { fontSize: 11.5, strokeColor: F.fascia, cssStyle: "font-weight:700" });
+        M.rett(crea, A.X(g - 0.46), A.Y(0), A.X(g + 0.46), A.Y(vmax * 1.18), { fillColor: F.fascia, fillOpacity: M.scuro() ? 0.16 : 0.09, strokeColor: "none" });
+        M.scritta(crea, A.X(g), A.Y(vmax * 1.18) - 9, T("setup", "setup"), { fontSize: 11.5, strokeColor: F.fascia, cssStyle: "font-weight:700" });
       });
       giorni.forEach((g, t) => {
         const q = R.x[t];
@@ -474,54 +514,26 @@
       lineaPunti(crea, A, giorni.slice(0, nG - 1), R.s, F.arancio, { r: 4, punto: { face: "[]" } });
       legendaRiga(crea, A, [[F.teal, T("produzione xₜ", "production xₜ"), "barra"], [F.rosso, T("domanda dₜ", "demand dₜ"), "tratteggioPunti"],
         [F.arancio, T("scorta sₜ a fine giorno", "stock sₜ at the end of the day"), "lineaPunti"], [F.fascia, T("giorno con setup (yₜ = 1)", "setup day (yₜ = 1)"), "fascia"]], C);
-      // 2. setup: ottimo intero y_t e rilassamento continuo ỹ_t
-      const B = figura(crea, { X0: MF.sx, X1: S.W - MF.dx, Y0: MF.basso, Y1: MF.basso + hTot - hTop, xa: 0.4, xb: nG + 0.6, ya: 0, yb: 1.75,
-        titolo: T("Setup: ottimo intero yₜ e rilassamento continuo ỹₜ", "Setups: integer optimum yₜ and continuous relaxation ỹₜ"),
-        nx: T("giorno", "day") }, C, { nTy: 2, fx, ymax: 1 });
-      const L = 0.2;
-      giorni.forEach((g, t) => {
-        if (R.y[t]) M.rett(crea, B.X(g - L - 0.02), B.Y(0), B.X(g - 0.02), B.Y(1), { fillColor: F.navy, fillOpacity: 1, strokeColor: F.navy, strokeWidth: 0.5 });
-        const yl = R.yLP ? R.yLP[t] : 0;
-        if (yl > 1e-9) M.rett(crea, B.X(g + 0.02), B.Y(0), B.X(g + L + 0.02), B.Y(yl), { fillColor: F.rosso, fillOpacity: 1, strokeColor: F.rosso, strokeWidth: 0.5 });
-        if (yl > 1e-9) M.scritta(crea, B.X(g + L / 2 + 0.02), B.Y(yl) + 3, FR.txt(yl, 2), { anchorY: "bottom", fontSize: 11, strokeColor: F.rosso });
-      });
-      legendaRiga(crea, B, [[F.navy, T("yₜ nell'ottimo intero", "yₜ in the integer optimum"), "barra"],
-        [F.rosso, T(`ỹₜ nel rilassamento (z(LP⁺) = ${R.zLP === null ? "—" : FR.euroTxt(R.zLP)})`, `ỹₜ in the relaxation (z(LP⁺) = ${R.zLP === null ? "—" : FR.euroTxt(R.zLP)})`), "barra"]], C);
     },
     legenda: () => [],
-    letture(R, v, st, C) {
-      if (R.stato !== "ottimo") return "";
-      const Mo = R.Mo, gi = R.y.map((y, t) => (y ? t : -1)).filter((t) => t >= 0);
-      const copre = gi.map((t, k) => {
-        const fine = (k + 1 < gi.length ? gi[k + 1] : Mo.nG) - 1;
-        return fine > t ? T(`il setup del giorno ${t + 1} copre i giorni ${t + 1}–${fine + 1}`, `the setup on day ${t + 1} covers days ${t + 1}–${fine + 1}`)
-          : T(`il setup del giorno ${t + 1} copre solo quel giorno`, `the setup on day ${t + 1} covers that day only`);
-      });
-      return `<div>${T("Setup", "Setups")}: ${tx(gi.map((t) => `y_{${t + 1}}`).join(" = ") + " = 1")}; ${copre.join("; ")}.</div>` +
-        `<div style="margin-top:.3em">${T("Big-M", "Big-M")}: \\(M_t\\) = ${Mo.Mt.join(", ")} ${T("unità, la domanda che resta da coprire dal giorno \\(t\\) in poi.", "units, the demand still to be covered from day \\(t\\) on.")}</div>` +
-        `<div style="margin-top:.3em">${T("Nel rilassamento continuo \\(\\tilde y_t = \\tilde x_t / M_t\\): ogni giorno paga solo la frazione del setup che usa, e per questo \\(z(\\mathrm{LP}^+)\\) sta sotto \\(z(\\mathrm{MILP})\\).",
-          "In the continuous relaxation \\(\\tilde y_t = \\tilde x_t / M_t\\): each day pays only the fraction of the setup it uses, and this is why \\(z(\\mathrm{LP}^+)\\) lies below \\(z(\\mathrm{MILP})\\).")}</div>`;
-    },
+    letture: () => "",
     soluzione(R) {
       if (R.stato !== "ottimo") return "";
-      const Mo = R.Mo, nG = Mo.nG, nL = R.y.reduce((a, y) => a + y, 0);
+      const Mo = R.Mo;
       const intest = ["", ...Mo.d.map((_, t) => `\\(t = ${t + 1}\\)`)];
       const righe = [
-        [T("\\(\\tilde x_t\\) (unità)", "\\(\\tilde x_t\\) (units)"), ...R.x.map((x) => SOL.z(x))],
-        [T("\\(\\tilde s_t\\) (unità)", "\\(\\tilde s_t\\) (units)"), ...R.s.map((x) => SOL.z(x)), ""],
+        ["\\(\\tilde x_t\\)", ...R.x.map((x) => SOL.z(x))],
+        ["\\(\\tilde s_t\\)", ...R.s.map((x) => SOL.z(x)), ""],
         ["\\(\\tilde y_t\\)", ...R.y.map(String)],
       ];
-      const g = R.gap === null ? "—" : tx(FR.gap(R.z, R.zLP));
       const nota = T("«—»: valore nullo.", "«—»: zero value.") +
         (R.nOtt > 1 ? " " + T(`Ci sono ${R.nOtt} piani ottimi con lo stesso costo: si mostra quello con meno setup.`, `There are ${R.nOtt} optimal plans with the same cost: the one with fewer setups is shown.`) : "");
       return SOL.blocco(
-        `${T("Costo ottimo", "Optimal cost")} \\(z(\\mathrm{MILP})\\): <b>${FR.euro(R.z)}</b> = ${T("produzione", "production")} ${FR.euro(R.prod)} + ` +
-        `${T("setup", "setups")} ${nL} × ${FR.euro(Mo.q)} = ${FR.euro(R.costoSetup)} + ${T("magazzino", "holding")} ${FR.euro(R.mag)}<br>` +
-        `${T("Rilassamento continuo", "Continuous relaxation")} \\(z(\\mathrm{LP}^+)\\): <b>${R.zLP === null ? "—" : FR.euro(R.zLP)}</b> · gap \\((z(\\mathrm{MILP}) - z(\\mathrm{LP}^+))/z(\\mathrm{MILP})\\) = <b>${g}</b>`,
-        [SOL.tab(T("Piano ottimo per giorno", "Optimal plan by day"), intest, righe)], nota);
+        SOL.valore(T("Costo ottimo", "Optimal cost"), FR.euro(R.z), R.zLP === null ? null : FR.euro(R.zLP), R.gap === null ? null : FR.gap(R.z, R.zLP)),
+        [SOL.tab("", intest, righe)], nota);
     },
-    domanda: T("Alza il costo di setup \\(q_t\\): da quale valore conviene un solo setup, il primo giorno? Abbassalo a 10 €: quale giorno guadagna un setup? Porta la giacenza \\(h_t\\) oltre 2 €: perché il setup in più cade proprio nel giorno 4? Con \\(d_5\\) oltre 25 unità anche il giorno 5 ha il suo setup: perché la soglia è \\(q_t/(2 h_t)\\)? Guarda il gap: quando il rilassamento si avvicina all'ottimo intero?",
-      "Raise the setup cost \\(q_t\\): from which value is a single setup, on day 1, better? Lower it to 10 €: which day gains a setup? Move the holding cost \\(h_t\\) above 2 €: why does the extra setup fall exactly on day 4? With \\(d_5\\) above 25 units day 5 gets its own setup too: why is the threshold \\(q_t/(2 h_t)\\)? Watch the gap: when does the relaxation get close to the integer optimum?"),
+    domanda: T("Porta \\(q_t\\) a 160 €: basta un solo setup, nel giorno 1. Riporta \\(q_t\\) a 50 € e \\(h_t\\) a 3 €: si aggiunge un setup nel giorno 4.",
+      "Set \\(q_t\\) to 160 €: a single setup, on day 1, is enough. Set \\(q_t\\) back to 50 € and \\(h_t\\) to 3 €: a setup is added on day 4."),
   };
 
   // ================================================================ ricetta a voci (GI_OTT.ricettaVoci di gi-ott.js, una voce sola)
