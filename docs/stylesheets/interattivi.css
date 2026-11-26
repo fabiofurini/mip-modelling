@@ -213,7 +213,18 @@ body:has(.gi-app-intera) .gi-app-intera { margin-top: .4em; }
 .md-typeset .plm-sol-nota { margin: .1em 0 .2em; opacity: .85; }
 /* valori dei dati: tabelline subito sotto la riga «Dati:» (GI_PL_DV in gi-mip-lotti.js; Fabio, 25/11/2026) */
 .md-typeset .plm-testo:empty { display: none; }
-.md-typeset .plm-dati { display: flex; flex-wrap: wrap; gap: .2em 1.6em; align-items: flex-start; margin: -.2em 0 .5em; font-size: .72rem; line-height: 1.4; overflow-x: auto; }
+.md-typeset .plm-dati { display: flex; flex-wrap: wrap; gap: .2em 1.6em; align-items: flex-start; margin: .2em 0 .6em; font-size: .72rem; line-height: 1.4; overflow-x: auto;
+  padding: .4em .7em .25em; border-radius: 8px; border: 1px solid color-mix(in srgb, var(--gi-line) 90%, transparent); }
+/* riquadri standard di ogni app: Il problema, Variabili, Dati, Modello (RIQ in FONDO.sposta; Fabio, 26/11/2026) */
+.md-typeset .plm-box { margin: .2em 0 .6em; padding: .4em .7em .3em; border-radius: 8px; border: 1px solid color-mix(in srgb, var(--gi-line) 90%, transparent); }
+.md-typeset .plm-box > p { margin: 0 0 .2em; }
+.md-typeset .plm-box > .plm-box-tit, .md-typeset .plm-dati > .plm-dati-tit { margin: 0 0 .15em; font-size: .76rem; font-weight: 700; }
+.md-typeset .plm-box-mod .plm-sim { padding: 0; }
+.md-typeset .plm-dati > .plm-dati-sig { flex-basis: 100%; margin: 0; font-size: .8rem; }
+/* riquadro «Dati» con il suo titolo (Fabio, 26/11/2026) */
+.md-typeset .plm-dati > .plm-dati-tit { flex-basis: 100%; margin: 0; font-size: .76rem; font-weight: 700; }
+.md-typeset .plm-sol-val { margin-top: .3em; }
+.gi[data-vetrina] .plm-dati { margin: 0 0 .6em; }
 .md-typeset .gi .plm-dati table.gi-tabella { width: auto; margin: 0 0 .2em; }
 .md-typeset .gi .plm-dati table.gi-tabella td, .md-typeset .gi .plm-dati table.gi-tabella th { min-width: 2.2em; padding: .05em .4em; }
 .md-typeset .gi .plm-dati table.gi-tabella td:first-child, .md-typeset .gi .plm-dati table.gi-tabella th:first-child { text-align: left; }

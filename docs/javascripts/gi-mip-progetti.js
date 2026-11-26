@@ -33,6 +33,8 @@
     const sol = st.el.querySelector(".plm-sol"), ctrl = st.el.querySelector(".gi-ctrl");
     if (!sol || !ctrl) return;
     const dx = ctrl.parentElement, prova = dx.querySelector(".gi-domanda");
+    const dati = st.el.querySelector(".plm .plm-dati");   // il riquadro «Dati» appena ridisegnato: sopra i cursori
+    if (dati) { dx.querySelectorAll(":scope > .plm-dati").forEach((e) => e.remove()); dx.insertBefore(dati, ctrl); }
     if (sol.parentElement !== dx || (prova && sol.nextElementSibling !== prova)) dx.insertBefore(sol, prova || null);
   }
 
@@ -85,7 +87,7 @@
         `<br><b>Data:</b> \\(n = ${N}\\) projects, \\(m = ${K}\\) funds; \\(p_i\\): benefit of project \\(i\\); \\(c_i\\): cost of project \\(i\\); \\(b_k\\): budget of fund \\(k\\), \\(b_1 = ${R.b[0]}\\) M€ (regional) and \\(b_2 = ${R.b[1]}\\) M€ (European).` + TAB);
       const V = !!st.el.dataset.vetrina;
       if (V) setTimeout(() => solDestra(st), 0);
-      const html = `<div class="plm"><p class="plm-testo">${V ? testo.split(TAB).join("") : testo}</p>` +
+      const html = `<div class="plm"><p class="plm-testo">${testo}</p>` +
         `<div class="plm-sim">\\(\\displaystyle \\begin{aligned} ${sim} \\end{aligned}\\)</div>` +
         `<details class="plm-num"${V ? "" : " open"}><summary>${T("Modello numerico con i dati attuali", "Numerical model with the current data")}</summary>` +
         `<div class="plm-num-corpo">${num}</div></details></div>`;
