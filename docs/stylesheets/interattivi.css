@@ -264,3 +264,6 @@ body:has(.gi-app-intera) .gi-app-intera { margin-top: .4em; }
 /* home: cursori un po' più fitti, così l'app sta in una schermata 1440×900 */
 .gi[data-vetrina] .gi-ctrl { padding: .3em 0 .35em; }
 .md-typeset .plm-nowrap { white-space: nowrap; }
+/* ◂ ▸: un passo alla volta (Fabio, 27/11/2026) */
+.gi-play.gi-passo { padding: .1em .25em; }
+.gi-play.gi-passo + .gi-val { margin-left: .3em; }

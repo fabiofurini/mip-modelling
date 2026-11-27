@@ -112,7 +112,7 @@ extra_css:
   - stylesheets/extra.css
   # laboratorio interattivo (genera_laboratorio.py)
   - https://cdn.jsdelivr.net/npm/jsxgraph@1.10.1/distrib/jsxgraph.css
-  - stylesheets/interattivi.css?v=9a914d3b27
+  - stylesheets/interattivi.css?v=30ce7ade49
   - stylesheets/quiz.css?v=9e3792b41c
 
 markdown_extensions:
@@ -135,7 +135,7 @@ extra_javascript:
   - https://unpkg.com/mathjax@3/es5/tex-mml-chtml.js
   # laboratorio interattivo (genera_laboratorio.py): JSXGraph, il motore, gli helper comuni, poi le ricette
   - https://cdn.jsdelivr.net/npm/jsxgraph@1.10.1/distrib/jsxgraphcore.js
-  - javascripts/interattivi.js?v=fb6fee175e
+  - javascripts/interattivi.js?v=1f0c3a08a6
   - javascripts/gi-comune.js?v=e97a9dedbc
   - javascripts/gi-mip-a.js?v=ad6566ad40
   - javascripts/gi-mip-b.js?v=b2e745ffa8

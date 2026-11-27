@@ -141,6 +141,7 @@
     quasi: T("Ci sei quasi…", "Almost there…"),
     funzione: T("Funzione", "Function"),
     anima: T("Anima", "Animate"),
+    avanti: T("Un passo avanti", "One step forward"), indietro: T("Un passo indietro", "One step back"),
     grafico: T("Grafico interattivo: ", "Interactive graph: "),
     compito: T("Riproduci il <strong style=\"color:var(--gi-target)\">bersaglio</strong> muovendo i cursori.",
       "Reproduce the <strong style=\"color:var(--gi-target)\">target</strong> by moving the sliders."),
@@ -332,7 +333,10 @@
       const destra = h("span");
       const play = h("button", { class: "gi-play", title: S.anima, "aria-label": S.anima }, "▶");
       valEl[k] = h("span", { class: "gi-val" });
-      destra.append(play, valEl[k]);
+      const meno = h("button", { class: "gi-play gi-passo", title: S.indietro, "aria-label": S.indietro }, "◂");
+      const piu = h("button", { class: "gi-play gi-passo", title: S.avanti, "aria-label": S.avanti }, "▸");
+      destra.append(meno, play, piu, valEl[k]);
+      meno.onclick = () => unPasso(k, -1); piu.onclick = () => unPasso(k, 1);
       riga.append(destra);
       input[k] = h("input", { type: "range", min: p.min, max: p.max, step: p.step, value: p.val, "aria-label": String(p.nome || k).replace(/\\/g, "") });
       input[k].addEventListener("input", () => aggiorna());
@@ -538,6 +542,14 @@
       if (!anim) return;
       cancelAnimationFrame(anim.id); anim.btn.classList.remove("on"); anim.btn.textContent = "▶";
       anim = null;
+    }
+
+    // un passo del cursore alla volta (◂ ▸), fermando l'animazione
+    function unPasso(k, d) {
+      ferma();
+      const inp = input[k], lo = +inp.min, hi = +inp.max, ps = +inp.step || (hi - lo) / 100;
+      const v = Math.min(hi, Math.max(lo, lo + (Math.round((+inp.value - lo) / ps) + d) * ps));
+      inp.value = String(+v.toFixed(6)); aggiorna();
     }
 
     function anima(k, btn) {
