@@ -112,7 +112,7 @@ extra_css:
   - stylesheets/extra.css
   # laboratorio interattivo (genera_laboratorio.py)
   - https://cdn.jsdelivr.net/npm/jsxgraph@1.10.1/distrib/jsxgraph.css
-  - stylesheets/interattivi.css?v=fbdb4fd4ed
+  - stylesheets/interattivi.css?v=c746d13ff8
   - stylesheets/quiz.css?v=9e3792b41c
 
 markdown_extensions:
@@ -143,7 +143,7 @@ extra_javascript:
   - javascripts/gi-mip-d.js?v=4f2ac4bb63
   - javascripts/gi-mip-localizzazione.js?v=60f44249b8
   - javascripts/gi-mip-logica.js?v=ee4a8e4c24
-  - javascripts/gi-mip-lotti.js?v=5c2c5063d6
+  - javascripts/gi-mip-lotti.js?v=ba5040d07a
   - javascripts/gi-mip-progetti.js?v=35933b6559
   - javascripts/quiz.js?v=be7fae2b85
 

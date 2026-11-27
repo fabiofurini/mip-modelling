@@ -262,7 +262,7 @@
     /** il valore ottimo e, sotto, in breve, il rilassamento continuo e il gap
      *  nome: «Costo ottimo»…; z, zLP: testi già formattati; gap: testo TeX del gap (o null) */
     valore: (nome, z, zLP, gap) =>
-      `<p class="plm-sol-z">${nome} \\(z(\\text{MILP})\\) = <b>${z}</b></p>` +
+      `<p class="plm-sol-z">${T("Valore ottimo", "Optimal value")} \\(z(\\text{MILP})\\) = <b>${z}</b></p>` +
       `<p class="plm-sol-lp">${T("Rilassamento continuo", "Continuous relaxation")} \\(z(\\text{LP}^+)\\) = ${zLP === null ? "—" : zLP} · <span class="plm-nowrap">gap ${gap === null ? "—" : `\\(${gap}\\)`}</span></p>`,
   };
 
