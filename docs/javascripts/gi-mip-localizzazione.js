@@ -121,7 +121,7 @@
     disegna(crea, R, v, C, S) {
       const M = window.GI_MIP, F = FIG(), FR = L().FR, W = S.W, H = S.H;
       const titolo = R.stato === "ottimo"
-        ? T(`Soluzione ottima: sedi aperte x̃(MILP) e litri spediti ỹₗ꜀(MILP) (z(MILP) = ${FR.euroTxt(R.z)})`, `Optimal solution: open sites x̃(MILP) and litres shipped ỹₗ꜀(MILP) (z(MILP) = ${FR.euroTxt(R.z)})`)
+        ? T(`Soluzione ottima: sedi aperte x̃(MILP) e litri spediti ỹ(MILP) (z(MILP) = ${FR.euroTxt(R.z)})`, `Optimal solution: open sites x̃(MILP) and litres shipped ỹ(MILP) (z(MILP) = ${FR.euroTxt(R.z)})`)
         : T("Nessuna soluzione ammissibile", "No feasible solution");
       M.scritta(crea, W / 2, H - 16, titolo, { fontSize: 13.5, strokeColor: F.blu, cssStyle: "font-weight:700" });
       if (R.stato !== "ottimo") return;
@@ -171,7 +171,7 @@
       const H = L(), FR = H.FR;
       return H.SOL.blocco(
         H.SOL.valore(T("Costo ottimo", "Optimal cost"), FR.euro(R.z), R.zLP === null ? null : FR.euro(R.zLP), R.zLP === null ? null : FR.gap(R.z, R.zLP)),
-        [H.SOL.tab(T("Sedi aperte \\(\\tilde x_l(\\text{MILP})\\) e litri spediti \\(\\tilde y_{lc}(\\text{MILP})\\)", "Open sites \\(\\tilde x_l(\\text{MILP})\\) and litres shipped \\(\\tilde y_{lc}(\\text{MILP})\\)"),
+        [H.SOL.tab(T("Sedi aperte \\(\\tilde x(\\text{MILP})\\) e litri spediti \\(\\tilde y(\\text{MILP})\\)", "Open sites \\(\\tilde x(\\text{MILP})\\) and litres shipped \\(\\tilde y(\\text{MILP})\\)"),
           [T("sede \\(l\\)", "site \\(l\\)"), "\\(\\tilde x_l\\)", ...[1, 2, 3, 4].map((k) => `\\(c = ${k}\\)`)],
           [0, 1, 2].map((l) => [String(l + 1), String(R.x[l]), ...R.y[l].map((q) => H.SOL.z(q))]))],
         T("«—»: nessuna spedizione.", "«—»: no shipment."));

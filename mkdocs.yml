@@ -141,10 +141,10 @@ extra_javascript:
   - javascripts/gi-mip-b.js?v=b2e745ffa8
   - javascripts/gi-mip-c.js?v=d299c7328a
   - javascripts/gi-mip-d.js?v=4f2ac4bb63
-  - javascripts/gi-mip-localizzazione.js?v=319f8fb8ca
-  - javascripts/gi-mip-logica.js?v=141bda702f
-  - javascripts/gi-mip-lotti.js?v=e9fce947ba
-  - javascripts/gi-mip-progetti.js?v=511eb14690
+  - javascripts/gi-mip-localizzazione.js?v=60f44249b8
+  - javascripts/gi-mip-logica.js?v=ee4a8e4c24
+  - javascripts/gi-mip-lotti.js?v=5c2c5063d6
+  - javascripts/gi-mip-progetti.js?v=35933b6559
   - javascripts/quiz.js?v=be7fae2b85
 
 # the single app pages are not in the menu: the lab is one entry

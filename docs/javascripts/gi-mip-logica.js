@@ -157,7 +157,7 @@
       return H.SOL.blocco(
         H.SOL.valore(T("Ricavo ottimo", "Optimal revenue"), tx(FR.tex(R.z)), R.zLP === null ? null : tx(FR.tex(R.zLP)), R.zLP === null ? null : FR.gap(R.zLP, R.z)),
         [0, 5].map((k) => H.SOL.tab("", ["\\(p\\)", ...[1, 2, 3, 4, 5].map((q) => String(k + q))],   // due righe da 5: la colonna è stretta
-          [["\\(\\tilde x_p(\\text{MILP})\\)", ...R.x.slice(k, k + 5).map(String)]])),
+          [["\\(\\tilde x(\\text{MILP})\\)", ...R.x.slice(k, k + 5).map(String)]])),
         R.nOtt > 1 ? T(`Ci sono ${R.nOtt} soluzioni ottime con lo stesso ricavo: se ne mostra una.`, `There are ${R.nOtt} optimal solutions with the same revenue: one is shown.`) : "");
     },
     domanda: T("Con \\(r_2 = 6\\) il progetto 2 esce e il gap va a zero. Con \\(b = 24\\) si finanziano otto progetti.",

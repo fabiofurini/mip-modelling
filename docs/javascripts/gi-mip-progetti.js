@@ -137,7 +137,7 @@
       return H.SOL.blocco(
         H.SOL.valore(T("Beneficio ottimo", "Optimal benefit"), pt(R.z), R.zLP === null ? null : pt(R.zLP), R.zLP === null ? null : FR.gap(R.zLP, R.z)),
         [H.SOL.tab("", ["\\(i\\)", ...R.fondo.map((_, i) => String(i + 1))],
-          [[T("\\(k\\) con \\(\\tilde x_{ik}(\\text{MILP}) = 1\\)", "\\(k\\) with \\(\\tilde x_{ik}(\\text{MILP}) = 1\\)"), ...R.fondo.map((k) => (k ? String(k) : T("no", "no")))]])]);
+          [[T("\\(k\\) con \\(\\tilde x(\\text{MILP}) = 1\\)", "\\(k\\) with \\(\\tilde x(\\text{MILP}) = 1\\)"), ...R.fondo.map((k) => (k ? String(k) : T("no", "no")))]])]);
     },
     domanda: T("Porta \\(b_1\\) a 12: il gap va a zero. Porta \\(c_5\\) a 7: si finanziano solo i progetti 2 e 5, biblioteca e illuminazione LED.",
       "Set \\(b_1\\) to 12: the gap drops to zero. Set \\(c_5\\) to 7: only projects 2 and 5, library and LED lighting, are financed."),

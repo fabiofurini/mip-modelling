@@ -514,7 +514,7 @@
       lineaPunti(crea, A, giorni, Mo.d, F.rosso, { dash: 2, spessore: 1.8 });
       lineaPunti(crea, A, giorni.slice(0, nG - 1), R.s, F.arancio, { r: 4, punto: { face: "[]" } });
       legendaRiga(crea, A, [[F.teal, T("produzione x̃(MILP)", "production x̃(MILP)"), "barra"], [F.rosso, T("domanda dₜ", "demand dₜ"), "tratteggioPunti"],
-        [F.arancio, T("scorta s̃(MILP) a fine giorno", "stock s̃(MILP) at the end of the day"), "lineaPunti"], [F.fascia, T("giorno con setup (ỹₜ(MILP) = 1)", "setup day (ỹₜ(MILP) = 1)"), "fascia"]], C);
+        [F.arancio, T("scorta s̃(MILP) a fine giorno", "stock s̃(MILP) at the end of the day"), "lineaPunti"], [F.fascia, T("giorno con setup (ỹ(MILP) = 1)", "setup day (ỹ(MILP) = 1)"), "fascia"]], C);
     },
     legenda: () => [],
     letture: () => "",
@@ -523,9 +523,9 @@
       const Mo = R.Mo;
       const intest = ["", ...Mo.d.map((_, t) => `\\(t = ${t + 1}\\)`)];
       const righe = [
-        ["\\(\\tilde x_t(\\text{MILP})\\)", ...R.x.map((x) => SOL.z(x))],
-        ["\\(\\tilde s_t(\\text{MILP})\\)", ...R.s.map((x) => SOL.z(x)), ""],
-        ["\\(\\tilde y_t(\\text{MILP})\\)", ...R.y.map(String)],
+        ["\\(\\tilde x(\\text{MILP})\\)", ...R.x.map((x) => SOL.z(x))],
+        ["\\(\\tilde s(\\text{MILP})\\)", ...R.s.map((x) => SOL.z(x)), ""],
+        ["\\(\\tilde y(\\text{MILP})\\)", ...R.y.map(String)],
       ];
       const nota = T("«—»: valore nullo.", "«—»: zero value.") +
         (R.nOtt > 1 ? " " + T(`Ci sono ${R.nOtt} piani ottimi con lo stesso costo: si mostra quello con meno setup.`, `There are ${R.nOtt} optimal plans with the same cost: the one with fewer setups is shown.`) : "");
