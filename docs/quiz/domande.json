@@ -5868,7 +5868,7 @@
      "Del rilassamento con i bound, con le binarie sostituite da $0 \\le x \\le 1$",
      "Del rilassamento della radice calcolato dal solver dopo presolve e tagli"
     ],
-    "spiegazione": "Il duale a mano è quello di $\\mathit{LP}$, senza i bound: ha meno vincoli primali, quindi meno variabili duali. Il rilassamento con i bound, $\\mathit{LP}^+$, lo calcola il solver con `relax()`."
+    "spiegazione": "Il duale a mano è quello di $\\text{LP}$, senza i bound: ha meno vincoli primali, quindi meno variabili duali. Il rilassamento con i bound, $\\text{LP}^+$, lo calcola il solver con `relax()`."
    },
    "en": {
     "testo": "In the course's bound protocol, for every MILP the dual of a relaxation is written by hand and a feasible solution of it is built. Of which relaxation?",
@@ -5878,7 +5878,7 @@
      "Of the relaxation with the bounds, with the binaries replaced by $0 \\le x \\le 1$",
      "Of the root relaxation computed by the solver after presolve and cuts"
     ],
-    "spiegazione": "The hand-made dual is that of $\\mathit{LP}$, without the bounds: it has fewer primal constraints, hence fewer dual variables. The relaxation with the bounds, $\\mathit{LP}^+$, is computed by the solver with `relax()`."
+    "spiegazione": "The hand-made dual is that of $\\text{LP}$, without the bounds: it has fewer primal constraints, hence fewer dual variables. The relaxation with the bounds, $\\text{LP}^+$, is computed by the solver with `relax()`."
    }
   },
   {
@@ -7571,22 +7571,22 @@
    },
    "corretta": 0,
    "it": {
-    "testo": "MILP di **minimo** con binarie. $\\zlp$: rilassamento con le sole $x \\ge 0$; $\\zlpp$: con $0 \\le x \\le 1$; $z(\\mathit{LP}^{++})$: come $\\zlpp$ più alcune disuguaglianze valide. Quale catena vale sempre?",
+    "testo": "MILP di **minimo** con binarie. $\\zlp$: rilassamento con le sole $x \\ge 0$; $\\zlpp$: con $0 \\le x \\le 1$; $z(\\text{LP}^{++})$: come $\\zlpp$ più alcune disuguaglianze valide. Quale catena vale sempre?",
     "opzioni": [
-     "$\\zlp \\le \\zlpp \\le z(\\mathit{LP}^{++}) \\le \\zmilp$",
-     "$\\zmilp \\le z(\\mathit{LP}^{++}) \\le \\zlpp \\le \\zlp$",
-     "$\\zlpp \\le \\zlp \\le z(\\mathit{LP}^{++}) \\le \\zmilp$",
-     "$\\zlp \\le \\zlpp \\le \\zmilp \\le z(\\mathit{LP}^{++})$"
+     "$\\zlp \\le \\zlpp \\le z(\\text{LP}^{++}) \\le \\zmilp$",
+     "$\\zmilp \\le z(\\text{LP}^{++}) \\le \\zlpp \\le \\zlp$",
+     "$\\zlpp \\le \\zlp \\le z(\\text{LP}^{++}) \\le \\zmilp$",
+     "$\\zlp \\le \\zlpp \\le \\zmilp \\le z(\\text{LP}^{++})$"
     ],
     "spiegazione": "Ogni passo aggiunge vincoli soddisfatti da tutte le soluzioni intere: l'insieme ammissibile si restringe senza perdere punti interi, quindi in un minimo il valore può solo salire, restando sotto $\\zmilp$."
    },
    "en": {
-    "testo": "**Minimisation** MILP with binaries. $\\zlp$: relaxation with $x \\ge 0$ only; $\\zlpp$: with $0 \\le x \\le 1$; $z(\\mathit{LP}^{++})$: like $\\zlpp$ plus some valid inequalities. Which chain always holds?",
+    "testo": "**Minimisation** MILP with binaries. $\\zlp$: relaxation with $x \\ge 0$ only; $\\zlpp$: with $0 \\le x \\le 1$; $z(\\text{LP}^{++})$: like $\\zlpp$ plus some valid inequalities. Which chain always holds?",
     "opzioni": [
-     "$\\zlp \\le \\zlpp \\le z(\\mathit{LP}^{++}) \\le \\zmilp$",
-     "$\\zmilp \\le z(\\mathit{LP}^{++}) \\le \\zlpp \\le \\zlp$",
-     "$\\zlpp \\le \\zlp \\le z(\\mathit{LP}^{++}) \\le \\zmilp$",
-     "$\\zlp \\le \\zlpp \\le \\zmilp \\le z(\\mathit{LP}^{++})$"
+     "$\\zlp \\le \\zlpp \\le z(\\text{LP}^{++}) \\le \\zmilp$",
+     "$\\zmilp \\le z(\\text{LP}^{++}) \\le \\zlpp \\le \\zlp$",
+     "$\\zlpp \\le \\zlp \\le z(\\text{LP}^{++}) \\le \\zmilp$",
+     "$\\zlp \\le \\zlpp \\le \\zmilp \\le z(\\text{LP}^{++})$"
     ],
     "spiegazione": "Each step adds constraints satisfied by all integer solutions: the feasible set shrinks without losing integer points, so in a minimisation the value can only rise, staying below $\\zmilp$."
    }
@@ -7638,7 +7638,7 @@
      "I due ottimi differiscono al più del gap; serve a stimare `MIPGap`",
      "Ogni soluzione duale ammissibile vale quanto l'ottimo primale; serve per costruire bound esatti a mano"
     ],
-    "spiegazione": "Dualità forte: con ottimo finito, $z(D(\\mathit{LP})) = \\zlp$. Le soluzioni duali ammissibili qualsiasi valgono al più $\\zlp$ (dualità debole), e fra MILP e duale del rilassamento resta in generale il salto $\\zmilp - \\zlp$."
+    "spiegazione": "Dualità forte: con ottimo finito, $z(D(\\text{LP})) = \\zlp$. Le soluzioni duali ammissibili qualsiasi valgono al più $\\zlp$ (dualità debole), e fra MILP e duale del rilassamento resta in generale il salto $\\zmilp - \\zlp$."
    },
    "en": {
     "testo": "Minimisation linear programme $\\min \\sum_j c_j x_j$ (the primal) with finite optimum, and its dual $\\max \\sum_i b_i \\pi_i$. What does **strong duality** state, and what is it used for in the course?",
@@ -7648,7 +7648,7 @@
      "The two optima differ by at most the gap; it serves to estimate `MIPGap`",
      "Every feasible dual solution is worth as much as the primal optimum; it serves to build exact bounds by hand"
     ],
-    "spiegazione": "Strong duality: with finite optimum, $z(D(\\mathit{LP})) = \\zlp$. Arbitrary feasible dual solutions are worth at most $\\zlp$ (weak duality), and between the MILP and the dual of the relaxation the jump $\\zmilp - \\zlp$ remains in general."
+    "spiegazione": "Strong duality: with finite optimum, $z(D(\\text{LP})) = \\zlp$. Arbitrary feasible dual solutions are worth at most $\\zlp$ (weak duality), and between the MILP and the dual of the relaxation the jump $\\zmilp - \\zlp$ remains in general."
    }
   },
   {
