@@ -77,7 +77,8 @@
 .gi-punti { font-family: "JetBrains Mono", monospace; }
 .gi-letture { font-size: .95em; background: color-mix(in srgb, var(--gi-line) 50%, transparent); border-radius: 8px; padding: .5em .7em; margin-top: .6em; line-height: 1.6; }
 .gi [hidden] { display: none !important; }
-.gi .JXGtext { color: var(--gi-muted) !important; font-family: "Source Sans 3", sans-serif !important; }
+.gi .JXGtext:not(.gi-mat) { color: var(--gi-muted) !important; }
+.gi .JXGtext { font-family: "Source Sans 3", sans-serif !important; }
 
 /* grafico la cui ricetta non c'è (ancora), o che non si è potuto disegnare */
 .gi.gi-assente { box-shadow: none; border-style: dashed; padding: .8em 1.1em; color: var(--gi-muted); font-size: .75rem; background: transparent; }

@@ -144,10 +144,21 @@
       Object.assign({ fixed: true, highlight: false, strokeWidth: 1, fillColor: "none", fillOpacity: 0 }, attr));
   const linea = (crea, x0, y0, x1, y1, attr) =>
     crea("curve", [[x0, x1], [y0, y1]], Object.assign({ fixed: true, highlight: false, strokeWidth: 1 }, attr));
-  const scritta = (crea, x, y, s, attr) =>
-    crea("text", [x, y, String(s)], Object.assign({
-      fixed: true, highlight: false, display: "internal", anchorX: "middle", anchorY: "middle", fontSize: 12,
+  // lettere matematiche in corsivo, come nei riquadri MathJax: x̃, ỹ… e i simboli con pedice (aᵢ, dₜ); LP, MILP, NLP restano in tondo
+  const CORSIVO = /([A-Za-z]\u0303|[\u00e3\u1ebd\u0129\u00f5\u0169\u1ef9]|(?<![A-Za-z])[A-Za-z](?=[\u2080-\u209c\u1d62-\u1d6a]))/g;
+  const scritta = (crea, x, y, s, attr) => {
+    let t = String(s), disp = "internal";
+    if (!(attr && attr.rotate) && CORSIVO.test(t)) {
+      CORSIVO.lastIndex = 0;
+      t = t.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(CORSIVO, "<i>$1</i>");
+      disp = "html";
+      attr = Object.assign({ strokeColor: "var(--gi-muted)", cssClass: "JXGtext gi-mat", highlightCssClass: "JXGtext gi-mat" }, attr);
+    }
+    CORSIVO.lastIndex = 0;
+    return crea("text", [x, y, t], Object.assign({
+      fixed: true, highlight: false, display: disp, anchorX: "middle", anchorY: "middle", fontSize: 12,
     }, attr));
+  };
   const area = (crea, P, attr) => P.length < 2 ? null :
     crea("curve", [[...P.map((p) => p[0]), P[0][0]], [...P.map((p) => p[1]), P[0][1]]],
       Object.assign({ fixed: true, highlight: false, strokeWidth: 2, fillOpacity: 0.18 }, attr));

@@ -112,7 +112,7 @@ extra_css:
   - stylesheets/extra.css
   # laboratorio interattivo (genera_laboratorio.py)
   - https://cdn.jsdelivr.net/npm/jsxgraph@1.10.1/distrib/jsxgraph.css
-  - stylesheets/interattivi.css?v=86806ddbb3
+  - stylesheets/interattivi.css?v=ee897b2f8e
   - stylesheets/quiz.css?v=9e3792b41c
 
 markdown_extensions:
@@ -136,13 +136,13 @@ extra_javascript:
   # laboratorio interattivo (genera_laboratorio.py): JSXGraph, il motore, gli helper comuni, poi le ricette
   - https://cdn.jsdelivr.net/npm/jsxgraph@1.10.1/distrib/jsxgraphcore.js
   - javascripts/interattivi.js?v=1f0c3a08a6
-  - javascripts/gi-comune.js?v=e97a9dedbc
+  - javascripts/gi-comune.js?v=f3c3cf905e
   - javascripts/gi-mip-a.js?v=ad6566ad40
   - javascripts/gi-mip-b.js?v=b2e745ffa8
   - javascripts/gi-mip-c.js?v=d299c7328a
   - javascripts/gi-mip-d.js?v=4f2ac4bb63
   - javascripts/gi-mip-localizzazione.js?v=60f44249b8
-  - javascripts/gi-mip-logica.js?v=ee4a8e4c24
+  - javascripts/gi-mip-logica.js?v=f5a7d7a61a
   - javascripts/gi-mip-lotti.js?v=ba5040d07a
   - javascripts/gi-mip-progetti.js?v=35933b6559
   - javascripts/quiz.js?v=be7fae2b85

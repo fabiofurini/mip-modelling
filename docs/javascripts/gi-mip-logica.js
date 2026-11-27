@@ -115,7 +115,7 @@
     disegna(crea, R, v, C, S) {
       const M = window.GI_MIP, F = FIG(), FR = L().FR, W = S.W, H = S.H;
       const titolo = R.stato === "ottimo"
-        ? T(`Soluzione ottima x̃ₚ(MILP): i progetti finanziati (z(MILP) = ${FR.txt(R.z)})`, `Optimal solution x̃ₚ(MILP): the financed projects (z(MILP) = ${FR.txt(R.z)})`)
+        ? T(`Soluzione ottima x̃(MILP): i progetti finanziati (z(MILP) = ${FR.txt(R.z)})`, `Optimal solution x̃(MILP): the financed projects (z(MILP) = ${FR.txt(R.z)})`)
         : T("Nessuna soluzione ammissibile", "No feasible solution");
       M.scritta(crea, W / 2, H - 16, titolo, { fontSize: 13.5, strokeColor: F.blu, cssStyle: "font-weight:700" });
       if (R.stato !== "ottimo") return;
@@ -148,7 +148,7 @@
       M.rett(crea, x0, by - 17, x0 + R.b * u, by + 17, { fillColor: "none", strokeColor: C.testo, strokeWidth: 2 });
       for (let k = 0; k <= 30; k += 5) M.scritta(crea, x0 + k * u, by - 28, String(k), { fontSize: 11, strokeColor: C.muted });
       M.scritta(crea, x0, by + 30, T(`costo dei progetti scelti: ${R.costo} su b = ${R.b}`, `cost of the chosen projects: ${R.costo} out of b = ${R.b}`), { anchorX: "left", fontSize: 12.5, strokeColor: C.testo });
-      M.scritta(crea, W - mg, by + 30, T("in rosso: il valore x̃ₚ(LP⁺) nel rilassamento continuo", "in red: the value x̃ₚ(LP⁺) in the continuous relaxation"), { anchorX: "right", fontSize: 11.5, strokeColor: F.rosso });
+      M.scritta(crea, W - mg, by + 30, T("in rosso: il valore x̃(LP⁺) nel rilassamento continuo", "in red: the value x̃(LP⁺) in the continuous relaxation"), { anchorX: "right", fontSize: 11.5, strokeColor: F.rosso });
     },
     letture: () => "",
     soluzione(R) {
