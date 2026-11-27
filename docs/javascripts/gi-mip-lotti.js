@@ -262,8 +262,8 @@
     /** il valore ottimo e, sotto, in breve, il rilassamento continuo e il gap
      *  nome: «Costo ottimo»…; z, zLP: testi già formattati; gap: testo TeX del gap (o null) */
     valore: (nome, z, zLP, gap) =>
-      `<p class="plm-sol-z">${nome} \\(z(\\mathrm{MILP})\\) = <b>${z}</b></p>` +
-      `<p class="plm-sol-lp">${T("Rilassamento continuo", "Continuous relaxation")} \\(z(\\mathrm{LP}^+)\\) = ${zLP === null ? "—" : zLP} · <span class="plm-nowrap">gap ${gap === null ? "—" : `\\(${gap}\\)`}</span></p>`,
+      `<p class="plm-sol-z">${nome} \\(z(\\text{MILP})\\) = <b>${z}</b></p>` +
+      `<p class="plm-sol-lp">${T("Rilassamento continuo", "Continuous relaxation")} \\(z(\\text{LP}^+)\\) = ${zLP === null ? "—" : zLP} · <span class="plm-nowrap">gap ${gap === null ? "—" : `\\(${gap}\\)`}</span></p>`,
   };
 
   // ================================================================ il modello numerico in fondo al riquadro (GI_PL_FONDO)
@@ -469,7 +469,9 @@
         T(`Il modello MILP dell'istanza: ${nv} variabili, ${nc} vincoli.`, `The MILP model of the instance: ${nv} variables, ${nc} constraints.`));
       const giorni = ["\\(t\\)", ...Mo.d.map((_, t) => String(t + 1))];
       const riga = (nome, a) => [nome, ...a.map((x) => (x === null ? "—" : FR.txt(x)))];
-      const TABS = DV.tabelle(DV.tab(T("Dati per giorno", "Data by day"), giorni, [
+      const TABS = DV.tabelle(DV.tab(T("Dimensioni", "Sizes"), ["\\(n\\)"], [[String(nG)]]),
+        DV.tab(T("Scorte (unità)", "Stock (units)"), ["\\(r_0\\)", "\\(r_n\\)"], [[String(LOT.r0), String(LOT.rn)]]),
+        DV.tab(T("Dati per giorno", "Data by day"), giorni, [
         riga(T("\\(d_t\\) (unità)", "\\(d_t\\) (units)"), Mo.d),
         riga("\\(p_t\\) (€)", LOT.p),
         riga("\\(q_t\\) (€)", Mo.d.map(() => Mo.q)),
@@ -478,12 +480,12 @@
       ]));
       const testo = T(`<b>Il problema.</b> Decidiamo quanto produrre in ogni giorno di un orizzonte di più giorni, e di conseguenza quanto resta in magazzino. ` +
         "L'obiettivo è minimizzare il costo totale di produzione, di setup e di magazzino. I vincoli: la domanda di ogni giorno è servita per intero, e non si produce in un giorno senza pagarne il costo fisso di setup." +
-        "<br><b>Variabili:</b> \\(x_t \\ge 0\\): unità prodotte nel giorno \\(t\\); \\(s_t \\ge 0\\): unità a scorta alla fine del giorno \\(t\\), per \\(t \\le n-1\\); \\(y_t \\in \\{0,1\\}\\): vale 1 se nel giorno \\(t\\) si attiva la produzione." +
-        `<br><b>Dati:</b> \\(n\\): numero di giorni; \\(d_t\\): domanda del giorno \\(t\\) (unità); \\(p_t\\): costo di produzione di un'unità nel giorno \\(t\\) (€); \\(q_t\\): costo fisso di setup del giorno \\(t\\) (€); \\(h_t\\): costo di tenere un'unità in magazzino alla fine del giorno \\(t\\), per \\(t \\le n-1\\) (€); \\(M_t = d_t + \\dots + d_n + r_n\\): big-M del giorno \\(t\\), la domanda che resta da coprire (unità); \\(r_0 = r_n = 0\\): scorte iniziale e finale (unità).` + TABS,
+        "<br><b>Variabili:</b> \\(x_t \\ge 0\\): unità prodotte nel giorno \\(t\\), con \\(t \\in \\{1, \\dots, n\\}\\); \\(s_t \\ge 0\\): unità a scorta alla fine del giorno \\(t\\), con \\(t \\in \\{1, \\dots, n-1\\}\\); \\(y_t \\in \\{0,1\\}\\): vale 1 se nel giorno \\(t\\) si attiva la produzione, con \\(t \\in \\{1, \\dots, n\\}\\)." +
+        `<br><b>Dati:</b> \\(n\\): numero di giorni; \\(d_t\\): domanda del giorno \\(t\\) (unità); \\(p_t\\): costo di produzione di un'unità nel giorno \\(t\\) (€); \\(q_t\\): costo fisso di setup del giorno \\(t\\) (€); \\(h_t\\): costo di tenere un'unità in magazzino alla fine del giorno \\(t\\), con \\(t \\in \\{1, \\dots, n-1\\}\\) (€); \\(M_t = d_t + \\dots + d_n + r_n\\): big-M del giorno \\(t\\), la domanda che resta da coprire (unità); \\(r_0\\), \\(r_n\\): scorte iniziale e finale (unità); con \\(t \\in \\{1, \\dots, n\\}\\).` + TABS,
       `<b>The problem.</b> We decide how much to produce on each day of a horizon of several days, and consequently how much is left in stock. ` +
         "The objective is to minimize the total cost of production, setups and stock. The constraints: the demand of every day is served in full, and nothing is produced on a day without paying its fixed setup cost." +
-        "<br><b>Variables:</b> \\(x_t \\ge 0\\): units produced on day \\(t\\); \\(s_t \\ge 0\\): units in stock at the end of day \\(t\\), for \\(t \\le n-1\\); \\(y_t \\in \\{0,1\\}\\): equals 1 if production is set up on day \\(t\\)." +
-        `<br><b>Data:</b> \\(n\\): number of days; \\(d_t\\): demand of day \\(t\\) (units); \\(p_t\\): production cost of one unit on day \\(t\\) (€); \\(q_t\\): fixed setup cost of day \\(t\\) (€); \\(h_t\\): cost of keeping one unit in stock at the end of day \\(t\\), for \\(t \\le n-1\\) (€); \\(M_t = d_t + \\dots + d_n + r_n\\): big-M of day \\(t\\), the demand still to be covered (units); \\(r_0 = r_n = 0\\): initial and final stock (units).` + TABS);
+        "<br><b>Variables:</b> \\(x_t \\ge 0\\): units produced on day \\(t\\), with \\(t \\in \\{1, \\dots, n\\}\\); \\(s_t \\ge 0\\): units in stock at the end of day \\(t\\), with \\(t \\in \\{1, \\dots, n-1\\}\\); \\(y_t \\in \\{0,1\\}\\): equals 1 if production is set up on day \\(t\\), with \\(t \\in \\{1, \\dots, n\\}\\)." +
+        `<br><b>Data:</b> \\(n\\): number of days; \\(d_t\\): demand of day \\(t\\) (units); \\(p_t\\): production cost of one unit on day \\(t\\) (€); \\(q_t\\): fixed setup cost of day \\(t\\) (€); \\(h_t\\): cost of keeping one unit in stock at the end of day \\(t\\), with \\(t \\in \\{1, \\dots, n-1\\}\\) (€); \\(M_t = d_t + \\dots + d_n + r_n\\): big-M of day \\(t\\), the demand still to be covered (units); \\(r_0\\), \\(r_n\\): initial and final stock (units); with \\(t \\in \\{1, \\dots, n\\}\\).` + TABS);
       return FONDO.sposta(st, modello(testo, sim, num, "lotti"));
     },
     disegna(crea, R, v, C, S) {
@@ -492,10 +494,11 @@
       const fx = (u) => (Number.isInteger(u) && u >= 1 && u <= nG ? String(u) : "");
       const hTop = S.H - MF.basso - MF.alto;   // una sola figura, la più significativa (Fabio, 26/11/2026)
       // 1. produzione, domanda, scorte e giorni con setup
-      const vmax = Math.max(...R.x, ...Mo.d, ...R.s, 10);
+      // scala fissa: produzione e scorte non superano la domanda totale M_1, così la figura non cambia scala con la soluzione
+      const vmax = Math.max(Mo.Mt[0], ...Mo.d, 10);
       const A = figura(crea, { X0: MF.sx, X1: S.W - MF.dx, Y0: S.H - MF.alto - hTop, Y1: S.H - MF.alto, xa: 0.4, xb: nG + 0.6, ya: 0, yb: vmax * 1.32,
-        titolo: T(`Piano ottimo: produzione, domanda e scorte (z = ${FR.euroTxt(R.z)})`, `Optimal plan: production, demand and stock (z = ${FR.euroTxt(R.z)})`),
-        ny: T("unità", "units"), nx: T("giorno", "day") }, C, { nTy: 5, fx, ymax: vmax * 1.12 });
+        titolo: T(`Piano ottimo: produzione, domanda e scorte (z(MILP) = ${FR.euroTxt(R.z)})`, `Optimal plan: production, demand and stock (z(MILP) = ${FR.euroTxt(R.z)})`),
+        ny: T("unità", "units"), nx: T("giorno", "day") }, C, { nTy: 5, fx, ymax: vmax });
       giorni.forEach((g, t) => {
         if (!R.y[t]) return;
         M.rett(crea, A.X(g - 0.46), A.Y(0), A.X(g + 0.46), A.Y(vmax * 1.18), { fillColor: F.fascia, fillOpacity: M.scuro() ? 0.16 : 0.09, strokeColor: "none" });
@@ -505,15 +508,13 @@
         const q = R.x[t];
         if (q <= 1e-9) return;
         M.rett(crea, A.X(g - 0.26), A.Y(0), A.X(g + 0.26), A.Y(q), { fillColor: F.teal, fillOpacity: 1, strokeColor: F.teal, strokeWidth: 0.5 });
-        // il valore dentro la barra, in cima (sopra la barra coprirebbe i pallini della domanda); fuori se la barra è bassa
-        const dentro = A.Y(q) - A.Y(0) > 20;
-        M.scritta(crea, A.X(g), A.Y(q) + (dentro ? -4 : 3), FR.txt(q, 1), { anchorY: dentro ? "top" : "bottom", fontSize: 11.5,
-          strokeColor: dentro ? "#ffffff" : F.teal, cssStyle: "font-weight:700" });
+        // il valore in una riga fissa sopra le barre, sotto la scritta «setup»: non si sposta quando cambia la soluzione
+        M.scritta(crea, A.X(g), A.Y(vmax * 1.07), FR.txt(q, 1), { fontSize: 12, strokeColor: F.teal, cssStyle: "font-weight:700" });
       });
       lineaPunti(crea, A, giorni, Mo.d, F.rosso, { dash: 2, spessore: 1.8 });
       lineaPunti(crea, A, giorni.slice(0, nG - 1), R.s, F.arancio, { r: 4, punto: { face: "[]" } });
-      legendaRiga(crea, A, [[F.teal, T("produzione xₜ", "production xₜ"), "barra"], [F.rosso, T("domanda dₜ", "demand dₜ"), "tratteggioPunti"],
-        [F.arancio, T("scorta sₜ a fine giorno", "stock sₜ at the end of the day"), "lineaPunti"], [F.fascia, T("giorno con setup (yₜ = 1)", "setup day (yₜ = 1)"), "fascia"]], C);
+      legendaRiga(crea, A, [[F.teal, T("produzione x̃ₜ(MILP)", "production x̃ₜ(MILP)"), "barra"], [F.rosso, T("domanda dₜ", "demand dₜ"), "tratteggioPunti"],
+        [F.arancio, T("scorta s̃ₜ(MILP) a fine giorno", "stock s̃ₜ(MILP) at the end of the day"), "lineaPunti"], [F.fascia, T("giorno con setup (ỹₜ(MILP) = 1)", "setup day (ỹₜ(MILP) = 1)"), "fascia"]], C);
     },
     legenda: () => [],
     letture: () => "",
@@ -522,9 +523,9 @@
       const Mo = R.Mo;
       const intest = ["", ...Mo.d.map((_, t) => `\\(t = ${t + 1}\\)`)];
       const righe = [
-        ["\\(\\tilde x_t\\)", ...R.x.map((x) => SOL.z(x))],
-        ["\\(\\tilde s_t\\)", ...R.s.map((x) => SOL.z(x)), ""],
-        ["\\(\\tilde y_t\\)", ...R.y.map(String)],
+        ["\\(\\tilde x_t(\\text{MILP})\\)", ...R.x.map((x) => SOL.z(x))],
+        ["\\(\\tilde s_t(\\text{MILP})\\)", ...R.s.map((x) => SOL.z(x)), ""],
+        ["\\(\\tilde y_t(\\text{MILP})\\)", ...R.y.map(String)],
       ];
       const nota = T("«—»: valore nullo.", "«—»: zero value.") +
         (R.nOtt > 1 ? " " + T(`Ci sono ${R.nOtt} piani ottimi con lo stesso costo: si mostra quello con meno setup.`, `There are ${R.nOtt} optimal plans with the same cost: the one with fewer setups is shown.`) : "");

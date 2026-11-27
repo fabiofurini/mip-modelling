@@ -93,19 +93,17 @@
         T(`Il modello MILP dell'istanza: ${N} variabili binarie, ${R.P.b.length} vincoli.`, `The MILP model of the instance: ${N} binary variables, ${R.P.b.length} constraints.`));
       const TAB = H.DV.tabelle(H.DV.tab(T("Progetti", "Projects"), [T("progetto \\(p\\)", "project \\(p\\)"), ...vars.map((_, p) => String(p + 1))],
         [["\\(r_p\\)", ...R.r.map(String)], ["\\(c_p\\)", ...DATI.c.map(String)]]),
-        H.DV.tab(T("Budget", "Budget"), ["\\(b\\)"], [[String(R.b)]]));
+        H.DV.tab(T("Dimensioni", "Sizes"), ["\\(n\\)"], [[String(N)]]), H.DV.tab(T("Budget", "Budget"), ["\\(b\\)"], [[String(R.b)]]));
       const imp = IMPL.map((im, k) => `(${k + 1}) \\(${im.tex}\\)`).join("; ");
       const testo = T(
         "<b>Il problema.</b> Un'azienda valuta alcuni progetti, ciascuno con un ricavo e un costo, e dispone di un budget. Alcune scelte sono legate da implicazioni logiche, del tipo «se si sceglie un progetto allora se ne sceglie (o non se ne sceglie) un altro». " +
         "Decidiamo quali progetti finanziare. L'obiettivo è massimizzare il ricavo totale. I vincoli: il costo totale non supera il budget e tutte le implicazioni sono rispettate." +
-        "<br><b>Variabili:</b> \\(x_p \\in \\{0,1\\}\\): vale 1 se si finanzia il progetto \\(p\\)." +
-        `<br><b>Dati:</b> \\(n\\): numero di progetti; \\(r_p\\): ricavo del progetto \\(p\\); \\(c_p\\): costo del progetto \\(p\\); \\(b\\): budget; ` +
-        `le sei implicazioni dell'esercizio 2.1: ${imp}. Ogni implicazione diventa una o due disuguaglianze lineari.` + TAB,
+        "<br><b>Variabili:</b> \\(x_p \\in \\{0,1\\}\\): vale 1 se si finanzia il progetto \\(p\\), con \\(p \\in \\{1, \\dots, n\\}\\)." +
+        `<br><b>Dati:</b> \\(n\\): numero di progetti; \\(r_p\\): ricavo del progetto \\(p\\); \\(c_p\\): costo del progetto \\(p\\); \\(b\\): budget; con \\(p \\in \\{1, \\dots, n\\}\\). Le sei implicazioni dell'esercizio 2.1: ${imp}. Ogni implicazione diventa una o due disuguaglianze lineari.` + TAB,
         "<b>The problem.</b> A company evaluates some projects, each with a revenue and a cost, and has a budget. Some choices are linked by logical implications, of the kind «if a project is chosen then another one is (or is not) chosen». " +
         "We decide which projects to finance. The objective is to maximize the total revenue. The constraints: the total cost does not exceed the budget and all the implications hold." +
-        "<br><b>Variables:</b> \\(x_p \\in \\{0,1\\}\\): equals 1 if project \\(p\\) is financed." +
-        `<br><b>Data:</b> \\(n\\): number of projects; \\(r_p\\): revenue of project \\(p\\); \\(c_p\\): cost of project \\(p\\); \\(b\\): budget; ` +
-        `the six implications of exercise 2.1: ${imp}. Each implication becomes one or two linear inequalities.` + TAB);
+        "<br><b>Variables:</b> \\(x_p \\in \\{0,1\\}\\): equals 1 if project \\(p\\) is financed, with \\(p \\in \\{1, \\dots, n\\}\\)." +
+        `<br><b>Data:</b> \\(n\\): number of projects; \\(r_p\\): revenue of project \\(p\\); \\(c_p\\): cost of project \\(p\\); \\(b\\): budget; with \\(p \\in \\{1, \\dots, n\\}\\). The six implications of exercise 2.1: ${imp}. Each implication becomes one or two linear inequalities.` + TAB);
       const html = `<div class="plm"><p class="plm-testo">${testo}</p>${rigaCapitolo()}` +
         `<div class="plm-sim">\\(\\displaystyle \\begin{aligned} ${sim} \\end{aligned}\\)</div>` +
         `<details class="plm-num"><summary>${T("Modello numerico con i dati attuali", "Numerical model with the current data")}</summary>` +
@@ -117,7 +115,7 @@
     disegna(crea, R, v, C, S) {
       const M = window.GI_MIP, F = FIG(), FR = L().FR, W = S.W, H = S.H;
       const titolo = R.stato === "ottimo"
-        ? T(`Soluzione ottima: i progetti finanziati (z = ${FR.txt(R.z)})`, `Optimal solution: the financed projects (z = ${FR.txt(R.z)})`)
+        ? T(`Soluzione ottima x̃ₚ(MILP): i progetti finanziati (z(MILP) = ${FR.txt(R.z)})`, `Optimal solution x̃ₚ(MILP): the financed projects (z(MILP) = ${FR.txt(R.z)})`)
         : T("Nessuna soluzione ammissibile", "No feasible solution");
       M.scritta(crea, W / 2, H - 16, titolo, { fontSize: 13.5, strokeColor: F.blu, cssStyle: "font-weight:700" });
       if (R.stato !== "ottimo") return;
@@ -135,7 +133,7 @@
           const val = Math.max(0, Math.min(1, R.xLP[p])), bx0 = x0 + 12, bx1 = x1 - 12, by = y0 + hh * 0.2;
           M.rett(crea, bx0, by - 5, bx1, by + 5, { fillColor: "#ffffff", fillOpacity: preso ? 0.9 : 0, strokeColor: F.rosso, strokeWidth: 1 });
           if (val > 1e-9) M.rett(crea, bx0, by - 5, bx0 + (bx1 - bx0) * val, by + 5, { fillColor: F.rosso, fillOpacity: 1, strokeColor: F.rosso, strokeWidth: 0.5 });
-          M.scritta(crea, xm, by + 15, `x̃ = ${FR.txt(val)}`, { fontSize: 12, strokeColor: preso ? "#ffffff" : F.rosso, cssStyle: "font-weight:700" });
+          M.scritta(crea, xm, by + 15, `x̃(LP⁺) = ${FR.txt(val)}`, { fontSize: 12, strokeColor: preso ? "#ffffff" : F.rosso, cssStyle: "font-weight:700" });
         }
       }
       // budget: barra lunga b, riempita dai costi dei progetti scelti
@@ -150,7 +148,7 @@
       M.rett(crea, x0, by - 17, x0 + R.b * u, by + 17, { fillColor: "none", strokeColor: C.testo, strokeWidth: 2 });
       for (let k = 0; k <= 30; k += 5) M.scritta(crea, x0 + k * u, by - 28, String(k), { fontSize: 11, strokeColor: C.muted });
       M.scritta(crea, x0, by + 30, T(`costo dei progetti scelti: ${R.costo} su b = ${R.b}`, `cost of the chosen projects: ${R.costo} out of b = ${R.b}`), { anchorX: "left", fontSize: 12.5, strokeColor: C.testo });
-      M.scritta(crea, W - mg, by + 30, T("in rosso: il valore x̃ₚ nel rilassamento continuo", "in red: the value x̃ₚ in the continuous relaxation"), { anchorX: "right", fontSize: 11.5, strokeColor: F.rosso });
+      M.scritta(crea, W - mg, by + 30, T("in rosso: il valore x̃ₚ(LP⁺) nel rilassamento continuo", "in red: the value x̃ₚ(LP⁺) in the continuous relaxation"), { anchorX: "right", fontSize: 11.5, strokeColor: F.rosso });
     },
     letture: () => "",
     soluzione(R) {
@@ -159,7 +157,7 @@
       return H.SOL.blocco(
         H.SOL.valore(T("Ricavo ottimo", "Optimal revenue"), tx(FR.tex(R.z)), R.zLP === null ? null : tx(FR.tex(R.zLP)), R.zLP === null ? null : FR.gap(R.zLP, R.z)),
         [0, 5].map((k) => H.SOL.tab("", ["\\(p\\)", ...[1, 2, 3, 4, 5].map((q) => String(k + q))],   // due righe da 5: la colonna è stretta
-          [["\\(\\tilde x_p\\)", ...R.x.slice(k, k + 5).map(String)]])),
+          [["\\(\\tilde x_p(\\text{MILP})\\)", ...R.x.slice(k, k + 5).map(String)]])),
         R.nOtt > 1 ? T(`Ci sono ${R.nOtt} soluzioni ottime con lo stesso ricavo: se ne mostra una.`, `There are ${R.nOtt} optimal solutions with the same revenue: one is shown.`) : "");
     },
     domanda: T("Con \\(r_2 = 6\\) il progetto 2 esce e il gap va a zero. Con \\(b = 24\\) si finanziano otto progetti.",

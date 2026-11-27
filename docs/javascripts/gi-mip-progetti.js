@@ -73,19 +73,21 @@
       const num = H.numLP({ senso: "max", vars, c: R.P.c, cifre: 0, righe: R.P.A.map((a, q) => ({ a, rel: R.P.rel[q], rhs: R.P.b[q] })),
         dominio: [{ cols: [...vars.keys()], rel: "\\in", rhs: "\\{0, 1\\}" }] },
         T(`Il modello MILP dell'istanza: ${vars.length} variabili binarie, ${R.P.b.length} vincoli.`, `The MILP model of the instance: ${vars.length} binary variables, ${R.P.b.length} constraints.`));
-      // tabelle per riga (un progetto, un fondo per colonna): il riquadro resta basso e l'app della home sta in una schermata
-      const TAB = H.DV.tabelle(H.DV.tab(T("Progetti", "Projects"), [T("progetto \\(i\\)", "project \\(i\\)"), ...NOMI().map((_, i) => String(i + 1))],
-        [[T("\\(p_i\\) (punti)", "\\(p_i\\) (points)"), ...DATI.p.map(String)], ["\\(c_i\\) (M€)", ...R.costo.map(String)]]),
-        H.DV.tab(T("Fondi", "Funds"), [T("fondo \\(k\\)", "fund \\(k\\)"), "1", "2"], [["\\(b_k\\) (M€)", ...R.b.map(String)]]));
+      // tabelle per riga (un progetto, un fondo per colonna): il riquadro resta basso e l'app della home sta in una schermata.
+      // I nomi dei progetti (nella figura) qui non ci stanno: con una riga per progetto l'app esce dalla schermata 1440×900.
+      const TAB = H.DV.tabelle(H.DV.tab(T("Dimensioni", "Sizes"), ["\\(n\\)", "\\(m\\)"], [[String(N), String(K)]]),
+        H.DV.tab(T("Progetti", "Projects"), ["\\(i\\)", ...NOMI().map((_, i) => String(i + 1))],
+          [["\\(p_i\\)", ...DATI.p.map(String)], ["\\(c_i\\)", ...R.costo.map(String)]]),
+        H.DV.tab(T("Fondi", "Funds"), ["\\(k\\)", "1", "2"], [["\\(b_k\\)", ...R.b.map(String)]]));
       const testo = T(
         "<b>Il problema.</b> Un comune ha alcuni progetti e alcuni fondi di finanziamento, ciascuno con il suo budget. " +
         "Ogni progetto ha un costo e un beneficio stimato, e può essere finanziato da un solo fondo. Quali progetti finanziare, e con quale fondo, per massimizzare il beneficio totale senza superare i budget?" +
-        "<br><b>Variabili:</b> \\(x_{ik} \\in \\{0,1\\}\\): vale 1 se il progetto \\(i\\) è finanziato dal fondo \\(k\\)." +
-        "<br><b>Dati:</b> \\(p_i\\), \\(c_i\\): beneficio e costo del progetto \\(i\\), con \\(i \\le n\\); \\(b_k\\): budget del fondo \\(k \\le m\\) (1 regionale, 2 europeo)." + TAB,
+        "<br><b>Variabili:</b> \\(x_{ik} \\in \\{0,1\\}\\): vale 1 se il progetto \\(i\\) è finanziato dal fondo \\(k\\), con \\(i \\in \\{1, \\dots, n\\}\\) e \\(k \\in \\{1, \\dots, m\\}\\)." +
+        "<br><b>Dati:</b> \\(n\\), \\(m\\): numero di progetti e di fondi; \\(p_i\\), \\(c_i\\): beneficio (punti) e costo (M€) del progetto \\(i\\); \\(b_k\\): budget del fondo \\(k\\) (M€); con \\(i \\in \\{1, \\dots, n\\}\\) e \\(k \\in \\{1, \\dots, m\\}\\)." + TAB,
         "<b>The problem.</b> A town has some projects and some funding sources, each with its own budget. " +
         "Each project has a cost and an estimated benefit, and can be financed by one fund only. Which projects should be financed, and by which fund, to maximize the total benefit without exceeding the budgets?" +
-        "<br><b>Variables:</b> \\(x_{ik} \\in \\{0,1\\}\\): equals 1 if project \\(i\\) is financed by fund \\(k\\)." +
-        "<br><b>Data:</b> \\(p_i\\), \\(c_i\\): benefit and cost of project \\(i\\), with \\(i \\le n\\); \\(b_k\\): budget of fund \\(k \\le m\\) (1 regional, 2 European)." + TAB);
+        "<br><b>Variables:</b> \\(x_{ik} \\in \\{0,1\\}\\): equals 1 if project \\(i\\) is financed by fund \\(k\\), with \\(i \\in \\{1, \\dots, n\\}\\) and \\(k \\in \\{1, \\dots, m\\}\\)." +
+        "<br><b>Data:</b> \\(n\\), \\(m\\): number of projects and of funds; \\(p_i\\), \\(c_i\\): benefit (points) and cost (M€) of project \\(i\\); \\(b_k\\): budget of fund \\(k\\) (M€); with \\(i \\in \\{1, \\dots, n\\}\\) and \\(k \\in \\{1, \\dots, m\\}\\)." + TAB);
       const V = !!st.el.dataset.vetrina;
       if (V) setTimeout(() => datiDestra(st), 0);
       const html = `<div class="plm"><p class="plm-testo">${testo}</p>` +
@@ -98,7 +100,7 @@
     // e a destra, in grigio, i progetti non finanziati
     disegna(crea, R, v, C, S) {
       const M = window.GI_MIP, W = S.W, H = S.H, nomi = NOMI(), fondi = FONDI();
-      M.scritta(crea, W / 2, H - 16, T("Soluzione ottima: i progetti finanziati da ogni fondo (altezza = costo)", "Optimal solution: the projects financed by each fund (height = cost)"),
+      M.scritta(crea, W / 2, H - 16, T("Soluzione ottima x̃ᵢₖ(MILP): i progetti finanziati da ogni fondo (altezza = costo)", "Optimal solution x̃ᵢₖ(MILP): the projects financed by each fund (height = cost)"),
         { fontSize: 13.5, strokeColor: C.testo, cssStyle: "font-weight:700" });
       if (R.stato !== "ottimo") return;
       const COL = [C.a, C.b, C.c, C.d, C.e], y0 = 62, alto = H - 44;
@@ -134,8 +136,8 @@
       const pt = (z) => `${FR.euro(z).replace(" €", "")} ${T("punti", "points")}`;
       return H.SOL.blocco(
         H.SOL.valore(T("Beneficio ottimo", "Optimal benefit"), pt(R.z), R.zLP === null ? null : pt(R.zLP), R.zLP === null ? null : FR.gap(R.zLP, R.z)),
-        [H.SOL.tab("", [T("progetto \\(i\\)", "project \\(i\\)"), ...R.fondo.map((_, i) => String(i + 1))],
-          [[T("fondo \\(k\\)", "fund \\(k\\)"), ...R.fondo.map((k) => (k ? String(k) : T("no", "no")))]])]);
+        [H.SOL.tab("", ["\\(i\\)", ...R.fondo.map((_, i) => String(i + 1))],
+          [[T("\\(k\\) con \\(\\tilde x_{ik}(\\text{MILP}) = 1\\)", "\\(k\\) with \\(\\tilde x_{ik}(\\text{MILP}) = 1\\)"), ...R.fondo.map((k) => (k ? String(k) : T("no", "no")))]])]);
     },
     domanda: T("Porta \\(b_1\\) a 12: il gap va a zero. Porta \\(c_5\\) a 7: si finanziano solo i progetti 2 e 5, biblioteca e illuminazione LED.",
       "Set \\(b_1\\) to 12: the gap drops to zero. Set \\(c_5\\) to 7: only projects 2 and 5, library and LED lighting, are financed."),

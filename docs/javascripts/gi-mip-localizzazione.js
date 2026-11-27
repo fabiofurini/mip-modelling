@@ -94,7 +94,7 @@
         dominio: [{ cols: [0, 1, 2], rel: "\\in", rhs: "\\{0, 1\\}" }, { cols: ys, rel: ">=", rhs: "0" }] },
         T(`Il modello MILP dell'istanza: ${NV} variabili (${NS} binarie, ${NS * NC} continue), ${R.P.b.length} vincoli.`,
           `The MILP model of the instance: ${NV} variables (${NS} binary, ${NS * NC} continuous), ${R.P.b.length} constraints.`));
-      const TAB = H.DV.tabelle(
+      const TAB = H.DV.tabelle(H.DV.tab(T("Dimensioni", "Sizes"), ["\\(m\\)", "\\(n\\)"], [[String(NS), String(NC)]]),
         H.DV.tab(T("Sedi", "Sites"), [T("sede \\(l\\)", "site \\(l\\)"), "\\(i_l\\) (€)", T("\\(u_l\\) (litri)", "\\(u_l\\) (litres)"),
           ...[1, 2, 3, 4].map((k) => `\\(t_{l${k}}\\) (€)`)],
           [0, 1, 2].map((l) => [String(l + 1), String(R.inst[l]), String(DATI.u[l]), ...DATI.t[l].map(String)])),
@@ -103,14 +103,14 @@
       const testo = T(
         "<b>Il problema.</b> Un'azienda deve servire alcuni clienti e ha individuato alcune sedi candidate. Decidiamo quali sedi installare e quanti litri spedire da ogni sede a ogni cliente. " +
         "L'obiettivo è minimizzare il costo totale, di installazione e di trasporto. I vincoli: la domanda di ogni cliente è soddisfatta esattamente, da una sede non installata non parte nulla e una sede installata non supera la sua capacità." +
-        "<br><b>Variabili:</b> \\(x_l \\in \\{0,1\\}\\): vale 1 se si installa la sede \\(l\\); \\(y_{lc} \\ge 0\\): litri spediti dalla sede \\(l\\) al cliente \\(c\\)." +
+        "<br><b>Variabili:</b> \\(x_l \\in \\{0,1\\}\\): vale 1 se si installa la sede \\(l\\), con \\(l \\in \\{1, \\dots, m\\}\\); \\(y_{lc} \\ge 0\\): litri spediti dalla sede \\(l\\) al cliente \\(c\\), con \\(l \\in \\{1, \\dots, m\\}\\) e \\(c \\in \\{1, \\dots, n\\}\\)." +
         "<br><b>Dati:</b> \\(m\\): numero di sedi; \\(n\\): numero di clienti; \\(i_l\\): costo di installazione della sede \\(l\\) (€); \\(u_l\\): capacità della sede \\(l\\) (litri); " +
-        "\\(t_{lc}\\): costo di trasporto di un litro dalla sede \\(l\\) al cliente \\(c\\) (€); \\(d_c\\): domanda del cliente \\(c\\) (litri)." + TAB,
+        "\\(t_{lc}\\): costo di trasporto di un litro dalla sede \\(l\\) al cliente \\(c\\) (€); \\(d_c\\): domanda del cliente \\(c\\) (litri); con \\(l \\in \\{1, \\dots, m\\}\\) e \\(c \\in \\{1, \\dots, n\\}\\)." + TAB,
         "<b>The problem.</b> A company has to serve some customers and has identified some candidate sites. We decide which sites to open and how many litres to ship from each site to each customer. " +
         "The objective is to minimize the total cost, of opening and of transport. The constraints: the demand of every customer is met exactly, nothing leaves a site that is not open, and an open site does not exceed its capacity." +
-        "<br><b>Variables:</b> \\(x_l \\in \\{0,1\\}\\): equals 1 if site \\(l\\) is opened; \\(y_{lc} \\ge 0\\): litres shipped from site \\(l\\) to customer \\(c\\)." +
+        "<br><b>Variables:</b> \\(x_l \\in \\{0,1\\}\\): equals 1 if site \\(l\\) is opened, with \\(l \\in \\{1, \\dots, m\\}\\); \\(y_{lc} \\ge 0\\): litres shipped from site \\(l\\) to customer \\(c\\), with \\(l \\in \\{1, \\dots, m\\}\\) and \\(c \\in \\{1, \\dots, n\\}\\)." +
         "<br><b>Data:</b> \\(m\\): number of sites; \\(n\\): number of customers; \\(i_l\\): opening cost of site \\(l\\) (€); \\(u_l\\): capacity of site \\(l\\) (litres); " +
-        "\\(t_{lc}\\): cost of transporting one litre from site \\(l\\) to customer \\(c\\) (€); \\(d_c\\): demand of customer \\(c\\) (litres)." + TAB);
+        "\\(t_{lc}\\): cost of transporting one litre from site \\(l\\) to customer \\(c\\) (€); \\(d_c\\): demand of customer \\(c\\) (litres); with \\(l \\in \\{1, \\dots, m\\}\\) and \\(c \\in \\{1, \\dots, n\\}\\)." + TAB);
       const html = `<div class="plm"><p class="plm-testo">${testo}</p>${rigaCapitolo()}` +
         `<div class="plm-sim">\\(\\displaystyle \\begin{aligned} ${sim} \\end{aligned}\\)</div>` +
         `<details class="plm-num"><summary>${T("Modello numerico con i dati attuali", "Numerical model with the current data")}</summary>` +
@@ -121,12 +121,14 @@
     disegna(crea, R, v, C, S) {
       const M = window.GI_MIP, F = FIG(), FR = L().FR, W = S.W, H = S.H;
       const titolo = R.stato === "ottimo"
-        ? T(`Soluzione ottima: sedi aperte e litri spediti (z = ${FR.euroTxt(R.z)})`, `Optimal solution: open sites and litres shipped (z = ${FR.euroTxt(R.z)})`)
+        ? T(`Soluzione ottima: sedi aperte x̃ₗ(MILP) e litri spediti ỹₗ꜀(MILP) (z(MILP) = ${FR.euroTxt(R.z)})`, `Optimal solution: open sites x̃ₗ(MILP) and litres shipped ỹₗ꜀(MILP) (z(MILP) = ${FR.euroTxt(R.z)})`)
         : T("Nessuna soluzione ammissibile", "No feasible solution");
       M.scritta(crea, W / 2, H - 16, titolo, { fontSize: 13.5, strokeColor: F.blu, cssStyle: "font-weight:700" });
       if (R.stato !== "ottimo") return;
-      const xs = W * 0.3, xc = W * 0.72, alto = H - 78, basso = 64, lato = Math.max(30, Math.min(44, H / 15)), rag = Math.max(15, Math.min(21, H / 26));
-      const ys = [0, 1, 2].map((l) => alto - (alto - basso) * (l + 0.5) / NS), yc = [0, 1, 2, 3].map((k) => alto - (alto - basso) * (k + 0.5) / NC);
+      const xs = W * 0.3, xc = W * 0.72, lato = Math.max(30, Math.min(44, H / 15)), rag = Math.max(15, Math.min(21, H / 26));
+      // nodi distanziati su tutta l'altezza (niente spazio vuoto sotto il titolo): in alto c'è posto per il valore x̃ₗ(LP⁺)
+      const alto = H - 44 - lato / 2 - 16, basso = 64 + lato / 2 + 10;
+      const ys = [0, 1, 2].map((l) => alto - (alto - basso) * l / (NS - 1)), yc = [0, 1, 2, 3].map((k) => alto - (alto - basso) * k / (NC - 1));
       const qMax = Math.max(...R.d);
       // archi: prima quelli vuoti, poi quelli usati (sopra)
       const archi = [];
@@ -151,7 +153,7 @@
         M.scritta(crea, xt, y + 17, T(`sede ${l + 1}: ${aperta ? "aperta" : "chiusa"}`, `site ${l + 1}: ${aperta ? "open" : "closed"}`), { anchorX: "right", fontSize: 12.5, strokeColor: aperta ? C.testo : C.muted, cssStyle: "font-weight:700" });
         M.scritta(crea, xt, y, T(`i = ${R.inst[l]} €, u = ${DATI.u[l]} litri`, `i = ${R.inst[l]} €, u = ${DATI.u[l]} litres`), { anchorX: "right", fontSize: 12, strokeColor: C.muted });
         M.scritta(crea, xt, y - 16, aperta ? T(`spedisce ${FR.txt(usati)} su ${DATI.u[l]}`, `ships ${FR.txt(usati)} of ${DATI.u[l]}`) : "", { anchorX: "right", fontSize: 12, strokeColor: C.testo });
-        if (R.xLP) M.scritta(crea, xs, y - lato / 2 - 11, `x̃${"₁₂₃"[l]} = ${FR.txt(R.xLP[l])}`, { fontSize: 12, strokeColor: F.rosso, cssStyle: "font-weight:700" });
+        if (R.xLP) M.scritta(crea, xs, y + lato / 2 + 11, `x̃${"₁₂₃"[l]}(LP⁺) = ${FR.txt(R.xLP[l])}`, { fontSize: 12, strokeColor: F.rosso, cssStyle: "font-weight:700" });
       });
       // clienti con la domanda
       yc.forEach((y, k) => {
@@ -161,7 +163,7 @@
         M.scritta(crea, xc + rag + 10, y - 9, T(`d = ${R.d[k]} litri`, `d = ${R.d[k]} litres`), { anchorX: "left", fontSize: 12, strokeColor: C.muted });
       });
       M.scritta(crea, W / 2, 34, T("arco pieno: litri spediti nell'ottimo; tratteggio: nessuna spedizione", "solid arc: litres shipped in the optimum; dashed: no shipment"), { fontSize: 11.5, strokeColor: C.muted });
-      M.scritta(crea, W / 2, 16, T("in rosso: il valore x̃ₗ della sede nel rilassamento continuo", "in red: the value x̃ₗ of the site in the continuous relaxation"), { fontSize: 11.5, strokeColor: F.rosso });
+      M.scritta(crea, W / 2, 16, T("in rosso: il valore x̃ₗ(LP⁺) della sede nel rilassamento continuo", "in red: the value x̃ₗ(LP⁺) of the site in the continuous relaxation"), { fontSize: 11.5, strokeColor: F.rosso });
     },
     letture: () => "",
     soluzione(R) {
@@ -169,7 +171,7 @@
       const H = L(), FR = H.FR;
       return H.SOL.blocco(
         H.SOL.valore(T("Costo ottimo", "Optimal cost"), FR.euro(R.z), R.zLP === null ? null : FR.euro(R.zLP), R.zLP === null ? null : FR.gap(R.z, R.zLP)),
-        [H.SOL.tab(T("Sedi aperte \\(\\tilde x_l\\) e litri spediti \\(\\tilde y_{lc}\\)", "Open sites \\(\\tilde x_l\\) and litres shipped \\(\\tilde y_{lc}\\)"),
+        [H.SOL.tab(T("Sedi aperte \\(\\tilde x_l(\\text{MILP})\\) e litri spediti \\(\\tilde y_{lc}(\\text{MILP})\\)", "Open sites \\(\\tilde x_l(\\text{MILP})\\) and litres shipped \\(\\tilde y_{lc}(\\text{MILP})\\)"),
           [T("sede \\(l\\)", "site \\(l\\)"), "\\(\\tilde x_l\\)", ...[1, 2, 3, 4].map((k) => `\\(c = ${k}\\)`)],
           [0, 1, 2].map((l) => [String(l + 1), String(R.x[l]), ...R.y[l].map((q) => H.SOL.z(q))]))],
         T("«—»: nessuna spedizione.", "«—»: no shipment."));
