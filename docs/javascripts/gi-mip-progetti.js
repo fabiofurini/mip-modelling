@@ -100,7 +100,7 @@
     // e a destra, in grigio, i progetti non finanziati
     disegna(crea, R, v, C, S) {
       const M = window.GI_MIP, W = S.W, H = S.H, nomi = NOMI(), fondi = FONDI();
-      M.scritta(crea, W / 2, H - 16, T("Soluzione ottima x̃ᵢₖ(MILP): i progetti finanziati da ogni fondo (altezza = costo)", "Optimal solution x̃ᵢₖ(MILP): the projects financed by each fund (height = cost)"),
+      M.scritta(crea, W / 2, H - 16, T("Soluzione ottima x̃(MILP): i progetti finanziati da ogni fondo (altezza = costo)", "Optimal solution x̃(MILP): the projects financed by each fund (height = cost)"),
         { fontSize: 13.5, strokeColor: C.testo, cssStyle: "font-weight:700" });
       if (R.stato !== "ottimo") return;
       const COL = [C.a, C.b, C.c, C.d, C.e], y0 = 62, alto = H - 44;

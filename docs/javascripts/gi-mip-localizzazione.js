@@ -121,12 +121,12 @@
     disegna(crea, R, v, C, S) {
       const M = window.GI_MIP, F = FIG(), FR = L().FR, W = S.W, H = S.H;
       const titolo = R.stato === "ottimo"
-        ? T(`Soluzione ottima: sedi aperte x̃ₗ(MILP) e litri spediti ỹₗ꜀(MILP) (z(MILP) = ${FR.euroTxt(R.z)})`, `Optimal solution: open sites x̃ₗ(MILP) and litres shipped ỹₗ꜀(MILP) (z(MILP) = ${FR.euroTxt(R.z)})`)
+        ? T(`Soluzione ottima: sedi aperte x̃(MILP) e litri spediti ỹₗ꜀(MILP) (z(MILP) = ${FR.euroTxt(R.z)})`, `Optimal solution: open sites x̃(MILP) and litres shipped ỹₗ꜀(MILP) (z(MILP) = ${FR.euroTxt(R.z)})`)
         : T("Nessuna soluzione ammissibile", "No feasible solution");
       M.scritta(crea, W / 2, H - 16, titolo, { fontSize: 13.5, strokeColor: F.blu, cssStyle: "font-weight:700" });
       if (R.stato !== "ottimo") return;
       const xs = W * 0.3, xc = W * 0.72, lato = Math.max(30, Math.min(44, H / 15)), rag = Math.max(15, Math.min(21, H / 26));
-      // nodi distanziati su tutta l'altezza (niente spazio vuoto sotto il titolo): in alto c'è posto per il valore x̃ₗ(LP⁺)
+      // nodi distanziati su tutta l'altezza (niente spazio vuoto sotto il titolo): in alto c'è posto per il valore x̃(LP⁺)
       const alto = H - 44 - lato / 2 - 16, basso = 64 + lato / 2 + 10;
       const ys = [0, 1, 2].map((l) => alto - (alto - basso) * l / (NS - 1)), yc = [0, 1, 2, 3].map((k) => alto - (alto - basso) * k / (NC - 1));
       const qMax = Math.max(...R.d);
@@ -163,7 +163,7 @@
         M.scritta(crea, xc + rag + 10, y - 9, T(`d = ${R.d[k]} litri`, `d = ${R.d[k]} litres`), { anchorX: "left", fontSize: 12, strokeColor: C.muted });
       });
       M.scritta(crea, W / 2, 34, T("arco pieno: litri spediti nell'ottimo; tratteggio: nessuna spedizione", "solid arc: litres shipped in the optimum; dashed: no shipment"), { fontSize: 11.5, strokeColor: C.muted });
-      M.scritta(crea, W / 2, 16, T("in rosso: il valore x̃ₗ(LP⁺) della sede nel rilassamento continuo", "in red: the value x̃ₗ(LP⁺) of the site in the continuous relaxation"), { fontSize: 11.5, strokeColor: F.rosso });
+      M.scritta(crea, W / 2, 16, T("in rosso: il valore x̃(LP⁺) della sede nel rilassamento continuo", "in red: the value x̃(LP⁺) of the site in the continuous relaxation"), { fontSize: 11.5, strokeColor: F.rosso });
     },
     letture: () => "",
     soluzione(R) {

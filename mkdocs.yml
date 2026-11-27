@@ -112,7 +112,7 @@ extra_css:
   - stylesheets/extra.css
   # laboratorio interattivo (genera_laboratorio.py)
   - https://cdn.jsdelivr.net/npm/jsxgraph@1.10.1/distrib/jsxgraph.css
-  - stylesheets/interattivi.css?v=ea2ace56da
+  - stylesheets/interattivi.css?v=fbdb4fd4ed
   - stylesheets/quiz.css?v=9e3792b41c
 
 markdown_extensions:
@@ -141,10 +141,10 @@ extra_javascript:
   - javascripts/gi-mip-b.js?v=b2e745ffa8
   - javascripts/gi-mip-c.js?v=d299c7328a
   - javascripts/gi-mip-d.js?v=4f2ac4bb63
-  - javascripts/gi-mip-localizzazione.js?v=c628f5e114
+  - javascripts/gi-mip-localizzazione.js?v=319f8fb8ca
   - javascripts/gi-mip-logica.js?v=141bda702f
-  - javascripts/gi-mip-lotti.js?v=2e8d2b922d
-  - javascripts/gi-mip-progetti.js?v=530a65697b
+  - javascripts/gi-mip-lotti.js?v=e9fce947ba
+  - javascripts/gi-mip-progetti.js?v=511eb14690
   - javascripts/quiz.js?v=be7fae2b85
 
 # the single app pages are not in the menu: the lab is one entry

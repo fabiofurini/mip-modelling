@@ -513,8 +513,8 @@
       });
       lineaPunti(crea, A, giorni, Mo.d, F.rosso, { dash: 2, spessore: 1.8 });
       lineaPunti(crea, A, giorni.slice(0, nG - 1), R.s, F.arancio, { r: 4, punto: { face: "[]" } });
-      legendaRiga(crea, A, [[F.teal, T("produzione x̃ₜ(MILP)", "production x̃ₜ(MILP)"), "barra"], [F.rosso, T("domanda dₜ", "demand dₜ"), "tratteggioPunti"],
-        [F.arancio, T("scorta s̃ₜ(MILP) a fine giorno", "stock s̃ₜ(MILP) at the end of the day"), "lineaPunti"], [F.fascia, T("giorno con setup (ỹₜ(MILP) = 1)", "setup day (ỹₜ(MILP) = 1)"), "fascia"]], C);
+      legendaRiga(crea, A, [[F.teal, T("produzione x̃(MILP)", "production x̃(MILP)"), "barra"], [F.rosso, T("domanda dₜ", "demand dₜ"), "tratteggioPunti"],
+        [F.arancio, T("scorta s̃(MILP) a fine giorno", "stock s̃(MILP) at the end of the day"), "lineaPunti"], [F.fascia, T("giorno con setup (ỹₜ(MILP) = 1)", "setup day (ỹₜ(MILP) = 1)"), "fascia"]], C);
     },
     legenda: () => [],
     letture: () => "",
