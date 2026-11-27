@@ -112,7 +112,7 @@ extra_css:
   - stylesheets/extra.css
   # laboratorio interattivo (genera_laboratorio.py)
   - https://cdn.jsdelivr.net/npm/jsxgraph@1.10.1/distrib/jsxgraph.css
-  - stylesheets/interattivi.css?v=8d9ae2b9f3
+  - stylesheets/interattivi.css?v=ea2ace56da
   - stylesheets/quiz.css?v=9e3792b41c
 
 markdown_extensions:
