@@ -133,7 +133,7 @@ that does not fit anywhere is **skipped**. The best-fit chooses the
 - **Step 3.** Job 3 ($t_3 = 75$): machine 3 is not enough; between 1 and 2
   the fullest is machine 1: $x[3][1] = 1$, $ra[1] = 30$.
 
-Profit $10 + 15 + 30 - 20 - 15 = 20$: $z(\mathit{MILP}) \ge 20$. Next-fit and
+Profit $10 + 15 + 30 - 20 - 15 = 20$: $z(\text{MILP}) \ge 20$. Next-fit and
 first-fit fill machine 1 first and reach $5$.
 
 ## LP relaxation and dual: the dual bound
@@ -189,15 +189,15 @@ then $\bar\mu_j = \max\{0, \max_m (r_j - t_j \bar\pi_m)\}$:
 $\bar\mu_1 = \tfrac{25}{4}$, $\bar\mu_2 = 9$, $\bar\mu_3 = \tfrac{75}{4}$;
 value $34$:
 
-$$20 ~\le~ z(\mathit{MILP}) ~\le~ 34.$$
+$$20 ~\le~ z(\text{MILP}) ~\le~ 34.$$
 
-**What the solver says.** $z(\mathit{LP}) = 34$: the hand-built solution is
+**What the solver says.** $z(\text{LP}) = 34$: the hand-built solution is
 optimal for the dual; the relaxation with the bounds drops to $680/21 = 32.38$.
 Integer optimum $25$: jobs 1 and 3 on machine 3 ($25 + 75 = 100$, exactly the
 availability), profit $40 - 15$; job 2 does not pay because it would require a
 second machine ($c_1 = 20 > r_2 = 15$). Heuristic gap: $20\%$.
 
-| $LB$ (best-fit) | $UB$ (hand dual) | $z(\mathit{LP})$ | $z(\mathit{LP}^+)$ | $z(\mathit{MILP})$ | heuristic gap |
+| $LB$ (best-fit) | $UB$ (hand dual) | $z(\text{LP})$ | $z(\text{LP}^+)$ | $z(\text{MILP})$ | heuristic gap |
 |---:|---:|---:|---:|---:|---:|
 | 20 | 34 | 34 | $680/21$ | 25 | $20.0\%$ |
 
@@ -249,9 +249,9 @@ base problem.
 |---|---:|---|
 | $\mathit{UB}$ | $34$ | dual certificate built by hand |
 | $\mathit{LB}$ | $20$ | heuristic solution |
-| $z(\mathit{LP})$ | $34$ | relaxation without the bounds |
-| $z(\mathit{LP}^+)$ | $\frac{680}{21}$ | relaxation with the bounds |
-| $z(\mathit{MILP})$ | $20$ | optimum of the MILP |
+| $z(\text{LP})$ | $34$ | relaxation without the bounds |
+| $z(\text{LP}^+)$ | $\frac{680}{21}$ | relaxation with the bounds |
+| $z(\text{MILP})$ | $20$ | optimum of the MILP |
 
 <!-- tabella-variante: fine -->
 

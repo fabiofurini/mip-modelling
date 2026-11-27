@@ -149,7 +149,7 @@ needed).
   minimum of $40$: nothing else is needed.
 
 The final diet is milk $1$ kg, rice $2.25$ kg, bread $1$ kg, for a cost of
-$z(\mathit{MILP}) \le \mathit{UB} = 39/4 = 9.75$.
+$z(\text{MILP}) \le \mathit{UB} = 39/4 = 9.75$.
 
 ## LP relaxation and dual: the dual bound
 
@@ -226,7 +226,7 @@ $$\bar\alpha_j = \min_{i :\, g_{ij} > 0} \frac{w_i}{g_{ij}},
 
 and keep the nutrient that gives the larger bound. On the instance iron gives
 $60 \cdot 3/20 = 9$ and calcium $40 \cdot 1/15 = 8/3$: iron wins, and
-$z(\mathit{MILP}) \ge \mathit{LB} = 9$.
+$z(\text{MILP}) \ge \mathit{LB} = 9$.
 
 ## Optimal solution
 
@@ -234,7 +234,7 @@ The optimal diet is rice $1.4$ kg, bread $1.4$ kg, potatoes $1$ kg: three
 different foods, as required, with $60$ grams of iron (exactly the minimum) and
 $40$ of calcium (again exactly the minimum).
 
-| $LB$ (dual) | $z(\mathit{LP})$ | $z(\mathit{LP}^+)$ | $z(\mathit{MILP})$ | $UB$ (heuristic) | heuristic gap |
+| $LB$ (dual) | $z(\text{LP})$ | $z(\text{LP}^+)$ | $z(\text{MILP})$ | $UB$ (heuristic) | heuristic gap |
 |---:|---:|---:|---:|---:|---:|
 | 9 | $46/5$ | $48/5$ | $48/5$ | $39/4$ | $1.6\%$ |
 
@@ -290,9 +290,9 @@ lot, completes with bread and reaches $31/3$, which is the optimum.
 |---|---:|---|
 | $\mathit{UB}$ | $\frac{31}{3}$ | heuristic solution |
 | $\mathit{LB}$ | $9$ | dual certificate built by hand |
-| $z(\mathit{LP})$ | $\frac{28}{3}$ | relaxation without the bounds |
-| $z(\mathit{LP}^+)$ | $\frac{31}{3}$ | relaxation with the bounds |
-| $z(\mathit{MILP})$ | $\frac{31}{3}$ | optimum of the MILP |
+| $z(\text{LP})$ | $\frac{28}{3}$ | relaxation without the bounds |
+| $z(\text{LP}^+)$ | $\frac{31}{3}$ | relaxation with the bounds |
+| $z(\text{MILP})$ | $\frac{31}{3}$ | optimum of the MILP |
 
 <!-- tabella-variante: fine -->
 

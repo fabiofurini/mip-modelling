@@ -47,8 +47,8 @@ solution that really exists; when it fails, there is no primal bound.
 
 !!! danger "The side of the bound depends on the objective, not on the heuristic"
     In a **minimisation** the value of a feasible solution is an *upper* bound:
-    $z(\mathit{MILP}) \le \mathit{UB}$. In a **maximisation** it is a *lower*
-    bound: $\mathit{LB} \le z(\mathit{MILP})$. Calling $UB$ the result
+    $z(\text{MILP}) \le \mathit{UB}$. In a **maximisation** it is a *lower*
+    bound: $\mathit{LB} \le z(\text{MILP})$. Calling $UB$ the result
     of a constructive heuristic on a maximisation is the commonest sign error in the course.
 
 ## Bin packing: the insertion rules
@@ -81,7 +81,7 @@ items. The instance there is for writing the model and is deliberately small —
 but for that very reason all three rules answer "three bins" on it, and cannot
 be told apart.
 
-| Heuristic | how it fills | $UB$ | $z(\mathit{MILP})$ | heuristic gap |
+| Heuristic | how it fills | $UB$ | $z(\text{MILP})$ | heuristic gap |
 |---|---|---:|---:|---:|
 | next-fit | `[4] [4] [5] [3+2] [3]` | 5 | 3 | $66.7\%$ |
 | first-fit | `[4+3] [4+2] [5] [3]` | 4 | 3 | $33.3\%$ |
@@ -143,7 +143,7 @@ impossible to place.
 
     **The elementary bound.** The makespan is at least
     $\max(\max_j t_j,\ \sum_j t_j / k) = \max(5, 9) = 9$. The optimum is exactly
-    $z(\mathit{MILP}) = 9$ — attained with $\{5,4\}$, $\{5,4\}$, $\{3,3,3\}$ —
+    $z(\text{MILP}) = 9$ — attained with $\{5,4\}$, $\{5,4\}$, $\{3,3,3\}$ —
     and LPT is off by $22.2\%$.
 
 !!! tip "Two free bounds, to be compared"
@@ -190,7 +190,7 @@ KnapsackHeuristic(p, w, C):
 
 On $p = (10,7,6,4)$, $w = (5,4,3,3)$, $C = 9$: ratios $2$, $7/4$, $2$, $4/3$;
 items 1 and 3 are taken (weight $8$), value $16$. Since the problem is a
-**maximisation**, $\mathit{LB} = 16 \le z(\mathit{MILP}) = 17$, gap $5.9\%$: the
+**maximisation**, $\mathit{LB} = 16 \le z(\text{MILP}) = 17$, gap $5.9\%$: the
 optimum takes items 1 and 2, filling the knapsack exactly. The constructive heuristic goes wrong
 because item 3 leaves an unusable residual.
 
@@ -241,7 +241,7 @@ step it looks only at the distances from the current city.
     started from at 25, that is 38.9 % above the optimum.
 
     Two things to take away. The heuristic gives *one* feasible solution, hence an
-    upper bound — here $z(\mathit{MILP}) \le 25$ — and nothing else; that 18 is
+    upper bound — here $z(\text{MILP}) \le 25$ — and nothing else; that 18 is
     the optimum is known by enumeration. And running the same rule from every
     start, keeping the best tour, costs $n$ times as much and gives a better
     bound: it is the simplest form of *multi-start*, and it is still a bound from
@@ -270,7 +270,7 @@ LeastUnitCost(d, f, h):
 On $d = (20, 10, 30, 40, 10)$, setup $f = 50$, holding $h = 1$: from period 1 it
 pays to cover 2 periods (unit cost $2$); from period 3 another 2 (unit cost
 $\approx 1.286$); from period 5 only that one (unit cost $5$). Cost
-$\mathit{UB} = 200$ against $z(\mathit{MILP}) = 170$, gap $17.6\%$ — which is
+$\mathit{UB} = 200$ against $z(\text{MILP}) = 170$, gap $17.6\%$ — which is
 also the value Wagner–Whitin would give, being exact on this model.
 
 ## Local search, and what it does not give
@@ -305,7 +305,7 @@ between two machines is needed.
 
 ## The overview of the heuristics
 
-| Heuristic | Direction | value | $z(\mathit{MILP})$ | heuristic gap |
+| Heuristic | Direction | value | $z(\text{MILP})$ | heuristic gap |
 |---|---|---:|---:|---:|
 | next-fit (bin packing) | min ($UB$) | 5 | 3 | $66.7\%$ |
 | first-fit (bin packing) | min ($UB$) | 4 | 3 | $33.3\%$ |

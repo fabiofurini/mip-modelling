@@ -147,7 +147,7 @@ Given order $1 \to 2 \to 3$:
 - **Step 2.** $\kappa_2 = 9$, $\tau_2 = 5$.
 - **Step 3.** $\kappa_3 = 15$, $\tau_3 = 5$.
 
-Value $12$: $z(\mathit{MILP}) \le 12$.
+Value $12$: $z(\text{MILP}) \le 12$.
 
 ## LP relaxation and dual: the dual bound
 
@@ -209,14 +209,14 @@ $$
 zero, then $\alpha = 0$; left are $\delta_j \le \gamma_j \le 1$ and every job
 contributes at most $t_j - d_j$, positive only if late even processed first:
 only job 1. $\bar\gamma_1 = \bar\delta_1 = 1$, value $-3 + 5 = 2$:
-$2 \le z(\mathit{MILP}) \le 12$.
+$2 \le z(\text{MILP}) \le 12$.
 
-**What the solver says.** $z(\mathit{LP}) = 2$: the relaxation of a big-M
+**What the solver says.** $z(\text{LP}) = 2$: the relaxation of a big-M
 model is extremely weak ($s_{ji} = 1/2$ releases the precedences). Integer
 optimum $11$, sequence $2 \to 1 \to 3$: $\tilde\kappa = (9, 4, 15)$,
 $\tilde\tau = (6, 0, 5)$.
 
-| $UB$ | $LB$ (hand dual) | $z(\mathit{LP})$ | $z(\mathit{MILP})$ | heuristic gap |
+| $UB$ | $LB$ (hand dual) | $z(\text{LP})$ | $z(\text{MILP})$ | heuristic gap |
 |---:|---:|---:|---:|---:|
 | 12 | 2 | 2 | 11 | $9.1\%$ |
 
@@ -267,9 +267,9 @@ heuristic is the same EDD rule, which now waits for the release.
 |---|---:|---|
 | $\mathit{UB}$ | $12$ | heuristic solution |
 | $\mathit{LB}$ | $2$ | dual certificate built by hand |
-| $z(\mathit{LP})$ | $4$ | relaxation without the bounds |
-| $z(\mathit{LP}^+)$ | $4$ | relaxation with the bounds |
-| $z(\mathit{MILP})$ | $12$ | optimum of the MILP |
+| $z(\text{LP})$ | $4$ | relaxation without the bounds |
+| $z(\text{LP}^+)$ | $4$ | relaxation with the bounds |
+| $z(\text{MILP})$ | $12$ | optimum of the MILP |
 
 <!-- tabella-variante: fine -->
 

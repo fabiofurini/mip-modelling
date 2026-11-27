@@ -118,7 +118,7 @@ The best bound is the one from the leather: $\mathit{UB} = 24\,000$.
 
 ## Optimum and comparison
 
-| $\mathit{LB}$ | $\mathit{UB}$ | $z(\mathit{LP})$ | $z(\mathit{LP}^+)$ | $z(\mathit{MILP})$ |
+| $\mathit{LB}$ | $\mathit{UB}$ | $z(\text{LP})$ | $z(\text{LP}^+)$ | $z(\text{MILP})$ |
 |---:|---:|---:|---:|---:|
 | 24 000 | 24 000 | 24 000 | 24 000 | 24 000 |
 
@@ -132,7 +132,7 @@ is over**.
 !!! tip "Two variations that change the picture"
     Doubling the thresholds, the loafers' becomes $400$ pairs while the leather
     allows at most $200$: no type reaches its own threshold any more and
-    production stops altogether, $z(\mathit{MILP}) = 0$.
+    production stops altogether, $z(\text{MILP}) = 0$.
 
     Raising the leather to $200\,000$ grams gives $333$ loafers for $39\,960$
     euros, and the big-Ms must be **recomputed**: they become $(235, 333, 285)$.

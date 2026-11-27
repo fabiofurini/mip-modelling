@@ -138,14 +138,14 @@ in the primal.
 
 ## Optimum and comparison
 
-| $\mathit{UB}$ | $\mathit{LB}$ | $z(\mathit{LP})$ | $z(\mathit{LP}^+)$ | $z(\mathit{MILP})$ |
+| $\mathit{UB}$ | $\mathit{LB}$ | $z(\text{LP})$ | $z(\text{LP}^+)$ | $z(\text{MILP})$ |
 |---:|---:|---:|---:|---:|
 | 8 410 | 6 300 | $115970/17$ | $115970/17$ | 7 060 |
 
 The optimal plan hires $5$ staff on pattern 1, $4$ on 3, $1$ on 4, $2$ on 5 and
 $3$ on 7, for a cost of $7060$. The cover is tight on Wednesday, Saturday and
 Sunday, and abundant on the other days. The heuristic gap is $19.1\%$; the
-difference $z(\mathit{MILP}) - z(\mathit{LP}) \approx 238$ is the price of
+difference $z(\text{MILP}) - z(\text{LP}) \approx 238$ is the price of
 integrality, that is of the fact that people are hired one at a time.
 
 !!! tip "Is the half-time day worth it?"

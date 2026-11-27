@@ -116,7 +116,7 @@ $$\mathit{UB} = 2.$$
 ## The lower bound
 
 All the costs $c_{dti}$ are $0$ or $1$, so the objective is a sum of non-negative
-terms and $z(\mathit{MILP}) \ge 0$ **with no dual needed**. The dual of the
+terms and $z(\text{MILP}) \ge 0$ **with no dual needed**. The dual of the
 relaxation confirms that one cannot do better: one variable per family of primal
 constraints — $\alpha_i$ free on the hours of each instrument,
 $\beta_{dt} \le 0$ on the slots, $\gamma_d \ge 0$ on the variety,
@@ -160,8 +160,8 @@ directions of the link, cannot exceed the cost of the slot; the last four are th
 $y_{di}$, where switching the indicator on costs the variety and is refunded by
 the link.
 
-$$\mathit{LB} = 0, \qquad z(\mathit{LP}) = 0, \qquad z(\mathit{LP}^+) = 2,
-\qquad z(\mathit{MILP}) = 2.$$
+$$\mathit{LB} = 0, \qquad z(\text{LP}) = 0, \qquad z(\text{LP}^+) = 2,
+\qquad z(\text{MILP}) = 2.$$
 
 The timetable built by hand was already optimal, but the dual bound does not
 prove it: between $0$ and $2$ a gap is left that only branch and bound closes.
@@ -169,9 +169,9 @@ prove it: between $0$ and $2$ a gap is left that only branch and bound closes.
 !!! warning "A count that is not a bound on the relaxation"
     Counting says more: every day holds both instruments, and on each day one of
     the two teachers would rather not be there; the violations are therefore at
-    least two, and $z(\mathit{MILP}) \ge 2$. That count, however, uses the
+    least two, and $z(\text{MILP}) \ge 2$. That count, however, uses the
     integrality of the variables: on the relaxation it does not hold, and indeed
-    $z(\mathit{LP}) = 0$. It cannot take the place of $\mathit{LB}$ in the chain
+    $z(\text{LP}) = 0$. It cannot take the place of $\mathit{LB}$ in the chain
     of bounds, where every term must hold for the LP as well.
 
 ![The optimal timetable](img/ex15_orario.png)

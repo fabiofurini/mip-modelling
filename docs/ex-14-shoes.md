@@ -133,7 +133,7 @@ $$\mathit{LB} = \frac{105}{2} \cdot 14\,500 = 761\,250.$$
 
 ## Optimum and comparison
 
-| $\mathit{UB}$ | $\mathit{LB}$ | $z(\mathit{LP})$ | $z(\mathit{LP}^+)$ | $z(\mathit{MILP})$ |
+| $\mathit{UB}$ | $\mathit{LB}$ | $z(\text{LP})$ | $z(\text{LP}^+)$ | $z(\text{MILP})$ |
 |---:|---:|---:|---:|---:|
 | 825 000 | 761 250 | 773 500 | 773 500 | 774 180 |
 

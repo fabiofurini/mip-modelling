@@ -151,7 +151,7 @@ product 2: after the first shipment plant 1 has $3$ left, plant 2 has $7$, so
 the shipment leaves from there. There are two legs, with $7$ and $4$ units: one
 box each.
 
-$$z(\mathit{MILP}) \le \mathit{UB} = 2 .$$
+$$z(\text{MILP}) \le \mathit{UB} = 2 .$$
 
 ## LP relaxation and dual: the dual bound
 
@@ -221,7 +221,7 @@ $\alpha_{pc} \le 1/w$: take $\bar\alpha_{pc} = 1/w$. The value is
 $$\mathit{LB} = \frac{1}{w} \sum_{p}\sum_{c} d_{pc} = \frac{11}{10} .$$
 
 Every unit ordered takes up $1/w$ of a box: it is the "volumetric" bound, and it
-coincides with $z(\mathit{LP})$.
+coincides with $z(\text{LP})$.
 
 ## A stronger integer bound
 
@@ -236,7 +236,7 @@ of the other customers.
 | 2 | 4 | 1 |
 | **total** | **11** | **2** |
 
-$$z(\mathit{MILP}) \ge \mathit{LB} = 2 ,$$
+$$z(\text{MILP}) \ge \mathit{LB} = 2 ,$$
 
 almost twice the volumetric bound $11/10$.
 
@@ -246,7 +246,7 @@ Plant 2 serves both customers: customer 1 with one box holding $5$ units of
 product 1 and $2$ of product 2, customer 2 with one box holding $4$ units of
 product 2.
 
-| $LB$ (combinatorial) | $z(\mathit{LP})$ | $z(\mathit{LP}^+)$ | $z(\mathit{MILP})$ | $UB$ (heuristic) | heuristic gap |
+| $LB$ (combinatorial) | $z(\text{LP})$ | $z(\text{LP}^+)$ | $z(\text{MILP})$ | $UB$ (heuristic) | heuristic gap |
 |---:|---:|---:|---:|---:|---:|
 | 2 | $11/10$ | $11/10$ | 2 | 2 | $0\%$ |
 
@@ -301,9 +301,9 @@ sandwich closes, and the optimum goes from $2$ to $3$.
 |---|---:|---|
 | $\mathit{UB}$ | $3$ | heuristic solution |
 | $\mathit{LB}$ | $3$ | count of the boxes per customer |
-| $z(\mathit{LP})$ | $\frac{11}{4}$ | relaxation without the bounds |
-| $z(\mathit{LP}^+)$ | $\frac{11}{4}$ | relaxation with the bounds |
-| $z(\mathit{MILP})$ | $3$ | optimum of the MILP |
+| $z(\text{LP})$ | $\frac{11}{4}$ | relaxation without the bounds |
+| $z(\text{LP}^+)$ | $\frac{11}{4}$ | relaxation with the bounds |
+| $z(\text{MILP})$ | $3$ | optimum of the MILP |
 
 <!-- tabella-variante: fine -->
 

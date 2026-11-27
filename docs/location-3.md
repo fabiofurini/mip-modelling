@@ -126,7 +126,7 @@ The first $k$ locations open. Client 1: signal $10\ge5$ but 2 strong
 locations ($>1$): **not covered**. Client 2: signal $5\ge5$, 1 strong
 location: **covered**. Client 3: signal $7\ge5$, 1 strong location:
 **covered**. Clients 4 and 5: insufficient signal: **not covered**. Value
-$20+5=25$: $z(\mathit{MILP}) \ge \mathit{LB} = 25$.
+$20+5=25$: $z(\text{MILP}) \ge \mathit{LB} = 25$.
 
 ## LP relaxation and dual: the dual bound
 
@@ -182,15 +182,15 @@ $$
 
 of value $m\sum_c\bar\lambda_c = 3\cdot75/2=225/2$. By weak duality (a
 maximisation problem: the heuristic gives the lower bound, the dual the
-upper bound), $\mathit{LB}=25 \le z(\mathit{MILP}) \le z(\mathit{LP}) \le
+upper bound), $\mathit{LB}=25 \le z(\text{MILP}) \le z(\text{LP}) \le
 \mathit{UB}=225/2$.
 
-**What the solver says.** $z(\mathit{LP}) = 41925/646 \approx 64.9$,
-$z(\mathit{LP}^+) = 125/2 = 62.5$. $z(\mathit{MILP}) = 45$, with locations
+**What the solver says.** $z(\text{LP}) = 41925/646 \approx 64.9$,
+$z(\text{LP}^+) = 125/2 = 62.5$. $z(\text{MILP}) = 45$, with locations
 1 and 3 installed and clients 1, 2, 4 covered (not 3 or 5): different from
 what the heuristic found. Heuristic gap $44.4\%$.
 
-| $LB$ | $UB$ (dual) | $z(\mathit{LP})$ | $z(\mathit{LP}^+)$ | $z(\mathit{MILP})$ | heuristic gap |
+| $LB$ | $UB$ (dual) | $z(\text{LP})$ | $z(\text{LP}^+)$ | $z(\text{MILP})$ | heuristic gap |
 |---:|---:|---:|---:|---:|---:|
 | 25 | $225/2$ | $41925/646$ | $125/2$ | 45 | $44.4\%$ |
 
@@ -235,9 +235,9 @@ and keeps the best feasible one.
 |---|---:|---|
 | $\mathit{UB}$ | $\frac{225}{2}$ | dual certificate built by hand |
 | $\mathit{LB}$ | $45$ | heuristic solution |
-| $z(\mathit{LP})$ | $\frac{41925}{646}$ | relaxation without the bounds |
-| $z(\mathit{LP}^+)$ | $\frac{125}{2}$ | relaxation with the bounds |
-| $z(\mathit{MILP})$ | $45$ | optimum of the MILP |
+| $z(\text{LP})$ | $\frac{41925}{646}$ | relaxation without the bounds |
+| $z(\text{LP}^+)$ | $\frac{125}{2}$ | relaxation with the bounds |
+| $z(\text{MILP})$ | $45$ | optimum of the MILP |
 
 <!-- tabella-variante: fine -->
 

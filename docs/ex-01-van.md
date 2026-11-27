@@ -122,19 +122,19 @@ much as the group that pays best for it".
 ## Optimum and comparison
 
 The optimum accepts groups $2$ and $4$, filling exactly the eight seats:
-$\tilde x = (0, 1, 0, 1)$ and $z(\mathit{MILP}) = 50 + 70 = 120$.
+$\tilde x = (0, 1, 0, 1)$ and $z(\text{MILP}) = 50 + 70 = 120$.
 
 | | value | what it is |
 |---|---:|---|
 | $\mathit{LB}$ | 110 | heuristic solution |
 | $\mathit{UB}$ | 160 | dual bound by hand |
-| $z(\mathit{LP})$ | 160 | relaxation without the bounds |
-| $z(\mathit{LP}^+)$ | 140 | relaxation with the bounds |
-| $z(\mathit{MILP})$ | 120 | optimum of the MILP |
+| $z(\text{LP})$ | 160 | relaxation without the bounds |
+| $z(\text{LP}^+)$ | 140 | relaxation with the bounds |
+| $z(\text{MILP})$ | 120 | optimum of the MILP |
 
 The heuristic gap is $|110 - 120|/120 = 8.3\%$. The one certified by the two
 bounds is known *before* solving, and for that very reason it cannot have
-$z(\mathit{MILP})$ as its denominator: in absolute terms
+$z(\text{MILP})$ as its denominator: in absolute terms
 $\mathit{UB} - \mathit{LB} = 50$, as a percentage $|160 - 110|/160 = 31.3\%$ in
 the solver's convention. The dual solution built by hand is **optimal**
 for the relaxation without the bounds: adding $x_j \le 1$ brings the relaxation

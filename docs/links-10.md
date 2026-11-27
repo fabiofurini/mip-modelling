@@ -41,7 +41,7 @@ optimum**.
 !!! danger "With $v = 0$ the argument fails, and $y$ stops meaning anything"
     Three-job instance, revenues $(2,2,2)$, capacity 3:
 
-    | bonus $v$ | constraints | $z(\mathit{MILP})$ | $y$, $x$ at the optimum | does $y$ say "class complete"? |
+    | bonus $v$ | constraints | $z(\text{MILP})$ | $y$, $x$ at the optimum | does $y$ say "class complete"? |
     |---:|---|---:|---|---|
     | $9$ | only $y \le x_j$ | $15$ | $y=1$, $x=(1,1,1)$ | yes |
     | $9$ | both | $15$ | $y=1$, $x=(1,1,1)$ | yes |
@@ -56,7 +56,7 @@ optimum**.
 
 ## The strength of the relaxation
 
-$z(\mathit{LP}^+) = 15 = z(\mathit{MILP})$ on this instance: with both
+$z(\text{LP}^+) = 15 = z(\text{MILP})$ on this instance: with both
 directions imposed the relaxation is exact. The second constraint is weak in the
 relaxation (with $x_j = 1/2$ its right-hand side is negative), but here that
 does not matter.

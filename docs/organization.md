@@ -64,7 +64,7 @@ are on the [downloads page](downloads.md#regenerating-everything).
 The course runs in two parts: first you learn the modelling tools, then you
 apply them to complete problems. One thread holds them together — a model is not
 just written down: its optimum is enclosed between two numbers,
-$\mathit{LB} \le z(\mathit{MILP}) \le \mathit{UB}$, before it is ever handed
+$\mathit{LB} \le z(\text{MILP}) \le \mathit{UB}$, before it is ever handed
 to the solver.
 
 ## The two-part path
@@ -100,7 +100,7 @@ four-question scheme:
    for the instance, and hand-build a feasible dual solution to obtain the
    bound from the other side.
 
-The resulting `lb ≤ z(\mathit{MILP}) ≤ ub` is the thread running through the course: a
+The resulting `lb ≤ z(\text{MILP}) ≤ ub` is the thread running through the course: a
 model is not just written down: its optimum is enclosed between two numbers
 before it is handed to the solver. A solver stopped halfway does provide a certificate, of
 course — the incumbent `ObjVal` and the bound `ObjBound` enclose the optimum in

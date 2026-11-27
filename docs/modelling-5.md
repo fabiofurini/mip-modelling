@@ -192,8 +192,8 @@ In all of them, $x_p = 1$ if project $p$ is chosen.
         also $x_1 + x_2 + x_3 \ge 2 x_4$: one constraint instead of three, with
         the same $16$ binary solutions but **stronger** in the relaxation. On
         $\max x_1+x_2+x_3+3x_4$ with $x_1+x_2+x_3+2x_4 \le 3$ and
-        $z(\mathit{MILP}) = 3$, the three clauses give
-        $z(\mathit{LP}^+) = 27/7 \approx 3.86$ and the counted constraint
+        $z(\text{MILP}) = 3$, the three clauses give
+        $z(\text{LP}^+) = 27/7 \approx 3.86$ and the counted constraint
         $15/4 = 3.75$.
 
 ??? question "2.5 — Splits (ten projects)"
@@ -251,8 +251,8 @@ $$
 <!-- modello-esteso: fine -->
 
 Without the logical constraints the optimum is $30$. With them it drops to
-$z(\mathit{MILP}) = 28$, with projects $1, 2, 3, 5, 8$ of total cost $14$: the
-budget is tight. The relaxation $z(\mathit{LP}^+)$ is $29$.
+$z(\text{MILP}) = 28$, with projects $1, 2, 3, 5, 8$ of total cost $14$: the
+budget is tight. The relaxation $z(\text{LP}^+)$ is $29$.
 
 !!! tip "How much six implications cut"
     The $2^{10} = 1024$ assignments drop to $234$ once all six implications are

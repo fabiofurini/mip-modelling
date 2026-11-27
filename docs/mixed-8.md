@@ -126,7 +126,7 @@ rule, with two different orders, gives two results.
   $6 \to$ CD2, $5 \to$ CD1, $4 \to$ CD2, $3 \to$ CD1. Final durations $18$ and
   $17$: difference $1$.
 
-The better one is kept: $z(\mathit{MILP}) \le \mathit{UB} = 1$.
+The better one is kept: $z(\text{MILP}) \le \mathit{UB} = 1$.
 
 ## LP relaxation and dual: zero again
 
@@ -215,7 +215,7 @@ to an odd number cannot be equal, and their difference $|q_1 - q_2|$ has the
 same parity as $q$, that is, it is odd. An odd, non-negative difference is at
 least $1$:
 
-$$z(\mathit{MILP}) \ge \mathit{LB} = 1 .$$
+$$z(\text{MILP}) \ge \mathit{LB} = 1 .$$
 
 The LPT heuristic reaches exactly $1$: the two bounds coincide, and the
 heuristic solution is optimal. This is known *before* calling the solver, and it
@@ -229,7 +229,7 @@ the job the LP relaxation cannot do.
 | CD 1 | 1, 2, 3 | 18 |
 | CD 2 | 4, 5, 6 | 17 |
 
-| $LB$ (parity) | $z(\mathit{LP})$ | $z(\mathit{LP}^+)$ | $z(\mathit{MILP})$ | $UB$ (heuristic) | heuristic gap |
+| $LB$ (parity) | $z(\text{LP})$ | $z(\text{LP}^+)$ | $z(\text{MILP})$ | $UB$ (heuristic) | heuristic gap |
 |---:|---:|---:|---:|---:|---:|
 | 1 | 0 | 0 | 1 | 1 | $0\%$ |
 
@@ -287,9 +287,9 @@ optimum: the certified gap stays open by one unit.
 |---|---:|---|
 | $\mathit{UB}$ | $2$ | heuristic solution |
 | $\mathit{LB}$ | $1$ | parity of the durations on three CDs |
-| $z(\mathit{LP})$ | $0$ | relaxation without the bounds |
-| $z(\mathit{LP}^+)$ | $0$ | relaxation with the bounds |
-| $z(\mathit{MILP})$ | $2$ | optimum of the MILP |
+| $z(\text{LP})$ | $0$ | relaxation without the bounds |
+| $z(\text{LP}^+)$ | $0$ | relaxation with the bounds |
+| $z(\text{MILP})$ | $2$ | optimum of the MILP |
 
 <!-- tabella-variante: fine -->
 

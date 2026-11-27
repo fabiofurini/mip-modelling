@@ -130,7 +130,7 @@ branch 2 to $A$ ($A = 19$), branch 4 to $B$ ($B = 18$), branch 3 to $B$
 ($B = 29$), branch 1 to $A$ ($A = 27$). One gets $A = \{1, 2\}$,
 $B = \{3, 4\}$, with differences $4$, $0$ and $6$ on the three products:
 
-$$z(\mathit{MILP}) \le \mathit{UB} = 6 .$$
+$$z(\text{MILP}) \le \mathit{UB} = 6 .$$
 
 ## LP relaxation and dual: the bound is zero
 
@@ -195,7 +195,7 @@ so are the others. The value is $\mathit{LB} = 0$.
     the constraints on the $x_i$ impose $\sum_j v_{ij}\, \theta_j \le 0$ for
     every branch; summing over all branches gives
     $\sum_j T_j\, \theta_j \le 0$. The dual is therefore worth at most $0$, and
-    by strong duality $z(\mathit{LP}) = 0$.
+    by strong duality $z(\text{LP}) = 0$.
 
     The primal certificate is even simpler: the fractional solution
     $x_i = 1/2$ for every branch with $z = 0$ is feasible for the relaxation and
@@ -214,7 +214,7 @@ $$g_j = \min_{S \subseteq \{1, 2, \dots,s\}}
 It is the classical partition problem on a single column, and with small $s$ it
 is solved by enumeration ($2^s$ subsets). Every feasible partition of the whole
 problem is in particular a partition for product $j$, so
-$z(\mathit{MILP}) \ge \max_j g_j$.
+$z(\text{MILP}) \ge \max_j g_j$.
 
 | Product | total $T_j$ | $g_j$ |
 |---|---:|---:|
@@ -224,7 +224,7 @@ $z(\mathit{MILP}) \ge \max_j g_j$.
 
 On product 1 the values are $3, 6, 3, 2$: the sum $7$ is not reachable by any
 subset, and the best is $6$ against $8$, that is $g_1 = 2$. Hence
-$z(\mathit{MILP}) \ge \mathit{LB} = 2$, a bound the LP relaxation cannot see,
+$z(\text{MILP}) \ge \mathit{LB} = 2$, a bound the LP relaxation cannot see,
 because it comes from integrality and not from the constraints.
 
 ## Optimal solution
@@ -232,7 +232,7 @@ because it comes from integrality and not from the constraints.
 The optimal partition is $A = \{2, 3\}$ and $B = \{1, 4\}$, with differences
 $4$, $2$ and $2$ on the three products.
 
-| $LB$ (combinatorial) | $z(\mathit{LP})$ | $z(\mathit{LP}^+)$ | $z(\mathit{MILP})$ | $UB$ (heuristic) | heuristic gap |
+| $LB$ (combinatorial) | $z(\text{LP})$ | $z(\text{LP}^+)$ | $z(\text{MILP})$ | $UB$ (heuristic) | heuristic gap |
 |---:|---:|---:|---:|---:|---:|
 | 2 | 0 | 0 | 4 | 6 | $50.0\%$ |
 
@@ -291,9 +291,9 @@ branches free it was $2$: tying two branches raises the bound.
 |---|---:|---|
 | $\mathit{UB}$ | $6$ | heuristic solution |
 | $\mathit{LB}$ | $4$ | smallest imbalance with branches 1 and 2 tied |
-| $z(\mathit{LP})$ | $0$ | relaxation without the bounds |
-| $z(\mathit{LP}^+)$ | $0$ | relaxation with the bounds |
-| $z(\mathit{MILP})$ | $6$ | optimum of the MILP |
+| $z(\text{LP})$ | $0$ | relaxation without the bounds |
+| $z(\text{LP}^+)$ | $0$ | relaxation with the bounds |
+| $z(\text{MILP})$ | $6$ | optimum of the MILP |
 
 <!-- tabella-variante: fine -->
 

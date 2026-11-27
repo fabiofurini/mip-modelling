@@ -144,7 +144,7 @@ On the instance the order by preference is $3, 5, 1, 2, 4$.
   ($3 \le 3$): taken with a contribution of $8$ euros; the preference reaches
   $17 \ge 16$ and one stops.
 
-The total contribution is $z(\mathit{MILP}) \le \mathit{UB} = 8$.
+The total contribution is $z(\text{MILP}) \le \mathit{UB} = 8$.
 
 ## LP relaxation and dual: the dual bound
 
@@ -223,18 +223,18 @@ $\bar\sigma = (0,\ 0,\ 1,\ 0,\ 4)$, with value
 $$\mathit{LB} = -(0+0+1+0+4) - 20 \cdot 2 + 16 \cdot 3 = 3 .$$
 
 This solution is **optimal** for the relaxation without the bounds: indeed
-$z(\mathit{LP}) = z(\mathit{LP}^+) = 3$.
+$z(\text{LP}) = z(\text{LP}^+) = 3$.
 
 !!! warning "An honest bound can be very far away"
-    Here $\mathit{LB} = 3$, $\mathit{UB} = 8$ and $z(\mathit{MILP}) = 5$. It
+    Here $\mathit{LB} = 3$, $\mathit{UB} = 8$ and $z(\text{MILP}) = 5$. It
     pays to look at the distances before the percentages:
     $\mathit{UB} - \mathit{LB} = 5$ is what is known without solving, and
-    $z(\mathit{MILP}) - \mathit{LB} = 2$ is how far the dual bound really is.
+    $z(\text{MILP}) - \mathit{LB} = 2$ is how far the dual bound really is.
     As percentages, the certified gap in the solver's convention is
     $(\mathit{UB} - \mathit{LB}) / \mathit{UB} = 5/8 = 62.5\%$ --- what Gurobi
     would call `MIPGap` if it stopped here --- while the heuristic gap in the
     table below is
-    $(\mathit{UB} - z(\mathit{MILP})) / z(\mathit{MILP}) = 3/5 = 60\%$: two
+    $(\mathit{UB} - z(\text{MILP})) / z(\text{MILP}) = 3/5 = 60\%$: two
     close numbers measuring different things, and it is the denominator that
     says so. Nothing is wrong: the LP relaxation may take
     "half a prize" at half preference, and that freedom is worth a lot. It is
@@ -252,7 +252,7 @@ Prizes $3$ and $5$ are taken with points only ($10 + 7 = 17$) and prize $4$ with
 the contribution ($2$ points and $5$ euros): $19$ of the $20$ points are used,
 the preference is $7 + 6 + 3 = 16$, exactly the threshold.
 
-| $UB$ | $LB$ (dual) | $z(\mathit{LP})$ | $z(\mathit{LP}^+)$ | $z(\mathit{MILP})$ | heuristic gap |
+| $UB$ | $LB$ (dual) | $z(\text{LP})$ | $z(\text{LP}^+)$ | $z(\text{MILP})$ | heuristic gap |
 |---:|---:|---:|---:|---:|---:|
 | 8 | 3 | 3 | 3 | 5 | $60.0\%$ |
 
@@ -266,7 +266,7 @@ which costs only $5$ euros of contribution.
 ## Additional considerations
 
 - The valid inequalities $x_i \le 1$ and $y_i \le 1$ are implied by the
-  mutual-exclusion constraints: indeed $z(\mathit{LP}) = z(\mathit{LP}^+)$.
+  mutual-exclusion constraints: indeed $z(\text{LP}) = z(\text{LP}^+)$.
 - If for some prize $c_i = 0$, the second option would dominate the first (fewer
   points, same cost) and the variable $x_i$ could be removed. It is a check on
   the data worth doing.
@@ -314,9 +314,9 @@ objects enumeration is the most honest rule.
 |---|---:|---|
 | $\mathit{UB}$ | $13$ | heuristic solution |
 | $\mathit{LB}$ | $6$ | dual certificate built by hand |
-| $z(\mathit{LP})$ | $\frac{25}{2}$ | relaxation without the bounds |
-| $z(\mathit{LP}^+)$ | $\frac{25}{2}$ | relaxation with the bounds |
-| $z(\mathit{MILP})$ | $13$ | optimum of the MILP |
+| $z(\text{LP})$ | $\frac{25}{2}$ | relaxation without the bounds |
+| $z(\text{LP}^+)$ | $\frac{25}{2}$ | relaxation with the bounds |
+| $z(\text{MILP})$ | $13$ | optimum of the MILP |
 
 <!-- tabella-variante: fine -->
 

@@ -157,7 +157,7 @@ On the instance the cheapest configuration to install is $2$ (cost $6$), the
 second is $1$ (cost $7$): $19$ trees are decorated with $2$ and one with $1$.
 Then $42$ lights of colour 1 and $59$ of colour 2 are needed, and the heuristic
 buys $30$ boxes of type 1. The total cost is
-$z(\mathit{MILP}) \le \mathit{UB} = 3121$.
+$z(\text{MILP}) \le \mathit{UB} = 3121$.
 
 The heuristic picks the configuration that is cheapest to install, $2$, which is
 however the greediest in lights of the expensive colour: the boxes pay the bill.
@@ -241,7 +241,7 @@ both box types give the same price per light, $\bar\beta_2 = 50$:
 $$i_1 + 2 \cdot 50 = 107, \qquad i_2 + 3 \cdot 50 = 156, \qquad i_3 + 2 \cdot 50 = 108 ,$$
 
 so $\bar\alpha = 107$ and
-$z(\mathit{MILP}) \ge \mathit{LB} = 20 \cdot 107 = 2140$.
+$z(\text{MILP}) \ge \mathit{LB} = 20 \cdot 107 = 2140$.
 
 ## Optimal solution
 
@@ -249,7 +249,7 @@ $19$ trees are decorated with configuration 1 and one with 3, and $20$ boxes of
 type 1 are bought. Of the lights, $78$ of colour 1 are needed ($200$ are bought:
 many are left over) and $40$ of colour 2 (exactly $40$ are bought).
 
-| $LB$ (dual) | $z(\mathit{LP})$ | $z(\mathit{LP}^+)$ | $z(\mathit{MILP})$ | $UB$ (heuristic) | heuristic gap |
+| $LB$ (dual) | $z(\text{LP})$ | $z(\text{LP}^+)$ | $z(\text{MILP})$ | $UB$ (heuristic) | heuristic gap |
 |---:|---:|---:|---:|---:|---:|
 | 2140 | 2140 | 2141 | 2141 | 3121 | $45.8\%$ |
 
@@ -300,9 +300,9 @@ gap stays wide. Here the MILP really is needed.
 |---|---:|---|
 | $\mathit{UB}$ | $3023$ | heuristic solution |
 | $\mathit{LB}$ | $2140$ | dual certificate built by hand |
-| $z(\mathit{LP})$ | $2140$ | relaxation without the bounds |
-| $z(\mathit{LP}^+)$ | $2190$ | relaxation with the bounds |
-| $z(\mathit{MILP})$ | $2239$ | optimum of the MILP |
+| $z(\text{LP})$ | $2140$ | relaxation without the bounds |
+| $z(\text{LP}^+)$ | $2190$ | relaxation with the bounds |
+| $z(\text{MILP})$ | $2239$ | optimum of the MILP |
 
 <!-- tabella-variante: fine -->
 

@@ -146,7 +146,7 @@ the domain of the $z_t$, which are non-negative.
     coefficients that depend on the period; $B$ has uniform coefficients and
     extends better if layoffs are added (a second family $\ell_t \ge 0$ and the
     balance $y_t = y_{t-1} + z_t - \ell_t$ suffice). On the instance the
-    *relaxations* coincide as well: $z(\mathit{LP}) = 15\,960$ for both. Two
+    *relaxations* coincide as well: $z(\text{LP}) = 15\,960$ for both. Two
     formulations equivalent over the integers are not always equivalent on the
     relaxation; here they are, and the check has to be made, not assumed.
 
@@ -217,7 +217,7 @@ solution is built, one element at a time, never backtracking.
 - month 3: $\lceil 4 \cdot 140/160 \rceil = 4$ workers, another hiring.
 
 The cost, including the constant term $m_0\, w\, n = 9000$, is
-$z(\mathit{MILP}) \le \mathit{UB} = 18\,200$.
+$z(\text{MILP}) \le \mathit{UB} = 18\,200$.
 
 ## LP relaxation and dual: the dual bound
 
@@ -301,7 +301,7 @@ on duty: the extra workforce is given away.
 | hirings $z_t$ | 0 | 1 | 0 |
 | stock $s_t$ | 0 | 20 | — |
 
-| $UB$ | $LB$ (dual) | $z(\mathit{LP})$ | $z(\mathit{LP}^+)$ | $z(\mathit{MILP})$ | heuristic gap |
+| $UB$ | $LB$ (dual) | $z(\text{LP})$ | $z(\text{LP}^+)$ | $z(\text{MILP})$ | heuristic gap |
 |---:|---:|---:|---:|---:|---:|
 | 18200 | 13500 | 15960 | 15960 | 16660 | $9.2\%$ |
 
@@ -362,9 +362,9 @@ that follows it.
 |---|---:|---|
 | $\mathit{UB}$ | $24000$ | heuristic solution |
 | $\mathit{LB}$ | $13500$ | dual certificate built by hand |
-| $z(\mathit{LP})$ | $17490$ | relaxation without the bounds |
-| $z(\mathit{LP}^+)$ | $17490$ | relaxation with the bounds |
-| $z(\mathit{MILP})$ | $19560$ | optimum of the MILP |
+| $z(\text{LP})$ | $17490$ | relaxation without the bounds |
+| $z(\text{LP}^+)$ | $17490$ | relaxation with the bounds |
+| $z(\text{MILP})$ | $19560$ | optimum of the MILP |
 
 <!-- tabella-variante: fine -->
 

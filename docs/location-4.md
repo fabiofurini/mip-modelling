@@ -135,7 +135,7 @@ A **next-fit** heuristic (bin packing): one hub at a time, up to $k$
 terminals — the same generic heuristic as scheduling, reused from
 `euristiche.py`. Terminals 1 and 2 on hub 1 (full), terminal 3 on hub 2.
 Maximum costs: $z_1=\max(5,5)=5$, $z_2=4$. Value $5+6+5+4=20$:
-$z(\mathit{MILP}) \le \mathit{UB} = 20$.
+$z(\text{MILP}) \le \mathit{UB} = 20$.
 
 ## LP relaxation and dual: the dual bound
 
@@ -200,7 +200,7 @@ $$
 $$
 
 of value $3\cdot5/2=15/2$. By weak duality, $\mathit{LB}=15/2 \le
-z(\mathit{LP}) \le z(\mathit{MILP}) \le \mathit{UB}=20$.
+z(\text{LP}) \le z(\text{MILP}) \le \mathit{UB}=20$.
 
 !!! warning "A common trap"
     The constraint on $\alpha_i$ holds for every hub $j$: setting
@@ -208,12 +208,12 @@ z(\mathit{LP}) \le z(\mathit{MILP}) \le \mathit{UB}=20$.
     free $\alpha_i$ from that constraint. $\alpha_i$ stays bounded by the
     minimum over all hubs, not by a single one.
 
-**What the solver says.** $z(\mathit{LP})=25/2$,
-$z(\mathit{LP}^+)=1015/78\approx13.0$. $z(\mathit{MILP})=19$, with hubs 1
+**What the solver says.** $z(\text{LP})=25/2$,
+$z(\text{LP}^+)=1015/78\approx13.0$. $z(\text{MILP})=19$, with hubs 1
 and 3 activated (not 1 and 2): terminal 1 alone on hub 3 (the cheapest for
 it), terminals 2 and 3 on hub 1. Heuristic gap $5.3\%$.
 
-| $UB$ | $LB$ (dual) | $z(\mathit{LP})$ | $z(\mathit{LP}^+)$ | $z(\mathit{MILP})$ | heuristic gap |
+| $UB$ | $LB$ (dual) | $z(\text{LP})$ | $z(\text{LP}^+)$ | $z(\text{MILP})$ | heuristic gap |
 |---:|---:|---:|---:|---:|---:|
 | 20 | $15/2$ | $25/2$ | $1015/78$ | 19 | $5.3\%$ |
 
@@ -223,7 +223,7 @@ it), terminals 2 and 3 on hub 1. Heuristic gap $5.3\%$.
 
 - $x_{ij} \le y_j$ (disaggregated) is implied by the aggregated activation
   constraint **on integer points**, not in the relaxation: adding it does not
-  change $z(\mathit{MILP})$ and raises $z(\mathit{LP}^+)$ from $1015/78$ to
+  change $z(\text{MILP})$ and raises $z(\text{LP}^+)$ from $1015/78$ to
   $79/6$ (question 8.4.1).
 - With $M_j=\max_i c_{ij}$, $z_j \le M_j y_j$ is not a valid inequality
   (the model allows $z_j>0$ with $y_j=0$), but it is an
@@ -264,9 +264,9 @@ primal *improves* the certificate, instead of leaving it still.
 |---|---:|---|
 | $\mathit{UB}$ | $20$ | heuristic solution |
 | $\mathit{LB}$ | $\frac{21}{2}$ | dual certificate built by hand |
-| $z(\mathit{LP})$ | $\frac{25}{2}$ | relaxation without the bounds |
-| $z(\mathit{LP}^+)$ | $\frac{79}{6}$ | relaxation with the bounds |
-| $z(\mathit{MILP})$ | $19$ | optimum of the MILP |
+| $z(\text{LP})$ | $\frac{25}{2}$ | relaxation without the bounds |
+| $z(\text{LP}^+)$ | $\frac{79}{6}$ | relaxation with the bounds |
+| $z(\text{MILP})$ | $19$ | optimum of the MILP |
 
 <!-- tabella-variante: fine -->
 

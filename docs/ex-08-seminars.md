@@ -120,12 +120,12 @@ reads: "two sessions are attended, and none is worth more than the best one".
 The first is optimal for the relaxation; the second, apparently more natural, is
 almost twice as large. **The recipe matters.**
 
-| $LB$ (constructive heuristic) | $z(\mathit{MILP})$ | $z(\mathit{LP})$ | $UB$ (dual by hand) | heuristic gap |
+| $LB$ (constructive heuristic) | $z(\text{MILP})$ | $z(\text{LP})$ | $UB$ (dual by hand) | heuristic gap |
 |---:|---:|---:|---:|---:|
 | 18 | 18 | 18 | 18 | $0.0\%$ |
 
 Here the two hand-built bounds **close** the problem:
-$z(\mathit{MILP}) = 18$ is proved without the solver.
+$z(\text{MILP}) = 18$ is proved without the solver.
 
 ![The two chosen sessions](img/ex08_ottimo.png)
 

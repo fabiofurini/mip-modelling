@@ -125,7 +125,7 @@ objective values the whole budget at that price.
 
 ## Optimum and comparison
 
-| $\mathit{LB}$ | $\mathit{UB}$ | $z(\mathit{LP})$ | $z(\mathit{LP}^+)$ | $z(\mathit{MILP})$ |
+| $\mathit{LB}$ | $\mathit{UB}$ | $z(\text{LP})$ | $z(\text{LP}^+)$ | $z(\text{MILP})$ |
 |---:|---:|---:|---:|---:|
 | 16 | $100/3$ | $700/27$ | $700/27$ | 23 |
 

@@ -158,7 +158,7 @@ On the instance types $2$ and $1$ are activated at their minimum lot, then one
 fills up: the production is $(11, 26, 0)$, the steel runs out and $220$ hours
 are left. The profit is $8700$ plus the bonus of $500$:
 
-$$z(\mathit{MILP}) \ge \mathit{LB} = 9200 .$$
+$$z(\text{MILP}) \ge \mathit{LB} = 9200 .$$
 
 ## LP relaxation and dual: the dual bound
 
@@ -243,7 +243,7 @@ $$
 $$
 
 The better bound is the one from the steel:
-$z(\mathit{MILP}) \le \mathit{UB} = 11\,250$.
+$z(\text{MILP}) \le \mathit{UB} = 11\,250$.
 
 ## Optimal solution
 
@@ -251,18 +251,18 @@ The optimal production is $(26, 16, 0)$: types $1$ and $2$ are activated, the
 bonus is collected, all $100$ tonnes of steel and $1180$ of the $1200$ available
 hours are used.
 
-| $LB$ (heuristic) | $z(\mathit{MILP})$ | $z(\mathit{LP}^+)$ | $z(\mathit{LP})$ | $UB$ (dual) | heuristic gap |
+| $LB$ (heuristic) | $z(\text{MILP})$ | $z(\text{LP}^+)$ | $z(\text{LP})$ | $UB$ (dual) | heuristic gap |
 |---:|---:|---:|---:|---:|---:|
 | 9200 | 9700 | 9750 | $20625/2$ | 11250 | $5.2\%$ |
 
 ![Optimal plan](img/cap09_veicoli_ottimo.png)
 
 !!! tip "Here the relaxation with the bounds beats the hand-built dual"
-    This is the only problem in the chapter where $z(\mathit{LP}^+) = 9750$ is
+    This is the only problem in the chapter where $z(\text{LP}^+) = 9750$ is
     *better* than the hand-built dual bound ($11\,250$), and barely worse than
     the optimum ($9700$). The reason is that the relaxation without the bounds
     lets $y_j$ and $z$ grow above $1$, and with them the bonus:
-    $z(\mathit{LP}) = 20625/2 \approx 10\,312$. Adding $y_j \le 1$ and $z \le 1$
+    $z(\text{LP}) = 20625/2 \approx 10\,312$. Adding $y_j \le 1$ and $z \le 1$
     removes exactly that freedom. When a model contains rewarded indicators, the
     relaxation with the bounds is not a detail.
 
@@ -314,9 +314,9 @@ not manage: it stays at $8700$, and the optimum drops from $9700$ to $9200$.
 |---|---:|---|
 | $\mathit{UB}$ | $\frac{32500}{3}$ | dual certificate built by hand |
 | $\mathit{LB}$ | $8700$ | heuristic solution |
-| $z(\mathit{LP})$ | $\frac{29875}{3}$ | relaxation without the bounds |
-| $z(\mathit{LP}^+)$ | $\frac{28750}{3}$ | relaxation with the bounds |
-| $z(\mathit{MILP})$ | $9200$ | optimum of the MILP |
+| $z(\text{LP})$ | $\frac{29875}{3}$ | relaxation without the bounds |
+| $z(\text{LP}^+)$ | $\frac{28750}{3}$ | relaxation with the bounds |
+| $z(\text{MILP})$ | $9200$ | optimum of the MILP |
 
 <!-- tabella-variante: fine -->
 

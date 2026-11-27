@@ -138,7 +138,7 @@ of residual capacity and residual demand.
 Execution: location 1 ships $8$ to client 1, $25$ to client 2, $17$ to
 client 3 (capacity exhausted); location 2 ships the remaining $10$ to
 client 3. Value: $60+90 + (4{\cdot}8+5{\cdot}25+6{\cdot}17+3{\cdot}10) =
-150+289 = 439$. Hence $z(\mathit{MILP}) \le \mathit{UB} = 439$.
+150+289 = 439$. Hence $z(\text{MILP}) \le \mathit{UB} = 439$.
 
 ## LP relaxation and dual: the dual bound
 
@@ -193,16 +193,16 @@ $$
 $$
 
 of value $8{\cdot}26/5 + 25{\cdot}29/5 + 27{\cdot}24/5 = 1581/5$. By weak
-duality, $\mathit{LB} = 1581/5 \le z(\mathit{LP}) \le z(\mathit{MILP}) \le
+duality, $\mathit{LB} = 1581/5 \le z(\text{LP}) \le z(\text{MILP}) \le
 \mathit{UB} = 439$.
 
-**What the solver says.** $z(\mathit{LP}) = 1581/5$ exactly: the hand-built
+**What the solver says.** $z(\text{LP}) = 1581/5$ exactly: the hand-built
 dual solution is already optimal. Strengthening with $x_l \le 1$,
-$z(\mathit{LP}^+) = 317$. $z(\mathit{MILP}) = 365$, with both locations
+$z(\text{LP}^+) = 317$. $z(\text{MILP}) = 365$, with both locations
 open: location 1 serves client 1 and part of client 2, location 2 the rest
 of client 2 and all of client 3. Heuristic gap $20.3\%$.
 
-| $UB$ | $LB$ (dual) | $z(\mathit{LP})$ | $z(\mathit{LP}^+)$ | $z(\mathit{MILP})$ | heuristic gap |
+| $UB$ | $LB$ (dual) | $z(\text{LP})$ | $z(\text{LP}^+)$ | $z(\text{MILP})$ | heuristic gap |
 |---:|---:|---:|---:|---:|---:|
 | 439 | $1581/5$ | $1581/5$ | 317 | 365 | $20.3\%$ |
 
@@ -249,9 +249,9 @@ already has the lowest cost per litre.
 |---|---:|---|
 | $\mathit{UB}$ | $439$ | heuristic solution |
 | $\mathit{LB}$ | $\frac{1581}{5}$ | dual certificate built by hand |
-| $z(\mathit{LP})$ | $325$ | relaxation without the bounds |
-| $z(\mathit{LP}^+)$ | $325$ | relaxation with the bounds |
-| $z(\mathit{MILP})$ | $365$ | optimum of the MILP |
+| $z(\text{LP})$ | $325$ | relaxation without the bounds |
+| $z(\text{LP}^+)$ | $325$ | relaxation with the bounds |
+| $z(\text{MILP})$ | $365$ | optimum of the MILP |
 
 <!-- tabella-variante: fine -->
 

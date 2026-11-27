@@ -129,7 +129,7 @@ $\mathit{LB} = 3$.
     least three hubs are needed. The dual has formalised an argument one could
     tell without writing it: that is the point of the constructive heuristic recipe.
 
-| $UB$ (constructive heuristic) | $LB$ (dual by hand) | $z(\mathit{LP})$ | $z(\mathit{MILP})$ | heuristic gap |
+| $UB$ (constructive heuristic) | $LB$ (dual by hand) | $z(\text{LP})$ | $z(\text{MILP})$ | heuristic gap |
 |---:|---:|---:|---:|---:|
 | 3 | 3 | 3 | 3 | $0.0\%$ |
 

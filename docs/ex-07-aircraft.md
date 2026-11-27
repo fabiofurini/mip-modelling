@@ -119,7 +119,7 @@ exceed the setup cost.
 
 ## Optimum and comparison
 
-| $\mathit{LB}$ | $\mathit{UB}$ | $z(\mathit{LP})$ | $z(\mathit{LP}^+)$ | $z(\mathit{MILP})$ |
+| $\mathit{LB}$ | $\mathit{UB}$ | $z(\text{LP})$ | $z(\text{LP}^+)$ | $z(\text{MILP})$ |
 |---:|---:|---:|---:|---:|
 | 4 | 5 | 5 | 5 | 5 |
 
@@ -128,7 +128,7 @@ client 3; two to client 2 and one to the third; three to client 1 and two to the
 third. All three use exactly the $1000$ hours.
 
 !!! tip "When the certificate closes the problem by itself"
-    Here the dual bound is exact: $\mathit{UB} = z(\mathit{MILP}) = 5$. The
+    Here the dual bound is exact: $\mathit{UB} = z(\text{MILP}) = 5$. The
     certificate built by hand proves optimality without the solver having to do
     anything. Without setup costs the optimum would rise to $9$; with $1400$
     hours available, to $7$.

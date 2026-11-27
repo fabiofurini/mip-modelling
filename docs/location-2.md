@@ -121,7 +121,7 @@ $$
 The first $k$ locations open; every client goes to the nearest open
 location. Opening locations 1 and 2: client 1 → location 2 (dist. 3),
 client 2 → location 1 (dist. 6), client 3 → location 2 (dist. 9). Value
-$3+6+9=18$: $z(\mathit{MILP}) \le \mathit{UB} = 18$.
+$3+6+9=18$: $z(\text{MILP}) \le \mathit{UB} = 18$.
 
 ## LP relaxation and dual: the dual bound
 
@@ -180,15 +180,15 @@ $$
 \bar\mu_1 = 3,\quad \bar\mu_2 = 6,\quad \bar\mu_3 = 4,
 $$
 
-of value $13$. By weak duality, $\mathit{LB}=13 \le z(\mathit{LP}) \le
-z(\mathit{MILP}) \le \mathit{UB}=18$.
+of value $13$. By weak duality, $\mathit{LB}=13 \le z(\text{LP}) \le
+z(\text{MILP}) \le \mathit{UB}=18$.
 
-**What the solver says.** $z(\mathit{LP}) = z(\mathit{LP}^+) = 15$: the
-relaxation is already integral on this instance. $z(\mathit{MILP}) = 15$,
+**What the solver says.** $z(\text{LP}) = z(\text{LP}^+) = 15$: the
+relaxation is already integral on this instance. $z(\text{MILP}) = 15$,
 with locations 1 and 3 open (not 1 and 2 as in the heuristic): heuristic
 gap $20.0\%$.
 
-| $UB$ | $LB$ (dual) | $z(\mathit{LP})$ | $z(\mathit{LP}^+)$ | $z(\mathit{MILP})$ | heuristic gap |
+| $UB$ | $LB$ (dual) | $z(\text{LP})$ | $z(\text{LP}^+)$ | $z(\text{MILP})$ | heuristic gap |
 |---:|---:|---:|---:|---:|---:|
 | 18 | 13 | 15 | 15 | 15 | $20.0\%$ |
 
@@ -240,9 +240,9 @@ constraint is redundant; it bites only when opening costs something.
 |---|---:|---|
 | $\mathit{UB}$ | $18$ | heuristic solution |
 | $\mathit{LB}$ | $13$ | dual certificate built by hand |
-| $z(\mathit{LP})$ | $15$ | relaxation without the bounds |
-| $z(\mathit{LP}^+)$ | $15$ | relaxation with the bounds |
-| $z(\mathit{MILP})$ | $15$ | optimum of the MILP |
+| $z(\text{LP})$ | $15$ | relaxation without the bounds |
+| $z(\text{LP}^+)$ | $15$ | relaxation with the bounds |
+| $z(\text{MILP})$ | $15$ | optimum of the MILP |
 
 <!-- tabella-variante: fine -->
 

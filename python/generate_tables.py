@@ -55,8 +55,8 @@ def tabella(riga, conf) -> str:
 
 # sul sito le macro della dispensa non esistono: si scrive la notazione per esteso
 SITO = {"$\\ub$": "$\\mathit{UB}$", "$\\lb$": "$\\mathit{LB}$",
-        "$\\zlp$": "$z(\\mathit{LP})$", "$\\zlpp$": "$z(\\mathit{LP}^+)$",
-        "$\\zmilp$": "$z(\\mathit{MILP})$"}
+        "$\\zlp$": "$z(\\text{LP})$", "$\\zlpp$": "$z(\\text{LP}^+)$",
+        "$\\zmilp$": "$z(\\text{MILP})$"}
 
 
 def tabella_md(riga, conf) -> str:

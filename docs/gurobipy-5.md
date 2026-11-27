@@ -32,7 +32,7 @@ salva_dati(pd.DataFrame([row]), "fam07_1_bound")          #     -> data/fam07_1_
 ```
 
 On the assignment instance the protocol produces $\mathit{LB} = 10$,
-$z(\mathit{LP}) = 53/5$, $z(\mathit{MILP}) = 11$, $\mathit{UB} = 11$, and the
+$z(\text{LP}) = 53/5$, $z(\text{MILP}) = 11$, $\mathit{UB} = 11$, and the
 row ends up in `data/fam07_1_bound.csv`. That is where the notes, the website
 page and `check_numbers.py` read it from: **one single place where the number
 exists**.

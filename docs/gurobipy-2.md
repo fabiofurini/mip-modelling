@@ -18,11 +18,11 @@ The reading order never changes: `Status`, then `SolCount`, then `ObjVal` and
 
 | `Status` | value | `SolCount` | What can be said |
 |---|---:|---:|---|
-| `OPTIMAL` | 2 | $\ge 1$ | $z(\mathit{MILP}) = $ `ObjVal`, proved |
+| `OPTIMAL` | 2 | $\ge 1$ | $z(\text{MILP}) = $ `ObjVal`, proved |
 | `INFEASIBLE` | 3 | 0 | the model has no feasible solution |
 | `UNBOUNDED` | 5 | 0 | a constraint, or a bound on a variable, is missing |
 | `TIME_LIMIT` | 9 | 0 | nothing: neither a solution nor, in general, a useful bound |
-| `TIME_LIMIT` | 9 | $\ge 1$ | `ObjBound` $\le z(\mathit{MILP}) \le$ `ObjVal` |
+| `TIME_LIMIT` | 9 | $\ge 1$ | `ObjBound` $\le z(\text{MILP}) \le$ `ObjVal` |
 | `SOLUTION_LIMIT` | 10 | $\ge 1$ | as above |
 
 !!! example "The four cases on the assignment instance"

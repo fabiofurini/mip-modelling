@@ -35,7 +35,7 @@ and inequalities that make a solution feasible).
 
 !!! note "Notation for optimal values"
     $X$ is the **feasible set** (the points satisfying all constraints, domains
-    included); $z(\mathit{MILP})$, $z(\mathit{LP})$, $z(\mathit{D})$ are the
+    included); $z(\text{MILP})$, $z(\text{LP})$, $z(\mathit{D})$ are the
     optimal values of the MILP, of its relaxation and of the dual of the
     relaxation. **Feasible** solutions carry a bar ($\bar x$), **optimal**
     ones a tilde ($\tilde x$). The bounds are called $\mathit{LB}$ and
@@ -43,11 +43,11 @@ and inequalities that make a solution feasible).
     they come from matters we write $\mathit{LB}(\bar x)$, $\mathit{UB}(\bar x)$
     for a feasible solution of the model and $\mathit{LB}(\bar\pi)$,
     $\mathit{UB}(\bar\pi)$ for a feasible solution of the dual. We always write
-    $z(\mathit{MILP})$ and never $z^\star$: which model is being optimised must
+    $z(\text{MILP})$ and never $z^\star$: which model is being optimised must
     be explicit.
 
 **Classes of models.** Upright LP is the *class* of problems, italic
-$\mathit{LP}$ is *one* problem of that class; the same for ILP, BIP and MILP. A
+$\text{LP}$ is *one* problem of that class; the same for ILP, BIP and MILP. A
 model has $n$ variables, with $j \in \{1, 2, \dots, n\}$, and $m$ constraints,
 with $i \in \{1, 2, \dots, m\}$; the data are the costs $c_j$, the coefficients
 $a_{ij}$ and the right-hand sides $b_i$.
@@ -147,7 +147,7 @@ $$
 $$
 
 The LP relaxation replaces $x_1, x_2 \in \{0,1\}$ by $0 \le x_1, x_2 \le 1$ and
-is worth $z(\mathit{LP}^+) = 3/2$. That value is attained by **infinitely many**
+is worth $z(\text{LP}^+) = 3/2$. That value is attained by **infinitely many**
 optimal solutions — every point of the segment $x_1 + x_2 = 3/2$ inside the
 square — among them $(3/4, 3/4)$, $(1, 1/2)$ and $(1/2, 1)$. Which one the
 solver returns depends on the algorithm: on our installation Gurobi gives
@@ -158,7 +158,7 @@ From $(3/4, 3/4)$: upwards it gives $(1,1)$, which violates the constraint
 ($2+2 = 4 > 3$); downwards it gives $(0,0)$, feasible but of value $0$. From
 this point **neither** direction finds the optimum. From $(1, 1/2)$: upwards it
 gives $(1,1)$ again, infeasible; downwards it gives $(1, 0)$, feasible with
-value $1$ — which is exactly the integer optimum, $z(\mathit{MILP}) = 1$. There
+value $1$ — which is exactly the integer optimum, $z(\text{MILP}) = 1$. There
 is no "right" direction.
 
 ![The relaxation and the integer points](img/cap01_rilassamento.png)
@@ -171,14 +171,14 @@ worth more than $1$.
 ## The two relaxations, and which side they are on
 
 !!! note "Two versions not to be confused"
-    - **relaxation without the bounds** $z(\mathit{LP})$: $x \in \{0,1\}$ becomes $x \ge 0$
+    - **relaxation without the bounds** $z(\text{LP})$: $x \in \{0,1\}$ becomes $x \ge 0$
       alone. This is the one whose dual the exercises write by hand.
-    - **relaxation with the bounds** $z(\mathit{LP}^+)$: $x \in \{0,1\}$
+    - **relaxation with the bounds** $z(\text{LP}^+)$: $x \in \{0,1\}$
       becomes $0 \le x \le 1$. This is Gurobi's `relax()` and the root
       relaxation of branch-and-bound.
 
     In a maximisation
-    $z(\mathit{LP}) \ge z(\mathit{LP}^+) \ge z(\mathit{MILP})$; in a
+    $z(\text{LP}) \ge z(\text{LP}^+) \ge z(\text{MILP})$; in a
     minimisation the directions are reversed. The two coincide when the other
     constraints already imply $x \le 1$ — for instance with an assignment
     constraint $\sum_m x_{jm} = 1$.
@@ -192,7 +192,7 @@ cases it is an **optimistic** bound.
 !!! warning "Which side each bound comes from"
     The dual of the relaxation does **not** give a bound "from the other side".
     By weak duality, in a minimisation every feasible dual solution is worth at
-    most $z(\mathit{LP})$, hence at most $z(\mathit{MILP})$: it sits on the
+    most $z(\text{LP})$, hence at most $z(\text{MILP})$: it sits on the
     *same* side as the relaxation. The bound from the other side — the
     *pessimistic* one — comes only from a feasible solution of the MILP, that
     is, from a heuristic or from the solver. Let
@@ -203,19 +203,19 @@ cases it is an **optimistic** bound.
     **minimisation** the first gives $\mathit{UB}(\bar x)$ and the second
     $\mathit{LB}(\bar\pi)$:
 
-    $$\mathit{LB}(\bar\pi) \le z(\mathit{D}(\mathit{LP})) = z(\mathit{LP}) \le z(\mathit{LP}^+) \le z(\mathit{MILP}) \le \mathit{UB}(\bar x)$$
+    $$\mathit{LB}(\bar\pi) \le z(\mathit{D}(\text{LP})) = z(\text{LP}) \le z(\text{LP}^+) \le z(\text{MILP}) \le \mathit{UB}(\bar x)$$
 
     in a **maximisation** the roles are swapped, the first gives
     $\mathit{LB}(\bar x)$ and the second $\mathit{UB}(\bar\pi)$:
 
-    $$\mathit{LB}(\bar x) \le z(\mathit{MILP}) \le z(\mathit{LP}^+) \le z(\mathit{LP}) = z(\mathit{D}(\mathit{LP})) \le \mathit{UB}(\bar\pi)$$
+    $$\mathit{LB}(\bar x) \le z(\text{MILP}) \le z(\text{LP}^+) \le z(\text{LP}) = z(\mathit{D}(\text{LP})) \le \mathit{UB}(\bar\pi)$$
 
 ## Three "gaps" not to be confused
 
 1. **Heuristic gap.** If $\bar x$ is the solution built by the heuristic, its
    value $\sum_{j=1}^{n} c_j\, \bar x_j$ is the bound $\mathit{UB}(\bar x)$ in a
    minimisation (and $\mathit{LB}(\bar x)$ in a maximisation), and the gap is
-   $\bigl|\mathit{UB}(\bar x) - z(\mathit{MILP})\bigr| / |z(\mathit{MILP})|$
+   $\bigl|\mathit{UB}(\bar x) - z(\text{MILP})\bigr| / |z(\text{MILP})|$
    when the optimum is known — it is the one reported in the exercise tables.
    When the optimum is not known it is computed against a dual bound, which
    takes its place.

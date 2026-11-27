@@ -40,7 +40,7 @@ zlp = r.ObjVal
 duals = {c.ConstrName: c.Pi for c in r.getConstrs()}
 ```
 
-On that instance, $z(\mathit{LP}^+) = z(\mathit{LP}) = 53/5$ — the
+On that instance, $z(\text{LP}^+) = z(\text{LP}) = 53/5$ — the
 two relaxations coincide because the assignment constraints already imply
 $x_{jm} \le 1$ — and the nonzero duals are $\tilde\mu = (2,\ 4.8,\ 5)$ and
 $\tilde\pi_2 = -0.2$: machine 2 is the only tight resource.

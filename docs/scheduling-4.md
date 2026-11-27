@@ -139,7 +139,7 @@ machine 2, and so on.
 - **Step 2.** Machine 1 is full ($p_1 = 1$): job 2 on machine 2, $y[2] = 10$.
 - **Step 3.** Job 3 on machine 2: $y[2] = \max(10, 13) = 13$.
 
-$\bar y = (6, 13, 0)$, value $19$: $z(\mathit{MILP}) \le 19$.
+$\bar y = (6, 13, 0)$, value $19$: $z(\text{MILP}) \le 19$.
 
 ## LP relaxation and dual: the dual bound
 
@@ -197,14 +197,14 @@ the primal objective limits the sum of the $\lambda_{jm}$.
 
 **A hand-built dual solution.** $\bar\lambda_{jm} = 1/3$, $\bar\pi_m = 0$,
 $\bar\mu_j = \min_m t_{jm}/3$: $1, \tfrac{2}{3}, \tfrac{10}{3}$, value $5$:
-$5 \le z(\mathit{MILP}) \le 19$.
+$5 \le z(\text{MILP}) \le 19$.
 
-**What the solver says.** $z(\mathit{LP}) = 520/49 = 10.61$. Integer optimum
+**What the solver says.** $z(\text{LP}) = 520/49 = 10.61$. Integer optimum
 $15$: job 1 on machine 2, jobs 2 and 3 on machine 3, $\tilde y = (0, 5, 10)$.
 The uniform split of the $\lambda$ is the first that comes to mind, not the
 best.
 
-| $UB$ | $LB$ (hand dual) | $z(\mathit{LP})$ | $z(\mathit{MILP})$ | heuristic gap |
+| $UB$ | $LB$ (hand dual) | $z(\text{LP})$ | $z(\text{MILP})$ | heuristic gap |
 |---:|---:|---:|---:|---:|
 | 19 | 5 | $520/49$ | 15 | $26.7\%$ |
 
@@ -260,9 +260,9 @@ the harmonic mean of the times of that job. The recipe turns out to be
 |---|---:|---|
 | $\mathit{UB}$ | $13$ | heuristic solution |
 | $\mathit{LB}$ | $\frac{260}{59}$ | dual certificate built by hand |
-| $z(\mathit{LP})$ | $\frac{260}{59}$ | relaxation without the bounds |
-| $z(\mathit{LP}^+)$ | $\frac{260}{59}$ | relaxation with the bounds |
-| $z(\mathit{MILP})$ | $10$ | optimum of the MILP |
+| $z(\text{LP})$ | $\frac{260}{59}$ | relaxation without the bounds |
+| $z(\text{LP}^+)$ | $\frac{260}{59}$ | relaxation with the bounds |
+| $z(\text{MILP})$ | $10$ | optimum of the MILP |
 
 <!-- tabella-variante: fine -->
 

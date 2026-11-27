@@ -40,12 +40,12 @@ larger set cannot be higher. In a maximisation the inequality is reversed.
 
 | Name | What is dropped | Note |
 |---|---|---|
-| $z(\mathit{LP})$, pure | $x \in \{0,1\}$ becomes $x \ge 0$ | this is the one whose dual is written by hand: fewer constraints, hence a dual with fewer variables |
-| $z(\mathit{LP}^+)$, bounds kept | $x \in \{0,1\}$ becomes $0 \le x \le 1$ | this is Gurobi's `relax()` and the root relaxation |
-| $z(\mathit{LP}^{++})$, strengthened | as above, plus valid inequalities | see below |
+| $z(\text{LP})$, pure | $x \in \{0,1\}$ becomes $x \ge 0$ | this is the one whose dual is written by hand: fewer constraints, hence a dual with fewer variables |
+| $z(\text{LP}^+)$, bounds kept | $x \in \{0,1\}$ becomes $0 \le x \le 1$ | this is Gurobi's `relax()` and the root relaxation |
+| $z(\text{LP}^{++})$, strengthened | as above, plus valid inequalities | see below |
 
 In a minimisation
-$z(\mathit{LP}) \le z(\mathit{LP}^+) \le z(\mathit{LP}^{++}) \le z(\mathit{MILP})$.
+$z(\text{LP}) \le z(\text{LP}^+) \le z(\text{LP}^{++}) \le z(\text{MILP})$.
 
 !!! note "The two relaxations coincide more often than one thinks"
     If the model contains an assignment constraint $\sum_m x_{jm} = 1$ with
@@ -77,19 +77,19 @@ building a dual solution has an economic meaning.
 - **Weak duality**: $\sum_i b_i \bar\pi_i \le \sum_j c_j \bar x_j$ for every pair of feasible
   solutions. *Always*, with no assumptions. This is the one we need: it gives a
   lower bound from **any** feasible dual solution, even one built by hand.
-- **Strong duality**: if the relaxation has a finite optimum, $z(\mathit{D}(\mathit{LP})) = z(\mathit{LP})$. It
+- **Strong duality**: if the relaxation has a finite optimum, $z(\mathit{D}(\text{LP})) = z(\text{LP})$. It
   serves as a **check**: the optimum of the dual written by hand must coincide
-  with $z(\mathit{LP})$. The course scripts verify it with an `assert`.
+  with $z(\text{LP})$. The course scripts verify it with an `assert`.
 
 And then: since every feasible solution of the MILP is feasible for the
 relaxation too,
 
-$$\textstyle\sum_i b_i \bar\pi_i ~\le~ z(\mathit{LP}) ~\le~ z(\mathit{MILP}).$$
+$$\textstyle\sum_i b_i \bar\pi_i ~\le~ z(\text{LP}) ~\le~ z(\text{MILP}).$$
 
 !!! danger "There is no such thing as «the dual of the MILP»"
     The dual one writes is that of the **relaxation**. A MILP has no linear
     dual, and strong duality between a MILP and any linear program does not hold
-    in general: the jump $z(\mathit{MILP}) - z(\mathit{LP})$ is precisely what
+    in general: the jump $z(\text{MILP}) - z(\text{LP})$ is precisely what
     is missing.
 
 ## Three recipes for building a dual solution by hand
@@ -106,7 +106,7 @@ $$\textstyle\sum_i b_i \bar\pi_i ~\le~ z(\mathit{LP}) ~\le~ z(\mathit{MILP}).$$
 
 Whichever recipe is used, the solution must be **checked feasible** for the dual
 — that is the only thing that makes the bound valid — and its value compared
-with $z(\mathit{LP})$.
+with $z(\text{LP})$.
 
 ## A minimisation problem, in full
 
@@ -160,7 +160,7 @@ picks the element costing least per newly covered requirement — takes teams $1
 $2$, $4$, of cost $4+3+3 = 10$: a feasible and **integer** solution, so
 $\mathit{UB} = 10$.
 
-| $UB$ (constructive heuristic) | $LB$ (dual by hand) | $z(\mathit{LP})$ | $z(\mathit{MILP})$ | heuristic gap |
+| $UB$ (constructive heuristic) | $LB$ (dual by hand) | $z(\text{LP})$ | $z(\text{MILP})$ | heuristic gap |
 |---:|---:|---:|---:|---:|
 | 10 | 7 | $15/2$ | 10 | $0.0\%$ |
 
@@ -194,7 +194,7 @@ the primal has three rows.
   testing: the cheapest is the steel. In a **maximisation** the dual gives an
   **upper** bound: $\mathit{UB} = 70/3 \approx 23.33$.
 
-$$19 ~\le~ z(\mathit{MILP}) = 22 ~=~ z(\mathit{LP}^+) ~\le~ z(\mathit{LP}) = \tfrac{159}{7} ~\le~ \mathit{UB} = \tfrac{70}{3}.$$
+$$19 ~\le~ z(\text{MILP}) = 22 ~=~ z(\text{LP}^+) ~\le~ z(\text{LP}) = \tfrac{159}{7} ~\le~ \mathit{UB} = \tfrac{70}{3}.$$
 
 The optimum picks jobs 2, 3 and 4, which saturate **all three** resources. Here
 the dual by hand is **not** optimal for the relaxation ($70/3 > 159/7$): paying a
@@ -205,8 +205,8 @@ $22$ and coincides with the integer optimum.
 ![The sandwich of the two problems](img/cap04_sandwich.png)
 
 !!! note "The sandwich, written once and for all"
-    $$\text{minimisation:}\quad \mathit{LB}(\bar\pi) \le z(\mathit{D}(\mathit{LP})) = z(\mathit{LP}) \le z(\mathit{LP}^+) \le z(\mathit{MILP}) \le \mathit{UB}(\bar x)$$
-    $$\text{maximisation:}\quad \mathit{LB}(\bar x) \le z(\mathit{MILP}) \le z(\mathit{LP}^+) \le z(\mathit{LP}) = z(\mathit{D}(\mathit{LP})) \le \mathit{UB}(\bar\pi)$$
+    $$\text{minimisation:}\quad \mathit{LB}(\bar\pi) \le z(\mathit{D}(\text{LP})) = z(\text{LP}) \le z(\text{LP}^+) \le z(\text{MILP}) \le \mathit{UB}(\bar x)$$
+    $$\text{maximisation:}\quad \mathit{LB}(\bar x) \le z(\text{MILP}) \le z(\text{LP}^+) \le z(\text{LP}) = z(\mathit{D}(\text{LP})) \le \mathit{UB}(\bar\pi)$$
 
     where $(\bar\pi_1, \bar\pi_2, \dots, \bar\pi_m)$ is a feasible dual
     solution of the relaxation, of value $\sum_{i=1}^{m} b_i\, \bar\pi_i$, and
@@ -221,8 +221,8 @@ $22$ and coincides with the integer optimum.
 ## Valid inequalities and constraints that preserve optimality
 
 - A **valid inequality** is satisfied by *all* feasible integer solutions:
-  adding it does not change $z(\mathit{MILP})$; if it reduces
-  $z(\mathit{LP}^+)$ it is called a **cut**.
+  adding it does not change $z(\text{MILP})$; if it reduces
+  $z(\text{LP}^+)$ it is called a **cut**.
 - A **constraint that preserves optimality** cuts off some feasible solutions
   but not all the optimal ones. It is not a valid inequality, and must be
   declared as such (example: $z_j \le M_j y_j$ in
@@ -240,8 +240,8 @@ relaxation is $\tilde x = (1,\ 1/4,\ 1,\ 0)$:
 | $\{1,3,4\}$ | $2$ | 2 | satisfied (with equality) |
 | $\{2,3,4\}$ | $5/4$ | 2 | satisfied |
 
-Adding the four cuts, $z(\mathit{LP}^+)$ drops from $71/4 = 17.75$ to
-$69/4 = 17.25$ and $z(\mathit{MILP})$ stays $17$.
+Adding the four cuts, $z(\text{LP}^+)$ drops from $71/4 = 17.75$ to
+$69/4 = 17.25$ and $z(\text{MILP})$ stays $17$.
 
 ## Stronger formulations
 
@@ -272,7 +272,7 @@ reference case is [activation](links-01.md).
 
 ## LP duals are not the marginal prices of the MILP
 
-| $b$ | $z(\mathit{MILP})$ | $z(\mathit{LP}^+)$ | LP dual | true change |
+| $b$ | $z(\text{MILP})$ | $z(\text{LP}^+)$ | LP dual | true change |
 |---:|---:|---:|---:|---:|
 | 8 | 16 | 16 | $2$ | — |
 | 9 | 17 | $71/4$ | $7/4$ | $+1$ |
@@ -288,7 +288,7 @@ the integer optimum comes in jumps: from $b = 9$ to $b = 10$ it does not change
     Of the LP dual, the only use this course makes of it remains true: it is a
     **bound**. As managerial advice ("is it worth buying one more unit?") it must
     be checked by solving the MILP again: the difference
-    $z(\mathit{MILP})(b_i + 1) - z(\mathit{MILP})(b_i)$ is the only correct
+    $z(\text{MILP})(b_i + 1) - z(\text{MILP})(b_i)$ is the only correct
     answer, and there is no closed formula for it.
 
 ## The bound protocol of the course
@@ -298,7 +298,7 @@ integer** solution from a heuristic, checked on constraints, bounds and
 integrality; (2) the dual of the relaxation without the bounds, in general form and for the
 instance; (3) a feasible dual solution built by hand, with the recipe declared;
 (4) the two relaxations from the solver; (5) the optimum and the table
-$\mathit{UB} \cdot \mathit{LB} \cdot z(\mathit{LP}) \cdot z(\mathit{LP}^+) \cdot z(\mathit{MILP}) \cdot$ gap;
+$\mathit{UB} \cdot \mathit{LB} \cdot z(\text{LP}) \cdot z(\text{LP}^+) \cdot z(\text{MILP}) \cdot$ gap;
 (6) the additional considerations.
 
 Every number in the table exists in a CSV produced by the problem's script, and

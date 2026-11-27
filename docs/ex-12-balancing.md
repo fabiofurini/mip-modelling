@@ -98,7 +98,7 @@ one is at least $q/2$".
     one cannot do is declare variables $\ge 0$ and then use one of them
     negative.
 
-| $UB$ (LPT) | $LB$ (dual by hand) | $z(\mathit{LP})$ | $z(\mathit{MILP})$ | heuristic gap |
+| $UB$ (LPT) | $LB$ (dual by hand) | $z(\text{LP})$ | $z(\text{MILP})$ | heuristic gap |
 |---:|---:|---:|---:|---:|
 | 9 | 9 | 9 | 9 | $0.0\%$ |
 
